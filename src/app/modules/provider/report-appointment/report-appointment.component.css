@@ -1,0 +1,113 @@
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* / z-index: 1000; / */
+}
+
+.popup {
+  background-color: #fff;
+  padding: 20px;
+  width: 500px;
+  border-radius: 8px;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.popup-header h2 {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.close-icon {
+  background: none;
+  border: none!important;
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-top: -2%;
+}
+
+.appointment-info p {
+  font-size: 0.9em;
+  margin: 5px 0;
+}
+               
+.report-options label {
+  display: block;
+  margin: 8px 0;
+  font-size: 0.95em;
+}
+
+.comment-box textarea {
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 0.9em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.save-feedback {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #00876f;
+  color: #fff;
+  font-weight:400;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-feedback {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #00876f;
+  color: #fff;
+  font-weight:400;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.modal-content{
+  display: none!important;
+  border : none!important;
+}
+.popup .report-options input[type="radio"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+p strong {
+  font-weight:bold;
+  font-size: 15px;
+  padding: 1%;
+}
+
+.cancelButton {
+  color: red;
+  width: 8rem;
+  padding: 5%;
+}
+.confirmButton {
+  width: 8rem;
+  padding: 5%;
+}
+.validation-error {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}

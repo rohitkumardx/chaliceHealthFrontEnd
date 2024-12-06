@@ -1,0 +1,30 @@
+.modal-content {
+    border-radius: 8px;
+    padding: 20px;
+    border: none !important;
+  }
+  
+  .patient-info p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .encounter-details h6 {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  
+  .encounter-details p,
+  .encounter-details ul {
+    font-size: 14px;
+  }
+  
+  .encounter-details ul {
+    padding-left: 20px;
+  }
+  
+  .modal-header .btn-close {
+    background-color: transparent;
+    border: none;
+  }
+  

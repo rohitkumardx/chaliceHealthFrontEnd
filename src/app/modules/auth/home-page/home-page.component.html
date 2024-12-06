@@ -1,0 +1,1436 @@
+<header class="mainhead">
+  <div class="subhead">
+    <div class="header py-2">
+      <div class=" d-flex align-items-center">
+        <!-- Logo -->
+        <div class="logo d-flex align-items-center ps-4">
+          <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo" class=""
+            style="width: 180px; height: 60px;">
+          <!-- <h2 class="m-0 fw-bold text-dark">Chalice <span class="text-muted">HEALTH</span></h2> -->
+        </div>
+
+        <!-- Navbar Links -->
+        <nav class="nav d-flex mx-auto">
+          <ul class="nav">
+            <li class="nav-item">
+              <a href="#" class="nav-link text-dark cursor">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-dark cursor" (click)="redirectToDoctorSearch()">Find a Doctor</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link text-dark cursor" >Services</a>
+            </li>
+            <li class="nav-item">
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                 Patients
+              </a>
+              <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+                <li class="dropdown-item ms-0">
+                  <a class="dropdown-item ms-0">Benefits</a>
+                </li>
+                <li class="dropdown-item">
+                  <a class="dropdown-item">How it works</a>
+                </li>
+                <li class="dropdown-item">
+                  <a class="dropdown-item" (click)="navigateToPatientLogin()">Login</a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="nav-item">
+              <li class="nav-item dropdown">
+                <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                   Providers
+                </a>
+                <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+                  <li class="dropdown-item ms-0">
+                    <a class="dropdown-item ms-0">Benefits</a>
+                  </li>
+                  <li class="dropdown-item">
+                    <a class="dropdown-item" (click)="navigateToDoctorLogin()">Login</a>
+                  </li>
+                </ul>
+              </li>
+
+            <li class="nav-item">
+              <li class="nav-item dropdown">
+                <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Resources
+                </a>
+                <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+                  <li class="dropdown-item ms-0">
+                    <a class="dropdown-item ms-0">FAQs</a>
+                  </li>
+                  <li class="dropdown-item">
+                    <a class="dropdown-item" >Contact Us</a>
+                  </li>
+                  <li class="dropdown-item">
+                    <a class="dropdown-item" >Blog</a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown pt-2">
+                <a            
+                  class="text-dark dropdown-toggle" 
+                  id="loginDropdown" 
+                  role="button" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false"
+                  style="text-decoration: none;">
+                  <i class="fas fa-sign-in-alt" style="color: rgba(7, 36, 86, .25);"></i> Sign In
+                </a>
+                <ul class="dropdown-menu mt-2 pe-5" aria-labelledby="loginDropdown">
+                  <li><a class="dropdown-item p-0" (click) = "navigateToDoctorLogin()" >Provider Login</a></li>
+                  <li><a class="dropdown-item p-0 mt-2" (click) = "navigateToPatientLogin()">Patient Login</a></li>
+                </ul>
+              </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- hero start -->
+<div class="heromain">
+  <div class="subhero">
+    <div class="hero">
+      <div class=" pt-2 py-4">
+        <div class="row ">
+          <div class="col-md-7">
+            <h2 class="">Find the best doctors near you</h2>
+            <p class="text-dark" style="line-height: 22px;">Get help from thousands of trusted experts near you for everything from medical
+              treatments to psychiatric help.</p>
+
+            <!-- Search Bar -->
+            <div class="input-group mb-3 shadow-sm bg-white" style="max-width: 93%;">
+              <span class="input-group-text bg-white border-0" id="search-icon"
+                style="border-left:4px solid #00876f!important;border-radius: 0px !important;">
+                <i class="fas fa-search text-muted"></i>
+              </span>
+              <input type="text" class="form-control border-0 py-3 no-outline"
+                placeholder="Search doctors, conditions, symptoms..." aria-label="Search"
+                aria-describedby="search-icon">
+              <input type="text" class="form-control no-outline" style="border-left:2px solid #aeaeae!important;"
+                placeholder="Location" aria-label="Location">
+              <button class="btn m-0 rounded-circle me-1 mt-1"
+                style="width: 50px;height: 50px; box-shadow: rgba(0, 135, 111, 0.35) 0px 5px 21px;" type="button">
+                <i class="fas fa-arrow-right  py-0"></i>
+              </button>
+            </div>
+
+            <!-- Suggested Keywords -->
+            <div class="mb-3">
+              <span class="badge bg-light text-success border me-2 cursor">DENTAL INFECTION</span>
+              <span class="badge bg-light text-success border me-2 cursor">TRAVEL MEDICINE CONSULTATION</span>
+              <span class="badge bg-light text-success border me-2 cursor">GENITAL WARTS</span>
+              <br>
+              <span class="badge bg-light text-success border me-2 mt-3 cursor">ABDOMINAL PAIN</span>
+              <span class="badge bg-light text-success border cursor">BRONCHITIS</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-5">
+              <button class="btn btn-success py-3" style="border-radius: 2px!important;"> See a doctor
+                urgently</button>
+              <button class="btn btn-outline-success border-2 py-3 ms-5" style="border-radius: 2px!important;">
+                Prescription refill</button>
+            </div>
+          </div>
+
+          <!-- Image Section -->
+          <div class="col-md-5 d-flex justify-content-center">
+            <img src="../../../../assets/svg/homepage/image_2024_11_08T08_51_31_420Z.png" alt="Mother and child smiling"
+            class="img-fluid rounded shadow-sm">
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+
+<!-- hero end -->
+<!-- carousel onn -->
+<div class="mainspecialties">
+  <div class="subspecialties">
+    <div class="specialties px-3">
+      <h2 class="pt-3 text-start " style="font-size: 40px;color: #00876f; margin-left: 4rem!important;">Popular Specialties</h2>
+      <div class="my-5">
+        <div class="row d-flex justify-content-center g-3">
+          <!-- Specialty Card Columns -->
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+            <span class="d-flex justify-content-between w-100">
+              Primary Care
+              <i class="fas fa-arrow-right text-success"></i>
+            </span>
+          </div>
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+            <span class="d-flex justify-content-between w-100">
+              Dentist
+              <i class="fas fa-arrow-right text-success ms-auto"></i>
+            </span>
+          </div>
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+            <span class="d-flex justify-content-between w-100">
+              OB/GYN
+              <i class="fas fa-arrow-right text-success ms-auto"></i>
+            </span>
+          </div>
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+            <span class="d-flex justify-content-between w-100">
+              Eye Doctor
+              <i class="fas fa-arrow-right text-success ms-auto"></i>
+            </span>
+          </div>
+          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+            <span class="d-flex justify-content-between w-100">
+              Dermatologist
+              <i class="fas fa-arrow-right text-success ms-auto"></i>
+            </span>
+          </div>
+        </div>
+        <!-- Align View All Specialties -->
+        <div class="row mt-4">
+          <div class=" d-flex justify-content-end" style="max-width: 95%!important;">
+            <a href="#" class="text-success fw-bold d-inline-flex align-items-center">
+              View all specialties 
+              <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- carousel end -->
+
+<!-- doctors start -->
+<div class="maindoctor">
+  <div class="subdoctor">
+    <div class="doctor ">
+      <h1 style="color: #01876f; font-size: 40px; font-weight: 500;">Top Doctors</h1>
+      <p style="color: black; font-size: 18px;" class="pt-1">Our most trusted and skilled doctors and physicians</p>
+
+      <div id="doctorCarousel" class="carousel slide pt-4 " data-bs-ride="carousel">
+        <!-- Carousel Indicators -->
+
+        <!-- Carousel Inner -->
+        <div class="carousel-inner">
+          <!-- First Slide -->
+          <div class="carousel-item active">
+            <div class="row">
+              <!--  cards  -->
+              <div class="col-md-3 mb-4 px-2">
+                <div class="doctor-card">
+                  <img src="../../../../assets/svg/homepage/MD5-400x400.png" alt="Dr. Lien Wong" class="doctor-photo my-4">
+                  <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
+                  <p class="doctor-location">
+                    <i class="fa fa-map-marker-alt" style="color: #00876f;"></i> Omaha, NE
+                  </p>
+                  <p class="doctor-specialty">Primary Care</p>
+                  
+                  <div class="doctor-info">
+                    <i class="fa fa-briefcase"></i> 15 years experience
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-laptop"></i> Offers Telehealth
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-home"></i> In-person
+                  </div>
+                  <hr class="my-3">
+              
+                  <div class="slots">
+                    <div class="row justify-content-center gap-2">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center gap-2 mt-3">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="More">More times</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!--  cards  -->
+              <div class="col-md-3 mb-4 px-2">
+                <div class="doctor-card">
+                  <img src="../../../../assets/svg/homepage/MD7-400x400.png" alt="Dr. Lien Wong" class="doctor-photo my-4">
+                  <h3 class="doctor-name">Dr. Dener Wong , PsyD</h3>
+                  <p class="doctor-location">
+                    <i class="fa fa-map-marker-alt" style="color: #00876f;"></i> Omaha, NE
+                  </p>
+                  <p class="doctor-specialty">Primary Care</p>
+                  
+                  <div class="doctor-info">
+                    <i class="fa fa-briefcase"></i> 15 years experience
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-laptop"></i> Offers Telehealth
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-home"></i> In-person
+                  </div>
+                  <hr class="my-3">
+              
+                  <div class="slots">
+                    <div class="row justify-content-center gap-2">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center gap-2 mt-3">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="More">More times</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+
+              <!--  cards -->
+              <div class="col-md-3 mb-4 px-2">
+                <div class="doctor-card">
+                  <img src="../../../../assets/svg/homepage/image_2024_11_08T07_45_11_475Z.png" alt="Dr. Lien Wong" class="doctor-photo my-4">
+                  <h3 class="doctor-name">Dr Brittany Thompson, MD
+                   </h3>
+                  <p class="doctor-location">
+                    <i class="fa fa-map-marker-alt" style="color: #00876f;"></i> Omaha, NE
+                  </p>
+                  <p class="doctor-specialty">Primary Care</p>
+                  
+                  <div class="doctor-info">
+                    <i class="fa fa-briefcase"></i> 15 years experience
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-laptop"></i> Offers Telehealth
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-home"></i> In-person
+                  </div>
+                  <hr class="my-3">
+              
+                  <div class="slots">
+                    <div class="row justify-content-center gap-2">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center gap-2 mt-3">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="More">More times</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!--  cards  -->
+              <div class="col-md-3 mb-4 px-2">
+                <div class="doctor-card">
+                  <img src="../../../../assets/svg/homepage/MD5-400x400.png" alt="Dr. Lien Wong" class="doctor-photo my-4">
+                  <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
+                  <p class="doctor-location">
+                    <i class="fa fa-map-marker-alt" style="color: #00876f;"></i> Omaha, NE
+                  </p>
+                  <p class="doctor-specialty">Primary Care</p>
+                  
+                  <div class="doctor-info">
+                    <i class="fa fa-briefcase"></i> 15 years experience
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-laptop"></i> Offers Telehealth
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-home"></i> In-person
+                  </div>
+                  <hr class="my-3">
+              
+                  <div class="slots">
+                    <div class="row justify-content-center gap-2">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center gap-2 mt-3">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="More">More times</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Second Slide -->
+          <div class="carousel-item">
+            <div class="row">
+              <div class="col-md-3 mb-4 px-2">
+                <div class="doctor-card">
+                  <img src="../../../../assets/svg/homepage/850.png" alt="Dr. Lien Wong" class="doctor-photo my-4">
+                  <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
+                  <p class="doctor-location">
+                    <i class="fa fa-map-marker-alt" style="color: #00876f;"></i> Omaha, NE
+                  </p>
+                  <p class="doctor-specialty">Primary Care</p>
+                  
+                  <div class="doctor-info">
+                    <i class="fa fa-briefcase"></i> 15 years experience
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-laptop"></i> Offers Telehealth
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-home"></i> In-person
+                  </div>
+                  <hr class="my-3">
+              
+                  <div class="slots">
+                    <div class="row justify-content-center gap-2">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center gap-2 mt-3">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="More">More times</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!--  cards  -->
+              <div class="col-md-3 mb-4 px-2">
+                <div class="doctor-card">
+                  <img src="../../../../assets/svg/homepage/image_2024_11_08T08_51_31_420Z.png" alt="Dr. Lien Wong" class="doctor-photo my-4">
+                  <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
+                  <p class="doctor-location">
+                    <i class="fa fa-map-marker-alt" style="color: #00876f;"></i> Omaha, NE
+                  </p>
+                  <p class="doctor-specialty">Primary Care</p>
+                  
+                  <div class="doctor-info">
+                    <i class="fa fa-briefcase"></i> 15 years experience
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-laptop"></i> Offers Telehealth
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-home"></i> In-person
+                  </div>
+                  <hr class="my-3">
+              
+                  <div class="slots">
+                    <div class="row justify-content-center gap-2">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center gap-2 mt-3">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="More">More times</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--  cards  -->
+              <div class="col-md-3 mb-4 px-2">
+                <div class="doctor-card">
+                  <img src="../../../../assets/svg/homepage/202.png" alt="Dr. Lien Wong" class="doctor-photo my-4">
+                  <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
+                  <p class="doctor-location">
+                    <i class="fa fa-map-marker-alt" style="color: #00876f;"></i> Omaha, NE
+                  </p>
+                  <p class="doctor-specialty">Primary Care</p>
+                  
+                  <div class="doctor-info">
+                    <i class="fa fa-briefcase"></i> 15 years experience
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-laptop"></i> Offers Telehealth
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-home"></i> In-person
+                  </div>
+                  <hr class="my-3">
+              
+                  <div class="slots">
+                    <div class="row justify-content-center gap-2">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center gap-2 mt-3">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="More">More times</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--  cards  -->
+              <div class="col-md-3 mb-4 px-2">
+                <div class="doctor-card">
+                  <img src="../../../../assets/svg/homepage/image_2024_11_08T07_45_11_475Z.png" alt="Dr. Lien Wong" class="doctor-photo my-4">
+                  <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
+                  <p class="doctor-location">
+                    <i class="fa fa-map-marker-alt" style="color: #00876f;"></i> Omaha, NE
+                  </p>
+                  <p class="doctor-specialty">Primary Care</p>
+                  
+                  <div class="doctor-info">
+                    <i class="fa fa-briefcase"></i> 15 years experience
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-laptop"></i> Offers Telehealth
+                  </div>
+                  <div class="doctor-info">
+                    <i class="fa fa-home"></i> In-person
+                  </div>
+                  <hr class="my-3">
+              
+                  <div class="slots">
+                    <div class="row justify-content-center gap-2">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                    </div>
+                    <div class="row justify-content-center gap-2 mt-3">
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="time-btn">15:00 am</button>
+                      </div>
+                      <div class="col-auto">
+                        <button class="More">More times</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- third slide -->
+
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" style="margin-left:-30px!important;" type="button"
+          data-bs-target="#doctorCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" style="margin-left: -200px!important;" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next " type="button" style="margin-right:-30px!important;"
+          data-bs-target="#doctorCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" style="margin-right: -200px!important;" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <!-- Another Doctor Card Row -->
+
+      <!-- Healthcare Section -->
+      <div class="row healthcare-section pt-4">
+        <div class="col-md-7 col-12 pt-3">
+          <p class="lead text-muted">Searching for a new healthcare provider?</p>
+          <p><strong class="text-dark">Chalice Health has got you covered!</strong></p>
+        </div>
+        <div class="col-md-5 col-12 d-flex align-items-center justify-content-start">
+          <button class="find-doctor-btn">Find a Doctor</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+    <!-- doctors end -->
+    <!-- brows start -->
+    <div class="mainbrowse">
+      <div class="subbrowse">
+        <div class="browse py-3">
+          <h2 class="mt-4">Browse by Services</h2>
+          <div id="cardCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+              <!-- Carousel Indicators -->
+              <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#cardCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#cardCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              </div>
+      
+              <!-- Carousel Inner -->
+              <div class="carousel-inner">
+                  <!-- Slide 1 -->
+                  <div class="carousel-item active">
+                      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+                          <div class="col mb-4">
+                              <div class="card">
+                                  <i class="hp-icon fas fa-hand-holding-heart p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+                                  <div class="card-body">
+                                      <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Primary Care</h5>
+                                      <p class="px-0 pt-4 ms-0">Routine check-ups, preventive care, and management of chronic conditions.</p>
+                                      <div class="mt-5 pt-4">
+                                          <a href="#">5 Listings</a>
+                                          <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col mb-4">
+                              <div class="card">
+                                  <i class="hp-icon fas fa-hand-holding-medical p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+                                  <div class="card-body">
+                                      <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Urgent Care</h5>
+                                      <p class="px-0 pt-4 ms-0">Treatment for minor illnesses and injuries that require immediate attention but are not life-threatening.</p>
+                                      <div class="mt-5 pt-4">
+                                          <a href="#">0 Listings</a>
+                                          <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col mb-4">
+                              <div class="card">
+                                  <i class="hp-icon fas fa-head-side-virus p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+                                  <div class="card-body">
+                                      <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Mental Health</h5>
+                                      <p class="px-0 pt-4 ms-0">Therapy sessions, counseling, and psychiatry appointments for various mental health concerns.</p>
+                                      <div class="mt-5 pt-4">
+                                          <a href="#">1 Listings</a>
+                                          <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col mb-4">
+                              <div class="card">
+                                  <i class="hp-icon fas fa-medkit p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+                                  <div class="card-body">
+                                      <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Specialty Care</h5>
+                                      <p class="px-0 pt-4 ms-0">Access to specialists in various fields such as dermatology, cardiology, orthopedics, physical therapy, occupational therapy, home health and more.</p>
+                                      <div class="mt-5 pt-4">
+                                          <a href="#">0 Listings</a>
+                                          <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+      
+                  <!-- Slide 2 -->
+                  <div class="carousel-item">
+                      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4">
+                          <div class="col mb-4">
+                              <div class="card">
+                                  <i class="hp-icon fas fa-laptop-medical p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+                                  <div class="card-body">
+                                      <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Telemedicine Visits</h5>
+                                      <p class="px-0 pt-4 ms-0">Virtual consultations with healthcare providers for diagnosis, treatment, and management of various health issues</p>
+                                      <div class="mt-5 pt-4">
+                                          <a href="#">3 Listings</a>
+                                          <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col mb-4">
+                              <div class="card">
+                                  <i class="hp-icon fas fa-brain p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+                                  <div class="card-body">
+                                      <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Lab Tests and Imaging</h5>
+                                      <p class="px-0 pt-4 ms-0">Ordering and scheduling of laboratory tests and imaging studies as needed for diagnosis and monitoring.</p>
+                                      <div class="mt-5 pt-4">
+                                          <a href="#">0 Listings</a>
+                                          <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col mb-4">
+                              <div class="card">
+                                  <i class="hp-icon fas fa-pills p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+                                  <div class="card-body">
+                                      <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Prescription Refills</h5>
+                                      <p class="px-0 ms-0">Convenient online prescription refills for ongoing medications.</p>
+                                      <div class="mt-5 pt-4">
+                                          <a href="#">0 Listings</a>
+                                          <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col mb-4">
+                              <div class="card">
+                                  <i class="hp-icon fas fa-head-side-cough p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+                                  <div class="card-body">
+                                      <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Chronic Care Management</h5>
+                                      <p class="px-0 pt-1 ms-0">Receive ongoing support for managing chronic conditions like diabetes, hypertension, or asthma.</p>
+                                      <div class="mt-5 pt-4">
+                                          <a href="#">0 Listings</a>
+                                          <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+      
+              <!-- Carousel Controls -->
+              <button class="carousel-control-prev " style="margin-left: -70px!important;" type="button" data-bs-target="#cardCarousel" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true" style="margin-left: -100px!important;" ></span>
+                  <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#cardCarousel" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true" style="margin-right: -200px!important;" ></span>
+                  <span class="visually-hidden">Next</span>
+              </button>
+          </div>
+      </div>
+      
+      
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    <!-- nexthelo -->
+
+
+
+    <!-- brows end -->
+
+    <!-- about start -->
+    <div class="mainabout">
+      <div class="subabout">
+        <div class="about">
+          <h1 class="" style="color: #01876f;">About Chalice Health</h1>
+
+
+          <!-- next -->
+          <div class="pt-2" style="width: 93%;">
+            <div class="">
+             <p style="font-size: 14px; line-height:30px; color: #333333!important;"> <span
+                  style="font-weight: 600; color: black; font-size: 18px;">
+                  
+                </span> </p>
+              <p style="line-height:30px;">
+                Chalice Health is a patient-centered healthcare platform that makes finding the care you need easier than ever. We  connect you with a network of qualified and compassionate providers offering a variety of
+                services, including: <br>
+                <span>Virtual consultations:</span> Get expert advice from the comfort of your home.<br>
+                <span>In-person visits:</span> Schedule appointments quickly and easily.<br>
+                <span>Home care services:</span> Receive the care you need in the comfort of your own home.<br>
+                <span>About Insurance:</span> Chalice health doesn't accept insurance.
+              </p>
+            </div>
+
+          </div>
+          <!-- next end -->
+          <h1 class="text-center" style="color: #01876f; padding-top: 30px; padding-bottom: 30px;">How It Works</h1>
+          <!-- Cards section -->
+          <div class="row box">
+            <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
+              <div class="card" style="width: 18rem; background-color: #ffffff; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+                <img
+                  class="card-img-top p-3 "
+                  style="border-radius: 20px;"
+                  src="../../../../assets/svg/homepage/step1.png"
+                  alt="Card image cap"
+                />
+                <div class="card-body text-center">
+                  <h5 class="card-title d-flex align-items-center justify-content-center gap-2">
+                    <span
+                      style="border: 1px solid #7b7e7e; padding: 6px 12px; border-radius: 50%; color: black; font-weight: 600; font-size: 14px;">
+                      1
+                    </span>
+                    <span style="font-weight: 600; font-size: 16px; color: #01876f;">Step</span>
+                  </h5>
+                  <h6 style="font-size: 14px; font-weight: 500; color:black;">Find the Right Fit</h6>
+                  <p class="card-text" style="font-size: 14px; line-height: 1.5; color: #777;">
+                    Explore our network of qualified and compassionate providers. Filter by specialty, location, and conditions to find the perfect match for your needs.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
+              <div class="card" style="width: 18rem; background-color: #ffffff; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+                <img
+                  class="card-img-top p-3"
+                  style="border-radius: 20px;"
+                  src="../../../../assets/svg/homepage/step2.png"
+                  alt="Card image cap"
+                />
+                <div class="card-body text-center">
+                  <h5 class="card-title d-flex align-items-center justify-content-center gap-2">
+                    <span
+                      style="border: 1px solid #7b7e7e; padding: 6px 12px; border-radius: 50%; color: black; font-weight: 600; font-size: 14px;">
+                      2
+                    </span>
+                    <span style="font-weight: 600; font-size: 16px; color: #01876f;">Step</span>
+                  </h5>
+                  <h6 style="font-size: 14px; font-weight: 500; color: black;">Schedule with Ease</h6>
+                  <p class="card-text" style="font-size: 14px; line-height: 1.5; color: #777;">
+                    Book your appointment directly through our platform, 24/7. Choose from virtual consultations, in-person visits, or home care services—all in a few clicks.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6 mb-4 d-flex justify-content-center">
+  <div class="card" style="width: 18rem; background-color: #ffffff; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+    <img
+      class="card-img-top p-3"
+      style="border-radius: 20px;"
+      src="../../../../assets/svg/homepage/step3.png"
+      alt="Card image cap"
+    />
+    <div class="card-body text-center">
+      <h5 class="card-title d-flex align-items-center justify-content-center gap-2">
+        <span
+          style="border: 1px solid #7b7e7e; padding: 6px 12px; border-radius: 50%; color: black; font-weight: 600; font-size: 14px;">
+          3
+        </span>
+        <span style="font-weight: 600; font-size: 16px; color: #01876f; ">Step</span>
+      </h5>
+      <h6 style="font-size: 14px; font-weight: 500; color:black;">Get the Care You Deserve</h6>
+      <p class="card-text" style="font-size: 14px; line-height: 1.5; color: #777;">
+        Connect with your chosen provider for your consultation. Ask questions, get expert advice, and take control of your health journey.
+      </p>
+    </div>
+  </div>
+</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- about end -->
+
+    <!-- patient start  -->
+    <div class="patientmain">
+      <div class="subpatient">
+        <div class="patient">
+          <div class="container">
+            <div class="row align-items-center">
+              <!-- Text content -->
+              <h2 class="text-center text-lg-left pb-5" style="color: #01876f;">Why Use Chalice
+                Health</h2>
+              <div class="col-lg-5 col-md-12 justify-content-center">
+                <img src="../../../../assets/svg/homepage/202.png" class="img-fluid rounded" alt="Find care image"
+                  style="max-width:91%; height: 360px;">
+              </div>
+              <div class="col-lg-7 col-md-12 mb-4 mb-lg-0">
+                <h4 ><strong>For Patients</strong></h4>
+                <p><strong style="color: #333333; font-weight: 600; font-size: 17px; ">Avoid Long Wait-</strong> Access healthcare on your terms through our user-friendly platform. Schedule appointments, refill prescriptions, and receive care without the hassle of waiting rooms or endless phone calls.</p>
+                <p><strong style="color: #333333; font-weight: 600; font-size: 17px; ">No Surprise Billing-</strong>See exact costs before booking any service. Our pay-per-appointment options help you to better manage your healthcare budget.</p>
+                <p><strong style="color: #333333; font-weight: 600!important; font-size: 17px; ">Quality Care You Can Trust-</strong> Connect with board-certified physicians and experienced specialists who match your needs. Our verified healthcare professionals are committed to providing exceptional care.</p>
+                <p class="text-muted"><em>Ready to take charge of your health? Find care with Chalice Health today..</em></p>
+                <!-- Find Care Button -->
+                <div class="d-flex align-items-center">
+                  <button class="btn btn-outline-none" type="button">
+                    <i class="fas fa-search"
+                      style="width: 30px; height: 30px; border:2px solid #01876f;padding: 5px; border-radius: 50%;"></i>
+                    <span class="ps-2">FIND CARE</span>
+                  </button>
+                </div>
+              </div>
+              <!-- Image content -->
+
+
+            </div>
+          </div>
+
+          <!-- second cont -->
+          <div class="container my-5 pt-4 pb-2">
+            <div class="row align-items-center d-flex">
+              <!-- Text content -->
+
+              <div class="col-lg-7 col-md-12 mb-lg-0 pe-2">
+                <h4><strong>For Provider</strong></h4>
+                <p><strong style="color: #333333; font-weight: 600; font-size: 17px;">	Streamlined Operations-</strong>
+                  Eliminate insurance paperwork and complicated billing processes. Our cash-pay model ensures immediate payment and reduced administrative overhead.</p>
+                <p><strong style="color:#333333; font-weight: 600; font-size: 17px; ">Smart Scheduling-</strong> Manage your practice efficiently with our automated appointment system. Spend less time on administration and more time with patients.</p>
+                <p><strong style="color: #333333; font-weight: 600; font-size: 17px; ">	Practice Growth- </strong>Expand your patient base while reducing operational costs through our platform.</p>
+                <p class="text-muted"><em>Ready to transform your practice? Join Chalice Health today.</em></p>
+                <!-- Find Care Button -->
+                <div class="d-flex align-items-center">
+                  <button class="btn btn-outline-none" type="button">
+                    <i class="fas fa-search"
+                      style="width: 30px; height: 30px; border:2px solid #01876f;padding: 5px; border-radius: 50%;"></i>
+                    <span class="ps-2">JOIN TODAY</span>
+                  </button>
+                </div>
+              </div>
+              <div class="col-lg-5 col-md-12 d-flex">
+                <img src="../../../../assets/svg/homepage/850.png" class="img-fluid rounded" alt="Find care image"
+                  style="max-width: 91%; height: 400px;">
+              </div>
+              <!-- Image content -->
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- patient End  -->
+
+    <!-- pthealth start -->
+    <div class="mainpthealth">
+      <div class="subpthealth">
+        <div class="pthealth">
+          <div class="container pt-2 pb-2">
+            <h2 class="text-center pb-4" style="color: #01876f;">Patients Love Chalice Health</h2>
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+              <div class="carousel-inner">
+                <!-- Testimonial 1 -->
+                <div class="carousel-item active">
+                  <div class="row gap-3 justify-content-center">
+                    <div class="col-lg-5 col-md-12 mb-4">
+                      <div class="">
+                        <div class="d-flex  align-items-center border">
+                          <img src="../../../../assets/svg/homepage/MD5-400x400.png" class="rounded-circle p-1 ms-2"
+                            alt="Customer" style="width: 90px; height: 90px;">
+                          <div class="d-block p-4">
+                            <h5 style="color: #01876f; padding-top: 20px; width: 100%;">Name of Customer</h5>
+                            <span class=" badge-secondary rounded-pill d-block"
+                              style="color: #fad129; width: 80%;">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <p class=" text-start pt-3 ps-3 pe-3 pb-2 border">
+                          <span class="pt-0 mt-0 text-dark"> <i class="fas fa-quote-left"></i></span><br>
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-12 mb-4">
+                      <div class="">
+                        <div class="d-flex  align-items-center border">
+                          <img src="../../../../assets/svg/homepage/MD5-400x400.png" class="rounded-circle p-1 ms-2"
+                            alt="Customer" style="width: 90px; height: 90px;">
+                          <div class="d-block p-4">
+                            <h5 style="color: #01876f; padding-top: 20px; width: 100%;">Name of Customer</h5>
+                            <span class=" badge-secondary rounded-pill d-block"
+                              style="color: #fad129; width: 80%;">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <p class=" text-start pt-3 ps-3 pe-3 pb-2 border">
+                          <span class="pt-0 mt-0 text-dark"> <i class="fas fa-quote-left"></i></span><br>
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="carousel-item">
+                  <div class="row gap-3 justify-content-center">
+                    <div class="col-lg-5 col-md-12 mb-4">
+                      <div class="">
+                        <div class="d-flex  align-items-center border">
+                          <img src="../../../../assets/svg/homepage/850.png" class="rounded-circle p-1 ms-2"
+                            alt="Customer" style="width: 90px; height: 90px;">
+                          <div class="d-block p-4">
+                            <h5 style="color: #01876f; padding-top: 20px; width: 100%;">Name of Customer</h5>
+                            <span class=" badge-secondary rounded-pill d-block"
+                              style="color: #fad129; width: 80%;">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <p class=" text-start pt-3 ps-3 pe-3 pb-2 border">
+                          <span class="pt-0 mt-0 text-dark"> <i class="fas fa-quote-left"></i></span><br>
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-12 mb-4">
+                      <div class="">
+                        <div class="d-flex  align-items-center border">
+                          <img src="../../../../assets/svg/homepage/850.png" class="rounded-circle p-1 ms-2"
+                            alt="Customer" style="width: 90px; height: 90px;">
+                          <div class="d-block p-4">
+                            <h5 style="color: #01876f; padding-top: 20px; width: 100%;">Name of Customer</h5>
+                            <span class=" badge-secondary rounded-pill d-block"
+                              style="color: #fad129; width: 80%;">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <p class=" text-start pt-3 ps-3 pe-3 pb-2 border">
+                          <span class="pt-0 mt-0 text-dark"> <i class="fas fa-quote-left"></i></span><br>
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="carousel-item">
+                  <div class="row gap-3 justify-content-center">
+                    <div class="col-lg-5 col-md-12 mb-4">
+                      <div class="">
+                        <div class="d-flex  align-items-center border">
+                          <img src="../../../../assets/svg/homepage/MD7-400x400.png" class="rounded-circle p-1 ms-2"
+                            alt="Customer" style="width: 90px; height: 90px;">
+                          <div class="d-block p-4">
+                            <h5 style="color: #01876f; padding-top: 20px; width: 100%;">Name of Customer</h5>
+                            <span class=" badge-secondary rounded-pill d-block"
+                              style="color: #fad129; width: 80%;">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <p class=" text-start pt-3 ps-3 pe-3 pb-2 border">
+                          <span class="pt-0 mt-0 text-dark"> <i class="fas fa-quote-left"></i></span><br>
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-12 mb-4">
+                      <div class="">
+                        <div class="d-flex  align-items-center border">
+                          <img src="../../../../assets/svg/homepage/MD7-400x400.png" class="rounded-circle p-1 ms-2"
+                            alt="Customer" style="width: 90px; height: 90px;">
+                          <div class="d-block p-4">
+                            <h5 style="color: #01876f; padding-top: 20px; width: 100%;">Name of Customer</h5>
+                            <span class=" badge-secondary d-block"
+                              style="color: #fad129; width: 80%;">
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star"></i>
+                              <i class="fas fa-star-half-alt"></i>
+                            </span>
+                          </div>
+                        </div>
+                        <p class=" text-start pt-3 ps-3 pe-3 pb-2 border">
+                          <span class="pt-0 mt-0 text-dark"> <i class="fas fa-quote-left"></i></span><br>
+                          Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                          Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Carousel controls -->
+              <button class="carousel-control-prev pe-5" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next ps-5" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+              
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- ptlhealth end -->
+
+    <!-- FAQS START -->
+    <div class="mainFAQS">
+      <div class="subFAQS pt-2">
+        <div class="FAQS">
+          <div class="container mb-2">
+            <h2 class="text-center" style="color: #01876f;">FAQs</h2>
+            <div class="accordion mt-4" id="faqAccordion">
+
+              <!-- FAQ 1 -->
+              <div class="accordion-item border-0 rounded-pill " style="background-color:white;">
+                <h2 class="accordion-header" id="headingOne">
+                  <button
+                    class="accordion w-100 border-0 p-3 collapsed bg-white text-start d-flex justify-content-between custom-accordion-button"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
+                    aria-controls="collapseOne"
+                    style="color: black; font-size: 17px;">
+                    What is Chalice Health?
+                    <i class="fas fa-chevron-down ms-auto mt-3 me-2" style="font-size: 13px;"></i>
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body px-3 py-0">
+                    Chalice Health is your gateway to convenient and affordable healthcare access. Our platform connects
+                    you with a wide range of medical professionals, ensuring seamless assistance with your healthcare
+                    needs, regardless of your location. We prioritize convenience and affordability, offering solutions
+                    that reduce wait times and support your health journey. Whether you prefer virtual consultations or
+                    in-person visits, we provide options tailored to your needs and the availability of our providers.
+                  </div>
+                </div>
+              </div>
+              
+              
+
+              <!-- FAQ 2 -->
+              <div class="accordion-item border-0 rounded-pill" style="background-color:white;">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button
+                    class="accordion w-100 border-0 p-3 bg-white collapsed text-start d-flex justify-content-between accordion-toggle"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false"
+                    aria-controls="collapseTwo" style="color: black; font-size: 17px;">
+                    Who is Chalice Health for?
+                    <i class="fas fa-chevron-down ms-auto mt-3 me-2" style="font-size: 13px;"></i>
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                  data-bs-parent="#faqAccordion">
+                  <div class="accordion-body px-3 py-0">
+                    Chalice Health is for everyone! We cater to individuals and families, regardless of their insurance
+                    status. Our platform is particularly beneficial for those who:
+                    <ul class="pt-3">
+                      <li> Lack health insurance.</li>
+                      <li>Have high-deductible health plans (HDHPs) with high out-of-pocket costs.</li>
+                      <li>Face challenges accessing quality healthcare due to geographic location or socioeconomic
+                        factors.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+
+              <!-- FAQ 3 -->
+              <div class="accordion-item border-0 rounded-pill" style="background-color:white;">
+                <h2 class="accordion-header" id="headingThree">
+                  <button
+                    class="accordion w-100 border-0 p-3 collapsed bg-white text-start d-flex justify-content-between accordion-toggle"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false"
+                    aria-controls="collapseThree" style="color: black; font-size: 17px;">
+                    What sets Chalice Health apart?
+                    <i class="fas fa-chevron-down ms-auto mt-3 me-2" style="font-size: 13px;"></i>
+                  </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                  data-bs-parent="#faqAccordion">
+                  <div class="accordion-body px-3 py-0 ">
+                    Chalice Health is committed to making quality healthcare accessible and affordable for everyone.
+                    Here’s what sets us apart: <br>
+                    <ul>
+                      <li><span style="font-weight: 600;">Discounted Rates:</span> Enjoy significant cost savings with
+                        our transparent pricing structure. You’ll see upfront pricing, up to 60% lower than traditional
+                        healthcare costs.</li>
+                      <li><span style="font-weight: 600;">No Hidden Fees:</span> We prioritize transparency. The price
+                        you see is the price you pay – no surprise charges or confusing billing practices.</li>
+                      <li><span style="font-weight: 600;">No Insurance Required:</span> We believe access to care
+                        shouldn’t be limited by insurance status. Utilize our platform regardless of your insurance
+                        coverage.</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+
+              <!-- FAQ 4 -->
+              <div class="accordion-item border-0 rounded-pill" style="background-color:white;">
+                <h2 class="accordion-header" id="headingFour">
+                  <button
+                    class="accordion w-100 border-0 pt-0 px-3 collapsed bg-white text-start d-flex justify-content-between"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"
+                    style="color: black; border-radius: 50px; font-size: 17px;">
+                  Is Chalice Health a substitute for traditional healthcare providers?
+                  <i class="fas fa-chevron-down ms-auto mt-2 me-2"
+                  style="font-size: 13px;"></i>
+                  </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body py-0">
+                    No, Chalice Health is not a substitute for traditional healthcare providers. We work collaboratively to complement existing healthcare services. Our platform offers a convenient and accessible way to connect with qualified professionals for consultations, prescriptions (when appropriate), and ongoing care management.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="text-center mt-4 w-50 mx-auto">
+              <button class="btn btn-outline-success px-4 py-2"
+                style="border-radius: 30px; color: white!important; border-color: #01876f; background-color: #01876f!important;">
+                Learn More
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- FAQS End -->
+    <!-- intouch start -->
+    <div class="mainget">
+      <div class="subget">
+        <div class="get">
+          <div class="container">
+            <div class="row  text-lg-left pb-2">
+              <h5 class="pt-4 text-center" style="color: #01876f; font-size: 35px;">Chalice Health</h5>
+              <p class="text-center" style="color:#333333; font-size: 15px;">Important Things to Know</p>
+              <div class="col-md-7 ">
+                <div class="mt-4">
+                  <p style="line-height: 30px;">
+                    <span class="info-title">Consultations:</span> Choose from in-person, in-home, or virtual
+                    options.<br>
+                    <span class="info-title">Insurance:</span> Cash-only practice. Transparent pricing available.<br>
+                    <span class="info-title">Controlled Substances:</span> Not prescribed at this time.<br>
+                    <span class="info-title">Support:</span> Dedicated team available for questions.<br>
+                    <span class="info-title">Appointments:</span> Schedule online 24/7.
+
+                  </p>
+                  <p class="mt-3" style="color: #fb8501;">Ready to experience the future of healthcare? Sign up now!</p>
+                </div>
+                <div class=" text-lg-left mt-4">
+                  <button class="btn" style="background-color:#01876f; color: white; padding: 5px 30px;">Sign
+                    Up</button>
+                </div>
+              </div>
+              <div class="col-md-5 text-end">
+                <img class="rounded-4 text-end" src="../../../../assets/svg/homepage/important- to-know.png"
+                  width="350px" alt="" srcset="">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- intouch end -->
+    <!-- footer start -->
+    <footer class="mainfooter bg-white">
+      <hr>
+      <div class="subfooter">
+        <div class="footer ">
+          <div class="footer-container">
+            <div class="logo-section pe-5">
+                <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo">
+                <p style="color: #333333; padding-top: 20px; font-size: 16px;">Your Health, Change to 'Quick and Affordable Healthcare.</p>
+            </div>
+            <!-- <div class="footer-column">
+                <h3>Specialties</h3>
+                <ul>
+                    <li>
+                      <span><i class="fas fa-chevron-right"></i></span> 
+                       Primary Care</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Dentistry</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Dermatology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> OB/GYN</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Psychiatry</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Allergy and Immunology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Cardiology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Endocrinology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Gastroenterology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Neurology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Mental Health Counseling</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Orthopedics</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Pediatrics</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Pulmonology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Rheumatology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Urology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Radiology</li>
+                </ul>
+            </div> -->
+            <div class="footer-column">
+                <h3>Services</h3>
+                <ul>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Primary Care</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Urgent Care</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Specialty Care</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Mental Health</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Lab Tests and Imaging</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Prescription Refills</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> Chronic Care Management</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span>Men's Health</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span>Womens Health</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span>Dermatology</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span>Sexual Health</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Social</h3>
+                <ul>
+                    <li><span><i class="fas fa-chevron-right"></i></span><i class="fab fa-facebook ms-2"></i> Facebook</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span><i class="fab fa-linkedin ms-2"></i> LinkedIn</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span><i class="fab fa-instagram ms-2"></i> Instagram</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span><i class="fab fa-youtube ms-2 "></i> YouTube</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span><i class="fab fa-tiktok ms-2"></i> TikTok</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span><i class="fab fa-twitter ms-2"></i> Twitter</li>
+                </ul>
+            </div>
+        </div>
+<hr>
+          <!-- Bottom section -->
+          <div class="footer-bottom d-flex justify-content-center   mx-auto" style="width: 85%;"  >
+            <p>&copy; 2024 Chalice Health. All Rights Reserved.</p>
+            <span class="w-75 d-flex justify-content-center"><a href="#">Term of Service</a>
+              <a href="#">Privacy</a>
+              <a href="#">Policies</a>
+             </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- footer end -->

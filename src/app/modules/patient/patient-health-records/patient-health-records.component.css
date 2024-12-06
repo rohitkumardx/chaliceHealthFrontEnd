@@ -1,0 +1,408 @@
+/* General Styles */
+.main-banner {
+    background-color: #f9f9f9;
+    padding: 30px;
+  }
+  
+  .wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .content-wrapper {
+    max-width: 100%px;
+    width: 100%;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .signup-card {
+    width: 100%;
+    max-width:  100%;
+  }
+  
+  .signup-card h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .red {
+    color: red;
+  }
+  
+  /* Form Styles */
+  .signup-form {
+    width: 100%;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  input[type="text"],
+  input[type="file"],
+  textarea,
+  select {
+    width: 100%;
+    /* padding: 10px; */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: border 0.3s;
+  }
+  
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: 00876F;
+    outline: none;
+  }
+  
+  textarea {
+    height: 120px;
+    /* resize: vertical; */
+  }
+  
+  .custom-textarea {
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Custom Dropdown */
+  .custom-dropdown {
+    position: relative;
+  }
+  
+  .custom-dropdown select {
+    appearance: none;
+  }
+  
+  .dropdown-symbol {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  .dropdown-symbol i {
+    font-size: 16px;
+    color: #888;
+  }
+  
+  .invalid-feedback {
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+  }
+  
+  /* .is-invalid {
+    border-color: red;
+  } */
+  .is-invalid {
+    border: 1px solid #DC3545!important;
+  }
+  
+  /* Profile Picture Styles */
+  .selected-files {
+    margin-top: 10px;
+  }
+  
+  .selected-files ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .selected-files li {
+    background-color: #eee;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .remove-icon {
+    color: red;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .error-message {
+    font-size: 12px;
+  }
+  
+  
+  .button{
+    background: #00876F!important;
+    color: white !important;
+    font-weight: 500 !important;
+    width: 15rem;
+    /* margin-left: 5.5rem; */
+  
+   
+  }
+  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+    color: #00876F!important;
+  }
+  
+  button:hover {
+    background-color: #00876F;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+  }
+  
+  .space {
+    margin-left: 5px;
+  }
+  
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .form-group.col-3,
+    .form-group.col-4,
+    .form-group.col-6,
+    .form-group.col-12 {
+      width: 100%;
+    }
+  
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  
+    .col-1,
+    .col-3,
+    .col-4,
+    .col-6,
+    .col-12 {
+      flex: 0 0 100%;
+      max-width: 100%;
+      padding: 0 15px;
+    }
+  
+    button {
+      width: 100%;
+    }
+  }
+  
+  /* thead {
+    background: #00876F!important;
+    color: white;
+    font-size: small;
+  }
+  table tr th {
+    color: #fff !important;
+    font-size: 12px;
+  } */
+  /* Table Header */
+  table thead th {
+    background-color: #d3d3d3; /* Light grey header */
+    color: #000; /* Black text */
+    text-align: center;
+    padding: 12px; /* Increase padding */
+    border-bottom: 3px solid #bbb; /* Slightly thicker bottom border */
+    font-weight: bold; /* Ensure bold text */
+  }
+  
+  /* Table Body Rows */
+  table tbody tr {
+    border-top: 1px solid #bbb; /* Add top border for rows */
+    border-bottom: 1px solid #bbb; /* Keep bottom border */
+  }
+  
+  /* Alternating Row Colors */
+  table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; 
+  }
+  
+  table tbody tr:nth-child(even) {
+    background-color: #fff; 
+  }
+  
+  /* Table Cell Padding */
+  table td {
+    padding: 12px; /* Increase padding */
+  }
+  
+  /* Action Icons */
+  .fa-pen-to-square {
+    color: #00876f; /* Green edit icon */
+    cursor: pointer;
+  }
+  
+  .fa-trash {
+    color: rgb(166, 7, 7); /* Red delete icon */
+    cursor: pointer;
+  }
+  
+  /* Responsive Table */
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .radio-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .radio-group label {
+    margin-right: 16px;
+    font-size: 14px;
+  }
+  
+  input[type="radio"] {
+    margin-right: 8px;
+  }
+
+  
+.switch {
+  position: relative;
+  display: block;
+  width: 35px;
+  height: 15px;
+  padding: 2px;
+  background: linear-gradient(to bottom, green, green 25px);
+  background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF 25px);
+  border-radius: 18px;
+  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  box-sizing:content-box;
+}
+.switch-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  box-sizing:content-box;
+}
+.switch-label {
+  position: relative;
+  display: block;
+  height: inherit;
+  font-size: 10px;
+  text-transform: uppercase;
+  background: green;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+  box-sizing:content-box;
+}
+.switch-label:before, .switch-label:after {
+  position: absolute;
+  top: 50%;
+  margin-top: -2.5em;
+  line-height: 1;
+  -webkit-transition: inherit;
+  -moz-transition: inherit;
+  -o-transition: inherit;
+  transition: inherit;
+  box-sizing:content-box;
+}
+.switch-label:before {
+  content: attr(data-off);
+  right: 11px;
+  color: green;
+  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+}
+.switch-label:after {
+  content: attr(data-on);
+  left: 11px;
+  color: green;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+}
+.switch-input:checked ~ .switch-label {
+  background: linear-gradient(to top, red, red);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+}
+.switch-input:checked ~ .switch-label:before {
+  opacity: 0;
+}
+.switch-input:checked ~ .switch-label:after {
+  opacity: 1;
+}
+.switch-handle {
+  position: absolute;
+  top: 1.7px;
+  left: 0px;
+  width: 17px;
+  height: 15px;
+  background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+  background-image: -webkit-linear-gradient(top, #FFFFFF 40%, #f0f0f0);
+  border-radius: 100%;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+.switch-handle:before {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  margin: -6px 0 0 -6px;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+  background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF);
+  border-radius: 6px;
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+}
+.switch-input:checked ~ .switch-handle {
+  left: 26px;
+  box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+} 
+/* Transition
+========================== */
+.switch-label, .switch-handle {
+  transition: All 0.3s ease;
+  -webkit-transition: All 0.3s ease;
+  -moz-transition: All 0.3s ease;
+  -o-transition: All 0.3s ease;
+} 
+
+.mat-mdc-tab-group, .mat-mdc-tab-nav-bar {
+  --mdc-tab-indicator-active-indicator-color: #00876F!important;
+  --mat-tab-header-disabled-ripple-color: #00876F;
+  --mat-tab-header-pagination-icon-color: #000;
+  --mat-tab-header-inactive-label-text-color: rgba(0, 0, 0, 0.6);
+  --mat-tab-header-active-label-text-color: #00876F;
+  --mat-tab-header-active-ripple-color: #00876F;
+  --mat-tab-header-inactive-ripple-color:#00876F;
+  --mat-tab-header-inactive-focus-label-text-color: rgba(0, 0, 0, 0.6);
+  --mat-tab-header-inactive-hover-label-text-color: rgba(0, 0, 0, 0.6);
+  --mat-tab-header-active-focus-label-text-color: #00876F;
+  --mat-tab-header-active-hover-label-text-color: #00876F;
+  --mat-tab-header-active-focus-indicator-color: #00876F!important;
+  --mat-tab-header-active-hover-indicator-color: #00876F!important;
+}
+
+
+
+
+
+
+  
+  
+  
+  
+  

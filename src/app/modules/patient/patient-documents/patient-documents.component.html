@@ -1,0 +1,141 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="document-card ">
+        
+                    <!-- <span class="close-icon" (click)="cancel()">&times;</span> -->
+                    <h1><b>Documents</b></h1>
+                    <form [formGroup]="documentForm" class="mt-2">
+                        <div class="row p-2">
+                            <div class="col-sm-4">
+                                <label for="patientCategory">Category<span class="red">*</span></label>
+                                <select class="form-select form-select-sm cursor mt-2" formControlName="patientCategory"
+                                    [ngClass]="{'is-invalid': documentForm.get('patientCategory')?.invalid &&  documentForm.get('patientCategory')?.touched}">
+                                    <option value="" disabled selected>Select</option>
+                                    <option *ngFor="let item of obj" [value]="item.id">{{item.value}}</option>
+                                </select>
+                                <div class="invalid-feedback"
+                                    *ngIf="documentForm.get('patientCategory')?.touched && documentForm.get('patientCategory')?.hasError('required')">
+                                    Category is required.
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="title">Title<span class="red">*</span></label>
+                                <input type="text" id="title" class="form-control form-control-sm mt-2"
+                                    formControlName="title"
+                                    [ngClass]="{'is-invalid':documentForm.get('title')?.invalid && documentForm.get('title')?.touched}"
+                                    [value]="documentForm.get('title')?.value | capitalizeFirstLetter">
+                                <div class="invalid-feedback"
+                                    *ngIf="documentForm.get('title')?.touched && documentForm.get('title')?.hasError('required')">
+                                    Title is required.
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="expiryDate">Expiry Date<span class="red">*</span></label>
+                                <input type="date" id="expiryDate" class="form-control form-control-sm mt-2"
+                                    formControlName="expiryDate"
+                                    [ngClass]="{'is-invalid':documentForm.get('expiryDate')?.invalid && documentForm.get('expiryDate')?.touched}">
+                                <div class="invalid-feedback"
+                                    *ngIf="documentForm.get('expiryDate')?.touched && documentForm.get('expiryDate')?.hasError('required')">
+                                    Expiry Date is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row p-2">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="fileName">Upload Document<span class="red">*</span></label>
+                                    <input type="file" id="fileName"
+                                        class="form-control form-control-sm mt-1 small-input" formControlName="fileName"
+                                        [ngClass]="{'is-invalid': documentForm.get('fileName')?.invalid && documentForm.get('fileName')?.touched}"
+                                        (change)="onProfileSelected($event)">
+                                    <div class="invalid-feedback"
+                                        *ngIf="documentForm.get('fileName')?.touched && documentForm.get('fileName')?.hasError('required')">
+                                        File is required.
+                                    </div>
+                                    <div class="file" *ngIf="selectedFile != null">
+                                        <span class="cursor"
+                                            (click)="downloadFile(selectedFilePath)">{{selectedFile}}</span>
+                                        <a><i class="mdi mdi-delete icon icon-lg cursor red" title="Delete"></i></a><br>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="fileName">Upload Document<span class="red">*</span></label>
+                                    <input type="file" id="fileName"
+                                        class="form-control form-control-sm mt-1 small-input" formControlName="fileName"
+                                        [ngClass]="{'is-invalid': documentForm.get('fileName')?.invalid && documentForm.get('fileName')?.touched}"
+                                        (change)="onProfileSelected($event)">
+                                    <div class="invalid-feedback"
+                                        *ngIf="documentForm.get('fileName')?.touched && documentForm.get('fileName')?.hasError('required')">
+                                        File is required.
+                                    </div>
+                                    <div class="file" *ngIf="selectedFile!= null">
+                                        <span class="cursor" (click)="downloadFile(selectedFilePath)">{{selectedFile}}</span>
+                                        <a><i class="mdi mdi-delete icon icon-lg cursor red" title="Delete"></i></a><br>
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="row p-2">
+                            <div class="form-group col-12">
+                                <label for="notes">Notes</label>
+                                <textarea id="notes" class="form-control form-control-sm mt-1" formControlName="notes"
+                                    [ngClass]="{'is-invalid': documentForm.get('notes')?.invalid && documentForm.get('notes')?.touched}"></textarea>
+                                <div class="invalid-feedback"
+                                    *ngIf="documentForm.get('notes')?.touched && documentForm.get('notes')?.hasError('required')">
+                                    Notes is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row p-2 d-flex">
+                            <div class="col-sm-12 d-flex justify-content-end pt-2">
+                                <button type="button" class="btn custom-padding" style="background-color: #00876f;"
+                                    (click)="submitData()">Save
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Optional Table -->
+
+                        <div class="table-responsive mt-5">
+                            <table class="table table-hover ">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Document</th>
+                                        <th scope="col">Expiry Date</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of documentData; let i = index">
+                                        <td>{{ item.patientCategory }}</td>
+                                        <td>{{ item.title}}</td>
+                                        <td (click)="downloadFile(item.filePath)" class="cursor" style="color: blue;">{{
+                                            item.fileName }}</td>
+                                        <td>{{ item.expiryDate }}</td>
+                                        <td>
+                                            <i class="fa-solid fa-share-alt me-3 cursor" (click)="shareItem(item)"
+                                            style="color: #007BFF; font-size: medium;"></i>
+                                            <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editDocument(i)"
+                                                style="color:#00876f;font-size: medium;"></i>
+                                            <i class="fa-solid fa-trash cursor" (click)="deleteDocument(item.id)"
+                                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </form>
+              
+            </div>
+        </div>
+    </div>
+</section>

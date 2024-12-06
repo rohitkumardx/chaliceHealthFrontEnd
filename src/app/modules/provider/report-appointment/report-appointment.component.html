@@ -1,0 +1,81 @@
+<div class="popup-overlay">
+  <div class="popup" *ngIf="bookingId.type == 'Report'">
+    <div class="popup-header">
+      <h1 class="mt-2">Report this appointment</h1>
+
+      <i class="fa-solid fa-xmark close-icon" (click)="modalClose()"></i>
+    </div>
+    <div class="appointment-info">
+      <p><strong>Appointment:</strong> {{ getFormattedAppointment() }} {{ appointmentDetails.meetingType }} visit</p>
+      <p><strong>Patient:</strong> {{appointmentDetails.patientName}}</p>
+    </div>
+    <!-- <div class="report-options">
+      <label *ngFor="let option of reportOptions">
+        <input type="radio" name="reportReason" [(ngModel)]="reportReason" [value]="option.id" />
+        {{ option.name }}
+      </label>
+    </div>
+    <div class="comment-box">
+      <textarea [(ngModel)]="comment" placeholder="Comment"></textarea>
+    </div>
+    <button class="save-feedback" (click)="submitFeedback()">Save Feedback</button> -->
+    <div class="report-options">
+      <label *ngFor="let option of reportOptions">
+        <input type="radio" name="reportReason" [(ngModel)]="reportReason" [value]="option.id" />
+        {{ option.name }}
+      </label>
+    </div>
+    <div *ngIf="isReportReasonInvalid" class="validation-error">Please select a reason for reporting.</div>
+    
+    <div class="comment-box">
+      <textarea [(ngModel)]="comment" placeholder="Comment"></textarea>
+    </div>
+    <div *ngIf="isCommentInvalid" class="validation-error">Comment is required.</div>
+    
+    <button class="save-feedback" (click)="submitFeedback()">Save Feedback</button>
+    
+    
+  </div>
+
+  <div class="popup" *ngIf="bookingId.type == 'Cancel'">
+    <div class="popup-header">
+      <h1 class="mt-2">Appointment Details</h1>
+
+      <i class="fa-solid fa-xmark close-icon" (click)="modalClose()"></i>
+    </div>
+    <div class="appointment-info">
+      <p><strong>Patient Name :</strong> {{ appointmentDetails.patientName }} </p>
+      <p><strong>DOB :</strong> {{ formatDOB(appointmentDetails.dob) }}</p>
+
+      <p><strong>Gender :</strong> {{appointmentDetails.patientName}}</p>
+      <p><strong>Date :</strong> {{appointmentDetails.gender}}</p>
+      <p><strong>Time :</strong> {{ formatTime(appointmentDetails.startTime) }}</p>
+
+      <p><strong>Location :</strong> {{appointmentDetails.stateName}}, {{appointmentDetails.city}} </p>
+      <p><strong>Type :</strong> {{appointmentDetails.meetingType}}</p>
+      <p><strong>Reason for Visit :</strong> {{appointmentDetails.reasonForVisit}}</p>
+    </div>
+    <div class="row p-1">
+      <div class="form-group col-12">
+          <label for="reasonForCancellation"><strong>Reason for Cancellation</strong></label>
+          <textarea id="reasonForCancellation" [(ngModel)]="reasonForCancellation" class="form-control form-control-sm mt-2" 
+             ></textarea>
+          
+      </div>
+  </div>
+
+    <div class="mt-4 text-center mb-4">
+      Are you sure you want to cancel this appointment?
+      <div class="row d-flex justify-content-center mt-2">
+        <div class="col-auto">
+          <button class="save-feedback confirmButton" (click)="confirmCancellation()">Confirm</button>
+        </div>
+        <div class="col-auto">
+          <button class="save-feedback cancelButton" (click)="cancel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

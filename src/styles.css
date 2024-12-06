@@ -1,0 +1,198 @@
+/* You can add global styles to this file, and also import other style files
+.text-transform-reset {
+  text-transform: none !important;
+}
+
+.ml-2 {
+  margin-left: 0.5rem !important;
+}
+
+html, body {
+  height: 100%;
+}
+
+
+  --bs-body-font-family: 'Public Sans';
+  --bs-btn-color: #fff;
+  --bs-success-rgb: 50, 107, 112;
+}
+
+.btn {
+  --bs-btn-color: #fff;
+}
+
+body {
+  background-color: #F9FAFA !important;
+}
+
+
+
+.form-control:focus, .form-select:focus, .eye-toggle:focus {
+  border-color: #326B70 !important;
+  box-shadow: unset !important;
+}
+
+.form-control {
+  padding-left: 1rem;
+}
+
+.modal {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  width: auto;
+  margin: auto;
+}
+
+.text-light {
+  color: #fff !important;
+}
+
+.spinner-border {
+  width: 1.42rem !important;
+  height: 1.42rem !important;
+}
+
+
+.mr-7 {
+  margin-right: 7px !important;
+}
+
+.mr-2o5rem {
+  margin-right: 2.5rem !important;
+}
+
+.pl-0 {
+  padding-left: 0px !important;
+
+}
+
+.pr-0 {
+  padding-right: 0px !important;
+}
+
+.justify-content-unset {
+  justify-content: unset !important;
+}
+
+.color-primary {
+  color: #326B70;
+}
+
+.white-space-nowrap {
+  white-space: nowrap !important;
+}
+
+.ml-1o8rem {
+  margin-left: 1.8rem !important;
+}
+
+
+.font-size-1rem {
+  font-size: 1rem !important;
+}
+
+.ml-0o3rem {
+  margin-left: 0.3rem !important;
+}
+
+.mb-0o7rem {
+  margin-bottom: 0.7rem !important;
+}
+
+.pl-3o5rem {
+  padding-left: 3.5rem !important;
+}
+
+.black {
+  color: #000;
+}
+
+.text-align-left {
+  text-align: left !important;
+}
+
+.cursor-default {
+  cursor: default !important;
+}
+
+.h-6rem {
+  height: 6rem !important;
+}
+
+.form-check-input:checked, .form-check-input[type=checkbox]:indeterminate {
+  background-color: #204446 !important;
+  border-color: #326B70 !important;
+  box-shadow: unset !important;
+}
+
+.form-check-input:focus {
+  border-color: #326B70 !important;
+  box-shadow: unset !important;
+}
+
+.form-label, .col-form-label {
+  font-size: 0.8125rem;
+}
+
+.form-label span, .col-form-label span {
+  color: #FA4A55;
+}
+
+.mr-3-5 {
+  margin-right: 1.25rem;
+}
+
+
+/* pagination 
+.btn-page-size {
+  background: none;
+  border: none;
+  color: #326B70;
+}
+
+.pagination {
+  --bs-pagination-padding-x: 0.5125rem;
+  --bs-pagination-padding-y: 0.625rem;
+  --bs-pagination-font-size: 0.9375rem;
+  --bs-pagination-color: #9AA1BC;
+  --bs-pagination-bg: #fff;
+  --bs-pagination-border-width: 0px;
+  --bs-pagination-border-color: #fff;
+  --bs-pagination-border-radius: 0.25rem;
+  --bs-pagination-hover-color: #326B70;
+  --bs-pagination-hover-bg: #fff;
+  --bs-pagination-hover-border-color: rgba(67, 89, 113, 0.3);
+  --bs-pagination-focus-color: #326B70;
+  --bs-pagination-focus-bg: #e1e4e8;
+  --bs-pagination-focus-box-shadow: none;
+  --bs-pagination-active-color: #326B70;
+  --bs-pagination-active-bg: #fff;
+  --bs-pagination-active-border-color: #fff;
+  --bs-pagination-disabled-color: #a1acb8;
+  --bs-pagination-disabled-bg: #fff;
+  --bs-pagination-disabled-border-color: rgba(67, 89, 113, 0.3);
+
+  margin: 0;
+  padding: 0;
+}
+
+/* hide go to first and last page
+.pagination li:first-child, .pagination li:last-child {
+  display: none;
+}
+
+.page-link {
+  margin: 0;
+  min-width: auto;
+}
+
+.page-item.disabled .page-link {
+  border: none;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */

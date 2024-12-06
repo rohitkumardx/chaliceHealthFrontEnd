@@ -1,0 +1,105 @@
+<div class="container-fluid px-4 p-2" style="   background-color: #ffffff !important;">
+  <div class="row g-4">
+    <div class="col-6">
+      <div class=" rounded h-100 p-2">
+        <div class="card ">
+          <div class="rounded border border-danger">
+            <div class=" px-5 py-4 border border-danger">
+              <div class="row  w-100">
+                <!-- Left Section -->
+                <div class="col-lg-12 left-section mt-2 border border-danger" style="padding: 0px 0px !important;">
+                  <h2>Set up your Chalice Health account</h2>
+                  <ul class="steps">
+                    <li [class.active]="currentStep == 1" [class.completed]="currentStep > 1">
+                      <div class="step-content">
+                        <h3><span class="step-number">1</span> Your Profile</h3>
+                        <div class="">
+                          <!-- <p>Add your practice name and location so patients can find you via ChaliceHealth search. <i -->
+                          <p class="border border-danger">Update your profile details and complete your info. <i
+                              class="fa-solid fa-pen-to-square ms-2" *ngIf="currentStep > 1"
+                              style="cursor:pointer;color:#00876f;font-size: large;" (click)="openProfilePopUp()"></i>
+                          </p>
+                        </div>
+                        <button class="btn btn-primary" *ngIf="currentStep == 1" (click)="nextStep()">Add Profile
+                          Details</button>
+                      </div>
+                    </li>
+
+                    <li [class.active]="currentStep == 2" [class.completed]="currentStep > 2">
+                      <div class="step-content">
+                        <h3><span class="step-number" [class.active-number]="currentStep == 2">2</span> Contact Details
+                        </h3>
+                        <div>
+                          <p>Update your contact details and complete your information.<i
+                              class="fa-solid fa-pen-to-square ms-2" *ngIf="currentStep > 2"
+                              style="cursor:pointer;color:#00876f;font-size: large;" (click)="openContactPopUp()"></i>
+                          </p>
+                        </div>
+                        <button class="btn btn-primary" *ngIf="currentStep == 2" (click)="nextStep()">
+                        Add  Contact Details</button>
+                      </div>
+                    </li>
+
+                    <li [class.active]="currentStep == 3" [class.completed]="currentStep > 3">
+                      <div class="step-content">
+                        <h3><span class="step-number" [class.active-number]="currentStep == 3">3</span> Medical License
+                          Information</h3>
+                        <p>Add medical license or other details for verification purpose.<i
+                            class="fa-solid fa-pen-to-square ms-2" *ngIf="currentStep > 3"
+                            style="cursor:pointer;color:#00876f;font-size: large;" (click)="openMedicalPopUp()"></i></p>
+                        <button class="btn btn-primary" *ngIf="currentStep == 3" (click)="nextStep()">Add License
+                          Details</button>
+                      </div>
+                    </li>
+
+                    <li [class.active]="currentStep == 4" [class.completed]="currentStep > 4">
+                      <div class="step-content">
+                        <h3><span class="step-number" [class.active-number]="currentStep == 4">4</span> Services and
+                          Prices</h3>
+                        <p>Define your services and set your pricing details.<i class="fa-solid fa-pen-to-square ms-2"
+                            *ngIf="currentStep > 4" style="cursor:pointer;color:#00876f;font-size: large;"
+                            (click)="openServicePopUp()"></i></p>
+                        <button class="btn btn-primary" *ngIf="currentStep == 4" (click)="nextStep()">Add Service and
+                          Price</button>
+                      </div>
+                    </li>
+
+                    <li [class.active]="currentStep == 5" [class.completed]="currentStep > 5">
+                      <div class="step-content">
+                        <h3><span class="step-number" [class.active-number]="currentStep == 5">5</span> Documents</h3>
+                        <p>Update documents for verification purpose . <i class="fa-solid fa-pen-to-square ms-2"
+                            *ngIf="currentStep > 5" style="cursor:pointer;color:#00876f;font-size: large;"
+                            (click)="openDocumentPopUp()"></i></p>
+                        <button class="btn btn-primary" *ngIf="currentStep == 5" (click)="nextStep()">Add
+                          Documents</button>
+                      </div>
+                    </li>
+
+                    <li [class.active]="currentStep == 6">
+                      <div class="step-content">
+                        <h3><span class="step-number" [class.active-number]="currentStep == 6">6</span> Wait for Review
+                        </h3>
+                        <p>Our credentialing team is currently reviewing your account to verify your credentials and licenses. This process typically takes 7 to 14 days. Once completed, your account will be approved and activated.</p>
+                      </div>
+                    </li>
+                  </ul>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile col-6">
+      <img src="../../../../assets/svg/homepage/profile.jpg" alt="Logo" *ngIf="currentStep == 1">
+      <img src="../../../../assets/svg/homepage/contact.png" alt="Logo" *ngIf="currentStep == 2">
+      <img src="../../../../assets/svg/homepage/medical.png" alt="Logo" *ngIf="currentStep == 3">
+      <img src="../../../../assets/svg/homepage/service-and-price.png" alt="Logo" *ngIf="currentStep == 4">
+      <img src="../../../../assets/svg/homepage/Document.png" alt="Logo" *ngIf="currentStep == 5">
+      <img src="../../../../assets/svg/homepage/Document.png" alt="Logo" *ngIf="currentStep == 6">
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+<div class="container my-2 pb-3">
+    <div class="header">
+        <h3 class="mt-2"><u>Patient Clinical Dashboard</u></h3>
+        <div class="close-btn" (click)="modalClose()"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+<!-- <div class="w-100 text-end"> <i class="fa-solid fa-xmark cancel-icon text-end cursor" (click)="modalClose()"></i></div> -->
+    <div class="row g-4 profile-card  text-start align-items-center">
+        <!-- Patient Image and Name Section -->
+        <div class="col-md-3 text-center">
+            <img *ngIf="patientList?.profilePicturePath" [src]="patientList.profilePicturePath" class="profile-image">
+
+            <!-- <img src="../../../../assets/svg/customer01.jpg" alt="Default Profile Picture" class="profile-image"> -->
+            <h5 class="mt-2">{{patientList.patientName || '--------'}}</h5>
+        </div>
+        <!-- Patient Details Section -->
+        <div class="col-md-3">
+            <p class="text-muted mb-1">
+                <strong>Age:</strong> {{patientList.age || '--------'}} Yrs, {{patientList.gender|| '--------'}}
+            </p>
+            <p class="text-muted small">
+                <strong>DOB:</strong> {{patientList.formattedDateOfBirth|| '--------'}}<br>
+                <strong>Code:</strong> {{patientList.uniqueId|| '--------'}}
+            </p>
+        </div>
+        <!-- Contact Information Section -->
+        <div class="col-md-3">
+            <p class="contact-info mb-1">
+                <i class="fa-solid fa-phone text-success me-2"></i> {{patientList.phoneNumber|| '--------'}}
+            </p>
+            <p class="contact-info mb-1">
+                <i class="fa-solid fa-envelope text-primary me-2"></i> {{patientList.email|| '--------'}}
+            </p>
+            <p class="contact-info">
+                <i class="fa-solid fa-location-dot text-danger me-2"></i> {{patientList.address|| '--------'}}
+            </p>
+        </div>
+        <div class="col-md-3" *ngFor="let item of documentList; let i = index" style="margin-top: -1px!important;">
+        <!-- <p class="py-0 my-0">{{item.fileName}}</p> -->
+        <a [href]="item.filePath" target="_blank">{{item.fileName}}</a>
+
+        <!-- <p class="py-0 my-0">Document 2</p>
+        <p class="py-0 my-0">Document 3</p>
+        <p class="py-0 my-0">Document 3</p> -->
+
+       
+        </div>
+    </div>
+    
+    
+
+    <!-- Medical History Section -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+
+            <div class="vital-info-card">
+                <h5 class="vital-title">Vital Info</h5>
+                <div class="row text-center">
+                    <div class="col-md-4 vital-item">
+                        <p class="vital-label">Heart Beat</p>
+                        <p class="vital-value">{{patientList.heartRate|| '--------'}}</p>
+                    </div>
+                    <div class="col-md-4 vital-item">
+                        <p class="vital-label">BP</p>
+                        <p class="vital-value">{{patientList.bloodPressure|| '--------'}}</p>
+                    </div>
+                    <div class="col-md-4 vital-item">
+                        <p class="vital-label">Temperature</p>
+                        <p class="vital-value">{{patientList.temperature|| '--------'}}°C</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-md-4 vital-item">
+                        <p class="vital-label">Height</p>
+                        <p class="vital-value">{{patientList.height|| '--------'}}</p>
+                    </div>
+                    <div class="col-md-4 vital-item">
+                        <p class="vital-label">Weight</p>
+                        <p class="vital-value">{{patientList.weight|| '--------'}}</p>
+                    </div>
+                    <div class="col-md-4 vital-item">
+                        <p class="vital-label">Vital Date</p>
+                        <p class="vital-value">{{patientList.vitalDate|| '--------'}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+       <div class="col-md-6">
+            <div class="medical-history p-4">
+                <h5 class="section-title mb-3">Medical History</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped align-middle">
+                        <thead class="table-header">
+                            <tr>
+                                <th scope="col">Diseases</th>
+                                <th scope="col">Date Of Diagnosis</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{patientList.conditionName|| '--------'}}</td>
+                                <td>{{patientList.dateOfDiagnosis|| '--------'}}</td>
+                            </tr>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

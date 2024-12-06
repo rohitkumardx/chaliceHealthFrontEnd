@@ -1,0 +1,100 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="w-100 text-end">
+
+        <i class="fa-solid fa-xmark cancel-icon text-end cursor"  (click)="modalClose()"></i>
+        <h3 class="text-center" style="font-size: larger;font-weight: 600;margin-top: -4%;">SOAP Notes and Prescriptions</h3>
+      </div>
+ 
+      <div class="modal-body">
+    
+        <!-- Patient Information Section -->
+        <div class="patient-info mb-3">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Patient Name: </strong> {{soapNotesData.patientName}}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Gender: </strong> {{soapNotesData.gender}}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>DOB: </strong> {{ formatDOB(soapNotesData.dob) }}<span class="text-muted"> ({{ calculateAge(soapNotesData.dob) }} yrs)</span></p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Date: </strong> {{soapNotesData.date}}</p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Encounter Details Section -->
+        <div class="encounter-details">
+          <div class="mb-3">
+            <h6 class="fw-bold">Subjective</h6>
+            <p>{{ soapNotesData.subjective ? soapNotesData.subjective : '------' }}</p>
+          </div>
+  
+          <div class="mb-3">
+            <h6 class="fw-bold">Objective</h6>
+            <p>{{  soapNotesData.objective ? soapNotesData.objective : '------' }}</p>
+          </div>
+  
+          <div class="mb-3">
+            <h6 class="fw-bold">Assessment</h6>
+            <p>{{  soapNotesData.assessment ? soapNotesData.assessment : '------' }}</p>
+          </div>
+  
+          <div>
+            <h6 class="fw-bold">Plan</h6>
+            <p>{{ soapNotesData.plan ? soapNotesData.plan : '------' }}</p>
+          </div>
+        </div>
+  
+        <!-- Prescriptions List Section -->
+        <div class="prescriptions-list mt-4">
+          <h4 class="fw-bold m-1">Prescriptions</h4>
+          <div *ngIf="prescriptionsList && prescriptionsList.length > 0; else noPrescriptions">
+            <table class="table table-bordered">
+              <thead class="table-light">
+                <tr>
+                  <th>Medicine Name</th>
+                  <th>Frequency</th>
+                  <th>Dosage</th>
+                  <th>Duration</th>
+                  <th>Direction Of Use</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let prescription of prescriptionsList">
+                  <td>{{prescription.medicationName}}</td>
+                  <td>{{prescription.frequency}}</td>
+                  <td>{{prescription.doseForm}}, {{prescription.doseStrength}}</td>
+                  <td>{{prescription.duration}}</td>
+                  <td>{{prescription.directionOfUse}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #noPrescriptions>
+            <p class="text-muted">No prescriptions available for this encounter.</p>
+          </ng-template>
+        </div>
+  
+        <!-- Signature Section -->
+        <div class="signature-section mt-4">
+          <h4 class="fw-bold m-1">Physician's Signature</h4>
+          <div class="signature-box p-3 border rounded text-center" style="width: 25rem !important;">
+            <!-- Dynamically load the signature -->
+            <img
+              *ngIf="signatureUrl"
+              [src]="signatureUrl"
+              alt="Physician's Signature"
+              class="img-fluid"
+              style="max-width: 200px;"
+            />
+            <p *ngIf="!signatureUrl" class="text-muted">No signature available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

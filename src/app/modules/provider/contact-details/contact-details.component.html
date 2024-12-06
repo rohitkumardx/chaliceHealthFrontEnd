@@ -1,0 +1,183 @@
+<div class="p-3 mt-2 mb-3">
+    <span class="close-icon" (click)="cancel()">&times;</span>
+    <h1 class="mt-1"><b>Contact Details</b></h1>
+    <form [formGroup]="contactForm" class="mt-2">
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label for="phoneNumber"> Phone Number<span class="red">*</span></label>
+                <input type="text" id="phoneNumber" class="form-control form-control-sm mt-1"
+                    formControlName="phoneNumber" maxlength="14" (input)="formatPhoneNumber($event)"
+                    [ngClass]="{'is-invalid':contactForm.get('phoneNumber')?.invalid && contactForm.get('phoneNumber')?.touched}"
+                    [value]="contactForm.get('phoneNumber')?.value | capitalizeFirstLetter">
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('phoneNumber')?.touched && contactForm.get('phoneNumber')?.hasError('required')">
+                    Phone Number is required.
+                </div>
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('phoneNumber')?.touched && contactForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                    Phone number is invalid.
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-12">
+                <label>Address <span class="red">*</span> </label>
+                <textarea id="address-input" class="form-control form-control-sm mt-1" type="text"
+                [ngClass]="{'is-invalid':contactForm.get('address')?.invalid && contactForm.get('address')?.touched}"
+                    formControlName="address" placeholder="Enter your address" (input)="onAddressChange($event)">
+              </textarea>
+                <ul *ngIf="suggestions.length">
+
+                    <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion.address.label)">
+                        {{ suggestion.address.label }}
+                    </li>
+                </ul>
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('address')?.touched && contactForm.get('address')?.hasError('required')">
+                    Address is required.
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label for="city">City<span class="red">*</span></label>
+                <input type="text" id="city" class="form-control form-control-sm mt-1" formControlName="city"
+                    [ngClass]="{'is-invalid':contactForm.get('city')?.invalid && contactForm.get('city')?.touched}"
+                    [value]="contactForm.get('city')?.value | capitalizeFirstLetter">
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('city')?.touched && contactForm.get('city')?.hasError('required')">
+                    City is required.
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label>State<span class="red">*</span></label>
+                <select class="form-select form-select-sm cursor mt-1" formControlName="stateId"
+                    [ngClass]="{'is-invalid': contactForm.get('stateId')?.invalid &&  contactForm.get('stateId')?.touched}">
+                    <option value="" disabled selected>Select</option>
+                    <option [value]="item.id" *ngFor="let item of state">{{item.name}}</option>
+                </select>
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('stateId')?.touched && contactForm.get('stateId')?.hasError('required')">
+                    State is required.
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <!-- <div class="col-sm-6">
+                <label for="Country">Country<span class="red">*</span></label>
+                <input type="text" id="Country" class="form-control form-control-sm mt-1" formControlName="countryName" readonly
+                    [ngClass]="{'is-invalid':contactForm.get('countryName')?.invalid && contactForm.get('countryName')?.touched}"
+                    [value]="contactForm.get('countryName')?.value | capitalizeFirstLetter">
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('countryName')?.touched && contactForm.get('countryName')?.hasError('required')">
+                    Country is required.
+                </div>
+            </div> -->
+            <div class="col-sm-6">
+                <label for="city">ZIP/Postal Code<span class="red">*</span></label>
+                <input type="text" id="city" class="form-control form-control-sm mt-1" formControlName="postalCode"
+                    maxlength="6"
+                    [ngClass]="{'is-invalid':contactForm.get('postalCode')?.invalid && contactForm.get('postalCode')?.touched}"
+                    [value]="contactForm.get('postalCode').value">
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('postalCode').touched && contactForm.get('postalCode').hasError('required')">
+                    ZIP/Postal Code is required.
+                </div>
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('postalCode').touched && contactForm.get('postalCode').hasError('pattern')">
+                    ZIP/Postal Code must be numeric.
+                </div>
+            </div>
+
+        </div>
+       
+
+
+        <h3 class="mt-2 mb-1 ms-1" style="font-weight:500 !important;">Practice Contact Details (If different)</h3>
+        <div class="row p-2">
+            <div class="col-sm-4">
+                <label for="city">Website</label>
+                <input type="text" id="city" class="form-control form-control-sm mt-1" formControlName="practiceWebsite"
+                    [ngClass]="{'is-invalid': contactForm.get('practiceWebsite')?.invalid && contactForm.get('practiceWebsite')?.touched}"
+                    [value]="contactForm.get('practiceWebsite')?.value">
+                <div class="invalid-feedback" *ngIf="contactForm.get('practiceWebsite')?.hasError('invalidUrlPattern')">
+                    Website URL is invalid
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <label for="city">Phone Number</label>
+                <input type="text" id="city" class="form-control form-control-sm mt-1"
+                    formControlName="practicePhoneNumber" (input)="formatPracticePhoneNumber($event)" maxlength="14"
+                    [ngClass]="{'is-invalid':contactForm.get('practicePhoneNumber')?.invalid}"
+                    [value]="contactForm.get('practicePhoneNumber')?.value">
+                <div class="invalid-feedback"
+                    *ngIf="contactForm.get('practicePhoneNumber')?.hasError('invalidPhonePattern')">
+                    Phone number is invalid.
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <label for="city">Email</label>
+                <input type="text" id="city" class="form-control form-control-sm mt-1" formControlName="practiceEmail"
+                    [ngClass]="{'is-invalid':contactForm.get('practiceEmail')?.invalid && contactForm.get('practiceEmail')?.touched}"
+                    [value]="contactForm.get('practiceEmail')?.value">
+                <div class="fv-plugins-message-container invalid-feedback d-block"
+                    *ngIf="contactForm.get('practiceEmail')?.touched && contactForm.get('practiceEmail')?.hasError('email')">
+                    Email is not valid.
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-12">
+                <label>Address </label>
+                <textarea class="form-control form-control-sm mt-1" type="text" formControlName="practiceAddress" (input)="onAddressChange1($event)"
+                    [value]="contactForm.get('practiceAddress')?.value"
+                    [ngClass]="{'is-invalid': contactForm.get('practiceAddress')?.invalid &&  contactForm.get('practiceAddress')?.touched}">
+                </textarea>
+                <ul *ngIf="suggestions1.length">
+
+                    <li *ngFor="let suggestion of suggestions1" (click)="selectSuggestionPractice(suggestion.address.label)">
+                        {{ suggestion.address.label }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="form-group col-4">
+              <label for="practiceCity">City </label>
+              <input type="text" id="practiceCity" placeholder="" class="form-control form-control-sm mt-1"
+                formControlName="practiceCity"
+                [ngClass]="{'is-invalid': contactForm.get('practiceCity')?.invalid && contactForm.get('practiceCity')?.touched}">
+              
+            </div>
+            <div class="form-group col-4">
+              <label for="practiceStateId">State </label>
+              <select id="practiceStateId" class="form-select form-select-sm cursor mt-1" formControlName="practiceStateId"
+                [ngClass]="{'is-invalid': contactForm.get('practiceStateId')?.invalid && contactForm.get('practiceStateId')?.touched}">
+                <option value="" disabled>Select</option>
+                <option *ngFor="let item of state" [value]="item.id">{{ item.name }}</option>
+              </select>
+            </div>
+            <div class="form-group col-4">
+              <label for="practiceZipCode">ZIP/ Postal Code </label>
+              <input type="number" id="practiceZipCode" placeholder="" class="form-control form-control-sm mt-1"
+                formControlName="practiceZipCode"
+                [ngClass]="{'is-invalid': contactForm.get('practiceZipCode')?.invalid && contactForm.get('practiceZipCode')?.touched}">              
+            </div>
+          </div>
+        <div class="row">
+            <div class="col-sm-5"></div>
+            <div class="mt-4 col-sm-7">
+                <button type="button" class="btn m-2 custom-padding cancelButton" (click)="cancel()">
+                    <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading1">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>Cancel</button>
+                <button type="button" class="btn m-2 custom-padding" (click)="submitData()"><span
+                        class="spinner-border text-light small-spinner" role="status" *ngIf="loading">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>Save
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

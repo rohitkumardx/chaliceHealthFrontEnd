@@ -1,0 +1,127 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="document-card">
+                <div class="px-4 py-3">
+                    <h1 class="text-center mb-2"><b>Message</b></h1>
+
+                    <!-- Recipient Section -->
+                    <div class="d-flex align-items-center row recipient-section mb-2">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <img *ngIf="messageReceiverData.profilePicturePath; else defaultIcon"
+                            [src]="messageReceiverData.profilePicturePath" alt="User Image" />
+                        <ng-template #defaultIcon>
+                            <div class="default-user-icon" style="padding: 13px 6px 13px  !important;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40"
+                                    height="40" fill="#555">
+
+                                    <circle cx="12" cy="8" r="4" />
+
+                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6v1H4v-1z" />
+                                </svg>
+                            </div>
+                        </ng-template>
+                            <p class="mb-0 "><b>To:</b> {{messageReceiverData.fullName}}</p>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-center justify-content-end pt-3">
+                        </div>
+                    </div>
+
+                    <!-- Message History Section -->
+                    <div *ngIf="messageList && messageList.length > 0; else noMessages">
+                        <div *ngFor="let item of messageList">
+                            <p class="w-100 d-flex justify-content-center" style="font-size: 16px; color: #000000;">
+                                {{ item.date | date:'d MMMM, y' }}
+                            </p>
+                            <div class="message-history">
+
+                                <div class=" mt-2">
+                                    <div class="chat-message" *ngFor="let message of item.messageList ;let i = index"
+                                        [ngClass]="{'align-right': message.senderId === userId, 'align-left': message.senderId !== userId}">
+
+                                        <img *ngIf="message.profilePicturePath; else defaultIcon"
+                                            style="  border: 1px solid #00876f; " [src]="message.profilePicturePath"
+                                            alt="User Image" />
+
+                                        <ng-template #defaultIcon>
+                                            <div class="default-user-icon" style="padding: 13px 6px 13px  !important;">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40"
+                                                    height="40" fill="#555">
+
+                                                    <circle cx="12" cy="8" r="4" />
+
+                                                    <path d="M4 20c0-4 4-6 8-6s8 2 8 6v1H4v-1z" />
+                                                </svg>
+                                            </div>
+                                        </ng-template>
+
+
+                                        <div>
+                                            <div class="message-header"
+                                                *ngIf="i === 0 || message.senderName !== item.messageList[i - 1].senderName">
+                                                {{message.senderName}}<span class="message-time">{{
+                                                    formatTime(message.time)
+                                                    }}</span>
+                                            </div>
+                                            <div class="chat-bubble">
+                                                <span *ngIf="message.messageContent; else showFileName">
+                                                    {{ message.messageContent }}
+                                                </span>
+                                                <ng-template #showFileName>
+                                                    <a style="color: blue;" class="cursor"
+                                                        (click)="downloadFile(message.filePath)"><u>{{ message.fileName
+                                                            }}</u></a>
+                                                </ng-template>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #noMessages>
+                        <p class="w-100 d-flex justify-content-center mt-4" style="font-size: 16px; color: #888888;">
+                            There is no chat
+                        </p>
+                    </ng-template>
+                    <!-- Message Body Section -->
+                    <div class="message-input d-flex align-items-center mt-4 p-2 px-2">
+                        <!-- Conditionally show input or file display -->
+                        <ng-container *ngIf="!selectedFile || selectedFile.length === 0; else fileDisplay">
+                            <!-- Text input field -->
+                            <input type="text" class="form-control message-box" placeholder="Write your message..."
+                                [(ngModel)]="message" (input)="capitalizeFirstLetter()"  (keydown.enter)="sendMessage()" />
+                            <div class="message-icons d-flex align-items-center"
+                                style="margin-top: -10px!important; margin-left: -40px!important;">
+                                <button class="btn btn-light px-2 py-1 rounded-circle" (click)="triggerFileUpload()">
+                                    <i class="fas fa-file"></i>
+                                </button>
+                                <!-- Hidden File Input -->
+                                <input type="file" #fileInput style="display: none;"
+                                    (change)="handleFileUpload($event)" />
+                            </div>
+                        </ng-container>
+
+
+                        <ng-template #fileDisplay>
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-light text-dark p-2 me-2">{{ selectedFile[0]?.name }}</span>
+
+                                <i class="fas fa-trash text-danger cursor" (click)="removeFile()"></i>
+
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-end mt-4 gap-2">
+                        <button class="btn btn-secondary" (click)="goBack()">Cancel</button>
+                        <button class="btn btn-primary" (click)="sendMessage()"
+                            [disabled]="!message || message.trim() === ''">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

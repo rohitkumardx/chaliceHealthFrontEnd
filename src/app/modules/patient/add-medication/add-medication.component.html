@@ -1,0 +1,106 @@
+<div class="popup-overlay"  >
+  <div class="popup">
+    <div class="popup-header">
+      <h2>Add Medication</h2>
+      
+     <i class="fa-solid fa-xmark close-icon" (click)="modalClose()"></i>
+    </div>
+    <form [formGroup]="medicationForm">
+      <div class="companyInfo">
+        <div class="row companyContent mt-2">
+
+          <!-- First Name Field -->
+          <div class="form-group col-6">
+            <label for="drugName">Drug Name <span class="red">*</span> </label>
+            <input type="text" id="drugName" class="form-control form-control-sm mt-1"
+              formControlName="drugName"
+              [ngClass]="{'is-invalid': medicationForm.get('drugName')?.invalid && medicationForm.get('drugName')?.touched}">
+            <div class="invalid-feedback"
+              *ngIf="medicationForm.get('drugName')?.touched && medicationForm.get('drugName')?.hasError('required')">
+              Drug Name is required.
+            </div>
+          </div>
+
+          <div class="form-group col-6">
+            <label for="strength">Strength <span class="red">*</span></label>
+            <input type="text" id="strength"  class="form-control form-control-sm mt-1"
+              formControlName="strength"
+              [ngClass]="{'is-invalid': medicationForm.get('strength')?.invalid && medicationForm.get('strength')?.touched}">
+            <div class="invalid-feedback"
+              *ngIf="medicationForm.get('strength')?.touched && medicationForm.get('strength')?.hasError('required')">
+              Strength is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="form-group col-6">
+              <label for="startDate"> Start Date <span class="red">*</span></label>
+              <input type="date" id="startDate" formControlName="startDate" placeholder=""
+                class="form-control form-control-sm mt-1"
+                [ngClass]="{'is-invalid': medicationForm.get('startDate')?.invalid && medicationForm.get('startDate')?.touched}" />
+              <div class="invalid-feedback"
+                *ngIf="medicationForm.get('startDate')?.touched && medicationForm.get('startDate')?.hasError('required')">
+                Start Date is required.
+              </div>
+            </div>
+
+
+            <div class="form-group col-6">
+              <label for="duration">Duration <span class="red">*</span></label>
+              <input type="date" id="duration" formControlName="duration" placeholder=""
+                class="form-control form-control-sm mt-1"
+                [ngClass]="{'is-invalid': medicationForm.get('duration')?.invalid && medicationForm.get('duration')?.touched}" />
+              <div class="invalid-feedback"
+                *ngIf="medicationForm.get('duration')?.touched && medicationForm.get('duration')?.hasError('required')">
+                Duration is required.
+              </div>
+            </div>
+          
+        </div>
+        <div class="row mt-3">
+          <div class="form-group col-12">
+              <label for="direction">Direction for Use </label>
+              <textarea id="direction" class="form-control form-control-sm mt-1" formControlName="direction"
+                  [ngClass]="{'is-invalid': medicationForm.get('direction')?.invalid && medicationForm.get('direction')?.touched}"></textarea>
+              <!-- <div class="invalid-feedback"
+                  *ngIf="medicationForm.get('notes')?.touched && medicationForm.get('notes')?.hasError('required')">
+                  Notes is required.
+              </div> -->
+          </div> 
+          
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-5"></div>
+                      <div class="mt-4 col-sm-7">
+                          <button type="button" class="btn m-2 custom-padding cancelButton" (click)="cancel()">
+                              <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading1">
+                                  <span class="visually-hidden">Loading...</span>
+                              </span>Cancel</button>
+                          <button type="button" class="btn m-2 custom-padding" (click)="postMedicationData()"><span
+                                  class="spinner-border text-light small-spinner" role="status" *ngIf="loading">
+                                  <span class="visually-hidden">Loading...</span>
+                              </span>Save
+                          </button>
+                      </div>
+                  </div>
+        
+        <!-- Save and Next Button -->
+        <div class="row">
+          <div class="col-3"></div>
+          <div class="col-3"></div>
+          <div class="col-3"></div>
+          <div class="col-3">
+            <!-- <button type="submit" class="btn m-2 custom-padding"
+              style="background-color: #00876F!important;" (click)="">
+              <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
+              <span *ngIf="!isLoading" class="space">Save and Next</span>
+              <span *ngIf="isLoading" class="space">Save and Next...</span>
+            </button> -->
+          </div>
+        </div>
+      </div>
+    </form>
+
+    </div>
+    </div>

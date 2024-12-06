@@ -1,0 +1,255 @@
+<div class="maincont">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar for Filters -->
+      <div class="col-md-3">
+        <div class="filter-sidebar">
+          <!-- Specialty Dropdown -->
+          <div class="dro">
+            <label for="specialtyDropdown" class="form-label">Specialty</label>
+            <div class="dropdown custom-dropdown">
+              <button type="button"
+                class=" border form-select form-select-sm w-100 text-start  justify-content-between align-items-center pb-0 ps-2 pt-1 pb-1"
+                data-bs-toggle="dropdown" aria-expanded="true">
+                <!-- {{ getSelectedSpecialitiesLabel() }} -->
+                <span *ngIf="selectedSpecialities.length === 0">Select Specialties</span>
+                <ng-container *ngFor="let item of selectedSpecialities">
+                  <span class="badge me-1">
+                    {{ item.name }}
+                    <span class="remove" (click)="removeSpeciality(item)">×</span>
+                  </span>
+                </ng-container>
+              </button>
+
+              <ul class="dropdown-menu w-100 mt-0 p-0 scrollable-menu">
+                <li class="px-2 py-2">
+                  <input type="text" class="form-control" [(ngModel)]="searchTerm" (input)="filterSpecialities()"
+                    placeholder="Search...">
+                </li>
+
+                <li *ngFor="let item of filteredSpecialities" class="dropdown-item"
+                  [ngClass]="{'bg-primary text-white': isSelected(item)}"
+                  (click)="toggleSpeciality(item) ; $event.stopPropagation()">
+                  {{ item.name }}
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+          <!-- Credentials Dropdown -->
+          <form [formGroup]="filterForm">
+            <div class="dro mt-4">
+              <!-- <div class="form-group">
+                <label for="credentials">Credentials</label>
+                <select id="credentials" class="form-select form-select-sm cursor mt-1" formControlName="credentials">
+                  <option value="" disabled>Select Credentials</option>
+                  <option *ngFor="let item of qualifications" [value]="item.id">{{ item.name }}</option>
+                </select>
+              </div> -->
+
+              <div class="form-group credential">
+                <label>Credentials</label>
+                <div class="cred-container">
+                  <div class="credentials-container">
+                    <button *ngFor="let item of visibleQualifications,let i = index" type="button"
+                      class="btn btn-outline-success rounded-pill" style="width: 7rem; font-size: 14px!important;"
+                      [ngClass]="{ 'active': selectedCredential === item.id, 'ms-2': i % 2 !== 0 }"
+                      (click)="selectCredential(item.id)">
+                      {{ item.name }}
+                    </button>
+
+                  </div>
+
+                  <!-- Sliding Panel -->
+                  <div class="more-options-panel" *ngIf="isMoreOptionsVisible">
+                    <div class="more-options-wrapper" [style.transform]="slideTransform">
+                      <button *ngFor="let item of hiddenQualifications;let i = index" type="button"
+                        style="width: 7rem; font-size: 14px!important;"
+                        [ngClass]="{ 'active': selectedCredential === item.id, 'ms-2': i % 2 !== 0 }"
+                        class="btn btn-outline-success rounded-pill" (click)="selectCredential(item.id)">
+                        {{ item.name }}
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+                <div *ngIf="showMoreButton" class="mt-2 cursor " (click)="showMoreOptions()">
+                  <u class="text-center">More credentials</u>
+                </div>
+                <div class="mt-2 cursor" (click)="hideMoreOptions()" *ngIf="isMoreOptionsVisible">
+                  <u>Show less</u>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- State Dropdown -->
+            <div class="dro mt-4">
+              <div class="form-group">
+                <label for="state">State</label>
+                <select id="state" class="form-select form-select-sm cursor mt-1" formControlName="state">
+                  <option value="" disabled>Select State</option>
+                  <option *ngFor="let item of states" [value]="item.id">{{ item.name }}</option>
+                </select>
+              </div>
+            </div>
+
+
+            <!-- Gender Selection -->
+            <div class="mt-4">
+              <h3 class="mb-0">Select Gender</h3>
+              <div class="gender d-flex flex-wrap">
+                <button class="btn btn-outline-success rounded-pill px-3 me-3 "
+                  style="width: 7rem; font-size: 14px!important;" [ngClass]="{'active': selectedGender === 'male'}"
+                  (click)="toggleGender('male')">Male</button>
+                <button class="btn btn-outline-success rounded-pill px-3 me-3"
+                  style="width: 7rem; font-size: 14px!important;" [ngClass]="{'active': selectedGender === 'female'}"
+                  (click)="toggleGender('female')">Female</button>
+                <button class="btn btn-outline-success rounded-pill px-3"
+                  style="width: 7rem; font-size: 14px!important;" [ngClass]="{'active': selectedGender === 'any'}"
+                  (click)="toggleGender('any')">Any</button>
+              </div>
+            </div>
+
+
+            <div class="availability">
+              <h3 class="mb-0 mt-3">Visit</h3>
+              <div class="d-flex flex-nowrap">
+                <button class="btn btn-outline-success rounded-pill px-3 me-3"
+                  style="font-weight: 400!important; font-size: 14px!important; width: 7rem;"
+                  [ngClass]="{'active': selectedVisit === 'telehealth'}"
+                  (click)="toggleVisit('telehealth')">Telehealth</button>
+                <button class="btn btn-outline-success rounded-pill px-3"
+                  style="font-weight: 400!important; font-size: 14px!important; width: 7rem;"
+                  [ngClass]="{'active': selectedVisit === 'in office' }" (click)="toggleVisit('in office')"> In
+                  office</button>
+              </div>
+              <div class="d-flex flex-nowrap">
+                <button class="btn btn-outline-success rounded-pill px-3 me-3"
+                  style="font-weight: 400!important; font-size: 14px!important; width: 7rem;"
+                  [ngClass]="{'active': selectedVisit === 'in home'}" (click)="toggleVisit('in home')">In home</button>
+                <!-- <button class="btn btn-outline-success rounded-pill px-3" style="font-weight: 400!important; font-size: 14px!important; width: 7rem;" [ngClass]="{'active': selectedVisit === 'next 3 days'}" (click)="toggleVisit('next 3 days')">Next 3 days</button> -->
+              </div>
+            </div>
+          </form>
+          <!-- Availability Selection -->
+          <!-- <div class="availability">
+            <h3 class="mb-0 mt-3">Availability</h3>
+            <div class="d-flex flex-nowrap">
+              <button class="btn btn-outline-success rounded-pill px-3 me-3" style="font-weight: 400!important; font-size: 13px; width: 8rem;" [ngClass]="{'active': selectedAvailability === 'any'}" (click)="toggleAvailability('any')">Any</button>
+              <button class="btn btn-outline-success rounded-pill px-3" style="font-weight: 400!important; font-size: 13px; width: 8rem;" [ngClass]="{'active': selectedAvailability === '2 hours'}" (click)="toggleAvailability('2 hours')">2 hours</button>
+            </div>
+            <div class="d-flex flex-nowrap">
+              <button class="btn btn-outline-success rounded-pill px-3 me-3" style="font-weight: 400!important; font-size: 13px; width: 8rem;" [ngClass]="{'active': selectedAvailability === 'today'}" (click)="toggleAvailability('today')">Today</button>
+              <button class="btn btn-outline-success rounded-pill px-3" style="font-weight: 400!important; font-size: 13px; width: 8rem;" [ngClass]="{'active': selectedAvailability === 'Existing Patient'}" (click)="toggleAvailability('Existing Patient')">Existing Patient</button>
+            </div>
+          </div> -->
+
+          <!-- Languages Selection -->
+          <div class="lang">
+            <h3 class="mt-3 mb-1">Languages</h3>
+            <div class="row chek fs-6">
+              <div class="col-md-6" *ngFor="let item of languages">
+                <input type="checkbox" class="me-2" value="item.id" [value]="item.id"
+                  (change)="onCheckboxChange($event, item.id)"><span>{{item.name}}</span><br>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search Filters Button -->
+          <button class="btn btn-block mt-4" (click)="applyFilters()" style="width: 100%!important;">Search
+            Filters</button>
+          <button class="btn btn-block mt-3" (click)="clearFilters()" style="width: 100%!important;">
+            Clear Filters
+          </button>
+        </div>
+      </div>
+
+
+      <!-- Main Content -->
+      <div class="col-md-9">
+        <!-- Search bar -->
+        <div class="search-bar mb-4">
+          <input type="text" class="form-control bg-white ms-2" placeholder="Search provider by their name "
+            [(ngModel)]="searchName" />
+          <button class="btn btn-primary mb-2 px-3 pt-1 border-none outline-none" (click)="applyFilters()"
+            style="width: 11rem!important;">Search</button>
+        </div>
+
+        <div class="row cursor" *ngIf="!loading">
+
+          <!-- Doctor Card List -->
+          <ng-container *ngFor="let item of doctorData;let i = index">
+            <div class="col-sm-6 doctor-card ms-2 mt-3" *ngIf="item.availabilities.length > 0;">
+
+              <div class="doctor-info" (click)="redirectToDoctorProfile(item.userId)">
+
+
+
+                <img *ngIf="item?.profilePicturePath" [src]="item.profilePicturePath" class="doctor-image">
+
+
+                <img *ngIf="!item?.profilePicturePath && item?.gender === 'Male'" alt="Doctor Profile Male"
+                  src="https://static.vecteezy.com/system/resources/thumbnails/028/287/555/small_2x/an-indian-young-female-doctor-isolated-on-green-ai-generated-photo.jpg"
+                  class="doctor-image">
+
+
+                <img *ngIf="!item?.profilePicturePath && item?.gender === 'Female'" alt="Doctor Profile Female"
+                  src="https://static.vecteezy.com/system/resources/thumbnails/028/287/555/small_2x/an-indian-young-female-doctor-isolated-on-green-ai-generated-photo.jpg"
+                  class="doctor-image">
+
+                <div class="details">
+                  <h3 class="doctor-name">Dr. {{item.firstName}} {{ item.lastName }} , {{item.qualificationName}}</h3>
+                  <p class="visit-type mb-0 mt-1">
+                    <!-- <i class="fas fa-hand-holding-medical"></i> -->
+                    <i class=" fas fa-medkit" style="font-size: 15px;"></i>
+                    <span class="ms-2">Offers </span>
+                    <span *ngIf="item.telehealthVisitPrice !== ''">Telehealth</span>
+                    <span
+                      *ngIf="item.telehealthVisitPrice !== '' && (item.officeVisitPrice !== '' || item.inHomeVisitPrice !== '')">,
+                    </span>
+                    <span *ngIf="item.officeVisitPrice !== ''">Office Visit</span>
+                    <span *ngIf="item.officeVisitPrice !== '' && item.inHomeVisitPrice !== ''">, </span>
+                    <span *ngIf="item.inHomeVisitPrice !== ''">In-Home Visit</span>
+                  </p>
+
+
+                  <div *ngIf="item.specialist.length > 0" class="urgent-care mt-1"
+                    style="font-weight: 400!important; font-size: 15px;">
+                    <i class="fas fa-stethoscope"></i>
+                    <span class="ms-2">{{ getSpecialistNames(item.specialist) }}</span>
+                  </div>
+                  <button class="btn btn-outline-success bg-none  rounded-pill px-3"
+                    style="font-weight: 400!important;font-size: 13px; width: 9rem;display: none;">Available
+                    today</button>
+                </div>
+              </div>
+              <div class="visit-details">
+                <div class="appointment-date"> {{item.date}}</div>
+                <div class="appointment-times row mt-2">
+                  <div class="col-12 col-sm-6 col-lg-4" *ngFor="let availabilitySlots of item.availabilities">
+                    <button class="time-btn " (click)="redirectToDoctorProfile(item.userId)">
+                      {{ availabilitySlots.startTime }}
+                    </button>
+                  </div>
+                  <div class="col-4">
+                    <button class="more-times-btn w-100" (click)="redirectToDoctorProfile(item.userId)">
+                      More times
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </ng-container>
+        </div>
+        <div *ngIf="loading">
+          <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+            [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+            [additionalClasses]="'mt-5'"></app-loader>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,367 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="signup-card">
+        <h3>Appointment List</h3>
+        <div class="signup-form">
+          <mat-tab-group (selectedTabChange)="onAppointmentChange($event)">
+            <mat-tab value="Today">
+              <ng-template mat-tab-label>
+                <span style="color: #00876F!important;">Today Appointment</span>
+              </ng-template>
+              <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class="row">
+                  <div class="table-responsive">
+                    <div class="col-3 offset-9 mt-4 mb-2">
+                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                        (input)="getTodayAppointmentsByUserId()" class="form-control">
+                    </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col" (click)="sortData('providerName')">Provider Name
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col" (click)="sortData('date')">Date & Time
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col" >Location
+                          
+                           
+                          </th>
+                          <th scope="col">Service</th>
+                          <th scope="col">Reason For Visit</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of todayAppointment; let i = index">
+                          <td>{{item.providerName}}</td>
+                          <!-- <td>{{item.date}} {{item.startTime}}</td> -->
+                          <td class="pt-3">{{item.date}}<br>
+                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
+                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
+                          <td>{{item.location ? item.location : '--------'}}</td>
+                          <td>{{item.meetingType}} ({{item.serviceDuration}}-mins)</td>
+                          <td>{{item.reasonForVisit}}</td>
+                          <td>{{item.bookingStatus}}</td>
+
+                          <td>
+                            <span *ngIf="item.meetingType === 'Virtual' && item.bookingStatus =='Booked'" class="icon-meeting-type"
+                              [title]="getMeetingTypeTitle(item.meetingType)" [style.color]="'#00bfff'"
+                              style="font-size: 19px; margin-right: 20px;">
+                              <i [class]="getMeetingTypeIcon(item.meetingType)" class="cursor"
+                                (click)="joinCall(item.bookAppointmentId, item.startTime, item.meetingType)">
+                              </i>
+                            </span>
+
+                            <span class="icon-chat" title="Send Message"
+                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
+                              <i class="fas fa-paper-plane cursor" (click)="sendMessage(item.bookAppointmentId)"></i>
+                            </span>
+
+                            <span class="icon-soap-notes" *ngIf="item.hasSoapNote"
+                              title="View SOAP Notes / Prescriptions"
+                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
+                              <i class="fas fa-file-alt cursor" (click)="viewSoapNotes(item.bookAppointmentId)"></i>
+                            </span>
+
+                          </td>
+                        </tr>
+                        <tr *ngIf="loading">
+                          <td colspan="7">
+                            <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                              [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                              [additionalClasses]="'mt-5'"></app-loader>
+                          </td>
+                        </tr>
+                        <tr *ngIf="todayAppointment.length === 0">
+                          <td colspan="9" class="no-data-card">
+                            <div class="no-data-card-container">
+                              <div class="no-data-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </div>
+                              <div class="no-data-content">
+                                <span class="no-data-title">No Appointments Found</span>
+                                <p class="no-data-description">It looks like there are no appointments at the moment.
+                                  Please check back later!</p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+
+                      </tbody>
+                    </table>
+                    <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0 && !loading">
+                      <app-pagination [paginator]="paginator" (onPageChange)="getTodayAppointmentsByUserId()" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </mat-tab>
+            <mat-tab label="Upcoming Appointment" value="Upcoming">
+              <ng-template mat-tab-label>
+                <span style="color: #00876F!important;">Upcoming Appointment</span>
+              </ng-template>
+              <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class="row">
+                  <div class="table-responsive">
+                    <div class="col-3 offset-9 mt-4 mb-2">
+                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                        (input)="getUpcomingAppointmentsByUserId()" class="form-control">
+                    </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col" (click)="sortData('providerName')">Provider Name
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col" (click)="sortData('date')">Date & Time
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col" >Location
+                          
+                          </th>
+                          <th scope="col">Service</th>
+                          <th scope="col">Reason For Visit</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Action</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of upcomingAppointment; let i = index">
+                          <td>{{item.providerName}}</td>
+                          <td class="pt-3">{{item.date}}<br>
+                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
+                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
+                          <!-- <td>
+                            {{ item.date | date: 'dd-MMM-yyyy' }}<br>
+                            {{ item.startTime }}
+                          </td> -->
+                          <td>{{item.location ? item.location : '--------'}}</td>
+                          <td>{{item.meetingType}} ({{item.serviceDuration}}-mins)</td>
+                          <td>{{item.reasonForVisit}}</td>
+                          <td>{{item.bookingStatus}}</td>
+
+                          <td>
+                            <span class="icon-chat" title="Send Message"
+                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
+                              <i class="fas fa-paper-plane cursor" (click)="sendMessage(item.bookAppointmentId)"></i>
+                            </span>
+                            <!-- <button type="submit" class="btn m-2 custom-padding"
+                              style="background-color: #00876F!important;"> Fill Intake Form</button>
+                            <button type="submit" class="btn m-2 custom-padding"
+                              style="background-color: #00876F!important;"> Message</button>
+                            <button type="submit" class="btn m-2 custom-padding"
+                              style="background-color: #00876F!important;"> Join</button> -->
+                          </td>
+                        </tr>
+                        <tr *ngIf="loading">
+                          <td colspan="7">
+                            <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                              [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                              [additionalClasses]="'mt-5'"></app-loader>
+                          </td>
+                        </tr>
+                        <tr *ngIf="upcomingAppointment.length === 0">
+                          <td colspan="9" class="no-data-card">
+                            <div class="no-data-card-container">
+                              <div class="no-data-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </div>
+                              <div class="no-data-content">
+                                <span class="no-data-title">No Appointments Found</span>
+                                <p class="no-data-description">It looks like there are no appointments at the moment.
+                                  Please check back later!</p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
+                      <app-pagination [paginator]="paginator" (onPageChange)=" getUpcomingAppointmentsByUserId()" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </mat-tab>
+            <mat-tab label="Past Appointment" value="Past">
+              <ng-template mat-tab-label>
+                <span style="color: #00876F!important;">Past Appointment</span>
+              </ng-template>
+              <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class="row">
+                  <div class="table-responsive">
+                    <div class="col-3 offset-9 mt-4 mb-2">
+                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search by Provider Name"
+                        (input)="getPastAppointmentsByUserId()" class="form-control">
+                    </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col" (click)="sortData('providerName')">Provider Name
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col" (click)="sortData('date')">Date & Time
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col" >Location
+                      
+                          </th>
+                          <!-- <th scope="col">Location</th> -->
+                          <th scope="col">Service</th>
+                          <th scope="col">Reason For Visit</th>
+                          <th scope="col">Status</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of pastAppointment; let i = index">
+                          <td>{{item.providerName}}</td>
+                          <td class="pt-3">{{item.date}}<br>
+                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
+                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
+                          <!-- <td>{{item.date}} {{item.startTime}}</td> -->
+                          <td>{{item.location ? item.location : '--------'}}</td>
+                          <td>{{item.meetingType}} ({{item.serviceDuration}}-mins)</td>
+                          <td>{{item.reasonForVisit}}</td>
+                          <td>{{item.bookingStatus}}</td>
+
+                          <td>
+                            <span class="icon-soap-notes" title="View SOAP Notes / Prescriptions" *ngIf="item.hasSoapNote"
+                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
+                              <i class="fas fa-file-alt cursor" (click)="viewSoapNotes(item.bookAppointmentId)"></i>
+                            </span>
+                            <!-- <button type="submit" class="btn m-2 " style="background-color: #00876F!important;"> View
+                              Encounter</button> -->
+
+                          </td>
+                        </tr>
+                        <tr *ngIf="loading">
+                          <td colspan="7">
+                            <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                              [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                              [additionalClasses]="'mt-5'"></app-loader>
+                          </td>
+                        </tr>
+                        <tr *ngIf="pastAppointment.length === 0 && loading">
+                          <td colspan="9" class="no-data-card">
+                            <div class="no-data-card-container">
+                              <div class="no-data-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </div>
+                              <div class="no-data-content">
+                                <span class="no-data-title">No Appointments Found</span>
+                                <p class="no-data-description">It looks like there are no appointments at the moment.
+                                  Please check back later!</p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
+                      <app-pagination [paginator]="paginator" (onPageChange)=" getPastAppointmentsByUserId()" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </mat-tab>
+            <mat-tab label="Cancelled Appointment" value="Cancel">
+              <ng-template mat-tab-label>
+                <span style="color: #00876F!important;">Cancelled Appointment</span>
+              </ng-template>
+              <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class="row">
+                  <div class="table-responsive">
+                    <div class="col-3 offset-9 mt-4 mb-2">
+                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                        (input)="getCancelledAppointmentsByUserId()" class="form-control">
+                    </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col" (click)="sortData('providerName')">Provider Name
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col" (click)="sortData('date')">Date & Time
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <!-- <th scope="col" (click)="sortData('ProviderName')">Date & Time</th> -->
+                          <th scope="col">Location
+                          
+                          </th>
+                          <th scope="col">Service</th>
+                          <th scope="col">Reason For Visit</th>
+                          <th scope="col">Reason For Cancellation</th>
+                          <!-- <th scope="col">Action</th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of cancelledAppointment; let i = index">
+                          <td>{{item.providerName}}</td>
+                          <td class="pt-3">{{item.date}}<br>
+                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
+                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
+                          <!-- <td>{{item.date}} {{item.startTime}}</td> -->
+                          <td>{{item.location ? item.location : '--------'}}</td>
+                          <td>{{item.meetingType}} ({{item.serviceDuration}}-mins)</td>
+                          <td>{{item.reasonForVisit}}</td>
+                          <td>{{item.reasonForCancellation}}</td>
+                          <!-- <td>
+                            <button type="submit" class="btn m-2 " style="background-color: #00876F!important;"> View
+                              Encounter</button>
+                          </td> -->
+                        </tr>
+                        <tr *ngIf="loading">
+                          <td colspan="7">
+                            <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                              [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                              [additionalClasses]="'mt-5'"></app-loader>
+                          </td>
+                        </tr>
+                        <tr *ngIf="cancelledAppointment.length === 0">
+                          <td colspan="9" class="no-data-card">
+                            <div class="no-data-card-container">
+                              <div class="no-data-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </div>
+                              <div class="no-data-content">
+                                <span class="no-data-title">No Appointments Found</span>
+                                <p class="no-data-description">It looks like there are no appointments at the moment.
+                                  Please check back later!</p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
+                      <app-pagination [paginator]="paginator" (onPageChange)="getCancelledAppointmentsByUserId()" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

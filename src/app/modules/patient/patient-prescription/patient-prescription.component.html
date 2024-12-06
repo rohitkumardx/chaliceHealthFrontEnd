@@ -1,0 +1,207 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="signup-card ">
+
+        <h3 class="section-title">Prescriptions/Medications</h3>
+        <!-- <div class="button-group">
+            <button class="btn btn-primary add-medication-button" (click)="openAddMedicationPopUp()">Add Medication</button>
+            <div class="search-container">
+              <input type="text" class="form-control search-input" placeholder="Search">
+              <button class="btn btn-secondary search-button">Search</button>
+            </div>
+          </div> -->
+
+        <!-- <h3>Prescriptions/Medications</h3> -->
+        <div class="signup-form">
+          <mat-tab-group (selectedTabChange)="onTabChange($event)">
+            <mat-tab value="Prescription">
+              <ng-template mat-tab-label>
+                <span style="color: #00876F!important;">Prescription</span>
+              </ng-template>
+              <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class="row">
+                  <div class="table-responsive">
+                    <div class="col-3 offset-9 mb-2 mt-1">
+                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
+                        (input)="filterPrescriptions()" class="form-control" />
+                    </div>
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <!-- <th scope="col" (click)="sortData('providerName')">Drug Name
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col" (click)="sortData('date')">Date & Time
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
+                          </th> -->
+                          <th scope="col">Drug Name</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Frequency</th>
+                          <th scope="col">Duration</th>
+                          <th scope="col">Dose Form</th>
+                          <th scope="col">Provider Name</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of prescription; let i = index">
+                          <td style="width: 40%;">{{ item.medicationName }}</td>
+                          <td>{{ item.createdDate | date: 'yyyy-MM-dd' }}</td>
+                          <td>{{ item.frequency }}</td>
+                          <td>{{ item.duration }}</td>
+                          <td>{{ item.doseForm }}</td>
+                          <td>{{ item.providerName }}</td>
+                        </tr>
+                        <tr *ngIf="prescription.length === 0">
+                          <td colspan="9" class="no-data-card">
+                            <div class="no-data-card-container">
+                              <div class="no-data-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </div>
+                              <div class="no-data-content">
+                                <span class="no-data-title">No Prescriptions Found</span>
+                                <p class="no-data-description">It looks like there are no appointments at the moment.
+                                  Please check back later!</p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length > 0 && !loading">
+                      <app-pagination [paginator]="paginator"
+                        (onPageChange)="getPrescriptionByUserId()"></app-pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Current Medication">
+              <ng-template mat-tab-label>
+                <span style="color: #00876F!important;">Current Medication</span>
+              </ng-template>
+              <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class="row">
+                  <div class="table-responsive">
+                    <div class="row">
+                      <div class="col-3"></div>
+                      <div class="col-3"></div>
+                      <div class="col-1"></div>
+                      <div class="col-3 mt-3 mb-2">
+                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
+                          (input)="filterCurrentMedications()" class="form-control" />
+                      </div>
+                      <div class="col-2 mb-1">
+                        <button class="btn btn-primary add-medication-button" (click)="openAddMedicationPopUp()">Add
+                          Medication</button>
+                      </div>
+                    </div>
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Drug Name</th>
+                          <th scope="col">Start Date</th>
+                          <th scope="col">Strength</th>
+                          <th scope="col">Duration</th>
+                          <th scope="col">Direction</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of currentPrescription; let i = index">
+                          <td>{{ item.drugName }}</td>
+                          <td>{{ item.startDate }}</td>
+                          <td>{{ item.strength }}</td>
+                          <td>{{ item.duration }}</td>
+                          <td>{{ item.direction }}</td>
+                        </tr>
+                        <tr *ngIf="currentPrescription.length === 0">
+                          <td colspan="9" class="no-data-card">
+                            <div class="no-data-card-container">
+                              <div class="no-data-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </div>
+                              <div class="no-data-content">
+                                <span class="no-data-title">No current medications Found</span>
+                                <p class="no-data-description">
+                                  It looks like there are no current medications at the moment. Please check back later!
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length > 0 && !loading">
+                      <app-pagination [paginator]="paginator"
+                        (onPageChange)="getCurrentMedicationByUserId()"></app-pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Past Medication">
+              <ng-template mat-tab-label>
+                <span style="color: #00876F!important;">Past Medication</span>
+              </ng-template>
+              <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class="row">
+                  <div class="table-responsive">
+                    <div class="row">
+                      <div class="col-3 offset-9 mt-3 mb-2">
+                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
+                          (input)="filterPastMedications()" class="form-control" />
+                      </div>
+                    </div>
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Drug Name</th>
+                          <th scope="col">Start Date</th>
+                          <th scope="col">Strength</th>
+                          <th scope="col">Duration</th>
+                          <th scope="col">Direction</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of pastPrescription; let i = index">
+                          <td>{{ item.drugName }}</td>
+                          <td>{{ item.startDate }}</td>
+                          <td>{{ item.strength }}</td>
+                          <td>{{ item.duration }}</td>
+                          <td>{{ item.direction }}</td>
+                        </tr>
+                        <tr *ngIf="pastPrescription.length === 0">
+                          <td colspan="9" class="no-data-card">
+                            <div class="no-data-card-container">
+                              <div class="no-data-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </div>
+                              <div class="no-data-content">
+                                <span class="no-data-title">No medications Found</span>
+                                <p class="no-data-description">
+                                  It looks like there are no medications at the moment. Please check back later!
+                                </p>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length > 0 && !loading">
+                      <app-pagination [paginator]="paginator"
+                        (onPageChange)="getPastMedicationByUserId()"></app-pagination>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

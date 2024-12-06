@@ -1,0 +1,79 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+
+                <h3>Message List</h3>
+
+                <div class="table-responsive">
+                    <!-- <div class="col-3 offset-9 mt-4 mb-2">
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
+        disabled="todayAppointment.length == 0" (input)="getTodayAppointmentsByUserId()"
+        class="form-control">
+    </div> -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Provider name</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Latest Message</th>
+                                <th scope="col">Action</th>
+
+                        </thead>
+                        <tbody class="">
+                            <tr *ngFor="let item of messagesList; let i = index">
+                                <td class="pt-3"> <img *ngIf="item.profilePicturePath; else defaultIcon"
+                                        [src]="item.profilePicturePath" alt="User Image" />
+                                    <ng-template #defaultIcon>
+                                        <div class="default-user-icon" style="padding: 13px 6px 13px  !important;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40"
+                                                height="40" fill="#555">
+
+                                                <circle cx="12" cy="8" r="4" />
+
+                                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6v1H4v-1z" />
+                                            </svg>
+                                        </div>
+                                    </ng-template>{{item.fullName}}
+                                </td>
+                                <td class="pt-3">{{item.createdDateUtc}}</td>
+                                <td class="pt-3">{{item.messageContent}}</td>
+                                <td class="pt-3">
+                                    <span class="message-icon-container">
+                                      <i class="fas fa-comments cursor" (click)="viewChat(item.bookAppointmentId)" title="View Chat"></i>
+                                      <span class="message-badge" *ngIf="item.unreadMessageCount > 0">
+                                        {{ item.unreadMessageCount }}
+                                      </span>
+                                    </span>
+                                  </td>
+                                  
+
+                            </tr>
+
+                            <tr *ngIf="messagesList.length === 0">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Messages Found</span>
+                                            <p class="no-data-description">It looks like there are no messages at the
+                                                moment.
+                                                Please check back later!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                    <!-- <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+      <app-pagination [paginator]="paginator" (onPageChange)="getTodayAppointmentsByUserId()" />
+    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

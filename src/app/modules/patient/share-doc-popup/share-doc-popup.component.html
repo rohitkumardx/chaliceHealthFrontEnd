@@ -1,0 +1,43 @@
+<div class="content-wrapper1">
+    <div class="row d-flex">
+      <div class="col-10">
+        <h3 class="ms-0">Share Document</h3>
+      </div>
+      <div class="col-2 text-end">
+        <div class="close-btn" (click)="closePopup()"><i class="fa-solid fa-xmark"></i></div>
+      </div>
+    </div>
+    <div class="row">
+      <div style="display: flex; align-items: center;">
+        <p style="margin: 0;width: 11rem !important;"><b>Select Provider:</b></p>
+        <select
+          id="providerSelect"
+          class="form-select form-select-sm cursor ms-2"
+          [(ngModel)]="selectedProviderId"
+          name="provider"
+        >
+          <option value="" disabled selected>Select</option>
+          <option *ngFor="let item of providerList" [value]="item.providerId">
+            {{ item.providerName }}
+          </option>
+        </select>
+      </div>
+      <div class="col-12">
+        <p><b>Title</b>: {{ documentData.data.title }}</p>
+        <p><b>File Name</b>: {{ documentData.data.fileName }}</p>
+        <p><b>Expiry Date</b>: {{ documentData.data.expiryDate | date: 'MM/dd/yyyy' }}</p>
+        <p *ngIf="documentData.data.notes"><b>Notes</b>: {{ documentData.data.notes }}</p>
+      </div>
+    </div>
+    <div class="row d-flex justify-content-center mt-2">
+      <div class="col-auto">
+        <button class="save-feedback confirmButton" (click)="ShareDocument()">
+          Confirm
+        </button>
+      </div>
+      <div class="col-auto">
+        <button class="save-feedback cancelButton" (click)="cancel()">Cancel</button>
+      </div>
+    </div>
+  </div>
+  

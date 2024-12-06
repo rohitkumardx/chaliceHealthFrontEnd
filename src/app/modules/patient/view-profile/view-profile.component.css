@@ -1,0 +1,242 @@
+body, html {
+    background-color: #f0f4f7;
+    font-family: 'Roboto', sans-serif;
+}
+
+.main {
+     padding-top: 1rem; 
+}
+
+.profile-container {
+    width: 75%;
+    max-width: 1100px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+.tab .serve1, .serve{
+    text-align: center;
+    cursor:pointer;
+    border-bottom: 3px solid #00876f;
+    width: 90%;
+    padding-bottom: 7px;
+}
+/* .rounded-circle {
+    border: 2px solid #adb5bd;
+} */
+
+h1, h2, h4 {
+    color: black;
+    /* font-weight: 500;
+    font-size: 20px; */
+    font-weight: 500 !important;
+    font-size: 20px;
+    /* / font-family: 'Montserrat'; / */
+}
+
+.text-muted {
+    color: #6c757d !important;
+    font-size: 18px!important;
+}
+
+.btn-outline-secondary {
+    border-color: #4B9DAA;
+    color: #016387c2;
+    border-radius: 25px;
+    padding: 10px 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #4B9DAA;
+    color: white;
+}
+
+.description {
+    text-align: justify;
+}
+
+.review-section .review-text {
+    font-style: italic;
+    color: #4B9DAA;
+}
+
+.overall-rating .rating-stars {
+    display: flex;
+    align-items: center;
+}
+
+
+.specialties h4, .consultation-fee h4, .description h4 {
+    color: black;
+    font-weight: 500;
+}
+
+.border {
+    border-color: #016387c2 !important;
+}
+
+.text-center img {
+    border:2px solid #00876f;
+}
+
+.btn-primary {
+    background-color: #016387c2;
+    border-color: #016387c2;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #4B9DAA;
+    border-color: #4B9DAA;
+}
+
+.review-section h5 {
+    color: #016387c2;
+}
+.review-section img {
+    border: 2px solid #016387c2!important;
+}
+
+.text-muted {
+    color: black!important;
+}
+
+
+.box-shadow {
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.5);
+}
+.info-card {
+    border: none; 
+    border-radius: 10px;
+    background-color: #f8f9fa; 
+    transition: transform 0.3s ease-in-out; 
+}
+
+.info-card .icon {
+    font-size: 24px;
+    color: #28a745; 
+}
+
+.info-card h4 {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #343a40; 
+}
+
+.info-card p {
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.info-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+}
+.time-btn {
+    background-color: #00876F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+    width: 8rem;
+    padding: 4px 0px;
+  
+  }
+
+
+
+
+/* / General carousel styling / */
+.carousel {
+    width: 100%;
+    max-width: 100%; 
+    margin: 0 auto;
+}
+
+.carousel-item {
+    padding: 20px;
+    /* / background-color: #f9f9f9; / */
+}
+
+.date {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.time-btn {
+    background-color: #00876F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.time-btn:hover {
+    background-color: #006f59;
+}
+
+.see-more {
+    /* / background-color: #f2e1f1; / */
+    color:  #006f59;
+    border: none;
+    padding: 8px 15px;
+    font-size: 1.3rem;
+    font-weight : 500;
+    left : 50%!important;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+/* / Carousel controls / */
+.carousel-control-prev-icon {
+    background-color: #006f59;
+   height : 30px!important;
+   width : 30px!important;
+   margin-right : 8px!important;
+   border-radius : 17px!important;
+}
+
+.carousel-control-next-icon {
+    background-color: #006f59;
+   height : 30px!important;
+   width : 30px!important;
+   margin-left: 8px!important;
+   border-radius: 17px!important;
+}
+
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background-color: #006f59;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mat-mdc-tab-group, .mat-mdc-tab-nav-bar {
+    --mdc-tab-indicator-active-indicator-color: #00876F!important;
+    --mat-tab-header-disabled-ripple-color: #00876F;
+    --mat-tab-header-pagination-icon-color: #000;
+    --mat-tab-header-inactive-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-active-label-text-color: #00876F;
+    --mat-tab-header-active-ripple-color: #00876F;
+    --mat-tab-header-inactive-ripple-color:#00876F;
+    --mat-tab-header-inactive-focus-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-inactive-hover-label-text-color: rgba(0, 0, 0, 0.6);
+    --mat-tab-header-active-focus-label-text-color: #00876F;
+    --mat-tab-header-active-hover-label-text-color: #00876F;
+    --mat-tab-header-active-focus-indicator-color: #00876F!important;
+    --mat-tab-header-active-hover-indicator-color: #00876F  !important;
+  }
+  
+

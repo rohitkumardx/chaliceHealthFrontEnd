@@ -1,0 +1,156 @@
+
+.close-icon {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+label .fa-question-circle {
+    font-size: 1.1rem; 
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+
+.tooltip {
+    border: none !important; 
+    background-color: rgba(0, 0, 0, 0.8) !important; 
+    padding: 5px 10px; 
+
+}
+
+.tooltip .tooltip-inner {
+    color: white !important; 
+    border: none !important; 
+    overflow: auto;
+}
+
+
+
+
+
+.roleDropdwon {
+    margin-left: 0.5rem;
+    /* margin-top: 1%; */
+    /* font-family: inherit;
+    font-size: 3rem; */
+}
+
+
+.dp-pd-l {
+    text-align: left;
+    background-color: #f8f8f8;
+    padding-left: 7px !important;
+}
+
+
+.small-input {
+    padding-top: 5px !important;
+    padding-right: 5px !important;
+    padding-bottom: 5px !important;
+    padding-left: 5px !important;
+}
+.invalid {
+    color:  #DC3545;
+    /* / background-color: #f8d7da; / */
+  }
+  
+
+  /* .dropdown-menu::-webkit-scrollbar {
+    display: none; 
+} */
+
+
+
+
+.custom-dropdown {
+    width: 100%;
+}
+
+
+
+.custom-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-up {
+    top: auto;
+    bottom: 100%;
+    margin-bottom: 10px;
+}
+
+
+.dropdown-menu {
+    position: fixed;
+    top: auto;
+    bottom: 100%;
+    margin-bottom: 10px;
+    z-index: 1050;
+    max-height: 450px;
+    overflow-y: auto;
+    background-color: #f8f8f8;
+    border: 1px solid black;
+}
+
+
+
+.dropdown-menu li {
+    color : black;
+    list-style: none;
+    padding: 3px 3px;
+    cursor: pointer;
+}
+
+.dropdown-menu li label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu li label input {
+    margin-right: 6px;
+}
+
+.dropdown-menu li:hover {
+    color: white;
+    background-color: #004ab9; /* Highlight color */
+}
+
+
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  .custom-tooltip {
+    position: absolute;
+    top: 50%; /* Aligns the tooltip to the bottom edge of the input field */
+    left: 120%; /* Aligns the tooltip to the left edge */
+    background-color: #fff;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    white-space: nowrap;
+    z-index: 100;
+  }
+  
+  .custom-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -5x; 
+    left: 10px; 
+    /* transform: translateY(-50%); */
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent transparent transparent #fff; 
+    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  
+  

@@ -1,0 +1,232 @@
+<div class="video-call bg-light" *ngIf="isVirtual">
+  <div class="row h-100  w-100 ">
+    <!-- Video Section -->
+    <div [ngClass]="{'col-9': isChatOpen, 'col-12': !isChatOpen}" class="video-section bg-dark">
+      <div class="streams">
+        <!-- Remote Stream -->
+        <div id="remote-stream" class="stream-container border border-dark border-2">
+          <p class="stream-label">Participant</p>
+        </div>
+        <!-- Local Stream -->
+        <div id="local-stream" class="stream-container">
+          <p class="stream-label">You</p>
+        </div>
+      </div>
+      <!-- Controls -->
+      <div class="controls">
+        <button (click)="toggleAudio()" class="control-button" aria-label="Toggle Audio">
+          <i class="material-icons control-icon ">{{ isAudioEnabled ? 'mic' : 'mic_off' }}</i>
+        </button>
+        <button (click)="toggleVideo()" class="control-button" aria-label="Toggle Video">
+          <i class="material-icons control-icon">{{ isVideoEnabled ? 'videocam' : 'videocam_off' }}</i>
+        </button>
+        <button (click)="toggleScreenShare()" class="control-button" aria-label="Toggle Screen Share">
+          <i class="material-icons control-icon">{{ isScreenSharing ? 'stop_screen_share' : 'screen_share' }}</i>
+        </button>
+        <button (click)="leaveChannel()" class="control-button leave-button" aria-label="Leave Call">
+          <i class="material-icons control-icon">call_end</i>
+        </button>
+        <button (click)="toggleChat()" class="control-button" aria-label="Open Chat">
+          <i class="material-icons control-icon">chat</i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Chat Section -->
+    <div *ngIf="isChatOpen" class="col-5 chat-container d-flex flex-column bg-light">
+      <!-- <div class="chat-header text-center bg-primary text-white p-2">Chat</div> -->
+
+      <!-- Chat Messages Container -->
+      <div class="content-wrapper">
+        <div class="document-card">
+          <div class=" pt-2">
+
+            <!-- Recipient Section -->
+
+            <!-- Message History Section -->
+            <div *ngFor="let item of messageList">
+              <p class=" w-100 d-flex justify-content-center" style=" font-size: 14px; color: #666666;">
+              </p>
+              <div class="message-history">
+
+                <div class=" mt-2">
+                  <div class="chat-message" *ngFor="let message of item.messageList ;let i = index">
+
+                    <div>
+                      <div class="message-header">
+                        {{message.senderName}}<span class="message-time">{{ formatTime(message.time)}}</span>
+                      </div>
+                      <div class="chat-bubble">
+                        <span *ngIf="message.messageContent; else showFileName">
+                          {{ message.messageContent }}
+                        </span>
+                        <ng-template #showFileName>
+                          <a style="color: blue;" class="cursor" (click)="downloadFile(message.filePath)"><u>{{
+                              message.fileName
+                              }}</u></a>
+                        </ng-template>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+                </div>
+              </div>
+            </div>
+            <!-- Message Body Section -->
+
+            <!-- Action Buttons -->
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Section -->
+      <!-- Input Section -->
+      <div class="message-input rounded-3 p-2 px-2 mb-1">
+        <ng-container>
+          <!-- Input Box with Icons -->
+          <div class="position-relative">
+            <input type="text" class="form-control message-box pe-5" placeholder="Write your message..."
+              [(ngModel)]="message" (input)="capitalizeFirstLetter()" />
+            <!-- File Upload Icon -->
+            <div *ngIf="!selectedFile || selectedFile.length === 0; else fileDisplay">
+
+
+              <button
+                class="btn btn-light px-2 py-1 border rounded-circle position-absolute ico start-0 translate-middle-y ms-2"
+                (click)="triggerFileUpload()">
+                <i class="fas fa-file"></i>
+              </button>
+              <input type="file" #fileInput style="display: none;" (change)="handleFileUpload($event)" />
+            </div>
+            <!-- Send Button -->
+            <button class="btn btn-primary px-2 py-1 rounded-circle position-absolute ico end-0 translate-middle-y me-2"
+              [disabled]="!message || message.trim() == ''" (click)="sendMessage()">
+              <i class="fas fa-paper-plane cursor"></i>
+            </button>
+          </div>
+        </ng-container>
+        <!-- File Display Template -->
+        <ng-template #fileDisplay>
+          <div class="d-flex align-items-center">
+            <span class="badge bg-light text-dark p-2 me-2">{{ selectedFile[0]?.name }}</span>
+            <i class="fas fa-trash text-danger cursor-pointer" (click)="removeFile()"></i>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="d-flex justify-content-end mt-3 me-4" *ngIf="userInfo.accountType == 'Patient'">
+  <button class="btn px-4 mx-2 me-4 bg-danger" (click)="endMeetFromPatient()">End meet </button>
+</div>
+
+
+<div class="notes-section" *ngIf="userInfo.accountType == 'IndependentProvider'">
+  <form [formGroup]="soapNotesForm">
+    <h2>Dr. {{userInfo.firstName}} {{userInfo.lastName}}</h2>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="subjective" class="form-label">Status of Visit</label>
+        <select class="form-select form-select-sm cursor" formControlName="statusOfVisit"
+          [ngClass]="{'is-invalid': soapNotesForm.get('statusOfVisit')?.invalid &&  soapNotesForm.get('statusOfVisit')?.touched}">
+          <option value="" disabled>Select</option>
+          <option value="Complete">Complete</option>
+          <option value="Incomplete">Incomplete</option>
+          <option value="NoShow">No Show</option>
+          <option value="Unavailable">Unavailable</option>
+          <option value="FollowUp">Follow-up Needed</option>
+          <option value="Other">Other (out of scope, referred to ER)</option>
+        </select>
+        <div class="invalid-feedback"
+          *ngIf="soapNotesForm.get('statusOfVisit')?.touched && soapNotesForm.get('statusOfVisit')?.hasError('required')">
+          State is required.
+        </div>
+      </div>
+
+    </div>
+    <div class="call-section" *ngIf="!isVirtual">
+
+      <div class="row">
+        <!-- Arrival Time -->
+        <div class="col-md-6 mb-3">
+          <label for="arrivalTime" class="form-label fw-bold">Arrival Time</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fas fa-clock"></i>
+            </span>
+            <input type="time" id="arrivalTime" class="form-control form-control-sm" formControlName="arrivalTime"
+              [value]="soapNotesForm.get('arrivalTime')?.value" />
+          </div>
+        </div>
+
+        <!-- Exit Time -->
+        <div class="col-md-6 mb-3">
+          <label for="exitTime" class="form-label fw-bold">Exit Time</label>
+          <div class="input-group">
+            <span class="input-group-text">
+              <i class="fas fa-clock"></i>
+            </span>
+            <input type="time" id="exitTime" class="form-control form-control-sm" formControlName="exitTime"
+              [value]="soapNotesForm.get('exitTime')?.value" />
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- </div> -->
+    <h5 class="mt-2">SOAP Notes</h5>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="subjective" class="form-label">Subjective</label>
+        <input type="text" id="subjective" class="form-control form-control-sm" placeholder="Enter subjective notes"
+          formControlName="subjective"
+          [ngClass]="{'is-invalid':soapNotesForm.get('subjective')?.invalid && soapNotesForm.get('subjective')?.touched}"
+          [value]="soapNotesForm.get('subjective')?.value">
+      </div>
+      <div class="col-md-6">
+        <label for="objective" class="form-label">Objective</label>
+        <input type="text" id="objective" class="form-control form-control-sm" placeholder="Enter objective notes"
+          formControlName="objective"
+          [ngClass]="{'is-invalid':soapNotesForm.get('objective')?.invalid && soapNotesForm.get('objective')?.touched}"
+          [value]="soapNotesForm.get('objective')?.value">
+      </div>
+      <div class="col-md-6">
+        <label for="assessment" class="form-label">Assessment</label>
+        <input type="text" id="assessment" class="form-control form-control-sm" placeholder="Enter assessment details"
+          formControlName="assessment"
+          [ngClass]="{'is-invalid':soapNotesForm.get('assessment')?.invalid && soapNotesForm.get('assessment')?.touched}"
+          [value]="soapNotesForm.get('assessment')?.value">
+      </div>
+      <div class="col-md-6">
+        <label for="plan" class="form-label">Plan</label>
+        <input type="text" id="plan" class="form-control form-control-sm" placeholder="Enter plan details"
+          formControlName="plan"
+          [ngClass]="{'is-invalid':soapNotesForm.get('plan')?.invalid && soapNotesForm.get('plan')?.touched}"
+          [value]="soapNotesForm.get('plan')?.value">
+      </div>
+      <!-- <div class="col-8"> -->
+      <label for="signature" class="form-label">Signature</label>
+      <!-- <textarea id="signature" rows="3" class="form-control form-control-sm"
+        placeholder="Enter your signature"></textarea> -->
+
+      <!-- </div> -->
+    </div>
+  </form>
+
+  <canvas #signaturePad width="450" height="200" style="border:0.5px solid #000;" (mousedown)="startDrawing($event)"
+    (mouseup)="stopDrawing()" (mouseleave)="stopDrawing()" (mousemove)="draw($event)"
+    (touchstart)="startDrawing($event)" (touchend)="stopDrawing()" (touchmove)="draw($event)">
+  </canvas>
+  <i *ngIf="isSignatureFilled" class="fa-solid fa-trash cursor"
+    style="color:rgb(166, 7, 7);margin-left: 20px; font-size: medium;" (click)="clearSignature()"></i>
+  <div class="d-flex justify-content-end mt-3">
+    <button class="btn px-4 mx-2 bg-danger" (click)="endMeet()">End meet </button>
+    <button class="btn  px-4 mx-2" (click)="addSoapNotes()">Add Prescription</button>
+  </div>
+</div>

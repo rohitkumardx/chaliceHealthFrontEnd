@@ -1,0 +1,84 @@
+.otp{
+  width: 600px;
+}
+
+h2{
+  font-weight: 500;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+
+}
+.container-fluid {
+   /* / background-image: url('../../../../assets/svg/Background/Doctorbackground.jpg'); / */
+  object-fit: contain;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  overflow: hidden;
+}
+
+
+
+.loginBtn {
+  background-color:#00876f;
+  color: white;
+  /* / / margin-top:15px;  / / */
+  width: 100%;
+  height:40px;      
+ 
+ 
+}
+
+
+
+@media (min-width: 1200px) {
+  .col-xl-4 {
+      flex: 0 0 auto;
+      width: 34.33333333%;
+  }
+}
+.login-wrap{
+  opacity: 0.9;
+  
+}
+.row{
+  margin-left: 9.8%;
+}
+.otp-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.otp-input-container {
+  width: 40px;
+}
+
+.otp-input {
+  text-align: center;
+  font-size: 24px;
+}
+.red{
+  color: red;
+}
+.loginBtn {
+ 
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.loadingBtn {
+  background-color: #00264ee1; 
+}
+
+.successBtn {
+  background-color: #28a745; 
+  color: white;
+}
+
+a.disabled {
+  pointer-events: none;
+  color: grey;
+  cursor: not-allowed;
+}

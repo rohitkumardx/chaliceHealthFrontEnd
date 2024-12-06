@@ -1,0 +1,129 @@
+/* .main-banner {
+    background-color: #f9f9f9;
+    padding: 30px;
+  } */
+ 
+  .wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .content-wrapper {
+    max-width: 100%px;
+    width: 100%;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .signup-card {
+    width: 100%;
+    max-width:  100%;
+  }
+  
+  .signup-card h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+  }
+  .header {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  
+  }
+  
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  .save-button {
+ 
+    margin-top : 30px
+  }
+  .signup-card h4 {
+    font-size: 22px;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+  }
+
+  
+  .weekdays-selector {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 710px;
+    margin: 0 auto;
+}
+
+.weekdays-label h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.weekdays-selector label {
+    margin: 14px 0;
+    font-size: 1rem;
+    color: #555;
+    cursor: pointer;
+    display: flex;
+}
+
+.weekdays-selector input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+
+.select-all {
+    font-weight: 600;
+    color: #444;
+}
+.invalid {
+  color: #dc3545;
+}
+
+.content-wrapper1 {
+  max-width: 100%;
+  width: 100%;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+.content-wrapper1 h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+p {
+    font-size: 16px;
+    color: black;
+    line-height: 1.6;
+    margin: 10px 0;
+    font-weight:400;
+}
+.content-wrapper1 b{
+  font-weight:500;
+}
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+   
+}
+

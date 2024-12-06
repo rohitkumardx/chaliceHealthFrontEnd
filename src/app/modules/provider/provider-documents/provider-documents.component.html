@@ -1,0 +1,125 @@
+<div class="px-3 py-4">
+    <span class="close-icon" (click)="cancel()">&times;</span>
+    <h1 class="mt-1"><b>Document</b></h1>
+    <form [formGroup]="documentForm" class="mt-2">
+
+        <div class="row p-2">
+            <div class="col-sm-4">
+                <label for="category">Category<span class="red">*</span></label>
+                <select class="form-select form-select-sm cursor mt-2" formControlName="category"
+                    [ngClass]="{'is-invalid': documentForm.get('category')?.invalid &&  documentForm.get('category')?.touched}">
+                    <option value="" disabled selected>Select</option>
+                    <option *ngFor="let item of obj" [value]="item.id">{{item.value}}</option>
+
+                </select>
+                <div class="invalid-feedback"
+                    *ngIf="documentForm.get('category')?.touched && documentForm.get('category')?.hasError('required')">
+                    Category is required.
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="fileName">Upload Document<span class="red">*</span></label>
+                    <input style="padding: 10px;" type="file" id="fileName"
+                        class="form-control form-control-sm mt-1 small-input" formControlName="fileName"
+                        [ngClass]="{'is-invalid': documentForm.get('fileName')?.invalid && documentForm.get('fileName')?.touched}"
+                        (change)="onProfileSelected($event)">
+                    <div class=""
+                        *ngIf="documentForm.get('fileName')?.touched && documentForm.get('fileName')?.hasError('required')">
+                        File is required.
+                    </div>
+                    <div class="file" *ngIf="selectedFile!= null">
+                        <span class="cursor" (click)="downloadFile(selectedFilePath)">{{selectedFile}}</span>
+                        <a><i class="mdi mdi-delete icon icon-lg cursor red" title="Delete"></i></a><br>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <label for="expiryDate">Expiry Date<span class="red">*</span></label>
+                <input type="date" id="expiryDate" class="form-control form-control-sm mt-2"
+                    formControlName="expiryDate"
+                    [ngClass]="{'is-invalid':documentForm.get('expiryDate')?.invalid && documentForm.get('expiryDate')?.touched}"
+                    [value]="documentForm.get('expiryDate')?.value | capitalizeFirstLetter">
+                <div class="invalid-feedback"
+                    *ngIf="documentForm.get('expiryDate')?.touched && documentForm.get('expiryDate')?.hasError('required')">
+                    Expriry Date is required.
+                </div>
+            </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="form-group col-12">
+                <label for="notes">Notes</label>
+                <textarea id="notes" class="form-control form-control-sm mt-1" formControlName="notes"
+                   ></textarea>
+                <!-- <div class="invalid-feedback"
+                    *ngIf="documentForm.get('notes')?.touched && documentForm.get('notes')?.hasError('required')">
+                    Notes is required.
+                </div> -->
+            </div>
+        </div>
+
+
+        <div class="row p-2 d-flex ">
+
+
+            <div class="col-sm-12 d-flex justify-content-end pt-2">
+                <button type="button" class="btn custom-padding" style="background-color: #00876f;"
+                    (click)="submitData()"><span class="spinner-border text-light small-spinner" role="status"
+                        *ngIf="loading">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>Save
+                </button>
+            </div>
+        </div>
+        <div class="table-responsive mt-5">
+            <table class="table table-hover ">
+                <thead>
+                    <tr>
+                        <th scope="col">Category</th>
+                        <th scope="col">Document</th>
+                        <th scope="col">Expiry Date</th>
+                        <th scope="col">Notes</th>
+                        <th scope="col">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of documentData; let i = index">
+
+                        <td>{{ item.categoryName }}</td>
+                      <td (click)="downloadFile(item.filePath)" class="cursor" style="color: blue;">{{ item.fileName }}</td>
+                        <td>{{ item.expiryDate }}</td>
+                        <td>{{ item.notes ?? '--------' }}</td>
+                        <td><i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editItem(i)"
+                                style="color:#00876f;font-size: medium;"></i>
+                            <i class="fa-solid fa-trash cursor" (click)="deleteItem(item.id)"
+                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
+                                
+                        </td>
+
+                    </tr>
+
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <div class="row p-2">
+            <div class="col-sm-5"></div>
+            <div class="mt-4 col-sm-7">
+                <button type="button" class="btn m-2 custom-padding cancelButton" (click)="cancel()">
+                    <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading1">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>Cancel</button>
+                <button type="button" class="btn m-2 custom-padding" style="background-color: #00876f;"   [disabled]="documentData.length === 0" 
+                    (click)="modalClose()">
+                
+                    Submit for review
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

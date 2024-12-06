@@ -1,0 +1,174 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  /* / / min-height: 100vh;  / / */
+}
+
+.minlogo{
+
+
+  font-family: 'Raleway';
+  font-size: 30px; 
+  font-weight: bold; 
+  color:#fb8501;
+  /* background: linear-gradient(90deg,#fb8501, #00876f );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;  */
+}
+.navbar .logo {
+font-family: 'Montserrat', sans-serif; 
+}
+.main-content {
+  flex: 1;
+    background-color: #f9f9f9 !important;
+  
+}
+
+.footer {
+  text-align: center;
+  width: 100%;
+}
+.rounded-image {
+  background-color: #84b5e6;
+  border-radius: 50%;
+  width: 25%;
+  height: auto; 
+  max-width: 100px;
+  max-height: 100px;
+}
+.info{
+  padding-left: 4%;
+}
+
+.bell-icon {
+  color: #009cff;
+  font-size: 25px; 
+  position: absolute;
+  right: 70px;
+  margin-left: 16px; 
+}
+/* .custom-badge {
+  background-color: red;
+  color: white; 
+  border-radius: 50%; 
+  font-size: 0.75em; 
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  margin-left: 8px; 
+  font-weight : 100;
+} */
+
+.badge{
+  font-weight : 500;
+}
+.mail-icon {
+  color: #009cff;
+  font-size: 25px;
+  position: absolute;
+  right: 30px;
+  margin-left: 30px; 
+}
+
+
+div.fixed {
+  position: fixed;
+  bottom: 30px;
+}
+
+
+
+
+@media (min-width: 1500px) {
+  .responsive-margin {
+      margin-top: 42vh 
+  }
+}
+@media (min-width: 2800px) {
+  .responsive-margin {
+      margin-top: 60vh 
+  }
+
+}
+div.fixed {
+  position: fixed;
+  bottom: 30px;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+
+
+.main-content {
+  flex-grow: 1;
+ 
+}
+
+.footer {
+  padding: 10px 20px;
+  width: 100%;
+
+  position: fixed;
+  bottom:0;
+}
+
+.lowerPart {
+  margin-top: auto !important;
+}
+
+.nav-link.text-danger {
+  color: rgb(12, 12, 12) !important; 
+}
+.dropdown-menu {
+  display: block !important; 
+}
+
+
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.1s ease-out, opacity 0.1s ease-out; 
+  opacity: 0;
+}
+
+.submenu.show {
+  max-height: 500px; 
+  opacity: 1;
+}
+
+.nav-item .nav-link.active {
+  background-color: #f8f9fa; 
+
+}
+
+.sidebar-toggler{
+  margin-left: -2%;
+}
+.cursor{
+  cursor: pointer;
+  font-size: 16px !important;
+}
+.sidebar-toggler{
+text-decoration: none;
+}
+
+.sidebar .navbar .navbar-nav .nav-link {
+   padding: 10px 4px!important;
+}
+
+.sidebar .navbar .dropdown-toggle::after {
+right: 10px!important;
+
+} 
+
+.navbar a{
+color:#FFFFFF!important;
+font-weight: 400 !important;
+}
+
+.shadow-bottom {
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+

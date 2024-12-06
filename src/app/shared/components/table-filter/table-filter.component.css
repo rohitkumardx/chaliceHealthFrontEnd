@@ -1,0 +1,4 @@
+.input-group-merge:focus-within .input-group-text{
+  border:  1px solid #326B70;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}

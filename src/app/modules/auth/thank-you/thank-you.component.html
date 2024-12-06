@@ -1,0 +1,49 @@
+<!-- <app-header></app-header> -->
+<!-- <div class="content-wrapper bg-light p-4">
+    <div class="thankyou-card card mt-3">
+        <div class="thankyou">
+            <img src="../../../../assets/svg/icons/success.png" alt="" width="100rem" height="100rem">
+            <h2>Thanks for Submitting</h2>
+            <h5 *ngIf="!showMessage">"Congratulations! Your password has been updated. Ensure its safety and keep it confidential.
+                Please check your inbox and follow the instructions to reset your password."</h5>
+            <h5 *ngIf="showMessage"> "The password reset link has been sent to your email account.."</h5>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary py-2 w-50 mb-4 rounded-pill btn-custom-blue" (click)="routerNevigate()">
+                    Login
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer> -->
+<!-- <app-header></app-header> -->
+<div class="bg-light p-4 d-flex align-items-center"
+    style="height:93vh;    background: linear-gradient(135deg, #83c0b1, #96c0a8, #cbbe91, #e6bf84);">
+    <div class="thankyou-card card d-flex align-items-center">
+        <div class="thankyou">
+            <img src="../../../../assets/svg/homepage/success.png" alt="" width="150px" style="margin-bottom: 20px;">
+            <h2>Thanks for Submitting</h2>
+            <h4 *ngIf="!showMessage && message != 'payment'">"
+                "Success! Your password has been updated.
+                Please keep it secure and confidential for your account's safety."
+            </h4>
+            <h4 *ngIf="showMessage && message != 'payment'"> "Password reset instructions have been emailed to you.
+                Please check your inbox and follow the steps to reset your password."</h4>
+            <h4 *ngIf="message == 'payment'"> "Your appointment has been booked successfully kindly check the email.
+                "</h4>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary  w-50 mb-4 rounded btn-custom-blue" *ngIf="message != 'payment'"
+                    (click)="routerNevigate()">
+                    Login
+                </button>
+                <button type="button" class="btn btn-primary  w-50 mb-4 rounded btn-custom-blue" *ngIf="message == 'payment'"
+                (click)="redirectToDoctorSearch()">
+                Continue
+            </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,53 @@
+<div class="tree-view">
+  <ul>
+    <li *ngFor="let itemLv1 of items">
+      <div class="d-flex align-items-center">
+        <div class="show-hide mr-3-5 cursor-pointer" (click)="itemLv1.isCollapsed = !itemLv1.isCollapsed"
+             [ngClass]="[itemLv1.isCollapsed ? 'collapsed' : '']">
+          <img src="/assets/svg/angle-down.svg"/>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" [(ngModel)]="itemLv1.checked"
+                 (change)="onCheckboxChange($event, itemLv1)"
+                 [id]="'tree-check-lv1-' + itemLv1.id"/>
+          <label class="caption-regular neutral-1 cursor-pointer" [for]="'tree-check-lv1-' + itemLv1.id">
+            {{itemLv1.name}}
+          </label>
+        </div>
+      </div>
+      <ul *ngIf="itemLv1.items && itemLv1.items.length" class="level2" #collapse="ngbCollapse"
+          [(ngbCollapse)]="itemLv1.isCollapsed">
+        <li *ngFor="let itemLv2 of itemLv1.items">
+          <div class="d-flex align-items-center">
+            <div class="show-hide mr-3-5 cursor-pointer" (click)="itemLv2.isCollapsed = !itemLv2.isCollapsed"
+                 [ngClass]="[itemLv2.isCollapsed ? 'collapsed' : '']">
+              <img src="/assets/svg/angle-down.svg"/>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" [(ngModel)]="itemLv2.checked"
+                     (change)="onCheckboxChange($event, itemLv2, itemLv1)"
+                     [id]="'tree-check-lv2-' + itemLv2.id"/>
+              <label class="caption-regular neutral-1 cursor-pointer" [for]="'tree-check-lv2-' + itemLv2.id">
+                {{itemLv2.name}}
+              </label>
+            </div>
+          </div>
+          <ul *ngIf="itemLv2.items && itemLv2.items.length" class="level3" #collapse="ngbCollapse"
+              [(ngbCollapse)]="itemLv2.isCollapsed">
+            <li *ngFor="let itemLv3 of itemLv2.items">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="itemLv3.checked"
+                       (change)="onCheckboxChange($event, itemLv3, itemLv2, itemLv1)"
+                       [id]="'tree-check-lv3-' + itemLv3.id"/>
+                <label class="caption-regular neutral-1 cursor-pointer" [for]="'tree-check-lv3-' + itemLv3.id">
+                  {{itemLv3.name}}
+                </label>
+              </div>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+</div>

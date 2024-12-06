@@ -1,0 +1,79 @@
+<div class="container p-4 review-container">
+    <h2 class="text-center mb-4">Write a Review for Dr. James Smith</h2>
+    <form [formGroup]="reviewForm">
+      <!-- Email Input -->
+      <!-- <div class="form-group mb-3">
+        <label for="email" class="form-label">
+          Email <span class="text-danger">*</span>
+        </label>
+        <input
+          type="email"
+          id="email"
+          class="form-control py-1"
+          mailto:placeholder="john.doe@techinnovations.com"
+        />
+        <div class="invalid-feedback">
+          Email is required.
+        </div>
+        <div class="invalid-feedback">
+          Email is not valid.
+        </div>
+      </div> -->
+  
+    <!-- Rating Section -->
+<div class="form-group mb-3">
+  <label class="form-label">Rating <span class="text-danger">*</span></label>
+  <div class="star-rating">
+    <span
+      *ngFor="let star of [1, 2, 3, 4, 5]"
+      (click)="setRating(star)"
+      [ngClass]="{ 'selected': star <= selectedRating }"
+    >
+      ★
+    </span>
+  </div>
+  <div *ngIf="reviewForm.get('rating')?.invalid && reviewForm.get('rating')?.touched" class="text-danger">
+    Please provide a rating.
+  </div>
+</div>
+
+<!-- Review Textarea -->
+<div class="form-group mb-3">
+  <label for="review" class="form-label">Review <span class="text-danger">*</span></label>
+  <textarea
+    id="review"
+    class="form-control"
+    formControlName="review"
+    maxlength="500"
+    (input)="updateCharCount()"
+    rows="3"
+    placeholder="Write your review here..."
+  ></textarea>
+  <small class="text-muted d-block text-end">{{ charCount }} / 500</small>
+  <div *ngIf="reviewForm.get('review')?.invalid && reviewForm.get('review')?.touched" class="text-danger">
+    Review is required and must be less than 500 characters.
+  </div>
+</div>
+
+      <!-- <div class="form-group mb-3">
+        <label for="review" class="form-label">Review</label>
+        <textarea
+          id="review"
+          class="form-control"
+          maxlength="500"
+          rows="3"
+          placeholder="Write your review here..."
+        ></textarea>
+        <small class="text-muted d-block text-end">0 / 500</small>
+      </div> -->
+  
+      <!-- Buttons -->
+      <div class="text-end mt-4">
+        <button type="submit" class="btn btn-submit"  (click)="submitReview()">
+          Submit
+        </button>
+        <button type="button" class="btn btn-cancel">Cancel</button>
+      </div>
+    </form>
+  </div>
+  

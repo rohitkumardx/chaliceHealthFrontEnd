@@ -1,0 +1,87 @@
+
+.main-banner {
+    background-color: #f9f9f9;
+    padding: 30px;
+  }
+  
+  .wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    max-width: 80%;
+    margin: auto;
+  }
+  
+  .content-wrapper {
+    max-width: 100%px;
+    width: 100%;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .appointment-card {
+    width: 100%;
+    max-width:  100%;
+  }
+  
+  .appointment-card h3 {
+    font-size: 24px;
+    font-weight: 500;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .time-slot {
+    background-color: #e6f4ea; 
+    color: #00876F; 
+    border-radius: 8px; 
+    font-weight: 600;
+    font-size: 0.95rem; 
+    padding: 6px 12px;
+    display: inline-block; 
+
+  }
+  .red {
+    color: red;
+  }
+  
+
+  .signup-form {
+    width: 100%;
+  }
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-size: 14px;
+    color: #555;
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  .form-label {
+
+    margin-bottom: 8px;
+    display: block;
+  }
+  
+  .radio-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .radio-group label {
+    margin-right: 16px;
+    font-size: 14px;
+  }
+  
+  input[type="radio"] {
+    margin-right: 8px;
+  }
+
+
+  

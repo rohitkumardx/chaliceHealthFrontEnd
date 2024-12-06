@@ -1,0 +1,200 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="appointment-card py-2 px-4">
+        
+        <h3>Book Appointment</h3>
+        <i class="fa fa-arrow-circle-left pt-0" (click)="goBack()"
+        style="color: #00876ee4; font-size: 38px; cursor: pointer;margin-top: -5%; transition: transform 0.3s ease; float: right;"></i>
+        <div class="appointment-form">
+          <form [formGroup]="appointmentForm">
+            <div class="row companyContent mt-2 ">
+              <div class="col-6 mb-2">
+                <label for="appointment">Who is this appointment for?<span class="red">*</span></label>
+                <select class="form-select form-select-sm cursor mt-1" formControlName="prefix"
+                  [ngClass]="{'is-invalid': appointmentForm.get('prefix')?.invalid &&  appointmentForm.get('prefix')?.touched}">
+                  <option value="" disabled selected>Select</option>
+                  <option value=1> Me </option>
+                  <option value=2> For someone else </option>
+                </select>
+                <div class="invalid-feedback"
+                  *ngIf="appointmentForm.get('prefix')?.touched && appointmentForm.get('prefix')?.hasError('required')">
+                  Who is this appointment for is required.
+                </div>
+              </div>
+              <div class=" col-6 mb-2" *ngIf="appointmentForm.get('relationshipType')?.enabled">
+                <label>Relationship <span class="red">*</span></label>
+                <select class="form-select form-select-sm cursor mt-1" formControlName="relationshipType"
+                  (change)="getBookAppointment()"
+                  [ngClass]="{'is-invalid': appointmentForm.get('relationshipType')?.invalid &&  appointmentForm.get('relationshipType')?.touched}">
+                  <option value="" disabled selected>Select</option>
+                  <option value=1>Father</option>
+                  <option value=2>Mother</option>
+                  <option value=3>Brother</option>
+                  <option value=4>Sister</option>
+                  <option value=5>Son</option>
+                  <option value=6>Daughter</option>
+                  <option value=7>Uncle</option>
+                  <option value=8>Friend</option>
+                </select>
+                <div class="invalid-feedback"
+                  *ngIf="appointmentForm.get('relationshipType')?.touched && appointmentForm.get('relationshipType')?.hasError('required')">
+                  Relationship is required.
+                </div>
+              </div>
+              <!-- <div class="col-6">
+                        <label for="relationship">Relationship to you<span class="red">*</span></label>
+                        <select class="form-select form-select-sm cursor mt-1" formControlName="relationship"
+                            [ngClass]="{'is-invalid': appointmentForm.get('relationship')?.invalid &&  appointmentForm.get('relationship')?.touched}">
+                            <option value="" disabled selected>Select</option>
+                            <option value= 1>Child</option>
+                        </select>
+                        <div class="invalid-feedback"
+                            *ngIf="appointmentForm.get('relationship')?.touched && appointmentForm.get('relationship')?.hasError('required')">
+                            Relationship to you is required.
+                        </div>
+                    </div> -->
+            </div>
+            <div class="row mt-2">
+              <div class="form-group col-6 mb-3">
+                <label for="fullName">Full Name <span class="red">*</span> </label>
+                <input type="text" id="fullName" class="form-control form-control-sm mt-1" formControlName="fullName"
+                  [ngClass]="{'is-invalid': appointmentForm.get('fullName')?.invalid && appointmentForm.get('fullName')?.touched}">
+                <div class="invalid-feedback"
+                  *ngIf="appointmentForm.get('fullName')?.touched && appointmentForm.get('fullName')?.hasError('required')">
+                  Full Name is required.
+                </div>
+              </div>
+              <div class="col-6 mb-3">
+                <label for="dob"> Date of Birth <span class="red">*</span> </label>
+                <input type="date" id="dob" class="form-control form-control-sm mt-1" formControlName="dob"
+                  [ngClass]="{'is-invalid': appointmentForm.get('dob')?.invalid && appointmentForm.get('dob')?.touched}">
+                <div class="invalid-feedback"
+                  *ngIf="appointmentForm.get('dob')?.touched && appointmentForm.get('dob')?.hasError('required')">
+                  Date of Birth is required.
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label for="gender">Gender<span class="red">*</span></label>
+                <select class="form-select form-select-sm cursor mt-1" formControlName="gender"
+                  [ngClass]="{'is-invalid': appointmentForm.get('gender')?.invalid &&  appointmentForm.get('gender')?.touched}">
+                  <option value="" disabled selected>Select</option>
+                  <option value=1>Male</option>
+                  <option value=2>Female</option>
+                  <option value=3>Other</option>
+                </select>
+                <div class="invalid-feedback"
+                  *ngIf="appointmentForm.get('gender')?.touched && appointmentForm.get('gender')?.hasError('required')">
+                  Gender is required.
+                </div>
+              </div>
+              <div class=" col-6 mb-3">
+                <label for="email">Email <span class="red">*</span></label>
+                <input type="text" id="email" class="form-control form-control-sm mt-1" formControlName="email"
+                  placeholder="Enter Email"
+                  [ngClass]="{'is-invalid': appointmentForm.get('email')?.invalid && appointmentForm.get('email')?.touched}">
+                <div class="invalid-feedback"
+                  *ngIf="appointmentForm.get('email')?.touched && appointmentForm.get('email')?.hasError('required')">
+                  Email is required.
+                </div>
+                <div class="fv-plugins-message-container invalid-feedback d-block"
+                  *ngIf="appointmentForm.get('email')?.touched && appointmentForm.get('email')?.hasError('email')">
+                  Email is not valid.
+                </div>
+              </div>
+
+            </div>
+            <div class="row mt-2">
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="fileName">Upload Document</label>
+                  <input type="file" id="document" class="form-control form-control-sm mt-1 small-input"
+                    formControlName="document"
+                    [ngClass]="{'is-invalid': appointmentForm.get('document')?.invalid && appointmentForm.get('document')?.touched}"
+                    (change)="onProfileSelected($event)">
+                  <div class="invalid-feedback"
+                    *ngIf="appointmentForm.get('document')?.touched && appointmentForm.get('document')?.hasError('required')">
+                    Upload Document is required.
+                  </div>
+                </div>
+                <div *ngIf="!showEditTimeFile" style="margin-top : -4%">
+                  <div class="file-name" *ngIf="editProfilePicture != null">
+                    <span class="cursor"
+                      (click)="downloadFile(editProfilePicture.filePath)">{{editProfilePicture.fileName}}</span>
+                    <a (click)="deleteDocument(editProfilePicture)"> <i class="fa-solid fa-trash ms-2 cursor"
+                        style="color:rgb(166, 7, 7);"></i></a><br>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6 mt-2">
+                <label class="form-label" for="meetingType">Meeting Type</label>
+                <div class="radio-group">
+                  <label *ngIf="servicePrice.telehealthVisitPrice">
+                    <input type="radio" id="meetingTypeVirtual" formControlName="meetingType" [value]="1" (change)="setConsultationFee(1)"/>
+                    Virtual
+                  </label>
+                  <label *ngIf="servicePrice.officeVisitPrice">
+                    <input type="radio" id="meetingTypeInPersonVisit" formControlName="meetingType" [value]="2" (change)="setConsultationFee(2)"/>
+                    In-Person Visit
+                  </label>
+                  <label *ngIf="servicePrice.inHomeVisitPrice">
+                    <input type="radio" id="meetingTypeHomeCareVisit" formControlName="meetingType" [value]="3" (change)="setConsultationFee(3)" />
+                    Home Care Visit
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="form-group col-12 mt-3">
+                <label for="reasonForVisit">Reason for Visit <span class="red">*</span></label>
+                <textarea id="reasonForVisit" class="form-control form-control-sm mt-1" formControlName="reasonForVisit"
+                  [ngClass]="{'is-invalid': appointmentForm.get('reasonForVisit')?.invalid && appointmentForm.get('reasonForVisit')?.touched}"></textarea>
+                <div class="invalid-feedback"
+                  *ngIf="appointmentForm.get('reasonForVisit')?.touched && appointmentForm.get('reasonForVisit')?.hasError('required')">
+                  Reason for Visit is required.
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row mt-3 align-items-center">
+              <!-- Slot Details Text -->
+              <div class="col-lg-7 col-md-8 col-sm-12">
+                <h2 class="mb-2" style="font-weight: 500;">Slot Time </h2>
+                <p class="text-muted mb-1">
+                  <span style="font-size: medium;">{{formatDate}}</span>
+                  &nbsp; <span class="time-slot p-2 ms-3">{{formatTime}}</span>
+
+                </p>
+                <p class="text-muted mb-0" *ngIf="selectedFee">
+                  <b style="font-size: medium;">Consultation fees:</b> <strong> ${{ selectedFee }}</strong>
+                </p>
+              </div>
+
+
+              <!-- Empty space for alignment (if needed) -->
+              <div class="col-lg-3 col-md-2 col-sm-6"></div>
+              <div class="col-lg-2 col-md-2 col-sm-6"></div>
+            </div>
+
+            <div class="row">
+              <div class="col-3"></div>
+              <div class="col-3"></div>
+              <div class="col-3"></div>
+              <div class="col-3">
+                <button type="submit" class="btn custom-padding mb-3" style="background-color: #00876F!important; "
+                  (click)="postBookAppointment()">
+                  <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading">
+                    <span class="visually-hidden">Loading...</span></span>Book Appointment
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

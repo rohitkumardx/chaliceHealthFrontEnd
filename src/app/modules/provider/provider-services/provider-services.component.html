@@ -1,0 +1,193 @@
+<div class="px-3 py-4">
+    <span class="close-icon" (click)="cancel()">&times;</span>
+    <h1 class="mt-1"><b>Services and Prices</b></h1>
+    <form [formGroup]="serviceForm">
+        <div class="row px-2">
+            <div class="col-sm-12 p-1 pb-0">
+                <h4 style="font-weight:500;"> Service pricing statement &nbsp;
+                </h4>
+                <p>
+                <b>For primary care :</b> We recommend $24 - $49 telehealth consults <br>
+                <b>For specialty care : </b> We recommend $49 - $79 telehealth consults <br>
+               <i>ChaliceHealth adds a 10% consumer fee ( $30 min , $100 max ) to all provider pricing, this is <br>
+ excluded from the above recommendations</i></p>
+
+                <!-- <input class="w-100" style="border: none; border-bottom:2px solid #dedada;" type="text"
+                    placeholder="Type your answer here" formControlName="servicePricing"
+                    [ngClass]="{'is-invalid':serviceForm.get('servicePricing')?.invalid && serviceForm.get('servicePricing')?.touched}"
+                    [value]="serviceForm.get('servicePricing')?.value">
+                <div class="invalid-feedback"
+                    *ngIf="serviceForm.get('servicePricing')?.touched && serviceForm.get('visitExistiservicePricingngPatient')?.hasError('required')">
+                </div> -->
+            </div>
+            <div class="col-sm-12 px-2 pb-0 pt-3 ">
+                <h4 style="font-weight: 500;">
+                    1. Ages treated &nbsp;
+                    <div class="tooltip-container" (mouseenter)="showTooltip()" (mouseleave)="hideTooltip()" (click)="toggleTooltip()">
+                        <i class="fas fa-question-circle cursor ms-1"></i>
+                        <div *ngIf="isTooltipVisible" class="custom-tooltip">
+                            Information about ages treated
+                        </div>
+                    </div>
+                </h4>
+                <input class="w-100" style="border: none; border-bottom:2px solid #dedada ;" type="text"
+                    placeholder="Type your answer here" formControlName="agesTreated"
+                    [ngClass]="{'is-invalid':serviceForm.get('agesTreated')?.invalid && serviceForm.get('agesTreated')?.touched}"
+                    [value]="serviceForm.get('agesTreated')?.value">
+                <div class="invalid-feedback"
+                    *ngIf="serviceForm.get('agesTreated')?.touched && serviceForm.get('agesTreated')?.hasError('required')">
+                </div>
+            </div>
+        </div>
+    </form>
+    <form [formGroup]="serviceForm" class="mt-2">
+        <div class="row px-2">
+            <h3 style="font-weight: 500; margin: 0%!important;">Please select the services you are interested</h3>
+            <div class="col-sm-5">
+                <div class="col-sm-12 p-2 pb-0 d-flex">
+                    <span><input type="radio" class="cursor" formControlName="serviceInterestedType" [value]="1"
+                            [ngClass]="{'is-invalid': serviceForm.get('serviceInterestedType')?.invalid &&  serviceForm.get('serviceInterestedType')?.touched}"></span>
+                    <span class="px-2">
+                        New patient telehealth visit
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="col-sm-12 p-2 pb-0 d-flex">
+                    <span><input type="radio" class="cursor" formControlName="serviceInterestedType" [value]="2"
+                            [ngClass]="{'is-invalid': serviceForm.get('serviceInterestedType')?.invalid &&  serviceForm.get('serviceInterestedType')?.touched}"></span>
+                    <span class="px-2">
+                        Existing patient telehealth visit
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="col-sm-12 p-2 pb-0 d-flex">
+                    <span><input type="radio" class="cursor" formControlName="serviceInterestedType" [value]="3"
+                            [ngClass]="{'is-invalid': serviceForm.get('serviceInterestedType')?.invalid &&  serviceForm.get('serviceInterestedType')?.touched}"></span>
+                    <span class="px-2">
+                        Both
+                    </span>
+                </div>
+            </div>
+            <div class="invalid mt-1"
+                *ngIf="serviceForm.get('serviceInterestedType')?.touched && serviceForm.get('serviceInterestedType')?.hasError('required')">
+                Atleast one service is required.
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label for="credetials">Service Duration<span class="red">*</span></label>
+                <select class="form-select form-select-sm cursor mt-1" formControlName="serviceDuration"
+                    [ngClass]="{'is-invalid': serviceForm.get('serviceDuration')?.invalid &&  serviceForm.get('serviceDuration')?.touched}">
+                    <option value="" disabled selected>Select</option>
+                    <option value="15">15 min</option>
+                    <option value="30">30 min</option>
+                    <option value="45">45 min</option>
+                    <option value="60">60 min</option>
+                </select>
+                <div class="invalid-feedback"
+                    *ngIf="serviceForm.get('serviceDuration')?.touched && serviceForm.get('serviceDuration')?.hasError('required')">
+                    Service Duration is required.
+                </div>
+            </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label for="phoneNumber">Telehealth Visit Price (in $)<span class="red">*</span></label>
+                <input type="number" id="phoneNumber" class="form-control form-control-sm mt-1"
+                    formControlName="telehealthVisitPrice"
+                    [ngClass]="{'is-invalid':serviceForm.get('telehealthVisitPrice')?.invalid && serviceForm.get('telehealthVisitPrice')?.touched}"
+                    [value]="serviceForm.get('telehealthVisitPrice')?.value">
+                <div class="invalid-feedback"
+                    *ngIf="serviceForm.get('telehealthVisitPrice')?.touched && serviceForm.get('telehealthVisitPrice')?.hasError('required')">
+                    Telehealth Visit Price is required.
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label for="phoneNumber">Telehealth Visit (Existing patient) (in $)</label>
+                <input type="number" id="phoneNumber" class="form-control form-control-sm mt-1"
+                    formControlName="visitExistingPatient"
+                    [ngClass]="{'is-invalid':serviceForm.get('visitExistingPatient')?.invalid && serviceForm.get('visitExistingPatient')?.touched}"
+                    [value]="serviceForm.get('visitExistingPatient')?.value">
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label for="phoneNumber">In-Home Visit Price (in $)</label>
+                <input type="number" id="number" class="form-control form-control-sm mt-1"
+                    formControlName="inHomeVisitPrice"
+                    [ngClass]="{'is-invalid':serviceForm.get('inHomeVisitPrice')?.invalid && serviceForm.get('inHomeVisitPrice')?.touched}"
+                    [value]="serviceForm.get('inHomeVisitPrice')?.value">
+            </div>
+            <div class="col-sm-6">
+                <label for="phoneNumber">Office Visit Price (in $)</label>
+                <input type="number" id="phoneNumber" class="form-control form-control-sm mt-1"
+                    formControlName="officeVisitPrice"
+                    [ngClass]="{'is-invalid':serviceForm.get('officeVisitPrice')?.invalid && serviceForm.get('price')?.touched}"
+                    [value]="serviceForm.get('officeVisitPrice')?.value">
+            </div>
+
+
+        </div>
+    </form>
+
+    <div class="row p-2" *ngIf="isDisabled && serviceRows.length > 0">
+        <h3 style="color: black;"><u style="font-weight: 500;">Specialty Service</u> <br>Service Name</h3>
+
+        <div *ngFor="let item of serviceRows; let i = index" class="row">
+            <div class="col-sm-6">
+                <label>Specialty</label>
+                <select [(ngModel)]="item.specialtyServiceId" class="form-select form-select-sm cursor mt-1"
+                    [disabled]="isDisabled">
+                    <option value="" disabled selected>Select</option>
+                    <option [value]="item.id" *ngFor="let item of specialities">{{item.name}}</option>
+                </select>
+                <div class="invalid" *ngIf="validationMessages[i]?.specialtyServiceId">
+                    Service is required.
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="row">
+                    <label for="price">Service Price (in $)</label>
+                    <div class="col-sm-11">
+                        <input type="number" [(ngModel)]="item.price" id="price" [disabled]="isDisabled"
+                            class="form-control form-control-sm mt-1 w-100">
+                        <div class="invalid" *ngIf="validationMessages[i]?.price">
+                            Service Price is required.
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1 d-flex" style="height: 40px !important;">
+                        <div style="  color: #00876f;" *ngIf="i == 0 " (click)="addService(serviceRows.length - 1)"
+                            class="d-flex align-items-center fs-3"><i class="fa-solid fa-circle-plus"
+                                *ngIf="!isDisabled"></i></div>
+                        <div *ngIf="i != 0 " (click)="deleteService(i)"> <i class="fa-solid fa-trash mt-2 ms-2"
+                                *ngIf="!isDisabled" style="color:rgb(166, 7, 7); font-size: 16px; "></i></div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row p-2">
+        <div class="col-sm-5"></div>
+        <div class="mt-4 col-sm-7">
+            <button type="button" class="btn m-2 custom-padding cancelButton" (click)="cancel()"
+                >
+                <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading1">
+                    <span class="visually-hidden">Loading...</span>
+                </span>Cancel</button>
+            <button type="button" class="btn m-2 custom-padding" style="background-color: #00876f;"
+                [disabled]="isDisabled" (click)="submitData()"><span class="spinner-border text-light small-spinner"
+                    role="status" *ngIf="loading">
+                    <span class="visually-hidden">Loading...</span>
+                </span>Save
+            </button>
+        </div>
+    </div>  
+
+</div>

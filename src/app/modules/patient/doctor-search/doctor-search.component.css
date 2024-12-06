@@ -1,0 +1,284 @@
+.maincont {
+  width: 100%;
+
+}
+
+.container-fluid {
+  padding: 20px;
+  width: 95%;
+  max-width: 1950px;
+}
+
+.filter-sidebar {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid #dfdfdf;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  width: 40%;
+  margin-right: 10px;
+
+}
+
+.dropdown-toggle::after {
+
+  margin-top: 10px;
+}
+
+.doctor-card {
+  /* display: flex;
+    justify-content: space-around; */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #fff;
+  width: 49%;
+  max-width: 100%;
+  /* margin-left: 1px; */
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
+/* .parent{
+    display : flex;
+    flex-wrap:nowrap;
+  } */
+
+.doctor-info {
+  display: flex;
+  gap: 15px;
+}
+
+.doctor-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.details {
+  padding-left: 1%;
+  ;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-around; */
+
+}
+
+.doctor-name {
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 0;
+}
+
+.visit-type {
+  color: black;
+  font-size: 0.9em;
+}
+
+.urgent-care {
+  display: flex;
+  align-items: center;
+  color: black;
+  font-size: 0.9em;
+}
+
+
+.visit-details {
+  text-align: right;
+}
+
+.price {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.discounted-price {
+  color: #00876F;
+  font-weight: bold;
+  margin-left: 5px;
+}
+
+.subscription-info {
+  font-size: 0.8em;
+  color: gray;
+}
+
+.appointment-date {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.appointment-times {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.time-btn {
+  background-color: #00876F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  width: 400% !important;
+  padding: 4px 0px;
+
+}
+
+.more-times-btn {
+  background-color: #f3e5f5;
+  color: #00876F;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  width: 8.3rem;
+  padding: 4px 0px;
+}
+
+.gender button.active {
+  background-color: #00876F !important;
+  color: white !important;
+}
+.credential button.active {
+  background-color: #00876F !important;
+  color: white !important;
+}
+.gender button.active {
+  background-color: #00876F !important;
+  color: white !important;
+}
+
+.availability button.active {
+  background-color: #00876F !important;
+  color: white !important;
+}
+
+.availability button {
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.gender   button {
+  background-color: transparent !important;
+  color: black !important;
+}
+.credential  button {
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.details button:focus,
+.details button:active {
+  background-color: #00876F !important;
+  color: white !important;
+  outline: none;
+}
+
+.details button {
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.visit button {
+  background-color: transparent !important;
+  color: black !important;
+}
+
+.visit button:focus,
+.visit button:active {
+  background-color: #00876F !important;
+  color: white !important;
+  outline: none;
+}
+
+.custom-dropdown {
+  position: relative;
+}
+
+.fixed-dropdown {
+  position: fixed;
+  top: 100px;
+  z-index: 1050;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.custom-dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-up {
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 10px;
+}
+
+
+.dropdown-menu {
+  position: fixed;
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 10px;
+  z-index: 1050;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.badge {
+  background-color: white !important;
+  color: black;
+  align-items: center;
+  position: relative;
+  line-height: 1.5;
+  margin-bottom: 5px !important;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.remove {
+  cursor: pointer;
+  color: black;
+  padding-left: 8px;
+}
+
+.credentials-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.btn {
+  min-width: 80px;
+  text-align: center;
+}
+
+.cred-container {
+  max-height: 200px; /* Set a fixed height for the panel */
+  overflow-y: auto;  /* Enable vertical scrolling */
+}
+
+.more-options-panel::-webkit-scrollbar {
+  width: 1px !important; /* Customize scrollbar width */
+}
+
+

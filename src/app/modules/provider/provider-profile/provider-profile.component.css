@@ -1,0 +1,95 @@
+
+.close-icon {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 2rem;
+    color: #000000;
+}
+
+label .fa-question-circle {
+    font-size: 1.1rem; 
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+
+.tooltip {
+    border: none !important; 
+    background-color: rgba(0, 0, 0, 0.8) !important; 
+    padding: 5px 10px; 
+
+}
+
+.tooltip .tooltip-inner {
+    color: white !important; 
+    border: none !important; 
+    overflow: auto;
+}
+
+
+
+.hover-effect:hover {
+    color: white;
+    background-color: #004ab9;
+}
+
+.roleDropdwon {
+    margin-left: 0.5rem;
+    margin-top: 4%;
+    /* font-family: inherit;
+    font-size: 3rem; */
+}
+
+
+.dp-pd-l {
+    text-align: left;
+    background-color: #f8f8f8;
+    padding-left: 7px !important;
+}
+
+.custom-dropdown {
+    width: 100%;
+}
+.small-input {
+    padding-top: 5px !important;
+    padding-right: 5px !important;
+    padding-bottom: 5px !important;
+    padding-left: 5px !important;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .custom-tooltip {
+    position: absolute;
+    top: 50%;
+    left: 120%; 
+    background-color: #fff;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    white-space: nowrap;
+    z-index: 100;
+  }
+  
+  .custom-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -5x; 
+    left: 10px; 
+    /* transform: translateY(-50%); */
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent transparent transparent #fff; 
+    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  

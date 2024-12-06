@@ -1,0 +1,228 @@
+.left-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+.steps li {
+    position: relative;
+    padding: 8px 0;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+}
+
+.step-content {
+    width: 100%;
+}
+
+.step-number {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #00876f;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    margin-right: 10px;
+}
+
+.step-content h3 {
+    margin: 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.step-content p {
+    /* margin: 10px 0; */
+    font-size: 14px;
+    color: #666;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #00876f;
+    width: auto;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.video-section {
+    width: 100%;
+    max-width: 35rem;
+}
+
+video {
+    width: 100%;
+    height: auto;
+}
+
+/* / / Align everything to the left on all screen sizes / / */
+
+.steps li.active .step-number {
+    background-color: #00876f;
+    color: #fff;
+}
+
+.steps li .step-number:not(.active-number) {
+    background-color: #b2b2b2;
+    color: #fff;
+}
+
+.steps li.active-number {
+    border: 1px solid #00876f;
+}
+
+.active-number {
+    border: 1px solid #00876f
+}
+
+.step-number.completed::before {
+    content: '\2713';
+    color: white;
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+}
+
+.step-number.completed {
+    background-color: #00876f;
+    color: white;
+}
+
+/* .steps li.completed+li .step-number::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: 15px;
+    width: 2px;
+    height: 40px;
+    background: #00876f;
+    z-index: -1;
+} */
+
+.steps li::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 30px;
+    width: 2px;
+    height: calc(100% - 60px);
+    background: #ccc;
+    background: repeating-linear-gradient(0deg,
+            #ccc,
+            #ccc 2px,
+            transparent 2px,
+            transparent 4px);
+    z-index: -1;
+}
+
+.steps li.completed::after {
+    background: repeating-linear-gradient(0deg,
+            #00876f,
+            #00876f 2px,
+            transparent 2px,
+            transparent 4px);
+}
+
+.steps li:last-child::after {
+    display: none;
+}
+
+@media (min-width: 992px) {
+    .steps li {
+        flex-direction: row;
+        text-align: left;
+        align-items: center;
+    }
+
+    .step-content p {
+     margin: 10px 45px; 
+    }
+
+    .btn-primary {
+        width: auto;
+        margin: 0px 45px;
+    }
+}
+
+.card {
+    border: none !important;
+}
+
+.profile img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 550px;
+    height: 600px;
+    margin-bottom: 90px;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.steps li.completed .step-number {
+    background-color: #00876f;
+    /* Green background for completed step */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: 0;
+    /* Hide the original number by reducing font size */
+}
+
+.steps li.completed .step-number::before {
+    content: '\2713';
+    /* Unicode for checkmark */
+    font-size: 18px;
+    /* Adjust font size */
+    color: white;
+    /* White color for the checkmark */
+}
+
+/* Hide the original number when the step is completed */
+.steps li.completed .step-number::after {
+    content: '' !important;
+    /* This hides the number */
+}
+
+
+/* Non-completed step styles */
+.steps li .step-number {
+    background-color: #b2b2b2;
+    /* Default gray background for non-completed steps */
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+/* Active step - keep the number */
+.steps li .step-number.active-number {
+    background-color: #00876f;
+    /* Green background for active step */
+    border: 2px solid #00876f;
+    color: white;
+}

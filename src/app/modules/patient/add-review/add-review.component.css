@@ -1,0 +1,91 @@
+.container.review-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10%;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #333;
+    text-align: center;
+    font-weight: 600;
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .form-control,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  small {
+    display: block;
+    margin-top: 4px;
+    color: #888;
+    text-align: end;
+  }
+  
+  .star-rating {
+    display: inline-flex;
+    font-size: 1.75rem;
+    color: #d3d3d3;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .star-rating span.selected {
+    color: #ffd700;
+  }
+  
+  button {
+    padding: 4px 20px;
+    font-size: 1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-submit {
+    background-color: #165D9D;
+    color: #fff;
+    margin-right: 10px;
+  }
+  
+  .btn-submit:hover {
+    background-color: #103256;
+  }
+  
+  
+  .btn-cancel {
+    background-color: rgb(215, 11, 11);
+    color: #fff;
+  }
+  
+  .btn-cancel:hover {
+    background-color: #ac2516;
+  }
+  

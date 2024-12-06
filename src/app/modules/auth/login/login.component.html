@@ -1,0 +1,61 @@
+<div class="login-container " style=" background: linear-gradient(135deg, #83c0b1, #96c0a8, #cbbe91, #e6bf84);">
+  <div class="row d-flex align-items-center justify-content-between w-100 ">
+    <div class="col-6  p-0 ">
+      <div class="login-card " style="margin:auto;">
+        <div class="pt-3"><a href="/home-page">
+          <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" width="200px" alt="Chalice Health Logo">
+      </a>
+      </div>
+        <form [formGroup]="loginForm">
+          <div class="form-group" style="padding-top: 70px;">
+            <label for="email" class="pb-1 ">Email</label>
+
+            <input type="text" id="email" class="form-control" formControlName="email" placeholder="Enter Email"
+              [ngClass]="{'is-invalid': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}">
+            <div class="invalid-feedback"
+              *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')">
+              Email is required.
+            </div>
+            <div class="fv-plugins-message-container invalid-feedback d-block"
+              *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('email')">
+              <div>Email is not valid</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="password" class="pb-1">Password</label>
+            <div class="password-input-container">
+              <input type="{{ hidePassword ? 'password' : 'text' }}" id="password" class="form-control form-control-eye"
+                formControlName="password" placeholder="Enter Password"
+              />
+              <!-- <div class="invalid-feedback"
+                *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
+                Password is required.
+              </div> -->
+              <i class="toggle-password-icon fas" [ngClass]="{ 'fa-eye': !hidePassword, 'fa-eye-slash': hidePassword }"
+                (click)="togglePasswordVisibility()"></i>
+            </div>
+          </div>
+          <div class="form-group remember-forgot mt-2">
+            <div class="remember-me-container">
+              <input type="checkbox" id="rememberMe" formControlName="rememberMe">
+              <label for="rememberMe" class="remember-me-label">Remember Me</label>
+            </div>
+            <a (click)="navigateToForgotPassword()" class="forgot-password-link ">Forgot Password?</a>
+          </div>
+          <button type="button" class="btn btn-primary login-button mt-2" (click)="login()"  [disabled]="loginForm.invalid">
+            <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': loading }"></i>
+            <span *ngIf="!loading" class="space">Login</span>
+            <span *ngIf="loading" class="space">Loading...</span>
+          </button>
+          <p class="sign-up-link ">Don't have an account? <a class="cursor text-primary"
+              (click)="navigateToSignup()">Sign Up</a></p>
+        </form>
+        <div id="googleButton" class="mb-2">Sign in </div>
+
+      </div>
+    </div>
+    <div class="image col-6  ">
+      <img src="../../../../assets/svg/homepage/g1.png" width="600px" alt="" srcset="">
+    </div>
+  </div>
+</div>

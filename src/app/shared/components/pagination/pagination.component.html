@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-md-end mt-3">
+  <div class="d-flex align-items-center">
+    <div class="body-regular neutral-1">
+      Items per page
+    </div>
+    <div class="page-size mx-2">
+      <div ngbDropdown class="d-inline-block">
+        <button type="button" class="btn btn-page-size page-button" id="ddlPageSize" ngbDropdownToggle>
+          {{paginator.pageSize}}
+        </button>
+        <div ngbDropdownMenu aria-labelledby="ddlPageSize">
+          <button ngbDropdownItem (click)="onChangePageSize(5)" class="body-regular neutral-1">5</button>
+          <button ngbDropdownItem (click)="onChangePageSize(10)" class="body-regular neutral-1">10</button>
+          <button ngbDropdownItem (click)="onChangePageSize(50)" class="body-regular neutral-1">50</button>
+          <button ngbDropdownItem (click)="onChangePageSize(100)" class="body-regular neutral-1">100</button>
+        </div>
+      </div>
+    </div>
+    <div class="mx-2">
+      <label class="body-medium neutral-1">
+        {{ ((paginator.pageNumber - 1) * paginator.pageSize) + 1 }}
+        -{{ Math.min(paginator.pageNumber * paginator.pageSize, paginator.totalCount) }}
+      </label>
+      <span> of </span> <span class="body-medium neutral-1">{{ paginator.totalCount }}</span>
+    </div>
+  </div>
+  <ngb-pagination
+    [collectionSize]="paginator.totalCount"
+    [(page)]="paginator.pageNumber"
+    [pageSize]="paginator.pageSize"
+    [maxSize]="5"
+    [rotate]="true"
+    [boundaryLinks]="true"
+    (pageChange)="pageChange()"
+    class="ml-2"
+  >
+    <ng-template ngbPaginationPrevious><img src="/assets/svg/pagination-left-icon.svg" alt="Previous"/></ng-template>
+    <ng-template ngbPaginationNext><img src="/assets/svg/pagination-right-icon.svg" alt="Next"/></ng-template>
+  </ngb-pagination>
+</div>

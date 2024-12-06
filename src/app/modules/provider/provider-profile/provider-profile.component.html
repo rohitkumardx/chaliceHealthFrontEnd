@@ -1,0 +1,208 @@
+<div class="p-3 mt-2 mb-3">
+    <span class="close-icon" (click)="cancel()">&times;</span>
+    <h1 class=" mt-1"><b>Your Profile</b></h1>
+    <form [formGroup]="profileForm" class="mt-2">
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label for="firstName"> First Name <span class="red">*</span></label>
+                <input type="text" id="firstName" class="form-control form-control-sm mt-1" formControlName="firstName"
+                    [ngClass]="{'is-invalid':profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched}"
+                    [value]="profileForm.get('firstName')?.value | capitalizeFirstLetter">
+                <div class="invalid-feedback"
+                    *ngIf="profileForm.get('firstName')?.touched && profileForm.get('firstName')?.hasError('required')">
+                    First Name is required.
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label>Middle Name</label>
+                <input class="form-control form-control-sm mt-1" type="text" aria-label="default input example"
+                    formControlName="middleName" [value]="profileForm.get('middleName')?.value | capitalizeFirstLetter">
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label for="lastName"> Last Name <span class="red">*</span></label>
+                <input type="text" id="lastName" class="form-control form-control-sm mt-1" formControlName="lastName"
+                    [ngClass]="{'is-invalid':profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched}"
+                    [value]="profileForm.get('lastName')?.value | capitalizeFirstLetter">
+                <div class="invalid-feedback"
+                    *ngIf="profileForm.get('lastName')?.touched && profileForm.get('lastName')?.hasError('required')">
+                    Last Name is required.
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label>Date of Birth<span class="red">*</span></label>
+                <input class="form-control form-control-sm mt-1" type="date" formControlName="dateOfBirth"
+                    [ngClass]="{'is-invalid': profileForm.get('dateOfBirth')?.invalid &&  profileForm.get('dateOfBirth')?.touched}">
+                <div class="invalid-feedback"
+                    *ngIf="profileForm.get('dateOfBirth')?.touched && profileForm.get('dateOfBirth')?.hasError('required')">
+                    DOB Title is required.
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label>Gender<span class="red">*</span></label>
+                <select class="form-select form-select-sm cursor mt-1" formControlName="gender"
+                    [ngClass]="{'is-invalid': profileForm.get('gender')?.invalid &&  profileForm.get('gender')?.touched}">
+                    <option value="" disabled selected>Select</option>
+                    <option value="1">Male</option>
+                    <option value="2">Female</option>
+                    <option value="3">Other</option>
+
+                </select>
+                <div class="invalid-feedback"
+                    *ngIf="profileForm.get('gender')?.touched && profileForm.get('gender')?.hasError('required')">
+                    Gender is required.
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-6">
+                <label>Languages<span class="red">*</span></label>
+                <div class="custom-dropdown">
+                    <button type="button" id="multiSelectDropdown" class="form-select form-select-sm dp-pd-l mt-1"
+                        data-bs-toggle="dropdown"
+                        [ngClass]="{'is-invalid': profileForm.get('languageIds')?.invalid &&  profileForm.get('languageIds')?.touched}"
+                        aria-expanded="false">
+                        {{ selectedItems.length > 0 ?
+                        selectedItems.join(', ') : 'Select' }}
+                    </button>
+                    <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()">
+                        <li *ngFor="let item of languages" (mouseenter)="hovering = true"
+                            (mouseleave)="hovering = false" [class.hover-effect]="hovering">
+                            <label>
+                                <input type="checkbox" class="cursor roleDropdwon"
+                                    (change)="checkboxChange($event, item.name, item.id)"
+                                    [checked]="item.checked == true">
+                                {{ item.name }}
+                            </label>
+                        </li>
+                    </ul>
+                    <div class="invalid-feedback"
+                        *ngIf="profileForm.get('languageIds')?.touched && profileForm.get('languageIds')?.hasError('required')">
+                        Atleast one language is required.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label>TIN/SSN<span class="red">*</span>
+                    <div class="tooltip-container" (mouseenter)="showTooltip1()" (mouseleave)="hideTooltip1()" (click)="toggleTooltip1()">
+                        <i class="fas fa-question-circle cursor ms-1"></i>
+                        <div *ngIf="isTooltipVisible1" class="custom-tooltip">
+                            Tax Identification Number/Social Security Number </div>
+                    </div>
+                   
+                </label>
+                <input class="form-control form-control-sm mt-1" type="text" aria-label="default input example"
+                    formControlName="SSN" maxlength="11"
+                    [ngClass]="{'is-invalid':profileForm.get('SSN')?.invalid && profileForm.get('SSN')?.touched}">
+                <div class="invalid-feedback"
+                    *ngIf="profileForm.get('SSN')?.touched && profileForm.get('SSN')?.hasError('required')">
+                    TIN/SSN is required.
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <label>Legal Practice Name</label>
+                <input class="form-control form-control-sm mt-1" type="text" aria-label="default input example"
+                    formControlName="legalPracticeName"
+                    [value]="profileForm.get('legalPracticeName')?.value | capitalizeFirstLetter">
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="image">Profile Picture</label>
+                    <input style="padding: 10px;" type="file" id="ProfilePic"
+                        class="form-control form-control-sm mt-1 small-input" formControlName="ProfilePic"
+                        [ngClass]="{'is-invalid': profileForm.get('ProfilePic')?.invalid && profileForm.get('ProfilePic')?.touched}"
+                        (change)="onProfileSelected($event)">
+                    <!-- <div class="invalid-feedback"
+                        *ngIf="profileForm.get('ProfilePicture')?.touched && profileForm.get('ProfilePicture')?.hasError('required')">
+                        Profile Picture is required.
+                    </div> -->
+                </div>
+                <div *ngIf="!showEditTimeFile">
+                    <div class="file-name mt-1" *ngIf="editProfilePicture != null">
+                        <span class="cursor"
+                            (click)="downloadFile(editProfilePicture.filePath)">{{editProfilePicture.fileName}}</span>
+                        <a (click)="deleteImage(editProfilePicture)"> <i class="fa-solid fa-trash ms-2 cursor"
+                                style="color:rgb(166, 7, 7);"></i></a><br>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="image">Video Intro Link</label>
+                    <input class="form-control form-control-sm mt-1" type="text" aria-label="default input example"
+                        formControlName="videoIntroName" [value]="profileForm.get('videoIntroName')?.value">
+                </div>
+            </div>
+        </div>
+
+        <div class="row p-2">
+            <div class="col-sm-6">
+                <label>Email<span class="red">*</span> </label>
+                <input class="form-control form-control-sm mt-1" type="text" aria-label="default input example" readonly
+                    formControlName="email"
+                    [ngClass]="{'is-invalid':profileForm.get('email')?.invalid && profileForm.get('email')?.touched}">
+                <div class="invalid-feedback"
+                    *ngIf="profileForm.get('email')?.touched && profileForm.get('email')?.hasError('required')">
+                    Email is required.
+                </div>
+            </div>
+
+        </div>
+        <div class="row p-2">
+            <div class="col-sm-12">
+                <label>Provider Bio
+                    <div class="tooltip-container" (mouseenter)="showTooltip2()" (mouseleave)="hideTooltip2()" (click)="toggleTooltip2()">
+                        <i class="fas fa-question-circle cursor ms-1"></i>
+                        <div *ngIf="isTooltipVisible2" class="custom-tooltip">
+                            Enter a short, professional bio for each clinician. We suggest using the following template for <br>
+                            your bio as this will help your profile appear in more searches:[Your name/title] is a <br>
+                            board-certified[list your professional title] who specializes in [list all areas that you <br>
+                            specialize in] and who has been practicing for [x amount of time]. [Include any professional <br> 
+                            organizations that you are a member of, if applicable]. [Your preferred pronoun] offers care in <br>
+                            the following languages: [list languages offered].[Your preferred pronoun] is able to treat symptoms <br>
+                            of [list any conditions or illnesses that you’d like to include], including [list symptoms].Why did <br> 
+                            you choose to go into the medical profession? Write a few sentences about your passion for healthcare <br> 
+                            and what you most enjoy about working with a patient, it can go a long way!What do you bring to the table?<br>
+                            Is there anything you would like patients to know about your care style, background, or personality? </div>
+                    </div>
+                    <!-- <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="right"
+                        title="Enter a short, professional bio for each clinician. We suggest using the following template for your bio as this will help your profile appear in more searches:
+                            [Your name/title] is a board-certified[list your professional title] who specializes in [list all areas that you specialize in] and who has been practicing for [x amount of time]. 
+                            [Include any professional organizations that you are a member of, if applicable]. 
+                            [Your preferred pronoun] offers care in the following languages: [list languages offered].
+                            [Your preferred pronoun] is able to treat symptoms of [list any conditions or illnesses that you’d like to include], including [list symptoms].
+                            Why did you choose to go into the medical profession? Write a few sentences about your passion for healthcare and what you most enjoy about working with a patient, it can go a long way!
+                            What do you bring to the table? Is there anything you would like patients to know about your care style, background, or personality?"></i> -->
+                </label>
+                <textarea class="form-control form-control-sm mt-1" type="text" formControlName="providerBio"
+                    [value]="profileForm.get('providerBio')?.value | capitalizeFirstLetter"></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-5"></div>
+            <div class="mt-4 col-sm-7">
+                <button type="button" class="btn m-2 custom-padding cancelButton" (click)="cancel()">
+                    <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading1">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>Cancel</button>
+                <button type="button" class="btn m-2 custom-padding" (click)="submitData()"><span
+                        class="spinner-border text-light small-spinner" role="status" *ngIf="loading">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>Save
+                </button>
+            </div>
+        </div>
+
+    </form>
+</div>

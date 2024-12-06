@@ -1,0 +1,11 @@
+.dropdown-menu{
+    width: 7.5rem;
+}
+.align-items-center{
+    margin-top: -4%;
+}
+.page-button {
+    background-color: white !important;
+    /* background: linear-gradient(#00b094, #008f78) !important; */
+    color: black !important;
+}
