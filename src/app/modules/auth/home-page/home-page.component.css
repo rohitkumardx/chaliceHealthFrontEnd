@@ -746,8 +746,55 @@ color: #00796b!important;
   height: 25px;
 }
 
-/* / pthealth end /
-/ FAQS START  / */
+ /* / pthealth end / */
+
+ /* Chalice Health  vs other  */
+ .chalice-health-other{
+  padding: 50px 0;
+ }
+ .chalice-health-other .chalice-health-other_heading{
+    font-size: 40px;
+    text-align: center;
+    font-weight: 400;
+    color: #01876f;
+ }
+ .chalice-health-other .chalice-health-other_subheading{
+  font-family: "DM Sans", sans-serif;
+  font-weight: 400;
+  color: #01876f;
+  font-size: 30px;
+  margin-bottom: 20px;
+
+}
+.chalice-health-other .chalice-health-table {
+  box-shadow: 1px 2px 3px #ddd;
+  border-radius: max(4px, 0.521vw);
+  overflow: hidden;
+  margin-bottom: 35px;
+ }
+ .chalice-health-other .chalice-health-table table{
+  margin: 0;
+  text-align: start;
+ 
+ }
+.chalice-health-other .chalice-health-table th{
+  background-color: #FFF1E5;
+  text-align: start;
+  font-size: 18px;
+  font-weight: 400;
+  color: #333333;
+  border-bottom: none;
+  padding: 14px 16px;
+}
+.chalice-health-other .chalice-health-table td{
+  padding: 13px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333333;
+}
+
+
+ /* FAQS START   */
 .mainFAQS {
   width: 100%;
 }
