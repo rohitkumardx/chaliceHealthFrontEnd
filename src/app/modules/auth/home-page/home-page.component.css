@@ -24,6 +24,13 @@
 
 .nav-link {
   font-weight: 500;
+  font-size: 17px;
+  margin-left: 10px !important;
+}
+.dropdown-toggle{
+  font-weight: 500;
+  font-size: 17px;
+  margin-left: 10px !important;
 }
 
 .no-outline:focus {
@@ -124,8 +131,14 @@
 }
 
 .dropdown-item:hover {
-  color: #00796b !important;
+  color: #ffffff !important;
+  background-color: #00876f !important;
 }
+
+.dropdown-menu{
+  min-width: 5rem !important;
+}
+
 
 /* / header button off /
 
@@ -138,7 +151,6 @@
   max-width: 1920px;
   margin: auto;
   background-color: #FFF1E5;
-  padding: 50px 0;
 }
 
 .hero {
@@ -391,6 +403,21 @@
   font-size: 18px;
 }
 
+.doctor-rateing-star{
+  color: #fac515;
+}
+.doctor-rateing-total-star{
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+}
+.doctor-rateing-star-by{
+  font-size: 14px;
+  font-weight: 400;
+  color: #61646c;
+}
+
+
 .doctor-location,
 .doctor-info {
   color: black;
@@ -408,6 +435,9 @@
 
 .doctor-info i {
   color: #A9B3C4;
+}
+.view-all-btn{
+  font-size: 20px;
 }
 
 /* responsive css  */
@@ -433,9 +463,6 @@
 }
 
 /* Styling for the first column */
-.healthcare-section{
-  padding-bottom: 50px ;
-}
 .healthcare-section .col-md-7 {
   padding-right: 20px;
 }
@@ -906,25 +933,36 @@
 
 .chalice-health-other .chalice-health-table th {
   background-color: #FFF1E5;
-  text-align: start;
+  text-align: center;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 600;
   color: #333333;
   border-bottom: none;
   padding: 14px 16px;
 }
+.chalice-health-other .chalice-health-table th:first-child {
+  background-color: #01876f;
+  color: #ffffff !important;
+  text-align: start;
+  border-color: #01876f ;
+} 
+
 
 .chalice-health-other .chalice-health-table td {
   padding: 16px;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   color: #333333;
   min-width: 350px;
+  text-align: center;
+}
+.chalice-health-other .chalice-health-table td:first-child {
+ background-color: #4bb57940;
+  text-align: start;
+  border: none;
 }
 
-.chalice-health-other .chalice-health-table tr:hover {
-background-color: #fff8f3
-}
+
 .chalice-health-other .responsive-table {
   overflow-x: auto;
 }
@@ -1274,6 +1312,23 @@ footer {
 
 .what-makes-us {
   padding: 50px 0;
+}
+.what-makes-us .card{
+  box-shadow: 0px 0px 4px #888888;
+}
+.what-makes-us .Services-list-heading{
+  color: #01876f;
+}
+.what-makes-us .box{
+  width: 86.3%;
+  margin: auto;
+}
+
+
+@media (max-width:1300px) {
+  .what-makes-us .box{
+    width: 100%;
+  }
 }
 @media (max-width:992px) {
   .what-makes-us {

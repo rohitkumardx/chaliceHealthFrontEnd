@@ -25,13 +25,13 @@
             Patients
           </a>
           <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
-            <li class="dropdown-item ms-0">
+            <li class=" ms-0">
               <a class="dropdown-item ms-0">Benefits</a>
             </li>
-            <li class="dropdown-item">
+            <li class="">
               <a class="dropdown-item">How it works</a>
             </li>
-            <li class="dropdown-item">
+            <li class="">
               <a class="dropdown-item" (click)="navigateToPatientLogin()">Login</a>
             </li>
           </ul>
@@ -44,10 +44,10 @@
             Providers
           </a>
           <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
-            <li class="dropdown-item ms-0">
+            <li class=" ms-0">
               <a class="dropdown-item ms-0">Benefits</a>
             </li>
-            <li class="dropdown-item">
+            <li class="">
               <a class="dropdown-item" (click)="navigateToDoctorLogin()">Login</a>
             </li>
           </ul>
@@ -60,13 +60,13 @@
             Resources
           </a>
           <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
-            <li class="dropdown-item ms-0">
+            <li class=" ms-0">
               <a class="dropdown-item ms-0">FAQs</a>
             </li>
-            <li class="dropdown-item">
+            <li class="">
               <a class="dropdown-item">Contact Us</a>
             </li>
-            <li class="dropdown-item">
+            <li class="">
               <a class="dropdown-item">Blog</a>
             </li>
           </ul>
@@ -76,9 +76,9 @@
             aria-expanded="false" style="text-decoration: none;">
             <i class="fas fa-sign-in-alt" style="color: rgba(7, 36, 86, .25);"></i> Sign In
           </a>
-          <ul class="dropdown-menu mt-2 pe-5" aria-labelledby="loginDropdown">
-            <li><a class="dropdown-item p-0" (click)="navigateToDoctorLogin()">Provider Login</a></li>
-            <li><a class="dropdown-item p-0 mt-2" (click)="navigateToPatientLogin()">Patient Login</a></li>
+          <ul class="dropdown-menu mt-2 p-0" aria-labelledby="loginDropdown">
+            <li><a class="dropdown-item " (click)="navigateToDoctorLogin()">Provider Login</a></li>
+            <li><a class="dropdown-item " (click)="navigateToPatientLogin()">Patient Login</a></li>
           </ul>
         </li>
       </ul>
@@ -320,7 +320,16 @@
               <img src="../../../../assets/svg/homepage/MD5-400x400.png" alt="Dr. Lien Wong" class="doctor-photo">
               <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
 
-              <p class="doctor-specialty mb-3">Primary Care</p>
+              <p class="doctor-specialty mb-2">Primary Care</p>
+              <div class="doctor-rateing mb-2">
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-total-star me-1" >5.0</span>
+                <span class="doctor-rateing-star-by me-1" >(4)</span>
+              </div>
               <div class="row">
                 <div class="doctor-info col-6 mt-1 ">
                   <i class="fa fa-briefcase"></i> 15 years experience
@@ -369,7 +378,16 @@
               <img src="../../../../assets/svg/homepage/MD7-400x400.png" alt="Dr. Lien Wong" class="doctor-photo">
               <h3 class="doctor-name">Dr. Dener Wong , PsyD</h3>
 
-              <p class="doctor-specialty mb-3">Primary Care</p>
+              <p class="doctor-specialty mb-2">Primary Care</p>
+              <div class="doctor-rateing mb-2">
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-total-star me-1" >5.0</span>
+                <span class="doctor-rateing-star-by me-1" >(4)</span>
+              </div>
               <div class="row">
                 <div class="doctor-info col-6 mt-1 ">
                   <i class="fa fa-briefcase"></i> 15 years experience
@@ -419,7 +437,16 @@
                 class="doctor-photo">
               <h3 class="doctor-name">Dr Brittany Thompson, MD
               </h3>
-              <p class="doctor-specialty mb-3">Primary Care</p>
+              <p class="doctor-specialty mb-2">Primary Care</p>
+              <div class="doctor-rateing mb-2">
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-total-star me-1" >5.0</span>
+                <span class="doctor-rateing-star-by me-1" >(4)</span>
+              </div>
               <div class="row">
                 <div class="doctor-info col-6 mt-1 ">
                   <i class="fa fa-briefcase"></i> 15 years experience
@@ -467,7 +494,16 @@
             <div class="doctor-card">
               <img src="../../../../assets/svg/homepage/MD5-400x400.png" alt="Dr. Lien Wong" class="doctor-photo">
               <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
-              <p class="doctor-specialty mb-3">Primary Care</p>
+              <p class="doctor-specialty mb-2">Primary Care</p>
+              <div class="doctor-rateing mb-2">
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-total-star me-1" >5.0</span>
+                <span class="doctor-rateing-star-by me-1" >(4)</span>
+              </div>
               <div class="row">
                 <div class="doctor-info col-6 mt-1 ">
                   <i class="fa fa-briefcase"></i> 15 years experience
@@ -515,7 +551,16 @@
             <div class="doctor-card">
               <img src="../../../../assets/svg/homepage/850.png" alt="Dr. Lien Wong" class="doctor-photo">
               <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
-              <p class="doctor-specialty mb-3">Primary Care</p>
+              <p class="doctor-specialty mb-2">Primary Care</p>
+              <div class="doctor-rateing mb-2">
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-total-star me-1" >5.0</span>
+                <span class="doctor-rateing-star-by me-1" >(4)</span>
+              </div>
               <div class="row">
                 <div class="doctor-info col-6 mt-1 ">
                   <i class="fa fa-briefcase"></i> 15 years experience
@@ -564,7 +609,16 @@
               <img src="../../../../assets/svg/homepage/image_2024_11_08T08_51_31_420Z.png" alt="Dr. Lien Wong"
                 class="doctor-photo">
               <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
-              <p class="doctor-specialty mb-3">Primary Care</p>
+              <p class="doctor-specialty mb-2">Primary Care</p>
+              <div class="doctor-rateing mb-2">
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-total-star me-1" >5.0</span>
+                <span class="doctor-rateing-star-by me-1" >(4)</span>
+              </div>
               <div class="row">
                 <div class="doctor-info col-6 mt-1 ">
                   <i class="fa fa-briefcase"></i> 15 years experience
@@ -612,7 +666,16 @@
             <div class="doctor-card">
               <img src="../../../../assets/svg/homepage/202.png" alt="Dr. Lien Wong" class="doctor-photo">
               <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
-              <p class="doctor-specialty mb-3">Primary Care</p>
+              <p class="doctor-specialty mb-2">Primary Care</p>
+              <div class="doctor-rateing mb-2">
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-total-star me-1" >5.0</span>
+                <span class="doctor-rateing-star-by me-1" >(4)</span>
+              </div>
               <div class="row">
                 <div class="doctor-info col-6 mt-1 ">
                   <i class="fa fa-briefcase"></i> 15 years experience
@@ -661,7 +724,16 @@
               <img src="../../../../assets/svg/homepage/image_2024_11_08T07_45_11_475Z.png" alt="Dr. Lien Wong"
                 class="doctor-photo">
               <h3 class="doctor-name">Dr. Liene Wong , PsyD</h3>
-              <p class="doctor-specialty mb-3">Primary Care</p>
+              <p class="doctor-specialty mb-2">Primary Care</p>
+              <div class="doctor-rateing mb-2">
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-star me-1" ><i class="fa-solid fa-star"></i></span>
+                <span class="doctor-rateing-total-star me-1" >5.0</span>
+                <span class="doctor-rateing-star-by me-1" >(4)</span>
+              </div>
               <div class="row">
                 <div class="doctor-info col-6 mt-1 ">
                   <i class="fa fa-briefcase"></i> 15 years experience
@@ -711,6 +783,14 @@
           <button (click)="nextSlide()">Next</button>
         </div>
       </div>
+      
+      <div class=" d-flex justify-content-center mt-4 justify-content-md-end view-all-btn " >
+        <a href="#" class="text-success fw-bold d-inline-flex align-items-center">
+          View all Doctor
+          <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+      </div>
+    
 
 
 
@@ -887,16 +967,16 @@
         </div>
       </div>
 
-
-      <!-- Slide 2 -->
-
-
       <!-- Carousel Controls -->
 
+      <div class=" d-flex justify-content-center mt-4 justify-content-md-end view-all-btn " >
+        <a href="#" class="text-success fw-bold d-inline-flex align-items-center">
+          View all Services
+          <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+      </div>
     </div>
   </div>
-
-
 </div>
 
 
@@ -953,39 +1033,7 @@
           </div>
         </div>
       </div>
-      <div class="what-makes-us   ">
-        <h3 class="services-heading">What Makes Us Different</h3>
-        <div class="row box">
-          
-          <div class="col-lg-4 col-md-6  mt-3">
-            <div class="card p-3 services-list">
-              <div class="services-list-image mb-4">
-                <img src="../../../../assets/svg/Transparent-Pricing.jpg" alt="">
-              </div>
-              <h5 class="Services-list-heading"> Transparent Pricing</h5>
-              <p class="Services-list-para">All services have clear, upfront<br> costs</p>
-            </div>
-          </div>
-          <div class="col-lg-4  col-md-6 mt-3">
-            <div class="card p-3 services-list">
-              <div class="services-list-image mb-4">
-                <img src="../../../../assets/svg/direct-payment.webp" alt="">
-              </div>
-              <h5 class="Services-list-heading">Direct Payment Model</h5>
-              <p class="Services-list-para">We keep things simple by not accepting insurance</p>
-            </div>
-          </div>
-          <div class="col-lg-4 col-md-6  mt-3">
-            <div class="card p-3 services-list">
-              <div class="services-list-image mb-4">
-                <img src="../../../../assets/svg/accessible-Care.jpg" alt="">
-              </div>
-              <h5 class="Services-list-heading">Accessible Care</h5>
-              <p class="Services-list-para">Multiple service options to suit your needs and preferences</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    
 
       <!-- What Makes Us Different -->
 
@@ -1566,6 +1614,43 @@
 
 
 <!-- FAQS End -->
+
+<!-- why us Different -->
+
+<div class="what-makes-us container px-3">
+  <h3 class="services-heading">What Makes Us Different</h3>
+  <div class="row box">
+    
+    <div class="col-lg-4 col-md-6  mt-3">
+      <div class="card p-3 services-list">
+        <div class="services-list-image mb-4">
+          <img src="../../../../assets/svg/Transparent-Pricing.jpg" alt="">
+        </div>
+        <h5 class="Services-list-heading"> Transparent Pricing</h5>
+        <p class="Services-list-para">All services have clear, upfront<br> costs</p>
+      </div>
+    </div>
+    <div class="col-lg-4  col-md-6 mt-3">
+      <div class="card p-3 services-list">
+        <div class="services-list-image mb-4">
+          <img src="../../../../assets/svg/direct-payment.webp" alt="">
+        </div>
+        <h5 class="Services-list-heading">Direct Payment Model</h5>
+        <p class="Services-list-para">We keep things simple by not accepting insurance</p>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6  mt-3">
+      <div class="card p-3 services-list">
+        <div class="services-list-image mb-4">
+          <img src="../../../../assets/svg/accessible-Care.jpg" alt="">
+        </div>
+        <h5 class="Services-list-heading">Accessible Care</h5>
+        <p class="Services-list-para">Multiple service options to suit your needs and preferences</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- intouch start -->
 
 
