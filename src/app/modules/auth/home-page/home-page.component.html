@@ -1,109 +1,205 @@
-<header class="mainhead">
-  <div class="subhead">
-    <div class="header py-2">
-      <div class=" d-flex align-items-center">
-        <!-- Logo -->
-        <div class="logo d-flex align-items-center ps-4">
-          <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo" class=""
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo" class=""
             style="width: 180px; height: 60px;">
-          <!-- <h2 class="m-0 fw-bold text-dark">Chalice <span class="text-muted">HEALTH</span></h2> -->
-        </div>
-
-        <!-- Navbar Links -->
-        <nav class="nav d-flex mx-auto">
-          <ul class="nav">
-            <li class="nav-item">
-              <a href="#" class="nav-link text-dark cursor">Home</a>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="nav ms-auto">
+        <li class="nav-item">
+          <a href="#" class="nav-link text-dark cursor">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-dark cursor" (click)="redirectToDoctorSearch()">Find a Doctor</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link text-dark cursor">Services</a>
+        </li>
+        <li class="nav-item">
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Patients
+          </a>
+          <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+            <li class="dropdown-item ms-0">
+              <a class="dropdown-item ms-0">Benefits</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark cursor" (click)="redirectToDoctorSearch()">Find a Doctor</a>
+            <li class="dropdown-item">
+              <a class="dropdown-item">How it works</a>
             </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link text-dark cursor">Services</a>
-            </li>
-            <li class="nav-item">
-            <li class="nav-item dropdown">
-              <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Patients
-              </a>
-              <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
-                <li class="dropdown-item ms-0">
-                  <a class="dropdown-item ms-0">Benefits</a>
-                </li>
-                <li class="dropdown-item">
-                  <a class="dropdown-item">How it works</a>
-                </li>
-                <li class="dropdown-item">
-                  <a class="dropdown-item" (click)="navigateToPatientLogin()">Login</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item">
-            <li class="nav-item dropdown">
-              <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Providers
-              </a>
-              <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
-                <li class="dropdown-item ms-0">
-                  <a class="dropdown-item ms-0">Benefits</a>
-                </li>
-                <li class="dropdown-item">
-                  <a class="dropdown-item" (click)="navigateToDoctorLogin()">Login</a>
-                </li>
-              </ul>
-            </li>
-
-            <li class="nav-item">
-            <li class="nav-item dropdown">
-              <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                Resources
-              </a>
-              <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
-                <li class="dropdown-item ms-0">
-                  <a class="dropdown-item ms-0">FAQs</a>
-                </li>
-                <li class="dropdown-item">
-                  <a class="dropdown-item">Contact Us</a>
-                </li>
-                <li class="dropdown-item">
-                  <a class="dropdown-item">Blog</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item dropdown pt-2">
-              <a class="text-dark dropdown-toggle" id="loginDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false" style="text-decoration: none;">
-                <i class="fas fa-sign-in-alt" style="color: rgba(7, 36, 86, .25);"></i> Sign In
-              </a>
-              <ul class="dropdown-menu mt-2 pe-5" aria-labelledby="loginDropdown">
-                <li><a class="dropdown-item p-0" (click)="navigateToDoctorLogin()">Provider Login</a></li>
-                <li><a class="dropdown-item p-0 mt-2" (click)="navigateToPatientLogin()">Patient Login</a></li>
-              </ul>
+            <li class="dropdown-item">
+              <a class="dropdown-item" (click)="navigateToPatientLogin()">Login</a>
             </li>
           </ul>
-        </nav>
-      </div>
+        </li>
+
+        <li class="nav-item">
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Providers
+          </a>
+          <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+            <li class="dropdown-item ms-0">
+              <a class="dropdown-item ms-0">Benefits</a>
+            </li>
+            <li class="dropdown-item">
+              <a class="dropdown-item" (click)="navigateToDoctorLogin()">Login</a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="nav-item">
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Resources
+          </a>
+          <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+            <li class="dropdown-item ms-0">
+              <a class="dropdown-item ms-0">FAQs</a>
+            </li>
+            <li class="dropdown-item">
+              <a class="dropdown-item">Contact Us</a>
+            </li>
+            <li class="dropdown-item">
+              <a class="dropdown-item">Blog</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown pt-2">
+          <a class="text-dark dropdown-toggle" id="loginDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false" style="text-decoration: none;">
+            <i class="fas fa-sign-in-alt" style="color: rgba(7, 36, 86, .25);"></i> Sign In
+          </a>
+          <ul class="dropdown-menu mt-2 pe-5" aria-labelledby="loginDropdown">
+            <li><a class="dropdown-item p-0" (click)="navigateToDoctorLogin()">Provider Login</a></li>
+            <li><a class="dropdown-item p-0 mt-2" (click)="navigateToPatientLogin()">Patient Login</a></li>
+          </ul>
+        </li>
+      </ul>
+      <!-- <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form> -->
     </div>
   </div>
-</header>
+</nav>
+
+<!-- <header class="mainhead">
+
+
+        Navbar Links
+        <nav class="nav navbar-expand-lg">
+          <div  class="container-fluid">
+            <a class="navbar-brand" href="#">
+                      <div class="logo d-flex align-items-center">
+          <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo" class=""
+            style="width: 180px; height: 60px;">
+          <h2 class="m-0 fw-bold text-dark">Chalice <span class="text-muted">HEALTH</span></h2>
+        </div>
+            </a>
+            <button class="navbar-toggler p-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon">|||</span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="nav">
+                <li class="nav-item">
+                  <a href="#" class="nav-link text-dark cursor">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link text-dark cursor" (click)="redirectToDoctorSearch()">Find a Doctor</a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link text-dark cursor">Services</a>
+                </li>
+                <li class="nav-item">
+                <li class="nav-item dropdown">
+                  <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Patients
+                  </a>
+                  <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+                    <li class="dropdown-item ms-0">
+                      <a class="dropdown-item ms-0">Benefits</a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a class="dropdown-item">How it works</a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a class="dropdown-item" (click)="navigateToPatientLogin()">Login</a>
+                    </li>
+                  </ul>
+                </li>
+    
+                <li class="nav-item">
+                <li class="nav-item dropdown">
+                  <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Providers
+                  </a>
+                  <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+                    <li class="dropdown-item ms-0">
+                      <a class="dropdown-item ms-0">Benefits</a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a class="dropdown-item" (click)="navigateToDoctorLogin()">Login</a>
+                    </li>
+                  </ul>
+                </li>
+    
+                <li class="nav-item">
+                <li class="nav-item dropdown">
+                  <a href="#" class="nav-link text-dark dropdown-toggle" id="forPatientsDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Resources
+                  </a>
+                  <ul class="dropdown-menu  py-0" style="overflow: hidden;" aria-labelledby="forPatientsDropdown">
+                    <li class="dropdown-item ms-0">
+                      <a class="dropdown-item ms-0">FAQs</a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a class="dropdown-item">Contact Us</a>
+                    </li>
+                    <li class="dropdown-item">
+                      <a class="dropdown-item">Blog</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown pt-2">
+                  <a class="text-dark dropdown-toggle" id="loginDropdown" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false" style="text-decoration: none;">
+                    <i class="fas fa-sign-in-alt" style="color: rgba(7, 36, 86, .25);"></i> Sign In
+                  </a>
+                  <ul class="dropdown-menu mt-2 pe-5" aria-labelledby="loginDropdown">
+                    <li><a class="dropdown-item p-0" (click)="navigateToDoctorLogin()">Provider Login</a></li>
+                    <li><a class="dropdown-item p-0 mt-2" (click)="navigateToPatientLogin()">Patient Login</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+</header> -->
 <!-- hero start -->
 <div class="heromain">
   <div class="subhero">
-    <div class="hero">
-      <div class=" pt-2 py-4">
+    <div class="hero px-3 container ">
+      <div class="py-4">
         <div class="row ">
-          <div class="col-md-7">
+          <div class="col-lg-7">
             <h2 class="">Find the best doctors near you</h2>
-            <p class="text-dark" style="line-height: 22px;">Get help from thousands of trusted experts near you for
+            <p class="text-dark mb-3 " style="line-height: 22px;">Get help from thousands of trusted experts near you for
               everything from medical
               treatments to psychiatric help.</p>
 
             <!-- Search Bar -->
-            <div class="input-group mb-3 shadow-sm bg-white" style="max-width: 93%;">
+            <div class="input-group mb-3 shadow-sm bg-white" style="max-width: 100%;">
               <span class="input-group-text bg-white border-0" id="search-icon"
                 style="border-left:4px solid #00876f!important;border-radius: 0px !important;">
                 <i class="fas fa-search text-muted"></i>
@@ -113,33 +209,32 @@
                 aria-describedby="search-icon">
               <input type="text" class="form-control no-outline" style="border-left:2px solid #aeaeae!important;"
                 placeholder="Location" aria-label="Location">
-              <button class="btn m-0 rounded-circle me-1 mt-1"
-                style="width: 50px;height: 50px; box-shadow: rgba(0, 135, 111, 0.35) 0px 5px 21px;" type="button">
+              <button class="btn m-0 rounded-circle me-1 mt-2"
+                style="width: 40px;height: 40px; box-shadow: rgba(0, 135, 111, 0.35) 0px 5px 21px;" type="button">
                 <i class="fas fa-arrow-right  py-0"></i>
               </button>
             </div>
 
             <!-- Suggested Keywords -->
             <div class="mb-3">
-              <span class="badge bg-light text-success border me-2 cursor">DENTAL INFECTION</span>
-              <span class="badge bg-light text-success border me-2 cursor">TRAVEL MEDICINE CONSULTATION</span>
-              <span class="badge bg-light text-success border me-2 cursor">GENITAL WARTS</span>
-              <br>
+              <span class="badge bg-light text-success border me-2 mt-3 cursor">DENTAL INFECTION</span>
+              <span class="badge bg-light text-success border me-2 mt-3 cursor">TRAVEL MEDICINE CONSULTATION</span>
+              <span class="badge bg-light text-success border me-2 mt-3 cursor">GENITAL WARTS</span>
               <span class="badge bg-light text-success border me-2 mt-3 cursor">ABDOMINAL PAIN</span>
-              <span class="badge bg-light text-success border cursor">BRONCHITIS</span>
+              <span class="badge bg-light text-success border me-2 mt-3 cursor">BRONCHITIS</span>
             </div>
 
             <!-- Action Buttons -->
-            <div class="d-flex gap-5">
-              <button class="btn btn-success py-3" style="border-radius: 2px!important;"> See a doctor
+            <div class="d-flex flex-column flex-sm-row  gap-2 ">
+              <button class="btn btn-success" > See a doctor
                 urgently</button>
-              <button class="btn btn-outline-success border-2 py-3 ms-5" style="border-radius: 2px!important;">
+              <button class="btn btn-outline-success border-2 ">
                 Prescription refill</button>
             </div>
           </div>
 
           <!-- Image Section -->
-          <div class="col-md-5 d-flex justify-content-center">
+          <div class="col-lg-5 d-none d-lg-flex justify-content-lg-end justify-content-center mt-3 mt-lg-0 ">
             <img src="../../../../assets/svg/homepage/image_2024_11_08T08_51_31_420Z.png" alt="Mother and child smiling"
               class="img-fluid rounded shadow-sm">
           </div>
@@ -155,37 +250,37 @@
 <!-- carousel onn -->
 <div class="mainspecialties">
   <div class="subspecialties">
-    <div class="specialties px-3">
-      <h2 class="pt-3 text-start " style="font-size: 40px;color: #00876f; margin-left: 4rem!important;">Popular
+    <div class="specialties px-3 container">
+      <h2 class="pt-3 text-start " style="font-size: 40px ;color: #00876f; font-weight: 500;">Popular
         Specialties</h2>
       <div class="my-5">
-        <div class="row d-flex justify-content-center g-3">
+        <div class=" d-flex  flex-wrap  align-items-center  gap-3">
           <!-- Specialty Card Columns -->
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+          <div class=" d-flex align-items-center specialty-card">
             <span class="d-flex justify-content-between w-100">
               Primary Care
               <i class="fas fa-arrow-right text-success"></i>
             </span>
           </div>
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+          <div class=" d-flex align-items-center specialty-card">
             <span class="d-flex justify-content-between w-100">
               Dentist
               <i class="fas fa-arrow-right text-success ms-auto"></i>
             </span>
           </div>
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+          <div class=" d-flex align-items-center specialty-card">
             <span class="d-flex justify-content-between w-100">
               OB/GYN
               <i class="fas fa-arrow-right text-success ms-auto"></i>
             </span>
           </div>
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+          <div class=" d-flex align-items-center specialty-card">
             <span class="d-flex justify-content-between w-100">
               Eye Doctor
               <i class="fas fa-arrow-right text-success ms-auto"></i>
             </span>
           </div>
-          <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex align-items-center specialty-card">
+          <div class="d-flex align-items-center specialty-card">
             <span class="d-flex justify-content-between w-100">
               Dermatologist
               <i class="fas fa-arrow-right text-success ms-auto"></i>
@@ -194,7 +289,7 @@
         </div>
         <!-- Align View All Specialties -->
         <div class="row mt-4">
-          <div class=" d-flex justify-content-end" style="max-width: 95%!important;">
+          <div class=" d-flex justify-content-center  justify-content-md-end" >
             <a href="#" class="text-success fw-bold d-inline-flex align-items-center">
               View all specialties
               <i class="fas fa-arrow-right ms-2"></i>
@@ -215,7 +310,7 @@
 <!-- doctors start -->
 <div class="maindoctor">
   <div class="subdoctor">
-    <div class="doctor ">
+    <div class="doctor container px-3">
       <h1 style="color: #01876f; font-size: 40px; font-weight: 500;">Top Doctors</h1>
       <p style="color: black; font-size: 18px;" class="pt-1">Our most trusted and skilled doctors and physicians</p>
       <div class="slider">
@@ -627,7 +722,7 @@
           <p class="lead text-muted">Searching for a new healthcare provider?</p>
           <p><strong class="text-dark">Chalice Health has got you covered!</strong></p>
         </div>
-        <div class="col-md-5 col-12 d-flex align-items-center justify-content-start">
+        <div class="col-md-5 col-12 d-flex align-items-center justify-content-md-end justify-content-center mt-3 mt-md-0">
           <button class="find-doctor-btn">Find a Doctor</button>
         </div>
       </div>
@@ -641,7 +736,7 @@
 <!-- brows start -->
 <div class="mainbrowse">
   <div class="subbrowse">
-    <div class="browse py-3">
+    <div class="browse px-3 container">
       <h2 class="mt-4">Browse by Services</h2>
 
       <!-- Carousel Indicators -->
@@ -652,103 +747,117 @@
         <div class="slider-wrapper" #sliderWrapper2>
           <div class="slider-item">
             <div class="card">
-              <i class="hp-icon fas fa-hand-holding-heart p-3 fs-1 ms-3 mt-3"
-                style="color: #00876f; background-color:#E5F3F0;"></i>
+              <div class="browse-card-inner" >
+                <i class="hp-icon fas fa-hand-holding-heart p-3 fs-1 ms-3 mt-3"
+                style="color: #00876f; background-color:#E5F3F0; border-radius:4px;"></i>
               <div class="card-body text-start">
                 <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Primary Care</h5>
-                <p class="px-0 pt-4 ms-0">Routine check-ups, preventive care, and management of chronic conditions.</p>
+                <p class="px-0 m-0">Routine check-ups, preventive care, and management of chronic conditions.</p>
                 <div class="pt-4">
                   <a href="#">5 Listings</a>
                   <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
                 </div>
               </div>
+              </div>
             </div>
           </div>
           <div class="slider-item">
             <div class="card">
-              <i class="hp-icon fas fa-hand-holding-medical p-3 fs-1 ms-3 mt-3"
-                style="color: #00876f; background-color:#E5F3F0;"></i>
+              <div class="browse-card-inner" > 
+                <i class="hp-icon fas fa-hand-holding-medical p-3 fs-1 ms-3 mt-3"
+                style="color: #00876f; background-color:#E5F3F0; border-radius:4px;"></i>
               <div class="card-body text-start">
                 <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Urgent Care</h5>
-                <p class="px-0 pt-4 ms-0">Treatment for minor illnesses and injuries that require immediate
+                <p class="px-0 m-0">Treatment for minor illnesses and injuries that require immediate
                   attention but are not life-threatening.</p>
                 <div class="pt-4">
                   <a href="#">0 Listings</a>
                   <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
                 </div>
               </div>
+              </div>
             </div>
           </div>
           <div class="slider-item">
             <div class="card">
-              <i class="hp-icon fas fa-head-side-virus p-3 fs-1 ms-3 mt-3"
-                style="color: #00876f; background-color:#E5F3F0;"></i>
+              <div class="browse-card-inner" > 
+                <i class="hp-icon fas fa-head-side-virus p-3 fs-1 ms-3 mt-3"
+                style="color: #00876f; background-color:#E5F3F0; border-radius:4px;"></i>
               <div class="card-body text-start ">
                 <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Mental Health</h5>
-                <p class="px-0 pt-4 ms-0">Therapy sessions, counseling, and psychiatry appointments for various mental
+                <p class="px-0 m-0">Therapy sessions, counseling, and psychiatry appointments for various mental
                   health concerns.</p>
                 <div class="pt-4">
                   <a href="#">1 Listings</a>
                   <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
                 </div>
               </div>
+              </div>
             </div>
           </div>
           <div class="slider-item">
             <div class="card">
-              <i class="hp-icon fas fa-medkit p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
-              <div class="card-body text-start">
-                <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Specialty Care</h5>
-                <p class="px-0 pt-4 ms-0">Access to specialists in various fields such as dermatology, cardiology,
-                  orthopedics, physical therapy, occupational therapy, home health and more.</p>
-                <div class="pt-4">
-                  <a href="#">0 Listings</a>
-                  <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
-                </div>
+              <div class="browse-card-inner" > 
+                <i class="hp-icon fas fa-medkit p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0; border-radius:4px;"></i>
+                <div class="card-body text-start">
+                  <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Specialty Care</h5>
+                  <p class="px-0 m-0">Access to specialists in various fields such as dermatology, cardiology,
+                    orthopedics, physical therapy, occupational therapy, home health and more.</p>
+                  <div class="pt-4">
+                    <a href="#">0 Listings</a>
+                    <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                  </div>
+                  </div>
               </div>
             </div>
           </div>
 
           <div class="slider-item">
             <div class="card">
-              <i class="hp-icon fas fa-laptop-medical p-3 fs-1 ms-3 mt-3"
-                style="color: #00876f; background-color:#E5F3F0;"></i>
+              <div class="browse-card-inner" > 
+                <i class="hp-icon fas fa-laptop-medical p-3 fs-1 ms-3 mt-3"
+                style="color: #00876f; background-color:#E5F3F0; border-radius:4px;"></i>
               <div class="card-body text-start">
                 <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Telemedicine Visits</h5>
-                <p class="px-0 pt-4 ms-0">Virtual consultations with healthcare providers for diagnosis, treatment, and
+                <p class="px-0 m-0">Virtual consultations with healthcare providers for diagnosis, treatment, and
                   management of various health issues</p>
                 <div class="pt-4">
                   <a href="#">3 Listings</a>
                   <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
                 </div>
               </div>
+              </div>
             </div>
           </div>
 
           <div class="slider-item">
             <div class="card">
-              <i class="hp-icon fas fa-brain p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
+              <div class="browse-card-inner" > 
+                <i class="hp-icon fas fa-brain p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0; border-radius:4px;"></i>
               <div class="card-body text-start">
                 <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Lab Tests and Imaging</h5>
-                <p class="px-0 pt-4 ms-0">Ordering and scheduling of laboratory tests and imaging studies as needed
+                <p class="px-0 m-0">Ordering and scheduling of laboratory tests and imaging studies as needed
                   for diagnosis and monitoring.</p>
                 <div class="pt-4">
                   <a href="#">0 Listings</a>
                   <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
                 </div>
               </div>
+              </div>
             </div>
           </div>
 
           <div class="slider-item">
             <div class="card">
-              <i class="hp-icon fas fa-pills p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0;"></i>
-              <div class="card-body text-start">
-                <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Prescription Refills</h5>
-                <p class="px-0 ms-0">Convenient online prescription refills for ongoing medications.</p>
-                <div class="pt-4">
-                  <a href="#">0 Listings</a>
-                  <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+              <div class="browse-card-inner" > 
+                <i class="hp-icon fas fa-pills p-3 fs-1 ms-3 mt-3" style="color: #00876f; background-color:#E5F3F0; border-radius:4px;"></i>
+                <div class="card-body text-start">
+                  <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Prescription Refills</h5>
+                  <p class="px-0 m-0">Convenient online prescription refills for ongoing medications.</p>
+                  <div class="pt-4">
+                    <a href="#">0 Listings</a>
+                    <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
+                  </div>
                 </div>
               </div>
             </div>
@@ -756,16 +865,18 @@
 
           <div class="slider-item">
             <div class="card">
-              <i class="hp-icon fas fa-head-side-cough p-3 fs-1 ms-3 mt-3"
-                style="color: #00876f; background-color:#E5F3F0;"></i>
+              <div class="browse-card-inner" > 
+                <i class="hp-icon fas fa-head-side-cough p-3 fs-1 ms-3 mt-3"
+                style="color: #00876f; background-color:#E5F3F0; border-radius:4px;"></i>
               <div class="card-body text-start">
                 <h5 class="fs-5 mt-3" style="color: #00876f; font-weight:600;">Chronic Care Management</h5>
-                <p class="px-0 pt-1 ms-0">Receive ongoing support for managing chronic conditions like diabetes,
+                <p class="px-0  m-0">Receive ongoing support for managing chronic conditions like diabetes,
                   hypertension, or asthma.</p>
                 <div class="pt-4">
                   <a href="#">0 Listings</a>
                   <i class="fas fa-arrow-right arrow-icon pt-1" style="float: right; color: #01876f;"></i>
                 </div>
+              </div>
               </div>
             </div>
           </div>
@@ -802,9 +913,9 @@
 <!-- about start -->
 <div class="mainabout">
   <div class="subabout">
-    <div class="about py-4">
+    <div class="about py-4 container">
       <h1 class="text-center" style="color: #01876f;">About Chalice Health</h1>
-      <p class="about-Chalice-para">Chalice Health is a patient-centered healthcare platform that simplifies your
+      <p class="about-Chalice-para pt-3">Chalice Health is a patient-centered healthcare platform that simplifies your
         journey to finding quality care. We connect you with compassionate, qualified healthcare providers who offer
         transparent, fixed-rate services without the complexity of insurance.</p>
       <!-- next -->
@@ -812,7 +923,7 @@
       <!-- Our Services -->
       <div class="services">
         <h3 class="services-heading">Our Services</h3>
-        <div class="row box">
+        <div class="row  box">
           <div class="col-lg-4 col-md-6 mt-3">
             <div class="card p-3 services-list">
               <div class="services-list-image mb-4">
@@ -842,11 +953,10 @@
           </div>
         </div>
       </div>
-
-      <!-- What Makes Us Different -->
-      <div class="what-makes-us">
+      <div class="what-makes-us   ">
         <h3 class="services-heading">What Makes Us Different</h3>
         <div class="row box">
+          
           <div class="col-lg-4 col-md-6  mt-3">
             <div class="card p-3 services-list">
               <div class="services-list-image mb-4">
@@ -877,6 +987,9 @@
         </div>
       </div>
 
+      <!-- What Makes Us Different -->
+
+
 
       <!-- <div class="pt-2" style="width: 93%;">
         <div class="">
@@ -897,13 +1010,13 @@
 
       </div> -->
       <!-- next end -->
-      <h1 class="text-center" style="color: #01876f; padding-top: 30px; padding-bottom: 30px;margin-bottom: 0;">How It
-        Works</h1>
+      <h2 class="text-center how-it-work-heading " style="color: #01876f; padding-top: 50px; padding-bottom: 20px;margin-bottom: 0;font-size: 32px;">How It
+        Works</h2>
       <!-- Cards section -->
-      <div class="row box">
+      <div class="row box ">
         <div class="col-lg-4 col-md-6 mb-4  mt-3 d-flex justify-content-center">
           <div class="card"
-            style="max-width: 380px; background-color: #ffffff; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+            style="max-width: 392px; background-color: #ffffff; border: none; border-radius: 10px;">
             <img class="card-img-top p-3 " style="border-radius: 20px;" src="../../../../assets/svg/homepage/step1.png"
               alt="Card image cap" />
             <div class="card-body text-center">
@@ -921,7 +1034,7 @@
 
         <div class="col-lg-4 col-md-6 mb-4  mt-3 d-flex justify-content-center">
           <div class="card"
-            style="max-width: 380px; background-color: #ffffff; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+            style="max-width: 392px; background-color: #ffffff; border: none; border-radius: 10px;">
             <img class="card-img-top p-3" style="border-radius: 20px;" src="../../../../assets/svg/homepage/step2.png"
               alt="Card image cap" />
             <div class="card-body text-center">
@@ -939,7 +1052,7 @@
 
         <div class="col-lg-4 col-md-6 mb-4  mt-3 d-flex justify-content-center">
           <div class="card"
-            style="max-width: 380px; background-color: #ffffff; border: none; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+            style="max-width: 392px; background-color: #ffffff; border: none; border-radius: 10px;">
             <img class="card-img-top p-3" style="border-radius: 20px;" src="../../../../assets/svg/homepage/step3.png"
               alt="Card image cap" />
             <div class="card-body text-center">
@@ -966,15 +1079,15 @@
 <!-- patient start  -->
 <div class="patientmain">
   <div class="subpatient">
-    <div class="patient">
-      <div class="container">
+    <div class="patient container">
+      <div class="">
         <div class="row align-items-center">
           <!-- Text content -->
           <h1 class="text-center patienmain-heading" style="color: #01876f; padding-top: 30px; padding-bottom: 30px;">
             Why Use Chalice Health</h1>
-          <div class="col-lg-5 col-md-12 justify-content-center">
+          <div class="col-lg-5 d-none d-lg-flex col-md-12 justify-content-start">
             <img src="../../../../assets/svg/homepage/202.png" class="img-fluid rounded" alt="Find care image"
-              style="max-width:91%; height: 360px;">
+              style="max-width:91%; height: 400px;">
           </div>
           <div class="col-lg-7 col-md-12 mb-4 mb-lg-0">
             <h4><strong>For Patients</strong></h4>
@@ -997,8 +1110,8 @@
             <div class="d-flex align-items-center">
               <button class="btn btn-outline-none" type="button">
                 <i class="fas fa-search"
-                  style="width: 30px; height: 30px; border:2px solid #01876f;padding: 5px; border-radius: 50%;"></i>
-                <span class="ps-2">FIND CARE</span>
+                  style="width: 25px; height: 25px; border:2px solid #01876f; border-radius: 50%;"></i>
+                <span class="ps-2">Find Care</span>
               </button>
             </div>
           </div>
@@ -1009,7 +1122,7 @@
       </div>
 
       <!-- second cont -->
-      <div class="container my-5 pt-4 pb-2">
+      <div class="container my-5 pt-4 pb-2 px-0">
         <div class="row align-items-center d-flex">
           <!-- Text content -->
 
@@ -1031,14 +1144,14 @@
             <div class="d-flex align-items-center">
               <button class="btn btn-outline-none" type="button">
                 <i class="fas fa-search"
-                  style="width: 30px; height: 30px; border:2px solid #01876f;padding: 5px; border-radius: 50%;"></i>
-                <span class="ps-2">JOIN TODAY</span>
+                  style="width: 25px; height: 25px; border:2px solid #01876f; border-radius: 50%;"></i>
+                <span class="ps-2">Join Today</span>
               </button>
             </div>
           </div>
-          <div class="col-lg-5 col-md-12 d-flex">
+          <div class="col-lg-5 col-md-12 d-none d-lg-flex justify-content-end ">
             <img src="../../../../assets/svg/homepage/850.png" class="img-fluid rounded" alt="Find care image"
-              style="max-width: 91%; height: 400px;">
+              style="max-width: 91%; height: 430px;">
           </div>
           <!-- Image content -->
 
@@ -1051,90 +1164,93 @@
 
 <!--Chalice HealthVS other-->
 
-<div class="chalice-health-other">
-  <div class="container">
-    <h2 class="chalice-health-other_heading">How Chalice Health Vs Others</h2>
+<div class="chalice-health-other mt-4">
+  <div class="container px-3">
+    <h2 class="chalice-health-other_heading">Chalice Health Vs. Others</h2>
     <div>
       <h5 class="chalice-health-other_subheading">Patients</h5>
       <div class="chalice-health-table">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Features</th>
-              <th>Chalice Health</th>
-              <th>Others</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Pricing</td>
-              <td>Clear, upfront fixed pricing</td>
-              <td>Variable costs, often unclear until after service</td>
-            </tr>
-            <tr>
-              <td>Payment Model</td>
-              <td>Simple direct payment - cash only</td>
-              <td>Complex insurance billing and copays</td>
-            </tr>
-            <tr>
-              <td>Appointment Booking</td>
-              <td>Instant online scheduling</td>
-              <td>Phone calls required, often with long wait times</td>
-            </tr>
-            <tr>
-              <td>Care Options</td>
-              <td>Virtual, in-person, and home care</td>
-              <td>Usually limited to in-person visits</td>
-            </tr>
-            <tr>
-              <td>Administrative Process</td>
-              <td>Streamlined digital platform</td>
-              <td>Multiple forms and paperwork</td>
-            </tr>
-            <tr>
-              <td>Provider Access</td>
-              <td>Quick access to various specialists</td>
-              <td>Often requires referrals and long wait times</td>
-            </tr>
-            <tr>
-              <td>Prescription Management</td>
-              <td>Easy online refills</td>
-              <td>Multiple steps, phone calls required</td>
-            </tr>
-            <tr>
-              <td>Price Transparency</td>
-              <td>100% transparent pricing</td>
-              <td>Often unclear until after service</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="responsive-table" >
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Features</th>
+                <th>Chalice Health</th>
+                <th>Others</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pricing</td>
+                <td>Clear, upfront fixed pricing</td>
+                <td>Variable costs, often unclear until after service</td>
+              </tr>
+              <tr>
+                <td>Payment Model</td>
+                <td>Simple direct payment - cash only</td>
+                <td>Complex insurance billing and copays</td>
+              </tr>
+              <tr>
+                <td>Appointment Booking</td>
+                <td>Instant online scheduling</td>
+                <td>Phone calls required, often with long wait times</td>
+              </tr>
+              <tr>
+                <td>Care Options</td>
+                <td>Virtual, in-person, and home care</td>
+                <td>Usually limited to in-person visits</td>
+              </tr>
+              <tr>
+                <td>Administrative Process</td>
+                <td>Streamlined digital platform</td>
+                <td>Multiple forms and paperwork</td>
+              </tr>
+              <tr>
+                <td>Provider Access</td>
+                <td>Quick access to various specialists</td>
+                <td>Often requires referrals and long wait times</td>
+              </tr>
+              <tr>
+                <td>Prescription Management</td>
+                <td>Easy online refills</td>
+                <td>Multiple steps, phone calls required</td>
+              </tr>
+              <tr>
+                <td>Price Transparency</td>
+                <td>100% transparent pricing</td>
+                <td>Often unclear until after service</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <h5 class="chalice-health-other_subheading">Providers</h5>
       <div class="chalice-health-table">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Features</th>
-              <th>Chalice Health</th>
-              <th>Others</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Location Flexibility</td>
-              <td>Multiple care options and locations</td>
-              <td>Limited to specific facilities</td>
-            </tr>
-            <tr>
-              <td>Administrative Burden</td>
-              <td>Minimal paperwork</td>
-              <td>Extensive documentation required</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="responsive-table" >
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Features</th>
+                <th>Chalice Health</th>
+                <th>Others</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Location Flexibility</td>
+                <td>Multiple care options and locations</td>
+                <td>Limited to specific facilities</td>
+              </tr>
+              <tr>
+                <td>Administrative Burden</td>
+                <td>Minimal paperwork</td>
+                <td>Extensive documentation required</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-
     </div>
   </div>
 
@@ -1144,7 +1260,7 @@
 <div class="mainpthealth">
   <div class="subpthealth">
     <div class="pthealth">
-      <div class="container pt-2 pb-2">
+      <div class="container pt-2 pb-2  px-3">
         <h2 class="text-center pb-4" style="color: #01876f;">Patients Love Chalice Health</h2>
         <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
@@ -1325,15 +1441,15 @@
 
 <!-- FAQS START -->
 <div class="mainFAQS">
-  <div class="subFAQS pt-2">
-    <div class="FAQS">
-      <div class="container mb-2">
+  <div class="subFAQS pt-2">        
+    <div class="FAQS container px-3">
+      <div class=" mb-2">
         <h2 class="text-center" style="color: #01876f;">FAQs</h2>
         <div class="accordion mt-4" id="faqAccordion">
 
           <!-- FAQ 1 -->
           <div class="accordion-item border-0 rounded-pill " style="background-color:white;">
-            <h2 class="accordion-header" id="headingOne">
+            <h2 class="accordion-header mb-0" id="headingOne">
               <button
                 class="accordion w-100 border-0 p-3 collapsed bg-white text-start d-flex justify-content-between custom-accordion-button"
                 type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false"
@@ -1358,7 +1474,7 @@
 
           <!-- FAQ 2 -->
           <div class="accordion-item border-0 rounded-pill" style="background-color:white;">
-            <h2 class="accordion-header" id="headingTwo">
+            <h2 class="accordion-header mb-0" id="headingTwo">
               <button
                 class="accordion w-100 border-0 p-3 bg-white collapsed text-start d-flex justify-content-between accordion-toggle"
                 type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false"
@@ -1385,7 +1501,7 @@
 
           <!-- FAQ 3 -->
           <div class="accordion-item border-0 rounded-pill" style="background-color:white;">
-            <h2 class="accordion-header" id="headingThree">
+            <h2 class="accordion-header mb-0" id="headingThree">
               <button
                 class="accordion w-100 border-0 p-3 collapsed bg-white text-start d-flex justify-content-between accordion-toggle"
                 type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false"
@@ -1416,9 +1532,9 @@
 
           <!-- FAQ 4 -->
           <div class="accordion-item border-0 rounded-pill" style="background-color:white;">
-            <h2 class="accordion-header" id="headingFour">
+            <h2 class="accordion-header mb-0" id="headingFour">
               <button
-                class="accordion w-100 border-0 pt-0 px-3 collapsed bg-white text-start d-flex justify-content-between"
+                class="accordion w-100 border-0 p-3 collapsed bg-white text-start d-flex justify-content-between"
                 type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false"
                 aria-controls="collapseFour" style="color: black; border-radius: 50px; font-size: 17px;">
                 Is Chalice Health a substitute for traditional healthcare providers?
@@ -1439,7 +1555,7 @@
         </div>
         <div class="text-center mt-4 w-50 mx-auto">
           <button class="btn btn-outline-success px-4 py-2"
-            style="border-radius: 30px; color: white!important; border-color: #01876f; background-color: #01876f!important;">
+            style="color: white!important; border-color: #01876f; background-color: #01876f!important;">
             Learn More
           </button>
         </div>
@@ -1451,10 +1567,12 @@
 
 <!-- FAQS End -->
 <!-- intouch start -->
-<div class="mainget">
+
+
+<!-- <div class="mainget">
   <div class="subget">
-    <div class="get">
-      <div class="container">
+    <div class="get container px-3">
+      <div class="">
         <div class="row  text-lg-left pb-2">
           <h5 class="pt-4 text-center" style="color: #01876f; font-size: 35px;">Chalice Health</h5>
           <p class="text-center" style="color:#333333; font-size: 15px;">Important Things to Know</p>
@@ -1485,7 +1603,7 @@
 
     </div>
   </div>
-</div>
+</div> -->
 <!-- intouch end -->
 <!-- footer start -->
 <footer class="mainfooter bg-white">
@@ -1522,7 +1640,7 @@
                     <li><span><i class="fas fa-chevron-right"></i></span> Radiology</li>
                 </ul>
             </div> -->
-        <div class="footer-column">
+        <div class="footer-column mt-3 mt-md-0">
           <h3>Services</h3>
           <ul>
             <li><span><i class="fas fa-chevron-right"></i></span> Primary Care</li>
@@ -1532,13 +1650,13 @@
             <li><span><i class="fas fa-chevron-right"></i></span> Lab Tests and Imaging</li>
             <li><span><i class="fas fa-chevron-right"></i></span> Prescription Refills</li>
             <li><span><i class="fas fa-chevron-right"></i></span> Chronic Care Management</li>
-            <li><span><i class="fas fa-chevron-right"></i></span>Men's Health</li>
-            <li><span><i class="fas fa-chevron-right"></i></span>Womens Health</li>
-            <li><span><i class="fas fa-chevron-right"></i></span>Dermatology</li>
-            <li><span><i class="fas fa-chevron-right"></i></span>Sexual Health</li>
+            <li><span class="me-1" ><i class="fas fa-chevron-right"></i></span>Men's Health</li>
+            <li><span class="me-1" ><i class="fas fa-chevron-right"></i></span>Womens Health</li>
+            <li><span class="me-1" ><i class="fas fa-chevron-right"></i></span>Dermatology</li>
+            <li><span class="me-1" ><i class="fas fa-chevron-right"></i></span>Sexual Health</li>
           </ul>
         </div>
-        <div class="footer-column">
+        <div class="footer-column mt-3 mt-md-0">
           <h3>Social</h3>
           <ul>
             <li><span><i class="fas fa-chevron-right"></i></span><i class="fab fa-facebook ms-2"></i> Facebook</li>
@@ -1552,11 +1670,11 @@
       </div>
       <hr>
       <!-- Bottom section -->
-      <div class="footer-bottom d-flex justify-content-center   mx-auto" style="width: 85%;">
-        <p>&copy; 2024 Chalice Health. All Rights Reserved.</p>
-        <span class="w-75 d-flex justify-content-center"><a href="#">Term of Service</a>
-          <a href="#">Privacy</a>
-          <a href="#">Policies</a>
+      <div class="footer-bottom d-flex flex-column flex-md-row mb-2 justify-content-center mx-auto" style="width: 85%;">
+        <p class="text-nowrap mb-2 mt-mb-0  " >&copy; 2024 Chalice Health. All Rights Reserved.</p>
+        <span class="w-md-75 w-100 d-flex justify-content-md-end justify-content-center ">
+          <a href="#">Term of Service</a>
+          <a href="#">Privacy Policy</a>
         </span>
       </div>
     </div>

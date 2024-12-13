@@ -49,7 +49,7 @@ export class HomePageComponent implements OnInit , AfterViewInit {
     this.updateSlider();
   }
 
-  prevSlide2() {debugger
+  prevSlide2() {
     if (this.currentIndex < this.totalSlides - 4) {
       this.currentIndex += 1; // Move by one group of 4 slides
     } else {
@@ -68,15 +68,19 @@ export class HomePageComponent implements OnInit , AfterViewInit {
 
   updateSlider() {
     const wrapper = this.sliderWrapper.nativeElement;
-    // Ensure transform calculation uses the correct width, even if the page size changes
-    this.slideWidth = wrapper.clientWidth / 4; // Ensure we divide by 4 for the visible slides
-    wrapper.style.transform = `translateX(-${this.currentIndex * this.slideWidth}px)`;
+    const slideItems = wrapper.children as HTMLCollectionOf<HTMLElement>;  
+    if (slideItems.length > 0) {
+      const slideWidth = slideItems[0].offsetWidth;
+      wrapper.style.transform = `translateX(-${this.currentIndex * slideWidth}px)`;
+    }
   }
   updateSlider2() {
     const wrapper = this.sliderWrapper2.nativeElement;
-    // Ensure transform calculation uses the correct width, even if the page size changes
-    this.slideWidth = wrapper.clientWidth / 4; // Ensure we divide by 4 for the visible slides
-    wrapper.style.transform = `translateX(-${this.currentIndex * this.slideWidth}px)`;
+    const slideItems = wrapper.children as HTMLCollectionOf<HTMLElement>;  
+    if (slideItems.length > 0) {
+      const slideWidth = slideItems[0].offsetWidth;
+      wrapper.style.transform = `translateX(-${this.currentIndex * slideWidth}px)`;
+    }
   }
 
   redirectToDoctorSearch(){

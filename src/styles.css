@@ -196,3 +196,7 @@ body {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
+
+body{
+  font-family: "DM Sans", sans-serif !important;
+}

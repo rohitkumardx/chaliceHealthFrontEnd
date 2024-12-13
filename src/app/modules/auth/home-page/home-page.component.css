@@ -1,3 +1,17 @@
+*{
+  font-family: "DM Sans", sans-serif !important; 
+  line-height: 1.3 !important;
+}
+.fa-classic, .fa-regular, .fa-solid, .far, .fas {
+  font-family: "Font Awesome 6 Free" !important;
+}
+.fa {
+  font-family: var(--fa-style-family,"Font Awesome 6 Free") !important;
+  font-weight: var(--fa-style,900);
+}
+.fa-brands, .fab {
+  font-family: "Font Awesome 6 Brands" !important;
+}
 .mainhead {
   width: 100%;
 }
@@ -36,13 +50,23 @@
 
 .header a {
   font-size: 17px !important;
-  margin-left: 20px !important;
+  margin-left: 10px !important;
 }
 
 .dropdown li {
   margin-left: 0px !important;
 }
 
+
+@media (max-width:1200px) {
+  .nav-link{
+    padding: 8px;
+  } 
+  .header a {
+    font-size: 15px !important;
+    margin-left: 5px !important;
+  }
+}
 /* .nav-item.dropdown:hover .dropdown-menu {
     display: block;
     margin-top: 5; 
@@ -59,7 +83,6 @@
   align-items: center;
   width: 110px;
   position: relative;
-  font-family: Arial, sans-serif;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 99;
@@ -115,17 +138,17 @@
   max-width: 1920px;
   margin: auto;
   background-color: #FFF1E5;
-  padding-top: 27px;
+  padding: 50px 0;
 }
 
 .hero {
-  width: 78%;
+  width: 100%;
   margin: auto;
   background-color: #FFF1E5;
   color: white;
-  font-family: 'Arial', sans-serif;
   border-radius: 20px;
   line-height: 3px;
+ 
 }
 
 
@@ -133,7 +156,6 @@
   color: #00876f;
   font-size: 2rem !important;
   font-weight: 700 !important;
-  font-family: "DM Sans", sans-serif;
 }
 
 .hero p {
@@ -174,14 +196,17 @@
   border-color: #007a5c !important;
   background-color: transparent !important;
   color: #007a5c !important;
-  border-radius: 0% !important;
-  width: 40% !important;
+  border-radius: 6px;
+  font-size: 16px;
+  padding: 12px 16px;
 }
 
 .btn-success {
   color: #fff;
-  border-radius: 0% !important;
-  width: 40% !important;
+  border-radius: 6px;
+  font-size: 16px;
+  padding: 12px 16px;
+
 }
 
 
@@ -192,6 +217,13 @@
   color: white !important;
 }
 
+/* hero section responive css  */
+
+@media (max-width:992px) {
+  .subhero{
+    padding: 20px 0;
+  }
+}
 /* hero end*/
 /* specialties start*/
 .mainspecialties {
@@ -206,17 +238,13 @@
 }
 
 .specialties {
-  width: 90%;
   margin: auto;
-  padding-top: 30px;
-  padding-bottom: 12px;
+  padding: 50px 0;
   text-align: center;
 }
 
 .specialties h2 {
-  font-size: 30px !important;
   color: #007a5c;
-  font-family: "DM Sans", sans-serif;
   font-weight: 400;
 }
 
@@ -231,7 +259,8 @@
   font-weight: 600;
   text-align: center;
   border-radius: 8px;
-  margin: 10px;
+  flex: 1;
+  min-width: 200px;
 }
 
 .specialty-card:hover {
@@ -239,24 +268,19 @@
   transition: background-color 0.3s;
 }
 
+
 /* Responsive Adjustments */
-@media (max-width: 768px) {
-  .specialty-card {
-    margin: 8px;
-    /* Reduce margin on smaller screens */
-  }
+
+@media (max-width:992px) {
+  
+.specialties h2{
+  font-size: 30px;
+
+}
+  
 }
 
-@media (max-width: 576px) {
-  .specialties h2 {
-    font-size: 24px !important;
-  }
 
-  .specialty-card {
-    font-size: 14px;
-    padding: 10px;
-  }
-}
 
 .mainspecialties a {
   font-size: 1.25rem;
@@ -300,14 +324,14 @@
   cursor: pointer;
   text-align: center;
   padding: 24px 16px;
-
+  max-width: 340px;
+  margin: auto;
 }
 
 .doctor-card h3 {
-  font-size: 26px;
+  font-size: 24px;
   line-height: 1.9rem;
-  font-family: "DM Sans", sans-serif;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 
@@ -320,11 +344,11 @@
   padding: 6px 7px !important;
   font-size: 12px;
   margin: 0;
+  width: 100%;
 }
 
 .More {
   width: 100%;
-  max-width: 5.5rem;
   padding-left: 0px !important;
   padding-right: 0px !important;
   background-color: #00876F;
@@ -402,14 +426,23 @@
   }
 
 }
+@media (max-width:992px) {
+  .doctor h1 {
+    font-size: 30px !important;
+  }
+}
 
 /* Styling for the first column */
+.healthcare-section{
+  padding-bottom: 50px ;
+}
 .healthcare-section .col-md-7 {
   padding-right: 20px;
 }
 
 .healthcare-section .lead {
-  font-size: 1.2rem;
+  font-size: 26px;
+  font-weight: 500;
   color: #6c757d;
 }
 
@@ -430,11 +463,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  font-size: 16px;  
 }
 
 .find-doctor-btn:hover {
-  background-color: #006f58;
-  transform: translateY(-5px);
+  background-color: #005f47 !important;
+  border-color: #005f47 !important;
+  color: white !important;
 }
 
 
@@ -444,9 +479,11 @@
   }
 
   .find-doctor-btn {
-    width: 100%;
     padding: 14px;
     font-size: 1.1rem;
+  }
+  .healthcare-section{
+    padding-bottom: 0px ;
   }
 
   .healthcare-section .col-md-7 {
@@ -483,22 +520,19 @@
   max-width: 1920px;
   margin: auto;
   background-color: #fbfbfce2;
-  padding-bottom: 20px;
+  padding: 50px 0;
 }
 
 .browse h2 {
   font-weight: 500 !important;
   color: #01876f;
-  font-size: 35px;
+  font-size: 40px;
   padding-bottom: 20px;
-  font-family: "DM Sans", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .browse {
-  width: 78%;
   margin: auto;
-  font-family: 'Arial', sans-serif;
   background-color: #fbfbfce2;
   border-radius: 25px;
   padding-left: 20px;
@@ -524,24 +558,31 @@
   cursor: pointer;
 }
 
-.browse .card:hover {
-  box-shadow: 0 5px 30px rgba(7, 36, 86, 0.075);
-  transition: box-shadow 0.3s ease;
-}
+
 
 .browse .card {
-  align-items: flex-start;
-  max-width: 320px !important;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  min-height: 340px;
+  max-width: 340px !important;
+  box-shadow: none;
+  border-radius: 0;
+  border: 1px solid #00876f;
   margin: auto;
+  border-radius: 6px;
+  min-height: 320px;
 }
+.browse .browse-card-inner{
+  border: 3px solid transparent;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+}
+.browse .browse-card-inner:hover {
+  border: 3px solid #00876f ;
+  transition: ease all 100ms;
+ }
+
 
 @media (max-width: 1199px) {
-  .browse {
-    width: 90%;
-  }
 
   .browse .carousel-inner .carousel-item {
     padding-left: 15px;
@@ -602,6 +643,9 @@
   .browse .carousel-inner .carousel-item {
     margin-bottom: 20px;
   }
+  .subbrowse{
+    padding: 25px 0;
+  }
 }
 
 
@@ -619,7 +663,7 @@
   max-width: 1920px;
   margin: auto;
   background-color: #FFF1E5;
-  padding-top: 20px;
+  padding-top: 40px;
   padding-bottom: 20px;
 }
 
@@ -643,7 +687,6 @@
 }
 
 .about h1 {
-  font-family: "DM Sans", sans-serif;
   font-size: 40px;
   font-weight: 500;
 }
@@ -698,6 +741,10 @@
     padding-left: 16px;
     padding-right: 16px;
   }
+  .about h1 {
+    font-size: 30px;
+    font-weight: 500;
+  }
 
 }
 
@@ -708,11 +755,9 @@
 
 .patientmain {
   width: 100%;
-
 }
 
 .patientmain .patienmain-heading {
-  font-family: "DM Sans", sans-serif;
   font-size: 40px;
   font-weight: 500;
 }
@@ -731,11 +776,9 @@
   background-color: #FFF1E5;
   border-radius: 25px;
   padding-left: 20px;
-
 }
 
 .patient h2 {
-  font-family: "DM Sans", sans-serif;
   font-weight: 400;
   font-size: 40px;
 }
@@ -743,7 +786,6 @@
 .patient h4 {
   color: #00876f;
   font-size: 23px;
-  font-family: "DM Sans", sans-serif;
   font-weight: 400;
 }
 
@@ -751,6 +793,23 @@
   color: #333333;
   font-size: 16px;
 
+}
+
+@media (max-width:1380px) {
+  .patient{
+    width: 100%;
+  }
+}
+
+@media (max-width:992px) {
+  .patientmain .patienmain-heading {
+    font-size: 30px;
+  }
+  .patient h4 {
+    color: #00876f;
+    font-size: 20px;
+    font-weight: 400;
+  }
 }
 
 /*   
@@ -770,17 +829,13 @@
 }
 
 .pthealth {
-  width: 75%;
   margin: auto;
   background-color: white;
   border-radius: 25px;
-  padding-left: 20px;
-
 }
 
 .pthealth h2 {
-  font-family: "DM Sans", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 40px;
 }
 
@@ -791,7 +846,6 @@
 }
 
 .imtext {
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-size: 15px;
   padding-top: 4px;
   font-weight: 400;
@@ -808,6 +862,12 @@
   height: 25px;
 }
 
+@media (max-width:992px) {
+  .pthealth h2 {
+    font-size: 30px;
+  }
+}
+
 /* / pthealth end / */
 
 /* Chalice Health  vs other  */
@@ -818,16 +878,16 @@
 .chalice-health-other .chalice-health-other_heading {
   font-size: 40px;
   text-align: center;
-  font-weight: 400;
+  font-weight: 500;
   color: #01876f;
+  margin-bottom: 40px;
 }
 
 .chalice-health-other .chalice-health-other_subheading {
-  font-family: "DM Sans", sans-serif;
   font-weight: 400;
   color: #01876f;
-  font-size: 30px;
-  margin-bottom: 20px;
+  font-size: 32px;
+  margin-bottom: 25px;
 
 }
 
@@ -835,7 +895,7 @@
   box-shadow: 1px 2px 3px #ddd;
   border-radius: max(4px, 0.521vw);
   overflow: hidden;
-  margin-bottom: 35px;
+  margin-bottom: 45px;
 }
 
 .chalice-health-other .chalice-health-table table {
@@ -855,12 +915,27 @@
 }
 
 .chalice-health-other .chalice-health-table td {
-  padding: 13px 16px;
+  padding: 16px;
   font-size: 16px;
   font-weight: 500;
   color: #333333;
+  min-width: 350px;
 }
 
+.chalice-health-other .chalice-health-table tr:hover {
+background-color: #fff8f3
+}
+.chalice-health-other .responsive-table {
+  overflow-x: auto;
+}
+@media (max-width:992px) {
+  .chalice-health-other .chalice-health-other_heading {
+    font-size: 30px;
+  }
+  .chalice-health-other .chalice-health-other_subheading{
+    font-size: 25px;
+  }
+}
 
 /* FAQS START   */
 .mainFAQS {
@@ -876,17 +951,13 @@
 }
 
 .FAQS {
-  width: 75%;
   margin: auto;
-  font-family: 'Arial', sans-serif;
   border-radius: 25px;
   padding-left: 20px;
 }
 
 .FAQS h2 {
-  font-family: "DM Sans", sans-serif;
-  font-weight: 400;
-  font-size: 35px;
+  font-size: 40px;
   font-weight: 500;
 }
 
@@ -894,6 +965,12 @@
   font-weight: 500;
 }
 
+
+@media (max-width:992px) {
+  .FAQS h2 {
+    font-size: 30px;
+  }
+}
 /* Default border when collapsed */
 .custom-accordion-button {
   border-bottom: 1px solid black !important;
@@ -929,7 +1006,6 @@
 .get {
   width: 75%;
   margin: auto;
-  font-family: 'Arial', sans-serif;
   border-radius: 25px;
   padding-left: 20px;
 
@@ -939,7 +1015,6 @@
   color: #333333;
   font-size: 18px;
   font-weight: 500;
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 }
 
 .get p {
@@ -948,7 +1023,6 @@
 }
 
 .get h5 {
-  font-family: "DM Sans", sans-serif;
   font-weight: 400;
 }
 
@@ -968,19 +1042,15 @@
 }
 
 .footer {
-  width: 98%;
   margin: auto;
-  font-family: 'Arial', sans-serif;
   border-radius: 25px;
-  padding-left: 20px;
   background-color: white;
   color: rgba(15, 23, 39, .65);
-  font-family: Arial, sans-serif;
 
 }
 
 .footer-container {
-  padding: 50px 0px;
+  padding: 50px 16px;
   text-align: left;
   display: flex;
   justify-content: space-between;
@@ -994,14 +1064,12 @@
 
 .footer-left h1 {
   font-size: 1.8rem;
-  font-family: "DM Sans", sans-serif;
   font-weight: 400;
 }
 
 footer {
   background-color: #f9f9f9;
-  padding: 20px 0px;
-  font-family: Arial, sans-serif;
+  padding: 20px 0px 0px 0px;
   color: #333;
 }
 
@@ -1010,7 +1078,6 @@ footer {
   justify-content: space-between;
   max-width: 1300px;
   margin: auto;
-  padding-left: 40px;
 }
 
 .footer i {
@@ -1020,7 +1087,6 @@ footer {
 
 .logo-section {
   flex: 1;
-  text-align: center;
 }
 
 .logo-section img {
@@ -1031,6 +1097,7 @@ footer {
 .footer-column {
   flex: 1;
   line-height: 1.6;
+  min-width: 250px;
 }
 
 .footer-column h3 {
@@ -1038,7 +1105,6 @@ footer {
   color: #00876f;
   margin-bottom: 10px;
   font-weight: 500;
-  font-family: "DM Sans", sans-serif;
   font-weight: 400;
 }
 
@@ -1117,16 +1183,24 @@ footer {
 
 .footer-bottom {
   text-align: center;
-  padding-bottom: 20px;
   font-size: 14px;
 }
 
 .footer-bottom a {
   color: rgba(15, 23, 39, .65);
-  margin: 0 20px;
+  margin: 0 14px;
   text-decoration: none;
   justify-content: end;
   font-size: 14px;
+}
+
+/* responsive footer section  */
+
+@media (max-width:768px) {
+  .footer-container{
+    padding: 24px  16px;
+  }
+  
 }
 
 /* / footer end  / */
@@ -1159,17 +1233,16 @@ footer {
 }
 
 .services-list {
-  max-width: 380px;
+  max-width: 392px;
   margin: auto;
 }
 
 .services-heading {
   text-align: center;
   color: #01876f;
-  font-family: "DM Sans", sans-serif;
-  font-size: 40px;
+  font-size: 32px;
   font-weight: 500;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .Services-list-heading {
@@ -1202,7 +1275,17 @@ footer {
 .what-makes-us {
   padding: 50px 0;
 }
-
+@media (max-width:992px) {
+  .what-makes-us {
+    padding: 20px 0;
+  }
+  .services-heading {
+    font-size: 25px;
+  }
+  .how-it-work-heading{
+    font-size: 25px !important;
+  }
+}
 
 /* Slider css  */
 
@@ -1227,7 +1310,6 @@ footer {
 
 .slider-controls {
   text-align: center;
-  margin-top: 10px;
   position: absolute;
   top: 50%;
   left: 0;
@@ -1272,6 +1354,20 @@ footer {
   margin-left: 2px;
 }
 
+/* responsive button  */
+
+@media (max-width:576px) {
+  .slider-controls button{
+    width: 26px;
+    height: 26px;
+  }
+  .slider-controls button::after{
+    width: 8px;
+    height: 8px;
+  }
+  
+}
+
 /* .carousel-control-prev,
 .carousel-control-next {
   position: absolute;
@@ -1308,5 +1404,34 @@ footer {
 @media (max-width: 720px) {
   .slider-item {
     min-width: 100%;
+  }
+}
+
+
+
+/* responsive css conatiner  */
+@media (min-width:1400px) {
+  .container{
+    max-width:1480px !important;
+  }
+}
+
+.navbar-toggler:focus {
+  box-shadow: none;
+}
+ .navbar-brand {
+  width: 180px;
+  display: inline-block;
+}
+.container-fluid {
+  display: flex;
+}
+nav.navbar.navbar-expand-lg {
+  background: #FFF1E5;
+}
+
+@media(max-width: 992px){
+  .nav {
+    flex-direction: column;
   }
 }
