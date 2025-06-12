@@ -1,79 +1,158 @@
 <section class="main-banner">
-    <div class="wrapper d-flex">
-        <div class="content-wrapper">
-            <div class="signup-card">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="signup-card">
 
-                <h3>Message List</h3>
-
-                <div class="table-responsive">
-                    <!-- <div class="col-3 offset-9 mt-4 mb-2">
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
-        disabled="todayAppointment.length == 0" (input)="getTodayAppointmentsByUserId()"
-        class="form-control">
-    </div> -->
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">Patient name</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Last Message</th>
-                                <th scope="col">Action</th>
-
-                        </thead>
-                        <tbody class="">
-                            <tr *ngFor="let item of messagesList; let i = index">
-                                <td class="pt-3"> <img *ngIf="item.profilePicturePath; else defaultIcon"
-                                        [src]="item.profilePicturePath" alt="User Image" />
-                                    <ng-template #defaultIcon>
-                                        <div class="default-user-icon" style="padding: 13px 6px 13px  !important;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40"
-                                                height="40" fill="#555">
-
-                                                <circle cx="12" cy="8" r="4" />
-
-                                                <path d="M4 20c0-4 4-6 8-6s8 2 8 6v1H4v-1z" />
-                                            </svg>
-                                        </div>
-                                    </ng-template>{{item.fullName}}
-                                </td>
-                                <td class="pt-3">{{item.createdDateUtc}}</td>
-                                <td class="pt-3">{{item.messageContent}}</td>
-                                <td class="pt-3">
-                                    <span class="message-icon-container">
-                                      <i class="fas fa-comments cursor" (click)="viewChat(item.bookAppointmentId)" title="View Chat"></i>
-                                      <span class="message-badge" *ngIf="item.unreadMessageCount > 0">
-                                        {{ item.unreadMessageCount }}
-                                      </span>
-                                    </span>
-                                  </td>
-                                  
-
-                            </tr>
-
-                            <tr *ngIf="messagesList.length === 0">
-                                <td colspan="9" class="no-data-card">
-                                    <div class="no-data-card-container">
-                                        <div class="no-data-icon">
-                                            <i class="fas fa-exclamation-triangle"></i>
-                                        </div>
-                                        <div class="no-data-content">
-                                            <span class="no-data-title">No Messages Found</span>
-                                            <p class="no-data-description">It looks like there are no messages at the
-                                                moment.
-                                                Please check back later!</p>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-
-
-                        </tbody>
-                    </table>
-                    <!-- <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
-      <app-pagination [paginator]="paginator" (onPageChange)="getTodayAppointmentsByUserId()" />
-    </div> -->
-                </div>
-            </div>
+        <!-- Title Section -->
+        <div class="d-flex justify-content-center align-items-center position-relative">
+          <h3>Message List</h3>
+          <div class="position-absolute end-0">
+            <span (click)="getAdminIdByUser()" class="icon-message cursor" title="Chat with Admin"
+              style="color: #00a98d; font-size: 23px">
+              <i class="fas fa-user-cog cursor" (click)="getAdminIdByUser()"></i> Customer Service
+            </span>
+          </div>
         </div>
+        <div class="row align-items-center mb-2">
+          <!-- Buttons Section (Left-Aligned) -->
+          <div class="col-12 col-md-9 mb-2 mb-md-0">
+            <div class="d-flex gap-2 flex-wrap">
+              <button class="btn1 btn-sm cursor" [ngClass]="{ 'active': selectedStatus === 'All' }"
+                (click)="setActiveStatus('All')">All</button>
+
+              <button class="btn1 btn-sm cursor" [ngClass]="{ 'active': selectedStatus === 'true' }"
+                (click)="setActiveStatus('true')">Read</button>
+
+              <button class="btn1 btn-sm cursor" [ngClass]="{ 'active': selectedStatus === 'false' }"
+                (click)="setActiveStatus('false')">Unread</button>
+            </div>
+          </div>
+
+          <!-- Search Bar Section (Right-Aligned) -->
+          <div class="col-12 col-md-3">
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Sender Name" (input)="getMessageList()"
+              class="form-control" />
+          </div>
+        </div>
+
+        <div class="table-responsive">
+
+          <!-- <div class="col-3 offset-9 mt-4 mb-2">
+                <input
+                  type="text"
+                  [(ngModel)]="searchTerm"
+                  placeholder="Search By Sender Name/DOB"
+                  (input)="getMessageList()"
+                  class="form-control"
+                />
+              </div> -->
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Sender Name</th>
+                <th scope="col">Age</th>
+                <th scope="col" style=" min-width: 150px;">Date & Time</th>
+                <th scope="col">Address</th>
+                <th scope="col">Last Message</th>
+                <th scope="col">Chat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of messagesList; let i = index">
+                <td class="d-flex justify-content-center">
+                  <img class="cursor" *ngIf="item.profilePicturePath; else defaultIcon" [src]="item.profilePicturePath"
+                    alt="User Image" (click)="item.userId !== 13 && viewProfile(item.patientId)" />
+                  <ng-template #defaultIcon>
+                    <div class="default-user-icon cursor" style="padding: 13px 6px 13px !important;"
+                      (click)="item.userId !== 13 && viewProfile(item.patientId)">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" height="40px" width="20px">
+                        <path
+                          d="M96 128a128 128 0 1 0 256 0A128 128 0 1 0 96 128zm94.5 200.2l18.6 31L175.8 483.1l-36-146.9c-2-8.1-9.8-13.4-17.9-11.3C51.9 342.4 0 405.8 0 481.3c0 17 13.8 30.7 30.7 30.7l131.7 0c0 0 0 0 .1 0l5.5 0 112 0 5.5 0c0 0 0 0 .1 0l131.7 0c17 0 30.7-13.8 30.7-30.7c0-75.5-51.9-138.9-121.9-156.4c-8.1-2-15.9 3.3-17.9 11.3l-36 146.9L238.9 359.2l18.6-31c6.4-10.7-1.3-24.2-13.7-24.2L224 304l-19.7 0c-12.4 0-20.1 13.6-13.7 24.2z" />
+                      </svg>
+                    </div>
+                  </ng-template>
+                  <span class="pt-2"
+                    [ngStyle]="{ 'color': item.userId == 13 ? 'gray' : '#009cff', 'cursor': item.UserId == 13 ? 'default' : 'pointer' }"
+                    [ngClass]="{ 'disabled-link': item.userId == 13 }"
+                    (click)="item.userId !== 13 && viewProfile(item.patientId)">
+                    <u>{{ item.fullName }}</u>
+                  </span>
+                  <!-- <span class="mt-2" style="color: #009cff!important; cursor: pointer;"
+                    (click)="viewProfile(item.patientId)"><u>{{ item.fullName }}</u></span> -->
+                </td>
+                <td class="pt-3">
+                  {{ item.dob && item.dob !== '0001-01-01T00:00:00' ? calculateAge(item.dob) + ' Yrs' : '--------' }}
+                </td>
+                <td class="pt-3">
+                  {{item.createdDateUtc| date: 'MM-dd-yyyy'}}<br>
+                  {{ ('1970-01-01T' + (item.time?.split('.')[0])) | date:'hh:mm a' }}
+                  <!-- {{ item.createdDateUtc && item.time ? formatDateTime(item.createdDateUtc, item.time) : '--------' }} -->
+                </td>
+                <td class="pt-3">{{ getStateAndCountry(item)|| '--------' }}</td>
+                <td class="pt-3">{{ item.messageContent || '--------' }}</td>
+
+
+
+
+                <td style="justify-items: center; cursor: pointer;">
+                  <div class="d-flex align-items-center justify-content-end gap-3 position-relative">
+
+                    <!-- View Chat icon with tooltip & unread badge -->
+                    <span title="View Chat" data-bs-toggle="tooltip"
+                      (click)="viewChat(item.userId, item.bookAppointmentId)"
+                      style="cursor: pointer; position: relative;">
+                      <i class="fas fa-comments" style="color: #00a98d; font-size: 20px;"></i>
+
+                      <span *ngIf="item.unreadMessageCount > 0" class="badge bg-danger"
+                        style="position: absolute; top: -8px; right: -10px; font-size: 10px;">
+                        {{ item.unreadMessageCount }}
+                      </span>
+                    </span>
+
+                    <!-- Report Message icon (moved out of dropdown) -->
+                    <span title="Report Message" (click)="viewMessageComplaint(item.patientId, item.providerId)"
+                      style="cursor: pointer;">
+                      <i class="fas fa-flag" style="color: #FF5733; font-size: 20px;"></i>
+                    </span>
+
+                  </div>
+                </td>
+
+
+
+              </tr>
+              <tr *ngIf="loading">
+                <td colspan="7">
+                  <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                    [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                    [additionalClasses]="'mt-5'"></app-loader>
+                </td>
+              </tr>
+              <tr *ngIf="messagesList.length === 0 && !loading">
+                <td colspan="9" class="no-data-card">
+                  <div class="no-data-card-container">
+                    <div class="no-data-icon">
+                      <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="no-data-content">
+                      <span class="no-data-title">No Messages Found</span>
+                      <p class="no-data-description">It looks like there are no messages at the
+                        moment.
+                        Please check back later!</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+
+            </tbody>
+          </table>
+        </div>
+        <div class="me-2 d-flex justify-content-end mt-2">
+          <app-pagination [paginator]="paginator" (onPageChange)="getMessageList()" />
+        </div>
+
+      </div>
     </div>
+  </div>
 </section>

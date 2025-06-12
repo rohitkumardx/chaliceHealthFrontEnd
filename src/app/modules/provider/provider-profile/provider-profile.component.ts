@@ -1,13 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/Services/auth.service';
 import { GlobalModalService } from 'src/app/Services/global-modal.service';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { ProviderService } from 'src/app/Services/provider.service';
 import { getErrorMessage } from 'src/app/utils/httpResponse';
 import { environment } from 'src/environments/environment';
+import { ContactDetailsComponent } from '../contact-details/contact-details.component';
 
 @Component({
   selector: 'app-provider-profile',
@@ -29,6 +30,9 @@ export class ProviderProfileComponent implements OnInit {
   userInfo: any
   showEditTimeFile: boolean;
   editProfilePicture: any;
+  userId: any
+  isDisabled = false
+  loading2: boolean = false;
 
   constructor(private fb: FormBuilder,
     public activeModel: NgbActiveModal,
@@ -36,27 +40,39 @@ export class ProviderProfileComponent implements OnInit {
     private notificationService: NotificationService,
     private providerService: ProviderService,
     private authService: AuthService,
-    private globalModalService: GlobalModalService,
+    private modalService: NgbModal
   ) { }
   ngOnInit() {
     this.profileForm = this.fb.group({
-      firstName: ['', Validators.required],
+      firstName: ['',[Validators.required, Validators.pattern(/\S+/)]],
       middleName: [''],
-      lastName: ['', Validators.required],
+      lastName: ['',[Validators.required, Validators.pattern(/\S+/)]],
       dateOfBirth: ['', Validators.required],
       gender: ['', Validators.required],
       languageIds: ['', Validators.required],
       email: ['', Validators.required],
       SSN: ['', Validators.required],
-      legalPracticeName: [''],
+      legalPracticeName: ['', Validators.required],
       ProfilePic: [],
       videoIntroName: [''],
-      providerBio: ['']
+      providerBio: ['',[Validators.required, Validators.pattern(/\S+/)]]
     })
     this.userInfo = this.authService.getUserInfo()
+    if (this.userInfo.accountType == "IndependentProvider") {
+      this.userId = this.userInfo.userId
+      this.autoFillData()
+    }
+    if (localStorage.getItem('NewProviderId')) {
+      this.userId = localStorage.getItem('NewProviderId')
+    }
+    if (this.userInfo.accountType != "IndependentProvider" && !localStorage.getItem('NewProviderId')) {
+      this.userId = this.userInfo.userId
+    }
+
+
 
     this.getlanguagesDropdown()
-    this.autoFillData()
+
     this.updateValidation();
   }
 
@@ -89,9 +105,8 @@ export class ProviderProfileComponent implements OnInit {
   }
 
   getEditProfileData() {
-    this.providerService.getProvdierProfileData(this.userInfo.userId).subscribe((response: any) => {
+    this.providerService.getProvdierProfileData(this.userId).subscribe((response: any) => {
       if (response != null) {
-
         const dateOfBirth = response.dateOfBirth;
         const formattedDate = this.datePipe.transform(dateOfBirth, 'yyyy-MM-dd');
         response.dateOfBirth = formattedDate;
@@ -122,6 +137,10 @@ export class ProviderProfileComponent implements OnInit {
           }
         })
       }
+      if(this.userInfo.accountType == 'Admin'){
+        // this.profileForm.disable()
+        // this.isDisabled = true
+      }
     })
   }
 
@@ -143,11 +162,9 @@ export class ProviderProfileComponent implements OnInit {
       this.notificationService.markFormGroupTouched(this.profileForm);
       return;
     }
-    debugger
     this.loading = true;
-    const userInfo = this.authService.getUserInfo()
     const providerForm = this.profileForm.value;
-    providerForm.userId = userInfo.userId
+    providerForm.userId = this.userId
     const formData = new FormData;
     Object.keys(providerForm).forEach(key => {
       formData.append(key, providerForm[key]);
@@ -159,8 +176,14 @@ export class ProviderProfileComponent implements OnInit {
       formData.append('ProfilePicture', this.profilePicture[i]);
     }
     this.providerService.postProviderGeneralInfo(formData).subscribe((data: any) => {
+      localStorage.setItem('NewProviderId', data.userId)
       this.notificationService.showSuccess("Provider General Info updated successfully.");
-      this.modalClose()
+      if(this.userInfo.accountType == 'Admin'){
+        this.openContactPopUp();
+      }
+      else{
+        this.modalClose()
+      }
     },
       (error) => {
         this.notificationService.showDanger(getErrorMessage(error));
@@ -209,6 +232,12 @@ export class ProviderProfileComponent implements OnInit {
     this.updateValidation();
   }
 
+  dropdownOpen = false;
+ 
+toggleDropdown() {
+  this.dropdownOpen = !this.dropdownOpen;
+}
+
   getDropdownWidth(): number {
     const button = document.getElementById('multiSelectDropdown');
     if (button) {
@@ -222,7 +251,7 @@ export class ProviderProfileComponent implements OnInit {
   }
   profilePicture = []
   onProfileSelected(event: any) {
-    debugger
+  
     this.profilePicture = []
     const file = event.target.files[0];
     if (file) {
@@ -231,10 +260,10 @@ export class ProviderProfileComponent implements OnInit {
   }
 
   deleteImage(file) {
-    this.providerService.deleteProfilePicture().subscribe((data: any) => {
+    this.providerService.deleteProfilePicture(this.userId).subscribe((data: any) => {
       this.editProfilePicture = null
       this.profilePicture = []
-      this.notificationService.showSuccess("Image deleted");
+      this.notificationService.showSuccess("Profile Picture Deleted Successfully");
     })
   }
   downloadFile(filePath: string): any {
@@ -242,10 +271,18 @@ export class ProviderProfileComponent implements OnInit {
     window.open(downloadUrl, '_blank');
   }
   modalClose() {
-    this.activeModel.close();
-    this.dialogClosed.emit();
-
+      this.activeModel.close();
+      this.dialogClosed.emit();
+    
   }
 
+  openContactPopUp() {
+    this.activeModel.close();
+    this.modalService.open(ContactDetailsComponent, {
+      backdrop: 'static',
+      size: 'lg',
+      centered: true
+    });
+  }
 
 }

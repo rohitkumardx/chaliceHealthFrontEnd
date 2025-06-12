@@ -1,583 +1,138 @@
-<div class="main ">
-
+<div class="main px-5">
+ 
     <div class="profile-container mx-auto bg-white rounded-3 p-5 mt-3 mb-3">
-        <div class="d-flex align-items-center">
-
-
-
-            <div class="text-center pt-3">
-                <!-- Show profile picture if available -->
+        <div class="d-flex justify-content-end">
+            <i class="fa fa-arrow-circle-left cursor mt-3 mt-md-0"
+                            (click)="goBack()"
+                            style="color: #00876ee4; font-size: 32px; cursor: pointer;"></i>
+        </div>
+        <div class="d-flex flex-column flex-md-row align-items-center text-center text-md-start">
+            <div class="pt-3">
                 <img *ngIf="profileData?.profilePicturePath" class="rounded-circle flex-shrink-0"
                     [src]="profileData.profilePicturePath" style="width: 130px; height: 130px;">
-
-                <!-- Show default male image if profile picture is not available and gender is male -->
-                <img *ngIf="!profileData?.profilePicturePath && profileData?.gender === 'Male'"
-                    class="rounded-circle flex-shrink-0" alt="Doctor Profile Male"
-                    src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png" style="width: 130px; height: 130px;">
-
-                <!-- Show default female image if profile picture is not available and gender is female -->
-                <img *ngIf="!profileData?.profilePicturePath && profileData?.gender === 'Female'"
-                    class="rounded-circle flex-shrink-0" alt="Doctor Profile Female"
-                    src="../../../../assets/svg/DoctorAvatar/image.png" style="width: 130px; height: 130px;">
+       
+                <img *ngIf="!profileData?.profilePicturePath" class="rounded-circle flex-shrink-0"
+                    alt="Doctor Profile Male" src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png"
+                    style="width: 130px; height: 130px;">
             </div>
-
-            <div class="d-flex align-items-center justify-content-between  w-100" style="padding: 10px;">
-                <div style="flex: 1;" class="mt-3 ps-4">
-                    <h2 style="font-weight: 500; font-size: 30px;">Dr. {{profileData.firstName}}
-                        {{profileData.lastName}}, {{profileData.qualificationName}}</h2>
-                    <p class="text-muted">{{profileData.email}}</p>
+       
+            <div class="d-flex flex-column flex-md-row align-items-center justify-content-between w-100 px-3">
+                <div class="mt-3 text-center text-md-start">
+                    <h3 *ngIf="profileData?.accountType == 'IndependentProvider'" class="text-success mb-0 mt-0" style="font-size: 1.5625rem; font-weight: 800;">
+                                {{profileData?.firstName}} {{profileData?.lastName}}, <br>
+                                {{profileData?.qualificationName}}
+                    </h3>
+ 
+                    <h3 *ngIf="profileData?.accountType == 'PrivatePractices' || profileData?.accountType == 'Facility'" class="text-success mb-0 mt-0" style="font-size: 1.5625rem; font-weight: 800;">
+                                  {{profileData?.legalPracticeName}}, <br>
+                                  {{profileData?.qualificationName}}
+                   </h3>
                 </div>
-                <i class="fa fa-arrow-circle-left pt-0 cursor" (click)="goBack()"
-                    style="color: #00876ee4; font-size: 38px; cursor: pointer;margin-top: -6%;"></i>
             </div>
-
         </div>
-
-        <mat-tab-group #tabGroup>
-            <mat-tab label="Availability">
-
-                <ng-template mat-tab-label>
-                    <!-- <i class="fas fa-info-circle" style="color: #00876F!important;"></i>  -->
-                    <span style="color: #00876F!important;">Availability</span>
-                </ng-template>
-                <!-- <div class="row tab mt-4">
-            <div class="col-md-6  d-flex justify-content-center">
-                <h2 class="serve1">Availability</h2>
-            </div>
-            <div class="col-md-6  d-flex justify-content-center">
-                <h2 class="serve">Service Details</h2>
-            </div>
-        </div> -->
-                <div style="overflow: hidden!important;">
-                    <div class="row text-center mt-5">
-                        <div class="col-12">
-                            <div id="slotCarousel" class="carousel slide" data-bs-ride="carousel">
-                                <!-- Carousel Items -->
+   
+           <h1 class="text-center" style="font-size: 35px; color: #00876ee4;">Availability</h1>
+           <hr>
+           
+               
+                <div >
+                 
+                    <div class="row text-center mt-2">
+                        <mat-form-field appearance="outline" style="margin-left: 10px; width: 180px;">
+                            <mat-label>Select Date</mat-label>
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" (dateChange)="onDateChange($event)" (click)="nextSlots()">
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                          </mat-form-field>
+ 
+                          <div class="col-12">
+                              <div id="slotCarousel" class="carousel slide position-relative">
                                 <div class="carousel-inner">
-                                    <!-- Carousel Items (Grouped by 3 availabilities) -->
-                                    <div class="carousel-item"
-                                        *ngFor="let availabilityGroup of chunkedAvailabilities; let i = index"
+                                    <div class="carousel-item" *ngFor="let availabilityGroup of chunkedAvailabilities; let i = index"
                                         [class.active]="i === 0">
-                                        <div>
-                                            <div class="row">
-                                                <div class="col-3 text-center"
-                                                    *ngFor="let availability of availabilityGroup">
-                                                    <div class="date">
-                                                        {{ availability.date | date:'EEE, MMM d' }}
-                                                    </div>
-
-                                                    <!-- Display slots if available -->
-                                                    <div
-                                                        *ngIf="availability.limitedSlots && availability.limitedSlots.length > 0; else noData">
-                                                        <div *ngFor="let slot of availability.limitedSlots">
-                                                            <button class="time-btn mt-3"
-                                                                (click)="redirectToBookAppointment(slot.slotId, availability.date, slot.startTime)">
-                                                                {{ formatTime(slot.startTime) }}
-                                                            </button>
-                                                            <br>
-                                                        </div>
+                                        <div class="row  gx-2 gy-3 py-3" style="background: #f8f9fa; border-radius: 20px;" >  <!-- Reduced spacing -->
+                                            <div class="col-md-3 col-6 "
+                                                *ngFor="let availability of availabilityGroup">
+                                                <div class="text-center  slot-card">
+                                                    <div class="date fw-bold">{{ availability.date | date:'EEE, MMM d' }}</div>
+                                                <div *ngIf="availability.limitedSlots && availability.limitedSlots.length > 0; else noData">
+                                                    <div *ngFor="let slot of availability.limitedSlots">
+                                                        <button class="time-btn mt-2" (click)="redirectToBookAppointment(slot.slotId, availability.date, slot.startTime, slot.bookAppointmentId, slot.meetingType)">
+                                                            {{ formatTime(slot.startTime) }}
+                                                        </button>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <!-- Single 'See more' or 'See less' button at the bottom, only shown if there are slots -->
-                                            <div *ngIf="hasSlots(availabilityGroup)" class="text-center mt-4">
-                                                <div (click)="toggleShowMore()" class="see-more">
-                                                    {{ showMore ? 'See less times' : 'See more times' }}
-                                                    <i
-                                                        [class]="showMore ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
                                                 </div>
                                             </div>
-
-                                            <!-- No data available message if there are no slots in the availability group -->
-                                            <ng-template #noData>
-                                                <div class="text-center my-3 mt-4">
-                                                    <p>No data available</p>
-                                                </div>
-                                            </ng-template>
                                         </div>
+                                        <div *ngIf="hasSlots(availabilityGroup)" class="text-center mt-3">
+                                            <div (click)="toggleShowMore()" class="see-more">
+                                                {{ showMore ? 'See less times' : 'See more times' }}
+                                                <i [class]="showMore ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                                            </div>
+                                        </div>
+                                        <ng-template #noData>
+                                            <div class="text-center no-data">No data available</div>
+                                        </ng-template>
                                     </div>
-
                                 </div>
-
-                                <!-- Carousel Controls -->
-                                <button class="carousel-control-prev mt-2" type="button" data-bs-target="#slotCarousel"
-                                    *ngIf="chunkedAvailabilities[0][0].date != currentDate" data-bs-slide="prev"
-                                    (click)="previousSlots()">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden pe-3">Previous</span>
+                                <button class="carousel-control-prev " type="button" data-bs-target="#slotCarousel" data-bs-slide="prev"
+                                   (click)="previousSlots()">
+                                    <span class="carousel-control-prev-icon"></span>
                                 </button>
-                                <button class="carousel-control-next mt-2" type="button" data-bs-target="#slotCarousel"
-                                    data-bs-slide="next" (click)="nextSlots()">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
+                                <button class="carousel-control-next" type="button" data-bs-target="#slotCarousel" data-bs-slide="next"
+                                   >
+                                    <span class="carousel-control-next-icon"></span>
                                 </button>
                             </div>
                         </div>
+                         
+                       
                     </div>
-
-                    <div class="row mt-5">
-                        <div class="col-md-3 mb-3">
-                            <div class=" py-4 ">
-                                <div class="text-center" style="width: 84%;">
-                                    <div class="icon mb-3">
-                                        <i class="fas fa-briefcase-medical" style="font-size: 24px;
-                              color: #28a745;"></i> <!-- Use an appropriate icon -->
-                                    </div>
-                                    <h4>Experience</h4>
-                                    <p class="text-muted "> {{profileData.experience}} Years</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class=" py-4 text-center">
-                                <div class="icon mb-3">
-                                    <i class="fas fa-language" style="font-size: 24px;
-                        color: #28a745;"></i>
-                                </div>
-                                <h4>Languages</h4>
-                                <div class="row">
-                                    <div class="" *ngFor="let language of profileData.languages; let i = index">
-                                        <p class="text-muted">
-                                            {{ language.languageName }}<span
-                                                *ngIf="i < profileData.languages.length - 1">,</span>
-                                        </p>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class=" p-4 text-center">
-                                <div class="icon mb-3">
-                                    <i class="fas fa-map-marker-alt" style="font-size: 24px;
-    color: #28a745;"></i>
-                                </div>
-                                <h4>Licensed States</h4>
-                                <div class="row">
-                                    <div class=" text-center"
-                                        *ngFor="let licensedState of profileData.licensedState; let i = index">
-                                        <p class="text-muted text-center">
-                                            {{licensedState.licensedStateNames}}<span
-                                                *ngIf="i < profileData.licensedState.length - 1">,</span></p>
-                                    </div>
-                                    <!-- <div class="col-3">
-                                        <p class="text-muted text-center">
-                                            {{ getLicensedStates() }}
-                                        </p>
-                                    </div> -->
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class=" p-4 text-center">
-                                <div class="icon mb-3">
-                                    <i class="fas fa-venus-mars" style="font-size: 24px;
-    color: #28a745;"></i>
-                                </div>
-                                <h4>Gender</h4>
-                                <p class="text-muted">{{profileData.gender}}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="specialties mt-4 row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="py-4 text-center">
-                                        <div class="text-center" style="width: 75%;">
-                                            <div class="icon mb-3">
-                                                <i class="fas fa-user-md" style="font-size: 24px;
-                                     color: #28a745;"></i>
-                                            </div>
-                                            <h4> Practice Name</h4>
-                                            <p class="text-muted">{{ profileData?.legalPracticeName || '-----' }}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class=" p-4 text-center">
-                                        <div class="icon mb-3">
-                                            <i class="fas fa-stethoscope" style="font-size: 24px;
-                                   color: #28a745;"></i>
-                                        </div>
-                                        <h4>Specialties</h4>
-                                        <p class="text-muted" *ngFor="let specialist of profileData.specialist">
-                                            {{specialist.specialistNames}} </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 rounded" *ngIf="profileData?.videoIntroName !== undefined">
-                            <iframe [src]="sanitizedVideoUrl" width="400" height="260" frameborder="0" allowfullscreen>
-                            </iframe>
-                        </div>
-
-                    </div>
-                    <div class="consultation-fee">
-                        <h4 class="" style="font-weight: 600 !important;font-size: 21px;">Consultation Fee</h4>
-                        <div class="row mt-2">
-                            <div class="col-md-3" *ngIf="profileData.telehealthVisitPrice != ''">
-                                <span class="text-muted btn btn-outline-success bg-white  rounded-pill px-4"
-                                    style="font-weight: 400!important; font-size: 14px!important;font-size: 16px!important;">
-                                    <p class="mb-0">Tele health Visit: <span
-                                            style="font-weight:500; font-size: 15px;">${{profileData.telehealthVisitPrice}}</span>
-                                    </p>
-                                </span>
-                            </div>
-                            <div class="col-md-3 " *ngIf="profileData.inHomeVisitPrice != ''">
-                                <span class="text-muted btn btn-outline-success bg-white  rounded-pill px-4"
-                                    style="font-weight: 400!important; font-size: 14px!important;font-size: 16px!important;">
-                                    <p class="mb-0">Personal Visit: <span
-                                            style="font-weight:500; font-size: 15px;">${{profileData.inHomeVisitPrice}}</span>
-                                    </p>
-                                </span>
-                            </div>
-                            <div class="col-md-3 " *ngIf="profileData.officeVisitPrice != ''">
-                                <span class="text-muted btn btn-outline-success bg-white  rounded-pill px-4"
-                                    style="font-weight: 400!important; font-size: 14px!important;font-size: 16px!important;">
-                                    <p class="mb-0">Office Visit: <span
-                                            style="font-weight:500; font-size: 15px;">${{profileData.officeVisitPrice}}</span>
-                                    </p>
-                                </span>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    <div class="description mt-4" *ngIf="profileData.providerBio">
-                        <h4 style="font-weight: 500;">About Me</h4>
-                        <p class="text-muted" style="line-height: 1.5;">
-                            {{profileData.providerBio}}</p>
-                    </div>
-                    <!-- <button class="btn btn-primary w-100 mt-4 disabled">Write a Review</button> -->
+                   
                     <div class="overall-rating mt-5 d-flex">
                         <h4 style="font-weight: 500;">
                             Overall Rating : &nbsp;
-                            <span class="" style=" color: #FFD700;">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </span>
-                            <span class="text-muted">&nbsp; 4.0 (1 review)</span>
+     
+                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                                <ng-container [ngSwitch]="getStarType(star, averageRating)">
+                                  <mat-icon *ngSwitchCase="'full'" class="text-warning">star</mat-icon>
+                                  <mat-icon *ngSwitchCase="'half'" class="text-warning">star_half</mat-icon>
+                                  <mat-icon *ngSwitchCase="'empty'" class="text-secondary">star</mat-icon>
+                                </ng-container>
+                              </ng-container>
+                            <span class="text-muted">&nbsp; {{averageRating}} ({{reviewCount}} review)</span>
                         </h4>
                     </div>
-
-                    <div class="row d-flex align-items-center border-bottom py-3">
+ 
+                    <div class="row d-flex align-items-center border-bottom py-3" *ngFor="let item of ratingListData">
                         <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
-                            <img src="../../../../assets/svg/staff-profile/images.png" width="80" alt="Reviewer Image"
-                                class="rounded-circle">
+                            <img *ngIf="item.filePath; else defaultIcon" style="  border: 1px solid #00876f; "
+                                class="rounded-circle" [src]="item.filePath" alt="User Image" width="80" height="80" />
+                            <ng-template #defaultIcon>
+                               
+                                <img src="../../../../assets/svg/staff-profile/images.png" width="80" height="80"
+                                    alt="Reviewer Image" class="rounded-circle">
+                            </ng-template>
                         </div>
                         <div
                             class="col-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-start mb-2 mb-md-0">
-                            <p mailto:class="mb-0">viktoria123@gmail.com <br>
+                            <p mailto:class="mb-0">{{item.email}} <br>
                                 <span class="" style=" color: #FFD700;">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star" *ngFor="let star of [].constructor(item.rating)"></i>
                                 </span><br>
-                                <span class="mb-0">This is a good doctor.Dr. James Smith has extensive experience in
-                                    psychiatry, specializing in personalized treatments.</span>
+                                <span class="mb-0">{{item.review}}</span>
                             </p>
-
+ 
                         </div>
+ 
                         <div class="col-12 col-md-3 text-center text-md-center ">
-
-                            <p class="mb-0">6 August 2024</p>
+                            <p class="mb-0">{{ getFormattedDate(item.date)|date:'MM-dd-yyyy' }}</p>
+ 
                         </div>
                     </div>
-                    <div class="row d-flex align-items-center border-bottom py-3">
-                        <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
-                            <img src="../../../../assets/svg/staff-profile/images.png" width="80" alt="Reviewer Image"
-                                class="rounded-circle">
-                        </div>
-                        <div
-                            class="col-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-start mb-2 mb-md-0">
-                            <p mailto:class="mb-0">viktoria123@gmail.com <br>
-                                <span class="" style=" color: #FFD700;">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span><br>
-                                <span class="mb-0">This is a good doctor.Dr. James Smith has extensive experience in
-                                    psychiatry, specializing in personalized treatments.</span>
-                            </p>
-
-                        </div>
-                        <div class="col-12 col-md-3 text-center text-md-center ">
-
-                            <p class="mb-0">6 August 2024</p>
-                        </div>
-                    </div>
-                    <div class="row d-flex align-items-center border-bottom py-3">
-                        <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
-                            <img src="../../../../assets/svg/staff-profile/images.png" width="80" alt="Reviewer Image"
-                                class="rounded-circle">
-                        </div>
-                        <div
-                            class="col-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-start mb-2 mb-md-0">
-                            <p mailto:class="mb-0">viktoria123@gmail.com <br>
-                                <span class="" style=" color: #FFD700;">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span><br>
-                                <span class="mb-0">This is a good doctor.Dr. James Smith has extensive experience in
-                                    psychiatry, specializing in personalized treatments.</span>
-                            </p>
-
-                        </div>
-                        <div class="col-12 col-md-3 text-center text-md-center ">
-
-                            <p class="mb-0">6 August 2024</p>
-                        </div>
-                    </div>
-
                 </div>
-            </mat-tab>
-            <mat-tab label="Service Details">
-                <ng-template mat-tab-label>
-                    <!-- <i class="fas fa-info-circle" style="color: #00876F!important;"></i> -->
-                    <span style="color: #00876F!important;">Service Details</span>
-                </ng-template>
-
-                <div style="overflow: hidden!important;">
-                    <div class="row mt-5">
-                        <div class="col-md-3 mb-3">
-                            <div class=" py-4 ">
-                                <div class="text-center" style="width: 84%;">
-                                    <div class="icon mb-3">
-                                        <i class="fas fa-briefcase-medical" style="font-size: 24px;
-          color: #28a745;"></i> <!-- Use an appropriate icon -->
-                                    </div>
-                                    <h4>Experience</h4>
-                                    <p class="text-muted"> {{profileData.experience}} Years</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class=" py-4 text-center">
-                                <div class="icon mb-3">
-                                    <i class="fas fa-language" style="font-size: 24px;
-                          color: #28a745;"></i>
-                                </div>
-                                <h4>Languages</h4>
-                                <div class="row">
-                                    <div class="" *ngFor="let language of profileData.languages; let i = index">
-                                        <p class="text-muted">
-                                            {{ language.languageName }}<span
-                                                *ngIf="i < profileData.languages.length - 1">,</span>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <div class=" p-4 text-center">
-                                <div class="icon mb-3">
-                                    <i class="fas fa-map-marker-alt" style="font-size: 24px;
-                           color: #28a745;"></i>
-                                </div>
-                                <h4>Licensed States</h4>
-                                <div class="row">
-                                    <div class=""
-                                        *ngFor="let licensedState of profileData.licensedState; let i = index">
-                                        <p class="text-muted">
-                                            {{licensedState.licensedStateNames}}<span
-                                                *ngIf="i < profileData.licensedState.length - 1">,</span></p>
-                                    </div>
-                                </div>
-                                <!-- <p class="text-muted" *ngFor="let licensedState of profileData.licensedState">{{licensedState.licensedStateNames}}</p> -->
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 mb-3">
-                            <div class=" p-4 text-center">
-                                <div class="icon mb-3">
-                                    <i class="fas fa-venus-mars" style="font-size: 24px;
-                    color: #28a745;"></i>
-                                </div>
-                                <h4>Gender</h4>
-                                <p class="text-muted">{{profileData.gender}}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="specialties mt-4 row">
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="py-4 text-center">
-                                        <div class="text-center" style="width: 75%;">
-                                            <div class="icon mb-3">
-                                                <i class="fas fa-user-md" style="font-size: 24px;
-                                       color: #28a745;"></i>
-                                            </div>
-                                            <h4> Practice Name</h4>
-                                            <p class="text-muted">{{profileData.legalPracticeName}}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class=" p-4 text-center">
-                                        <div class="icon mb-3">
-                                            <i class="fas fa-stethoscope" style="font-size: 24px;
-                                     color: #28a745;"></i>
-                                        </div>
-                                        <h4>Specialties</h4>
-                                        <p class="text-muted" *ngFor="let specialist of profileData.specialist">
-                                            {{specialist.specialistNames}} </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 rounded" *ngIf="profileData?.videoIntroName !== undefined">
-                            <iframe [src]="sanitizedVideoUrl" width="400" height="260" frameborder="0" allowfullscreen>
-                            </iframe>
-                        </div>
-                        <!-- <div class="col-md-6 rounded">
-                   <video width="450" height="260" controls>
-                      <source src="../../../../assets/svg/4487124-uhd_3840_2160_25fps.mp4" type="video/mp4">            
-                    </video>
-              </div> -->
-                    </div>
-                    <div class="consultation-fee mt-4">
-                        <h4 class="" style="font-weight: 600 !important;font-size: 21px;">Consultation Fee</h4>
-                        <div class="row mt-2">
-                            <div class="col-md-3" *ngIf="profileData.telehealthVisitPrice != ''">
-                                <span class="text-muted btn btn-outline-success bg-white  rounded-pill px-4"
-                                    style="font-weight: 400!important; font-size: 14px!important;font-size: 16px!important;">
-                                    <p class="mb-0">Tele health Visit: <span
-                                            style="font-weight:500; font-size: 15px;">${{profileData.telehealthVisitPrice}}</span>
-                                    </p>
-                                </span>
-                            </div>
-                            <div class="col-md-3 " *ngIf="profileData.inHomeVisitPrice != ''">
-                                <span class="text-muted btn btn-outline-success bg-white  rounded-pill px-4"
-                                    style="font-weight: 400!important; font-size: 14px!important;font-size: 16px!important;">
-                                    <p class="mb-0">Personal Visit: <span
-                                            style="font-weight:500; font-size: 15px;">${{profileData.inHomeVisitPrice}}</span>
-                                    </p>
-                                </span>
-                            </div>
-                            <div class="col-md-3 " *ngIf="profileData.officeVisitPrice != ''">
-                                <span class="text-muted btn btn-outline-success bg-white  rounded-pill px-4"
-                                    style="font-weight: 400!important; font-size: 14px!important;font-size: 16px!important;">
-                                    <p class="mb-0">Office Visit: <span
-                                            style="font-weight:500; font-size: 15px;">${{profileData.officeVisitPrice}}</span>
-                                    </p>
-                                </span>
-                            </div>
-                            <!-- <div class="col-md-3">       
-        <span class="text-muted btn btn-outline-success bg-white  rounded-pill px-4" style="font-weight: 400!important; font-size: 14px!important;font-size: 16px!important;"> <p class="mb-0">Personal Visit: <span style="font-weight:500; font-size: 15px;">${{profileData.inHomeVisitPrice}}</span></p></span>
-    </div> -->
-
-                        </div>
-                    </div>
-                    <div class="description mt-4" *ngIf="profileData.providerBio">
-                        <h4 style="font-weight: 500;">About Me</h4>
-                        <p class="text-muted" style="line-height: 1.5;">
-                            {{profileData.providerBio}}</p>
-                    </div>
-                    <!-- <button class="btn btn-primary w-100 mt-4 disabled">Write a Review</button> -->
-                    <div class="overall-rating mt-5 d-flex">
-                        <h4 style="font-weight: 500;">
-                            Overall Rating : &nbsp;
-                            <span class="" style=" color: #FFD700;">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </span>
-                            <span class="text-muted">&nbsp; 4.0 (1 review)</span>
-                        </h4>
-                    </div>
-
-                    <div class="row d-flex align-items-center border-bottom py-3">
-                        <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
-                            <img src="../../../../assets/svg/staff-profile/images.png" width="80" alt="Reviewer Image"
-                                class="rounded-circle">
-                        </div>
-                        <div
-                            class="col-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-start mb-2 mb-md-0">
-                            <p mailto:class="mb-0">viktoria123@gmail.com <br>
-                                <span class="" style=" color: #FFD700;">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span><br>
-                                <span class="mb-0">This is a good doctor. Dr. James Smith
-                                    has extensive experience in psychiatry, specializing in personalized
-                                    treatments.</span>
-                            </p>
-
-                        </div>
-                        <div class="col-12 col-md-3 text-center text-md-center ">
-
-                            <p class="mb-0">6 August 2024</p>
-                        </div>
-                    </div>
-                    <div class="row d-flex align-items-center border-bottom py-3">
-                        <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
-                            <img src="../../../../assets/svg/staff-profile/images.png" width="80" alt="Reviewer Image"
-                                class="rounded-circle">
-                        </div>
-                        <div
-                            class="col-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-start mb-2 mb-md-0">
-                            <p mailto:class="mb-0"> mailto:viktoria123@gmail.com <br>
-                                <span class="" style=" color: #FFD700;">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span><br>
-                                <span class="mb-0">This is a good doctor.Dr. James Smith has extensive experience in
-                                    psychiatry, specializing in personalized treatments.</span>
-                            </p>
-
-                        </div>
-                        <div class="col-12 col-md-3 text-center text-md-center ">
-
-                            <p class="mb-0">6 August 2024</p>
-                        </div>
-                    </div>
-                    <div class="row d-flex align-items-center border-bottom py-3">
-                        <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
-                            <img src="../../../../assets/svg/staff-profile/images.png" width="80" alt="Reviewer Image"
-                                class="rounded-circle">
-                        </div>
-                        <div
-                            class="col-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-start mb-2 mb-md-0">
-                            <p mailto:class="mb-0">viktoria123@gmail.com <br>
-                                <span class="" style=" color: #FFD700;">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span><br>
-                                <span class="mb-0">This is a good doctor. Dr. James Smith has extensive experience in
-                                    psychiatry, specializing in personalized treatments.</span>
-                            </p>
-
-                        </div>
-                        <div class="col-12 col-md-3 text-center text-md-center ">
-
-                            <p class="mb-0">6 August 2024</p>
-                        </div>
-                    </div>
-                    <!-- <div class="w-100 d-flex justify-content-end">
-          <button class="btn btn-primary mt-5" style="width: 100%; max-width: 20%; ">Submit</button>
-      </div> -->
-                </div>
-            </mat-tab>
-        </mat-tab-group>
+   
     </div>
 </div>
+ 

@@ -1,0 +1,162 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+
+            <div class="bg-white rounded mt-2 p-4">
+                <h3 class="text-center">Service Management</h3>
+
+                <form [formGroup]="serviceForm" class="mt-4 p-4">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-4">
+                            <label for="drugName">Service Name <span class="red">*</span> </label>
+                            <input type="text" id="drugName" class="form-control form-control-sm mt-1"
+                                formControlName="name"
+                                [ngClass]="{'is-invalid': serviceForm.get('name')?.invalid && serviceForm.get('name')?.touched}">
+                            <div class="invalid-feedback"
+                                *ngIf="serviceForm.get('name')?.touched && serviceForm.get('name')?.hasError('required')">
+
+                                Service name is required.
+                            </div>
+                            <div class="invalid-feedback"
+                                *ngIf="serviceForm.get('name')?.touched && serviceForm.get('name')?.hasError('pattern')">
+
+                                Service Name cannot be empty or only spaces.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-12">
+                            <label for="drugName">Category </label>
+                            <input type="text" id="drugName" class="form-control form-control-sm mt-1"
+                                formControlName="serviceCategory"
+                                [ngClass]="{'is-invalid': serviceForm.get('serviceCategory')?.invalid && serviceForm.get('serviceCategory')?.touched}">
+                          
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="description">Service Description </label>
+                            <textarea id="description" class="form-control form-control-sm mt-1"
+                                formControlName="description"
+                                [ngClass]="{'is-invalid': serviceForm.get('description')?.invalid && serviceForm.get('description')?.touched}"></textarea>
+                            <div class="invalid-feedback"
+                                *ngIf="serviceForm.get('description')?.touched && serviceForm.get('description')?.hasError('required')">
+                                Description is required.
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex">
+                        <div class="col-sm-12 d-flex justify-content-end pt-2">
+                            <button type="submit" class="btn custom-padding"
+                                style="background-color: #00876F!important;" (click)="addService()">
+                                <i class="fas" [ngClass]="{'fa-spinner fa-spin': loading}"></i>
+                                <span *ngIf="!loading" class="space">Save</span>
+                                <span *ngIf="loading" class="space">Saving...</span>
+                            </button>
+                            <!-- <button type="button" class="btn custom-padding" style="background-color: #00876f;"
+                                (click)="addService()">
+                                Save
+                            </button> -->
+                        </div>
+                    </div>
+                </form>
+                <hr>
+
+                <div class="row">
+                    <div class="col-sm-9 ">
+                        <h1 class="">Service List</h1>
+                    </div>
+
+                    <div class="col-sm-3 ">
+
+                        <input type="text" [(ngModel)]="searchTerm" (input)="filterItems()" placeholder="Search Service"
+                            class="form-control">
+                    </div>
+                </div>
+
+                <div class="table-responsive" *ngIf="serviceList.length > 0">
+                    <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+
+                        <div>
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" (click)="sortData('name')">Name
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'name', 'fa-sort-up': sortColumn === 'name' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'name' && sortOrder === 'desc'}"></i>
+                                </th>
+                                <th style="min-width: 150px;" scope="col" (click)="sortData('serviceCategory')">Category
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'serviceCategory', 'fa-sort-up': sortColumn === 'serviceCategory' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'serviceCategory' && sortOrder === 'desc'}"></i>
+                                </th>
+                                <th scope="col" style="min-width: 150px;">Description</th>
+                                <th scope="col" style=" min-width: 150px;">Created Date</th>
+                                <th scope="col"> Actions</th>
+                                <!-- <th scope="col">Action</th> -->
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of serviceList; let i = index">
+                                <td> {{item.name}} </td>
+                                <td>{{ item.serviceCategory ? item.serviceCategory : '-----' }}</td>
+                                <td>{{ item.description ? item.description : '-----' }}</td>
+                                <td>{{ item.createdDate | date: 'MM-dd-yyyy'}}</td>
+                                <td>
+
+                                    <span class="icon-edit" title="Edit" style="color: #00876f; font-size: medium">
+                                        <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                            (click)="editItem(item.id)"></i>
+                                    </span>
+
+                                    <span class="icon-delete" title="Delete" style="color: #dc3545; font-size: medium">
+                                        <i class="fa-solid fa-trash cursor" (click)="deleteItem(item.id)"></i>
+                                    </span>
+                                </td>
+                                <!-- <td>
+                                    <button type="button" class="btn btn-primary m-0" style="font-size: 11px;" (click)="showDetails(item.id)">
+                              Show Details
+                            </button>
+                                </td> -->
+
+                            </tr>
+
+                            <!-- <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr> -->
+
+                            <tr *ngIf="serviceList?.length == 0">
+                                <td colspan="5" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Services Found</span>
+                                            <p class="no-data-description">It looks like there are no services at
+                                                the
+                                                moment.
+                                                Please check back later!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="mx-2 d-flex justify-content-end" *ngIf="roles.length >0 && !loading">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getServiceList()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

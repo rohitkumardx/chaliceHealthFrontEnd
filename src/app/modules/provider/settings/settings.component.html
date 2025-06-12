@@ -1,0 +1,507 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="signup-card">
+        <h3>Settings</h3>
+        <div class="signup-form">
+          <mat-tab-group (selectedTabChange)="onSettingsChange($event)" class="custom-tab-group">
+
+            <mat-tab value="Payout">
+              <ng-template mat-tab-label>
+                <span class="tab-label ">Payout Details</span>
+              </ng-template>
+              <div class="mat-tab-content" style="overflow: hidden !important;">
+
+                <div class="">
+                  <div class=" p-4">
+                    <div class="modal-content p-4">
+                      <!-- Modal Header -->
+                      <!-- <div class="modal-header p-0">
+                                                <h2 class="modal-title">Edit payout details</h2>
+                                            </div> -->
+                      <!-- Modal Body -->
+                      <div class="modal-body px-4 py-2">
+                        <p class="text-muted">
+                          What legal entity will receive payouts? All of the info entered here
+                          must match the info
+                          associated with the bank account that will be used to receive funds.
+                        </p>
+
+                        <!-- Form Starts -->
+                        <form [formGroup]="payoutForm">
+                          <!-- Row 1: Legal Name & EIN -->
+                          <div class="row">
+                            <div class="col-md-6">
+                              <label class="form-label">Legal Name <span class="red">*</span></label>
+                              <input type="text" id="LegalName" class="form-control form-control-sm" placeholder=""
+                                formControlName="LegalName"
+                                [ngClass]="{'is-invalid': payoutForm.get('LegalName')?.invalid && payoutForm.get('LegalName')?.touched}">
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('LegalName')?.touched && payoutForm.get('LegalName')?.hasError('required')">
+                                Legal Name is required.
+                              </div>
+                              <div class="text-danger" *ngIf="payoutForm.get('LegalName')?.hasError('whitespace')">
+                                Reason cannot be just spaces.
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Employer Identification Number <span
+                                  class="red">*</span></label>
+                              <input type="text" id="EmployerIdentificationNumber" class="form-control form-control-sm"
+                                placeholder="XXXXXXXXX" formControlName="EmployerIdentificationNumber" maxlength="9"
+                                [ngClass]="{
+                                  'is-invalid': payoutForm.get('EmployerIdentificationNumber')?.invalid &&
+                                  payoutForm.get('EmployerIdentificationNumber')?.touched
+                                }">
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('EmployerIdentificationNumber')?.touched">
+                                <ng-container
+                                  *ngIf="payoutForm.get('EmployerIdentificationNumber')?.hasError('required')">
+                                  Employer Identification Number is required.
+                                </ng-container>
+                                <ng-container
+                                  *ngIf="payoutForm.get('EmployerIdentificationNumber')?.hasError('pattern')">
+                                  Employer Identification Number must be exactly 9 digits.
+                                </ng-container>
+                              </div>
+                            </div>
+
+
+
+                          </div>
+
+                          <!-- Row 2: Address Line 1 & Address Line 2 -->
+                          <div class="row">
+                            <div class="col-md-6">
+                              <label class="form-label">Address Line 1 <span class="red">*</span></label>
+                              <input type="text" id="AddressLine1" class="form-control form-control-sm" placeholder=""
+                                formControlName="AddressLine1"
+                                [ngClass]="{'is-invalid': payoutForm.get('AddressLine1')?.invalid && payoutForm.get('AddressLine1')?.touched}">
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('AddressLine1')?.touched && payoutForm.get('AddressLine1')?.hasError('required')">
+                                Address Line 1 is required.
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <label class="form-label">Address Line 2</label>
+                              <input type="text" id="AddressLine2" class="form-control form-control-sm" placeholder=""
+                                formControlName="AddressLine2"
+                                [ngClass]="{'is-invalid': payoutForm.get('AddressLine2')?.invalid && payoutForm.get('AddressLine2')?.touched}">
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('AddressLine2')?.touched && payoutForm.get('AddressLine2')?.hasError('required')">
+                                Address Line 2 is required.
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Row 3: City, State, Zip -->
+                          <div class="row mb-3">
+                            <div class="col-md-4">
+                              <label class="form-label">City <span class="red">*</span></label>
+                              <input type="text" id="City" class="form-control form-control-sm" placeholder=""
+                                formControlName="City"
+                                [ngClass]="{'is-invalid': payoutForm.get('City')?.invalid && payoutForm.get('City')?.touched}">
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('City')?.touched && payoutForm.get('City')?.hasError('required')">
+                                City is required.
+                              </div>
+                              <div class="text-danger" *ngIf="payoutForm.get('City')?.hasError('whitespace')">
+                                City cannot be just spaces.
+                              </div>
+                            </div>
+
+                            <div class="col-md-4">
+                              <label>State <span class="red">*</span></label>
+                              <select id="StateId" class="form-select form-select-sm cursor mt-2"
+                                formControlName="StateId" [ngClass]="{
+                                                                'is-invalid': payoutForm.get('StateId')?.invalid && payoutForm.get('StateId')?.touched
+                                                              }">
+                                <option value="" disabled selected>Select State</option>
+                                <option *ngFor="let state of states" [value]="state.id">
+                                  {{ state.name }}
+                                </option>
+                              </select>
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('StateId')?.touched && payoutForm.get('StateId')?.hasError('required')">
+                                State is required.
+                              </div>
+                            </div>
+
+                            <div class="col-md-4">
+                              <label class="form-label">Zip Code <span class="red">*</span></label>
+                              <input type="text" id="zipCode" class="form-control form-control-sm" placeholder="XXXXX"
+                                formControlName="zipCode" [ngClass]="{
+                                                                'is-invalid':
+                                                                  payoutForm.get('zipCode')?.invalid &&
+                                                                  payoutForm.get('zipCode')?.touched
+                                                              }" />
+                              <div class="invalid-feedback" *ngIf="
+                                                                payoutForm.get('zipCode')?.touched &&
+                                                                payoutForm.get('zipCode')?.hasError('required')">
+                                Zip Code is required.
+                              </div>
+                              <div class="invalid-feedback" *ngIf="
+                                                                payoutForm.get('zipCode')?.touched &&
+                                                                payoutForm.get('zipCode')?.hasError('pattern')">Zip
+                                Code must be exactly 5 digits.
+                              </div>
+                            </div>
+
+                          </div>
+
+
+
+
+                          <!-- Payout Information -->
+                          <p class="text-muted">
+                            To what bank account would you like us to send your payouts? To
+                            receive payouts, the bank account must be a checking account and
+                            be located in the United States.
+                          </p>
+
+                          <!-- Row 5: Routing, Account, Confirm Account -->
+                          <div class="row">
+                            <div class="col-md-4">
+                              <label class="form-label">Routing Number <span class="red">*</span></label>
+                              <input type="text" id="RoutingNumber" class="form-control form-control-sm"
+                                placeholder="XXX-XXX-XXX" formControlName="RoutingNumber"
+                                [ngClass]="{'is-invalid': payoutForm.get('RoutingNumber')?.invalid && payoutForm.get('RoutingNumber')?.touched}">
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('RoutingNumber')?.touched && payoutForm.get('RoutingNumber')?.hasError('required')">
+                                Routing Number is required.
+                              </div>
+                              <div class="invalid-feedback" *ngIf="
+                                                                payoutForm.get('RoutingNumber')?.touched &&
+                                                                payoutForm.get('RoutingNumber')?.hasError('pattern')">
+                                Routing Number must be exactly 9 digits.
+                              </div>
+                            </div>
+                            <div class="col-md-4">
+                              <label for="AccountNumber">Account Number <span class="red">*</span></label>
+                              <input type="text" id="AccountNumber" minlength="5" (keypress)="allowOnlyDigits($event)"
+                                (paste)="blockNonDigitsOnPaste($event)" class="form-control form-control-sm mt-2"
+                                formControlName="AccountNumber" [ngClass]="{
+                                                              'is-invalid': payoutForm.get('AccountNumber')?.invalid && payoutForm.get('AccountNumber')?.touched
+                                                            }" />
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('AccountNumber')?.touched && payoutForm.get('AccountNumber')?.hasError('required')">
+                                Account Number is required.
+                              </div>
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('AccountNumber')?.touched && payoutForm.get('AccountNumber')?.hasError('minlength')">
+                                Account Number must be at least 5 digits.
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                              <label for="ConfirmAccountNumber">Confirm Account Number</label>
+                              <input type="text" id="ConfirmAccountNumber" (keypress)="allowOnlyDigits($event)"
+                                (paste)="blockNonDigitsOnPaste($event)" class="form-control form-control-sm mt-2"
+                                formControlName="ConfirmAccountNumber" [ngClass]="{
+                                                              'is-invalid': payoutForm.get('ConfirmAccountNumber')?.invalid && payoutForm.get('ConfirmAccountNumber')?.touched
+                                                            }" />
+
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('ConfirmAccountNumber')?.touched && payoutForm.get('ConfirmAccountNumber')?.hasError('required')">
+                                Confirm Account Number is required.
+                              </div>
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('ConfirmAccountNumber')?.touched && payoutForm.get('ConfirmAccountNumber')?.hasError('length')">
+                                Confirm Account Number long number.
+                              </div>
+                              <div class="invalid-feedback"
+                                *ngIf="payoutForm.get('ConfirmAccountNumber')?.touched && payoutForm.get('ConfirmAccountNumber')?.hasError('mismatch')">
+                                Account numbers do not match.
+                              </div>
+
+                            </div>
+
+
+
+                          </div>
+
+                          <form id="payment-form">
+                            <div class="mt-4 " id="card-element"></div>
+
+                            <div id="card-errors"></div>
+                          </form>
+                          <div class="terms bottom-note mt-3">
+                            By clicking Save, you agree to our
+                            <a href="http://localhost:4200/terms-of-service" target="_blank" rel="noopener noreferrer">
+                              Terms of Service
+                            </a>
+                            and the
+                            <a href="https://stripe.com/us/legal/connect-account" target="_blank"
+                              rel="noopener noreferrer">
+                              Stripe Connected Account Agreement
+                            </a>.
+                          </div>
+                        </form>
+                      </div>
+                      <!-- Modal Footer -->
+                      <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-save" [disabled]="isLoading" (click)="handlePayment()">
+                          <span *ngIf="!isLoading">Save Changes</span>
+                          <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                            aria-hidden="true"></span>
+                          <span *ngIf="isLoading"> Saving...</span>
+                        </button>
+                        <!-- <button type="button" class="btn btn-save" (click)="postPayoutDetails()">Save changes</button> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+
+            <mat-tab value="Reports">
+              <ng-template mat-tab-label>
+                <span class="tab-label">Reports</span>
+              </ng-template>
+              <div class="modal-content px-4 mt-4">
+                <div class="mat-tab-content px-1" style="overflow: hidden !important;">
+
+                  <div class=" mt-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                      <!-- Filter Dropdown -->
+                      <div class="filter-select d-flex">
+                        <label for="filter" class="form-label me-2 mt-1 fw-bold fs-5">Filter: </label>
+                        <select id="filter" class="form-select w-auto py-0" [(ngModel)]="selectedFilter"
+                          (change)="onFilterChange($event)">
+                          <option value="" disabled>Select</option>
+                          <option value="Week">Week</option>
+                          <option value="Month">Month</option>
+                          <option value="6month">6 Month</option>
+                          <option value="1Year">12 Month</option>
+                        </select>
+                      </div>
+
+                    </div>
+
+                    <!-- Summary Section -->
+                    <div class="row g-4">
+                      <div class="col-md-4">
+                        <div class="summary-card">
+                          <div class="summary-title">Total Patients</div>
+                          <div class="summary-description">
+                            Total no. of patients seen
+                          </div>
+                          <div class="summary-value">{{totalAmount?.totalPatient}}</div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="summary-card">
+                          <div class="summary-title">Total Amount</div>
+                          <div class="summary-description">
+                            Total amount earned based on completed visits
+                          </div>
+                          <div class="summary-value">{{totalAmount?.totalAmount| currency:'USD'}}</div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="summary-card">
+                          <div class="summary-title">Total Net Amount</div>
+                          <div class="summary-description">
+                            Total net amount
+                          </div>
+                          <div class="summary-value">{{totalAmount?.totalNetAmount| currency:'USD'}}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-12 d-flex justify-content-md-end justify-content-start mt-4 mb-2">
+                    <div class="col-md-3 col-12">
+                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
+                        (input)="getReportList()" class="form-control" />
+                    </div>
+                  </div>
+                </div>
+                <div class="table-responsive">
+                  <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                  </div>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('patientUniqueCode')">
+                          Patient Code
+                          <i
+                            [ngClass]="{ 'fa': true, 'fa-sort': sortColumn !== 'patientUniqueCode', 'fa-sort-up': sortColumn === 'patientUniqueCode' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueCode' && sortOrder === 'desc' }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('providerName')">
+                          Provider Name
+                          <i
+                            [ngClass]="{ 'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc' }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('meetingType')">
+                          Service Type
+                          <i
+                            [ngClass]="{ 'fa': true, 'fa-sort': sortColumn !== 'meetingType', 'fa-sort-up': sortColumn === 'meetingType' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'meetingType' && sortOrder === 'desc' }"></i>
+                        </th>
+
+                        <th scope="col">Total Amount</th>
+
+                        <th scope="col" style=" min-width: 150px;">Appointment Date & Time</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of filteredItems; let i = index">
+                        <td style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item?.userId)">
+                          <u>{{ item?.patientUniqueCode }}</u>
+                        </td>
+                        <td *ngIf="item.accountType == 'IndependentProvider'"
+                          style="color: #009cff!important; cursor: pointer;"
+                          (click)="viewProviderProfile(item.providerId)">
+                          <u>{{item.providerName}}</u>
+                        </td>
+                        <td *ngIf="item.accountType == 'PrivatePractices' || item?.accountType == 'Facility'"
+                          style="color: #009cff!important; cursor: pointer;"
+                          (click)="viewProviderProfile(item.providerId)">
+                          <u>{{item.legalPracticeName}}</u>
+                        </td>
+                        <!-- <td  style="color: #009cff!important; cursor: pointer;"
+                          (click)="viewProviderProfile(item.providerId)"> <u>{{ item.providerName }}</u> </td> -->
+                        <td>
+                          <ng-container [ngSwitch]="item.meetingType">
+                            <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                              style="font-size: 15px; color: #00876ec8;"></i>
+                            <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                            <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                              style="color: #00876ec8;"></i>
+                          </ng-container>
+                          {{ formatMeetingType(item.meetingType) }}
+                        </td>
+                        <!-- <td> {{formatMeetingType(item.meetingType)}} </td> -->
+                        <td> {{ item.totalAmount| currency:'USD' }}</td>
+                        <td>
+                          <ng-container *ngIf="item.appointmentDateTime; else noDate">
+                            {{ item.appointmentDateTime | date:'MM-dd-yyyy' }} <br>
+                            {{ item.appointmentDateTime | date:'hh:mm a' }}
+                          </ng-container>
+                          <ng-template #noDate>--------</ng-template>
+                        </td>
+
+                        <!-- <td> {{ item.appointmentDateTime | date: 'MM-dd-yyyy'}}</td> -->
+                        <td>
+                        </td>
+                      </tr>
+                    </tbody>
+
+                  </table>
+
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getReportList()" />
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab value="notification">
+              <ng-template mat-tab-label>
+                <span class="tab-label">Notification</span>
+              </ng-template>
+              <div class="mat-tab-content" style="overflow: hidden !important;">
+                <div class="p-4">
+                  <div class="modal-content px-4 py-4">
+                    <form [formGroup]="notificationForm">
+                      <div class="modal-body  py-2">
+                        <!-- Notification Preference -->
+                        <div class="row ">
+                          <div class="form-group col-12">
+                            <label>How would you like to be notified?<span class="red">*</span></label>
+
+                            <div class="d-flex flex-wrap">
+                              <div class="form-check mt-2 me-2 cursor">
+                                <input class="form-check-input cursor" type="radio" [value]="preference.Email"
+                                  formControlName="preference" id="email">
+                                <label class="form-check-label" for="email">Email</label>
+                              </div>
+
+                              <div class="form-check mt-2 me-2 ms-2 cursor">
+                                <input class="form-check-input cursor" type="radio" [value]="preference.Phone"
+                                  formControlName="preference" id="phone">
+                                <label class="form-check-label" for="phone">Phone</label>
+                              </div>
+
+                              <div class="form-check mt-2  ms-2 cursor both">
+                                <input class="form-check-input cursor" type="radio" [value]="preference.Both"
+                                  formControlName="preference" id="both">
+                                <label class="form-check-label" for="both">Both</label>
+                              </div>
+                            </div>
+
+
+                          </div>
+                        </div>
+
+                        <!-- Show Email Field Only If 'Email' or 'Both' is Selected -->
+                        <!-- <div class="row" *ngIf="notificationForm.get('preference')?.value === preference.Email || 
+                          notificationForm.get('preference')?.value === preference.Both"> -->
+                        <div class="row" *ngIf="['Email', 'Both'].includes(notificationForm.value.preference)">
+                          <div class="form-group col-md-4">
+
+                            <label for="email">Email <span class="red">*</span></label>
+                            <input type="email" id="email" class="form-control form-control-sm mt-1"
+                              formControlName="email" placeholder="Enter Email"
+                              [ngClass]="{'is-invalid': notificationForm.get('email')?.invalid && notificationForm.get('email')?.touched}">
+                            <div class="invalid-feedback"
+                              *ngIf="notificationForm.get('email')?.touched && notificationForm.get('email')?.hasError('required')">
+                              Email is required.
+                            </div>
+                            <div class="invalid-feedback d-block"
+                              *ngIf="notificationForm.get('email')?.touched && notificationForm.get('email')?.hasError('email')">
+                              Email is not valid.
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Show Phone Number Field Only If 'Phone' or 'Both' is Selected -->
+                        <div class="row" *ngIf="['Phone', 'Both'].includes(notificationForm.value.preference)">
+                          <div class="form-group col-md-4">
+                            <label for="phoneNumber">Phone Number <span class="red">*</span></label>
+                            <input class="form-control form-control-sm mt-1" type="text" id="phoneNumber"
+                              formControlName="phoneNumber" placeholder="XXX-XXX-XXXX"
+                              (input)="formatPhoneNumber($event)" maxlength="14"
+                              [ngClass]="{'is-invalid': notificationForm.get('phoneNumber')?.invalid && notificationForm.get('phoneNumber')?.touched}">
+                            <div class="invalid-feedback"
+                              *ngIf="notificationForm.get('phoneNumber')?.touched && notificationForm.get('phoneNumber')?.hasError('required')">
+                              Phone Number is required.
+                            </div>
+                            <div class="invalid-feedback"
+                              *ngIf="notificationForm.get('phoneNumber')?.touched && notificationForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                              Phone number is invalid.
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <!-- Modal Footer -->
+                      <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-save" [disabled]="loading" (click)="postNotification()">
+                          <span *ngIf="!loading">Save Changes</span>
+                          <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status"
+                            aria-hidden="true"></span>
+                          <span *ngIf="loading"> Saving...</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

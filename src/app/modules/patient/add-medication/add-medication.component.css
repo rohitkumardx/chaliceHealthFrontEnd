@@ -31,11 +31,67 @@
 
 .close-icon {
   background: none;
-  border: none!important;
+  border: none !important;
   font-size: 1.5em;
   cursor: pointer;
 }
 
 .is-invalid {
-  border: 1px solid #DC3545!important;
+  border: 1px solid #DC3545 !important;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 5px;
+  background-color: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f0f0f0;
+  color: rgb(255, 255, 255) !important;
+}
+
+.medicine-suggestions {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+}
+
+.medicine-item {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.medicine-item:hover,
+.medicine-item.active {
+  background-color: #006952;
+  color: white;
 }

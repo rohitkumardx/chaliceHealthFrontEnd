@@ -210,12 +210,11 @@
   } */
   /* Table Header */
   table thead th {
-    background-color: #d3d3d3; /* Light grey header */
-    color: #000; /* Black text */
+    background: linear-gradient(#00b094, #008f78) !important; 
+    color: white !important;; 
     text-align: center;
-    padding: 12px; /* Increase padding */
-    border-bottom: 3px solid #bbb; /* Slightly thicker bottom border */
-    font-weight: bold; /* Ensure bold text */
+    padding: 12px;
+    font-weight: bold; 
   }
   
   /* Table Body Rows */
@@ -253,7 +252,19 @@
   .table-responsive {
     overflow-x: auto;
   }
-  
-  
-  
-  
+   
+    .provider-card1 {
+    border: 1px solid #059669; 
+    border-radius: 10px;
+    padding: 16px;
+    align-items: center;
+    position: relative;
+    margin: 10px auto;
+  }
+
+    .provider-header h2 {
+    color: #059669; 
+    font-size: 20px;
+    margin: 0;
+    margin-right: 8px;
+  }

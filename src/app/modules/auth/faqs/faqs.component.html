@@ -1,0 +1,678 @@
+<app-header></app-header>
+<div>
+  
+    <div class="faq-section container-fluid" [@fadeIn]>
+      <h1>Chalice Health - Frequently Asked Questions (FAQ)</h1>
+      <p>Have questions about Chalice Health? Explore our frequently asked questions to learn more about our platform, services, and how we can support your healthcare needs.</p>
+      <p class="mb-5">You can also email us anytime at <a class="text-success" href="mailto:info@chalicehealth.com">info&#64;chalicehealth.com</a> for questions about our services.</p>
+    </div>
+    
+    
+    <div class="container mt-4">
+      <div class="row well d-block ">
+          <div class="col-md-6 container"[@slideInLeft] [@fadeIn] >
+              <ul class="nav flex-column mt-1">
+                  <li class="nav-item"><a class="nav-link"  href="javascript:void(0);" (click)="scrollToSection('faqAccordion')" >General Question</a></li>
+                  <li class="nav-item"><a class="nav-link" href="javascript:void(0);" (click)="scrollToSection('faqAccordion2')">For Patients</a></li>
+                  <li class="nav-item"><a class="nav-link"  href="javascript:void(0);" (click)="scrollToSection('faqAccordion3')" >For Healthcare Providers</a></li>
+                  <li class="nav-item"><a class="nav-link"  href="javascript:void(0);" (click)="scrollToSection('faqAccordion4')" >Telehealth Appointments</a></li>
+                  <li class="nav-item"><a class="nav-link"  href="javascript:void(0);" (click)="scrollToSection('faqAccordion5')" >Privacy & Security</a></li>
+                  <li class="nav-item"><a class="nav-link"  href="javascript:void(0);" (click)="scrollToSection('faqAccordion6')" >Billing & Payments</a></li>
+              </ul>
+          </div>
+          <div class="col-md-10 mt-2 container" [@slideInRight]  [@fadeIn]>
+              <h1 class="mt-0 mb-4">General</h1>
+              <div class="accordion" id="faqAccordion">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne1">
+                          <button class="accordion-button " type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne1">
+                            What is Chalice Health?
+                          </button>
+                      </h2>
+                      <div id="collapseOne1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                            Chalice Health is a healthcare platform that connects patients with licensed providers for <strong>virtual care, home visits, or in-office consultations.</strong> We offer a wide range of services, including medical consultations, mental health therapy, dermatology, prescriptions, imaging, and more.
+                          </div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo1">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo1">
+                            How does Chalice Health work?
+                          </button>
+                      </h2>
+                      <div id="collapseTwo1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                            <p>Patients can sign up, browse providers, schedule appointments, make payments, and receive care—all through our easy-to-use platform. Providers can offer services flexibly through virtual visits, home care, or office appointments.</p>
+                              <!-- <ul>
+                                <li>Lack health insurance.</li>
+                                <li>  Have high-deductible health plans (HDHPs) with high out-of-pocket costs.</li>
+                                <li>  Face challenges accessing quality healthcare due to geographic location or socioeconomic factors.</li>
+                              </ul> -->
+                            
+                          
+                          
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Add More Items Here -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree1">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree1">
+                          Do I need insurance to use Chalice Health?
+                        </button>
+                    </h2>
+                    <div id="collapseThree1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                          <p>No, insurance is not required. We offer transparent, upfront pricing with no hidden fees, making healthcare more accessible and affordable.</p>
+                        
+                        </div>
+                    </div>
+                </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingFour1">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour1">
+                        What types of healthcare providers are available on Chalice Health?
+                      </button>
+                  </h2>
+                  <div id="collapseFour1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                      <p>  Chalice Health connects patients with a variety of licensed professionals, including primary care doctors, specialists, therapists, counselors, and more.</p>
+                      </div>
+                  </div>
+              </div>
+              <!-- Add More Items Here -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive1">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive1">
+                      Is Chalice Health available in my state?
+                    </button>
+                </h2>
+                <div id="collapseFive1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                    <p>  We are continuously expanding our provider network. You can check availability by signing up and entering your location.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Add More Items Here -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingSix1">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix1">
+                    Do I need to download an app to use Chalice Health?
+                  </button>
+              </h2>
+              <div id="collapseSix1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                  <p> No, you can access Chalice Health directly through our website. However, we may offer an app in the future for an even smoother experience.</p>
+                  </div>
+              </div>
+          </div>
+          <!-- Add More Items Here -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingSeven1">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven1">
+                  Is Chalice Health covered by insurance?
+                </button>
+            </h2>
+            <div id="collapseSeven1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                <p> Currently, Chalice Health operates on a self-pay model with transparent pricing and no hidden fees. However, you may be able to submit receipts to your insurance provider for potential reimbursement.</p>
+                </div>
+            </div>
+        </div>
+          <!-- Add More Items Here -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEight1">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight1">
+                  Who is Chalice Health for?
+                </button>
+            </h2>
+            <div id="collapseEight1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  <p>Chalice Health is for <strong> everyone</strong>—individuals and families seeking convenient, affordable healthcare, regardless of insurance status. Our platform is especially beneficial for those who:</p>
+                  
+
+                   <ul>
+                    <li><b>	Do not have health insurance. </b></li>
+                    <li><b>Have high-deductible health plans (HDHPs) </b>with significant out-of-pocket costs.</li>
+                    <li><b>	Struggle with access to quality healthcare  </b>due to geographic, financial, or other barriers.</li>
+                  </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Add More Items Here -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingNine1">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine1">
+                What Sets Chalice Health Apart?
+              </button>
+          </h2>
+          <div id="collapseNine1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                <p>Chalice Health is dedicated to making quality healthcare  <strong> accessible, affordable, and hassle-free.</strong>Here’s what makes us different:</p>
+                
+
+                 <ul>
+                  <li><b>	Significant Cost Savings  </b>– Our transparent pricing is up to <strong>60% lower</strong> than traditional healthcare costs.</li>
+                  <li><b>	No Hidden Fees </b>– The price you see is the price you pay—<strong>no surprise charges or confusing bills.</strong></li>
+
+                  <li><b>	No Insurance Required  </b>– Get the care you need without worrying about insurance coverage or high deductibles.</li>
+                </ul>
+              </div>
+          </div>
+      </div>
+      <!-- Add More Items Here -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTen1">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen1">
+              Is Chalice Health a substitute for traditional healthcare providers?
+            </button>
+        </h2>
+        <div id="collapseTen1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              <p>No, Chalice Health is not a substitute for traditional healthcare providers. We work collaboratively to complement existing healthcare services. Our platform offers a convenient and accessible way to connect with qualified professionals for consultations, prescriptions (when appropriate), and ongoing care management.</p>
+              
+            </div>
+        </div>
+    </div>
+              <!-- Add More Items Here -->
+              </div>
+
+              <!-- next2 -->
+              <h1 >For Patients</h1>
+              <div class="accordion" id="faqAccordion2">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                            How do I sign up for Chalice Health?
+                          </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                          <p>Signing up is easy! Visit our website, create a free account, and start browsing providers immediately.</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                            How do I book an appointment?
+                          </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                            You can book an appointment by signing into your Chalice Health account, browsing available providers, and selecting a time that works for you.
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Add More Items Here -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree">
+                          What services are available through Chalice Health?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                          We offer a range of healthcare services, including general medical consultations, mental health therapy, dermatology, prescription refills, imaging, and more.
+                        </div>
+                    </div>
+                </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingFour">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour">
+                        How do I choose the right provider?
+                      </button>
+                  </h2>
+                  <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                        You can filter providers by <strong>specialty, location, and availability</strong> to find the best match for your healthcare needs
+                      </div>
+                  </div>
+              </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingFive">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive">
+                        How do I pay for my appointment?
+                      </button>
+                  </h2>
+                  <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                        Payments are made securely through our platform. We provide upfront pricing, so you know the cost before booking.
+                      </div>
+                  </div>
+              </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingSix">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix">
+                        Can I choose between virtual, home, or office visits?
+                      </button>
+                  </h2>
+                  <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                        Yes! Chalice Health offers flexible care options. You can choose virtual care, home visits, or in-office consultations based on provider availability.
+                      </div>
+                  </div>
+              </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingSeven">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven">
+                        Are my medical records and information secure?
+                      </button>
+                  </h2>
+                  <div id="collapseSeven" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                        Yes, Chalice Health complies with all healthcare privacy regulations to protect your personal and medical information.
+                      </div>
+                  </div>
+              </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingEight">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight">
+                        Can I switch providers if I’m not satisfied?
+                      </button>
+                  </h2>
+                  <div id="collapseEight" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                        Yes! You can browse and schedule with different providers at any time.
+                      </div>
+                  </div>
+              </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingNine">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine">
+                        How soon can I get an appointment?
+                      </button>
+                  </h2>
+                  <div id="collapseNine" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                        Many providers offer same-day or next-day appointments, depending on availability.
+                      </div>
+                  </div>
+              </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingTen">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen">
+                        What happens if I miss my appointment?
+                      </button>
+                  </h2>
+                  <div id="collapseTen" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body d-flex">
+                        Missed appointments may be subject to a cancellation fee. Check the &nbsp; <a href="#"> <u> Terms of Service  </u> </a> &nbsp; for cancellation policy before booking.
+                      </div>
+                  </div>
+              </div>
+                <!-- Add More Items Here -->
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingEleven">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven">
+                        Can I get prescriptions through Chalice Health?
+                      </button>
+                  </h2>
+                  <div id="collapseEleven" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                        Yes! If medically appropriate, providers can prescribe medications and send them to your preferred pharmacy. Prescription refills for controlled substances can only be done through office/in-person consultation.
+                      </div>
+                  </div>
+              </div>
+              <!-- Add More Items Here -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwelve">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve">
+                      Can Chalice Health handle emergency situations?
+                    </button>
+                </h2>
+                <div id="collapseTwelve" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                      No, Chalice Health is <strong>not</strong> for emergencies. If you are experiencing a medical emergency, call 911 or go to the nearest emergency room.
+                    </div>
+                </div>
+            </div>
+              <!-- Add More Items Here -->
+              </div>
+              <!-- next3 -->
+              <h1>For Healthcare Providers</h1>
+              <div class="accordion" id="faqAccordion3">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne3">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne3">
+                            How can I join Chalice Health as a provider?
+                          </button>
+                      </h2>
+                      <div id="collapseOne3" class="accordion-collapse collapse " data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                          <p>Licensed healthcare professionals can apply to join Chalice Health by signing up on our platform and completing the provider onboarding process.</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo3">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo3">
+                            What are the benefits of offering services through Chalice Health?
+                          </button>
+                      </h2>
+                      <div id="collapseTwo3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                            Providers enjoy increased patient reach, flexible scheduling, improved work-life balance, reduced overhead costs, Increase revenue with <strong>streamlined online payments.</strong> and the ability to offer virtual, home, or office visits.
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Add More Items Here -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo4">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo4">
+                          Can I set my own rates?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                          Yes, providers set their own consultation fees within platform guidelines. Providers are encouraged to keep fees competitive and affordable.
+                        </div>
+                    </div>
+                </div>
+              <!-- Add More Items Here -->
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo5">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo5">
+                      How do I get paid for my services?
+                    </button>
+                </h2>
+                <div id="collapseTwo5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                      Payments are processed securely through our platform, and providers receive payouts on a scheduled basis.
+                    </div>
+                </div>
+            </div>
+            <!-- Add More Items Here -->
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingTwo6">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo6">
+                    Can I set my own hours?
+                  </button>
+              </h2>
+              <div id="collapseTwo6" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                  <div class="accordion-body">
+                    Yes, Chalice Health allows providers to set their own schedules, whether for virtual care, home visits, or office consultations.
+                  </div>
+              </div>
+          </div>
+          <!-- Add More Items Here -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo7">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo7">
+                  Can I offer both virtual and in-person visits?
+                </button>
+            </h2>
+            <div id="collapseTwo7" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  Absolutely! Chalice Health supports virtual care, home visits, and in-office appointments.
+                </div>
+            </div>
+        </div>
+        <!-- Add More Items Here -->
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo4">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo4">
+                What if I have technical issues with the platform?
+              </button>
+          </h2>
+          <div id="collapseTwo4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Our support team is available to assist with any technical concerns.
+              </div>
+          </div>
+      </div>
+              </div>
+              <!-- next4 -->
+              <h1>Telehealth Appointments</h1>
+              <div class="accordion" id="faqAccordion4">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne4">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne4">
+                            What is a telehealth appointment?
+                          </button>
+                      </h2>
+                      <div id="collapseOne4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                          <p> A telehealth appointment allows patients to consult with healthcare providers remotely, providing medical care without the need for in-person visits.</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne0">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne0">
+                            How do telehealth appointments work on Chalice Health?
+                          </button>
+                      </h2>
+                      <div id="collapseOne0" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                          <p> Patients can easily book a telehealth appointment through the Chalice Health platform by selecting their preferred provider and scheduling a time. At the scheduled appointment, they can join the secure virtual session to receive care from the comfort of home.</p>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Add More Items Here -->
+                
+              
+              </div>
+              <!-- next5 -->
+              <h1>Privacy & Security</h1>
+              <div class="accordion" id="faqAccordion5">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne5">
+                          <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne5">
+                            Is my personal and medical information secure?
+                          </button>
+                      </h2>
+                      <div id="collapseOne5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                          <p>Yes, Chalice Health follows strict HIPAA-compliant protocols to ensure your data is safe and confidential.</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne2">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne2">
+                            Will my consultations be recorded?
+                          </button>
+                      </h2>
+                      <div id="collapseOne2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                          <p>No, consultations are <strong>not recorded</strong> to maintain privacy and confidentiality.</p>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Add More Items Here -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne9">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne9">
+                          How does Chalice Health protect payment information?
+                        </button>
+                    </h2>
+                    <div id="collapseOne9" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                        <p>We use <strong>secure payment processing</strong> to protect your financial data.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="headingOne10">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne10">
+                        How does Chalice Health ensure the quality of care provided by its network professionals?
+                      </button>
+                  </h2>
+                  <div id="collapseOne10" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                      <div class="accordion-body">
+                      <p>We take quality care very seriously. All providers in our network undergo a rigorous credentialing process, license verification, and evaluation of their experience and expertise. We also monitor provider performance and patient satisfaction to maintain high standards within our network.</p>
+                      </div>
+                  </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne11">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne11">
+                      Can I share my medical records with a Chalice Health provider?
+                    </button>
+                </h2>
+                <div id="collapseOne11" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                    <p>Yes, you can securely upload your medical records to your Chalice Health account and share them with your chosen provider(s).</p>
+                    </div>
+                </div>
+            </div>
+              
+              </div>
+
+
+              <!-- next6 -->
+              <h1>Billing & Payments</h1>
+              <div class="accordion" id="faqAccordion6">
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne12">
+                          <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne12">
+                            How much does it cost to use Chalice Health?
+                          </button>
+                      </h2>
+                      <div id="collapseOne12" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                          <p>Costs vary based on the provider and service. All pricing is <strong>transparent and displayed upfront </strong> before booking.</p>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne13">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne13">
+                            What payment methods are accepted?
+                          </button>
+                      </h2>
+                      <div id="collapseOne13" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                          <div class="accordion-body">
+                          <p>We accept <strong>credit/debit cards and other secure online payment options.</strong></p>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Add More Items Here -->
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne14">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne14">
+                          Are there refunds if I cancel an appointment?
+                        </button>
+                    </h2>
+                    <div id="collapseOne14" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                        <p>Refunds depend on our cancellation policy. Be sure to review <a href="#"><u>it</u></a> before booking.</p>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="mt-3">
+                <strong>Still have questions?</strong> Contact us at <a href="mailto:info@chalicehealth.com"><u>info&#64;chalicehealth.com</u></a> for more information.
+              </div>
+          </div>  
+      </div>
+  </div>
+    
+    
+      
+     <!-- matter end -->
+      
+       <!-- second -->
+       <footer class="mainfooter bg-white">
+        <hr>
+        <div class="subfooter">
+          <div class="footer ">
+            <div class="footer-container">
+              <div class="logo-section pe-5">
+                <a href="/home-page">
+                  <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo">
+                </a>
+                <p style="color: #333333; padding-top: 20px; font-size: 16px; font-family: Arial,  sans-serif;">Quick and
+                  Affordable Healthcare </p>
+              </div>
+              <div class="footer-column mt-3 mt-md-0">
+                <h3>Services</h3>
+                <ul>
+                  <li *ngFor="let item of serviceData" (click)="redirectToServiceListing(item)"><span> <i class="fas fa-chevron-right"></i></span> {{item.categoryName}}</li>
+                 
+                </ul>
+              </div>
+              <div class="footer-column">
+                      <h3>Popular</h3>
+                      <ul>
+                          <li (click)="navigateToBlogContent()">
+                            <span><i class="fas fa-chevron-right"></i></span> 
+                             Blogs</li>
+                         
+                          <li  (click)=" FAQS()"><span><i class="fas fa-chevron-right"></i></span> FAQs</li>
+                          <li (click)="contact()"><span><i class="fas fa-chevron-right"></i></span> Contact Us</li>
+                         
+                      </ul>
+                  </div>
+              
+              <div class="footer-column mt-3 mt-md-0">
+                <h3>Social</h3>
+                <ul>
+                  <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.facebook.com/ChalicehealthX/" target="_blank" rel="noopener noreferrer"> <i class="fab fa-facebook ms-2"></i> Facebook</a></li>
+                  <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.linkedin.com/company/chalicehealth/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin ms-2"></i> LinkedIn</a> </li>
+                  <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.instagram.com/chalicehealth/" target="_blank" rel="noopener noreferrer"> <i class="fab fa-instagram ms-2"></i> Instagram</a></li>
+                  <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.youtube.com/@ChaliceHealth" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube ms-2 "></i> YouTube</a> </li>
+                  <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.tiktok.com/@chalicehealth" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok ms-2"></i> TikTok</a></li>
+                </ul>
+              </div>
+              <!-- next -->
+              <div class="footer-column mt-3 mt-md-0">
+                
+                <div class="">
+                  <h3>Join Our Community</h3>
+                  <p>Be the first  to know we offer deals.</p>
+                  <form [formGroup]="communityForm">
+                    <div class="subscribe-form position-relative">
+          
+                      <input type="text" id="email" class="form-control" formControlName="email" placeholder="Enter Email"
+                        [ngClass]="{'is-invalid': communityForm.get('email')?.invalid && communityForm.get('email')?.touched}">
+                     
+                      <div class="invalid-feedback position-absolute mb-3" style="top: 37px;"
+                      *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('required')">
+                      Email is required.
+                    </div>
+                    <!-- <div class="fv-plugins-message-container invalid-feedback position-absolute" style="top:37px;"
+                      *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('email')">
+                      <div>Email is not valid</div>
+                    </div> -->
+                    <div class="fv-plugins-message-container invalid-feedback d-block position-absolute" style="top:37px;"
+                     *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('invalidEmail')">
+                       Please enter a valid email address.
+                    </div>
+                    
+                      <button type="submit" (click)="postJoinOurCommunity()"><i class="fas fa-envelope"></i>
+                      </button>
+                    </div>
+                   
+                  </form>
+                  
+                  <div class="d-flex justify-content-between mt-3 ">
+                    <img src="../../../../assets/svg/homepage/unnamed.png" width="120px" height="100px" alt="">
+                    <img src="../../../../assets/svg/homepage/HIPAA-logo.png" width="150px" height="80px" alt="" class="mt-2 ms-2">
+                  </div>
+              </div>
+              </div>
+            </div>
+            <hr class="mt-0">
+            <!-- Bottom section -->
+            <div class="footer-bottom d-flex flex-column flex-md-row mb-2 justify-content-center mx-auto" style="width: 85%;">
+              <p class="text-nowrap mb-2 mt-mb-0  ">&copy; 2024 Chalice Health. All Rights Reserved.</p>
+              <span class="w-md-75 w-100 d-flex justify-content-md-end justify-content-center cursor">
+                <a (click)="redirectTotermofservice()">Term of Service</a>
+                <a (click)="redirectToprivacypolicy()">Privacy Policy</a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </footer>
+</div>

@@ -1,92 +1,97 @@
 
 .close-icon {
-    position: absolute;
-    top: 20px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 2rem;
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 2rem;
 }
 
 label .fa-question-circle {
-    font-size: 1.1rem; 
-    margin-left: 10px;
-    cursor: pointer;
+  font-size: 1.1rem; 
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 
 .tooltip {
-    border: none !important; 
-    background-color: rgba(0, 0, 0, 0.8) !important; 
-    padding: 5px 10px; 
+  border: none !important; 
+  background-color: rgba(0, 0, 0, 0.8) !important; 
+  padding: 5px 10px; 
 
 }
 
 .tooltip .tooltip-inner {
-    color: white !important; 
-    border: none !important; 
-    overflow: auto;
+  color: white !important; 
+  border: none !important; 
+  overflow: auto;
 }
 
 .invalid {
-    color:  #DC3545;
-  }
+  color:  #DC3545;
+}
 
-  .form-multi-select {
-    width: 100%;
-    height: auto;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 8px;
-    background-color: #fff;
-    cursor: pointer;
-  }
-  
-  .form-multi-select option {
-    padding: 8px;
-  }
-  
-  .form-multi-select:focus {
-    outline: none;
-    border-color: #007bff; /* Change to your theme color */
-  }
-  
-  .custom-input:focus {
-    outline: none !important;
-    border-bottom: 2px solid #dedada !important; /* Keeps the custom bottom border */
+.form-multi-select {
+  width: 100%;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.form-multi-select option {
+  padding: 8px;
+}
+
+.form-multi-select:focus {
+  outline: none;
+  /* border-color: #007bff; / Change to your theme color / */
+}
+
+.custom-input:focus {
+  outline: none !important;
+  /* border-bottom: 2px solid #dedada !important; / Keeps the custom bottom border / */
 }
 
 
 .tooltip-container {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
+position: relative;
+display: inline-block;
+cursor: pointer;
 }
 
 .custom-tooltip {
-  position: absolute;
-  top: 50%;
-  left: 120%; 
-  transform: translateY(-50%); 
-  background-color: #fff;
-  color: #333;
-  padding: 5px 10px;
-  border-radius: 3px;
-  font-size: 14px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ccc;
-  white-space: nowrap;
-  z-index: 10;
+position: absolute;
+top: 50%;
+left: 120%; 
+background-color: #fff;
+color: #333;
+padding: 5px 10px;
+border-radius: 3px;
+font-size: 13px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+border: 1px solid #ccc;
+white-space: nowrap;
+z-index: 100;
+line-height: 18px!important;
+font-weight: 400;
+font-family: "Inter", sans-serif;
 }
 
 .custom-tooltip::after {
-  content: '';
-  position: absolute;
-  top: 50%; 
-  left: -6px; 
-  transform: translateY(-50%);
-  border-width: 1px;
-  border-style: solid;
-  border-color: transparent transparent transparent #fff; 
-  box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
+content: '';
+position: absolute;
+top: 50%; 
+left: -6px; 
+transform: translateY(-50%);
+border-width: 1px;
+border-style: solid;
+border-color: transparent transparent transparent #fff; 
+box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+label{
+  margin-top: 15px!important;
+}

@@ -1,4 +1,3 @@
-
 .close-icon {
     position: absolute;
     top: 20px;
@@ -8,22 +7,31 @@
 }
 
 label .fa-question-circle {
-    font-size: 1.1rem; 
+    font-size: 1.1rem;
     margin-left: 10px;
     cursor: pointer;
 }
 
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+}
+
 .tooltip {
-    border: none !important; 
-    background-color: rgba(0, 0, 0, 0.8) !important; 
-    padding: 5px 10px; 
+    border: none !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    padding: 5px 10px;
 
 }
 
 .tooltip .tooltip-inner {
-    color: white !important; 
-    border: none !important; 
+    color: white !important;
+    border: none !important;
     overflow: auto;
 }
 
@@ -33,7 +41,7 @@ label .fa-question-circle {
 
 .roleDropdwon {
     margin-left: 0.5rem;
-    /* margin-top: 1%; */
+    /* / margin-top: 1%; / */
     /* font-family: inherit;
     font-size: 3rem; */
 }
@@ -52,13 +60,14 @@ label .fa-question-circle {
     padding-bottom: 5px !important;
     padding-left: 5px !important;
 }
-.invalid {
-    color:  #DC3545;
-    /* / background-color: #f8d7da; / */
-  }
-  
 
-  /* .dropdown-menu::-webkit-scrollbar {
+.invalid {
+    color: #DC3545;
+    /* / / background-color: #f8d7da; / / */
+}
+
+
+/* .dropdown-menu::-webkit-scrollbar {
     display: none; 
 } */
 
@@ -97,7 +106,7 @@ label .fa-question-circle {
 
 
 .dropdown-menu li {
-    color : black;
+    color: black;
     list-style: none;
     padding: 3px 3px;
     cursor: pointer;
@@ -114,8 +123,8 @@ label .fa-question-circle {
 }
 
 .dropdown-menu li:hover {
-    color: white;
-    background-color: #004ab9; /* Highlight color */
+    /* color: white; */
+    background-color: skyblue;
 }
 
 
@@ -124,33 +133,41 @@ label .fa-question-circle {
     position: relative;
     display: inline-block;
     cursor: pointer;
-  }
-  .custom-tooltip {
+}
+
+.custom-tooltip {
     position: absolute;
-    top: 50%; /* Aligns the tooltip to the bottom edge of the input field */
-    left: 120%; /* Aligns the tooltip to the left edge */
+    top: 90%;
+    /* width: 50%; */
+    left: -280%;
     background-color: #fff;
     color: #333;
     padding: 5px 10px;
     border-radius: 3px;
-    font-size: 14px;
+    font-size: 13px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
     white-space: nowrap;
+    /* text-overflow: ellipsis;
+    overflow: hidden; */
     z-index: 100;
-  }
-  
-  .custom-tooltip::after {
+    line-height: 18px !important;
+    font-weight: 400;
+    font-family: "Inter", sans-serif;
+}
+
+.custom-tooltip::after {
     content: '';
     position: absolute;
-    top: -5x; 
-    left: 10px; 
-    /* transform: translateY(-50%); */
+    /* top: -5x; 
+    left: 10px;  */
+    transform: translateY(-50%);
     border-width: 1px;
     border-style: solid;
-    border-color: transparent transparent transparent #fff; 
+    border-color: transparent transparent transparent #fff;
     box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  
-  
+label{
+    margin-top: 15px!important;
+}

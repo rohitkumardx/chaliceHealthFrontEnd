@@ -1,0 +1,388 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <div class="signup-form">
+                    <mat-tab-group class="custom-tab-group">
+
+
+                        <mat-tab value="notification">
+                            <ng-template mat-tab-label>
+                                <span class="tab-label "> <i class="fas fa-bell me-2"></i>
+                                    Notification Settings
+                                </span>
+                            </ng-template>
+                            <div class="mat-tab-content" style="overflow: hidden !important;">
+
+                                <div class="">
+                                    <div class=" p-4">
+                                        <div class="modal-content px-4 py-4">
+                                            <!-- Modal Body -->
+                                            <form [formGroup]="notificationForm">
+                                                <div class="modal-body px-4 py-2">
+                                                    <!-- Notification Preference -->
+                                                    <div class="row">
+                                                        <div class="form-group col-md-12">
+                                                            <label>How would you like to be notified? <span
+                                                                    class="red">*</span></label>
+
+                                                            <div class="d-flex flex-wrap">
+                                                                <div class="form-check mt-2 me-2 cursor">
+                                                                    <input class="form-check-input cursor" type="radio"
+                                                                        [value]="preference.Email"
+                                                                        formControlName="preference" id="email">
+                                                                    <label class="form-check-label"
+                                                                        for="email">Email</label>
+                                                                </div>
+
+                                                                <div class="form-check mt-2 me-2  cursor">
+                                                                    <input class="form-check-input cursor" type="radio"
+                                                                        [value]="preference.Phone"
+                                                                        formControlName="preference" id="phone">
+                                                                    <label class="form-check-label"
+                                                                        for="phone">Phone</label>
+                                                                </div>
+
+                                                                <div class="form-check mt-2 me-2  both cursor">
+                                                                    <input class="form-check-input cursor" type="radio"
+                                                                        [value]="preference.Both"
+                                                                        formControlName="preference" id="both">
+                                                                    <label class="form-check-label"
+                                                                        for="both">Both</label>
+                                                                </div>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row"
+                                                        *ngIf="['Email', 'Both'].includes(notificationForm.value.preference)">
+                                                        <div class="form-group col-md-4 col-lg-4 col-sm-12">
+
+                                                            <label for="email">Email <span class="red">*</span></label>
+                                                            <input type="email" id="email"
+                                                                class="form-control form-control-sm mt-1"
+                                                                formControlName="email" placeholder="Enter Email"
+                                                                [ngClass]="{'is-invalid': notificationForm.get('email')?.invalid && notificationForm.get('email')?.touched}">
+                                                            <div class="invalid-feedback"
+                                                                *ngIf="notificationForm.get('email')?.touched && notificationForm.get('email')?.hasError('required')">
+                                                                Email is required.
+                                                            </div>
+                                                            <div class="invalid-feedback d-block"
+                                                                *ngIf="notificationForm.get('email')?.touched && notificationForm.get('email')?.hasError('email')">
+                                                                Email is not valid.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Show Phone Number Field Only If 'Phone' or 'Both' is Selected -->
+                                                    <div class="row"
+                                                        *ngIf="['Phone', 'Both'].includes(notificationForm.value.preference)">
+                                                        <div class="form-group  col-md-4 col-lg-4 col-sm-12">
+                                                            <label for="phoneNumber">Phone Number <span
+                                                                    class="red">*</span></label>
+                                                            <input class="form-control form-control-sm mt-1" type="text"
+                                                                id="phoneNumber" formControlName="phoneNumber"
+                                                                placeholder="XXX-XXX-XXXX"
+                                                                (input)="formatPhoneNumber($event)" maxlength="14"
+                                                                [ngClass]="{'is-invalid': notificationForm.get('phoneNumber')?.invalid && notificationForm.get('phoneNumber')?.touched}">
+                                                            <div class="invalid-feedback"
+                                                                *ngIf="notificationForm.get('phoneNumber')?.touched && notificationForm.get('phoneNumber')?.hasError('required')">
+                                                                Phone Number is required.
+                                                            </div>
+                                                            <div class="invalid-feedback"
+                                                                *ngIf="notificationForm.get('phoneNumber')?.touched && notificationForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                                                                Phone number is invalid.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- Modal Footer -->
+                                                <div class="modal-footer border-0">
+                                                    <button type="button" class="btn btn-save" [disabled]="loading"
+                                                        (click)="postNotification()">
+                                                        <span *ngIf="!loading">Save Changes</span>
+                                                        <span *ngIf="loading" class="spinner-border spinner-border-sm"
+                                                            role="status" aria-hidden="true"></span>
+                                                        <span *ngIf="loading"> Saving...</span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab value="appointment-reminder">
+                            <ng-template mat-tab-label>
+                                <span class="tab-label "> <i class="fas fa-calendar-check me-2"></i>
+                                    Appointment Reminder
+                                    <span *ngIf="newNotification?.appointmentCount > 0"
+                                        class="badge badge-circle bg-danger ms-2">
+                                        {{ newNotification.appointmentCount }}
+                                    </span>
+                                </span>
+                            </ng-template>
+                            <div class="mat-tab-content" style="overflow: hidden !important;">
+
+                                <section class="main-banner">
+                                    <div class="wrapper d-flex">
+                                        <div class="content-wrapper">
+                                            <div class="signup-card">
+                                                <div class="signup-form">
+                                                    <div class="mat-tab-content">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead class="table-light">
+                                                                    <tr>
+                                                                        <th scope="col">Title</th>
+                                                                        <th scope="col">Message</th>
+                                                                        <th scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <!-- Loading Spinner -->
+                                                                    <tr *ngIf="loading">
+                                                                        <td colspan="3" class="text-center py-4">
+                                                                            <div class="spinner-border text-primary"
+                                                                                role="status">
+                                                                                <span
+                                                                                    class="visually-hidden">Loading...</span>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <!-- Data Rows -->
+                                                                    <tr *ngFor="let notification of notificationList">
+                                                                        <td>{{ notification.title }}</td>
+                                                                        <td>{{ notification.message }}</td>
+                                                                        <td>
+                                                                            <i class="fas fa-eye cursor text-success"
+                                                                                (click)="showDetails(notification.bookAppointmentId)">
+                                                                            </i>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <!-- Empty State -->
+                                                                    <tr
+                                                                        *ngIf="!loading && notificationList?.length === 0">
+                                                                        <td colspan="3" class="text-center py-4">
+                                                                            <div class="no-data-card">
+                                                                                <i
+                                                                                    class="fas fa-bell-slash fs-1 text-muted mb-3"></i>
+                                                                                <h5 class="text-muted mb-2">No Reminders
+                                                                                    Found</h5>
+                                                                                <p class="text-muted small">
+                                                                                    You don't have any Appointment
+                                                                                    Reminders yet.
+                                                                                </p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                            </div>
+                        </mat-tab>
+
+
+                        <mat-tab value="medication-reminder">
+                            <ng-template mat-tab-label>
+                                <span class="tab-label "> <i class="fas fa-pills me-2"></i>
+                                    Medication Reminder
+                                    <span *ngIf="newNotification?.medicationCount > 0"
+                                        class="badge badge-circle bg-danger ms-2">
+                                        {{ newNotification.medicationCount }}
+                                    </span>
+                                </span>
+                            </ng-template>
+                            <div class="mat-tab-content" style="overflow: hidden !important;">
+                                <section class="main-banner">
+                                    <div class="wrapper d-flex">
+                                        <div class="content-wrapper">
+                                            <div class="signup-card">
+                                                <div class="signup-form">
+                                                    <div class="mat-tab-content">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead class="table-light">
+                                                                    <tr>
+                                                                        <th scope="col">Title</th>
+                                                                        <th scope="col">Message</th>
+                                                                        <th scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <!-- Loading Spinner -->
+                                                                    <tr *ngIf="loading">
+                                                                        <td colspan="3" class="text-center py-4">
+                                                                            <div class="spinner-border text-primary"
+                                                                                role="status">
+                                                                                <span
+                                                                                    class="visually-hidden">Loading...</span>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <!-- Data Rows -->
+                                                                    <tr
+                                                                        *ngFor="let notification of notificationMedicalList">
+                                                                        <td>{{ notification.title }}</td>
+                                                                        <td>{{ notification.message }}</td>
+                                                                        <td>
+                                                                            <i class="fas fa-eye cursor text-success"
+                                                                                (click)="MedicalviewDetails(notification.medicationId)">
+                                                                            </i>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <!-- Empty State -->
+                                                                    <tr
+                                                                        *ngIf="!loading && notificationMedicalList?.length === 0">
+                                                                        <td colspan="3" class="text-center py-4">
+                                                                            <div class="no-data-card">
+                                                                                <i
+                                                                                    class="fas fa-bell-slash fs-1 text-muted mb-3"></i>
+                                                                                <h5 class="text-muted mb-2">No Reminders
+                                                                                    Found</h5>
+                                                                                <p class="text-muted small">
+                                                                                    You don't have any Medication
+                                                                                    Reminder yet.
+                                                                                </p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                            </div>
+                        </mat-tab>
+
+                        <mat-tab value="blogs">
+                            <ng-template mat-tab-label>
+                                <span class="tab-label "> <i class="fa fa-blog me-2"></i>
+                                    Blogs
+                                    <span *ngIf="newNotification?.blogCount > 0"
+                                        class="badge badge-circle bg-danger ms-2">
+                                        {{ newNotification.blogCount }}
+                                    </span>
+                                </span>
+                            </ng-template>
+                            <div class="mat-tab-content" style="overflow: hidden !important;">
+
+                                <section class="main-banner">
+                                    <div class="wrapper d-flex">
+                                        <div class="content-wrapper">
+                                            <div class="signup-card">
+                                                <div class="signup-form">
+                                                    <div class="mat-tab-content">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover">
+                                                                <thead class="table-light">
+                                                                    <tr>
+                                                                        <th scope="col">News Type</th>
+                                                                        <th scope="col">Title</th>
+                                                                        <th scope="col" style=" min-width: 150px;">Content</th>
+                                                                        <th scope="col" style=" min-width: 150px;">
+                                                                            Created Date</th>
+                                                                        <th scope="col" style=" min-width: 150px;">
+                                                                            Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                    <tr *ngIf="loading">
+                                                                        <td colspan="3" class="text-center py-4">
+                                                                            <div class="spinner-border text-primary"
+                                                                                role="status">
+                                                                                <span
+                                                                                    class="visually-hidden">Loading...</span>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr
+                                                                        *ngFor="let blog of blogNotification; let i = index">
+                                                                        <td>{{ blog.newsType}}</td>
+                                                                        <td>{{ blog.title }}</td>
+                                                                        <td style="min-width: 200px;"> <span
+                                                                                *ngIf="!isExpanded[i]">
+                                                                                {{ getFirstWords(blog.content, 12) }}
+                                                                            </span>
+                                                                            <span *ngIf="isExpanded[i]">
+                                                                                {{ blog.content }}
+                                                                            </span>
+
+                                                                            <a class="cursor" (click)="toggleContent(i); $event.preventDefault()"
+                                                                                *ngIf="isLongContent(blog.content, 15)">
+                                                                                {{ isExpanded[i] ? 'See Less' : 'See More' }}
+                                                                            </a>
+                                                                        </td>
+                                                                        <!-- <td>{{ blog.content }}</td> -->
+
+                                                                        <td>{{ blog.createdAt | date:'MM-dd-yyyy' }}<br>
+                                                                            {{ blog.createdAt | date:'hh:mm a' }}</td>
+
+                                                                        <td>
+                                                                            <button *ngIf="!blog.isProviderRead"
+                                                                                class="btn btn-success"
+                                                                                (click)="closeBlogsNotificationDropdown(blog.id)">View
+                                                                                Blog
+                                                                            </button>
+
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    <tr
+                                                                        *ngIf="blogNotification?.length === 0 && !loading">
+                                                                        <td colspan="10" class="text-center py-4">
+                                                                            <div class="no-data-card">
+                                                                                <i
+                                                                                    class="fas fa-bell-slash fs-1 text-muted mb-3"></i>
+                                                                                <h5 class="text-muted mb-2">No Reminders
+                                                                                    Found</h5>
+                                                                                <p class="text-muted small">
+                                                                                    You don't have any Blogs & Alerts
+                                                                                    yet.
+                                                                                </p>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                            </div>
+                        </mat-tab>
+
+
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

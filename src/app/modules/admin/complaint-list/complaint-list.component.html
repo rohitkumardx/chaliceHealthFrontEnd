@@ -1,0 +1,101 @@
+<section class="main-banner">
+  <div class="wrapper">
+    <div class="content-wrapper">
+      <div class="signup-card">
+        <h3 class="notifications-title mb-0">Complaint List</h3>
+        <div class="search-box">
+          <input type="text" placeholder="Search By Patient/Provider Name ..." class="search-input"
+            [(ngModel)]="searchTerm" (input)="getAdminComplaintList()">
+          <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <div class="timeline border border-2 mt-3">
+          <div *ngFor="let item of complaintData; let i = index" class="timeline-item"
+            [ngClass]="{'highlight-unread': !item.isRead}">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content bg-white p-3">
+              <div class="up row d-flex w-100">
+                <h6 class="timeline-title col-md-4">
+                  Patient Name: {{ item.patientName }}
+                  <span *ngIf="!item.isRead" class="notification-label  ms-2">
+                    New
+                  </span>
+
+                </h6>
+
+
+              </div>
+
+              <div class="row data d-flex align-items-center mt-2">
+                <div class="col-md-3">
+                  <strong>Complaint Date:</strong>
+                  {{ item.complaintDate | date:'MM-dd-yyyy'}}
+                </div>
+
+                <div class="col-md-3">
+                  <strong>Provider Name:</strong> {{ item.providerName }}
+                </div>
+                <div class="col-md-3">
+                  <strong>Appointment Type:</strong> {{ formatMeetingType(item.meetingType) }}
+                </div>
+
+                <div class="col-md-2">
+                  <strong>Status:</strong>
+                  <select class="form-select form-select-sm cursor bg-white custom-dropdown"
+                    [value]="item.status" (change)="onStatusChange($event,item.complaintId,item.bookAppointmentId)">
+                    <option value="Pending">Pending</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Refund">Refund</option>
+                  </select>
+                </div>
+
+               
+                <div class="col-md-1">
+                  <span>
+                    <a class="">
+                      <i class="fas fa-eye cursor" style="color: #198754;"
+                        (click)="showDetails(item.bookAppointmentId)"></i>
+                    </a>
+                  </span>
+                  <span class="icon-message ms-2" title="Send Message"
+                    style="position: relative; color: #00a98d; font-size: 15px;">
+                    <i class="fas fa-comments cursor" (click)="redirectToMessage(item.patientId)"></i>
+                    <span *ngIf="item.messageCount > 0" class="message-count-badge">
+                      {{ item.messageCount }}
+                    </span>
+                  </span>
+                </div>
+                <div class="col-md-12 mt-2">
+                  <strong>Reason for Complaint:</strong> {{item.reason }}
+                </div>
+              </div>
+              <span *ngIf="!item.isRead" class="timeline-action cursor pb-2" (click)="markAsRead(item.complaintId)">
+                <i class="fas fa-bell"></i> Mark as Read
+              </span>
+            </div>
+          </div>
+          <div *ngIf="loading" class="loading-card">
+            <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+              [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+              [additionalClasses]="'mt-5'"></app-loader>
+          </div>
+          <div *ngIf="complaintData.length === 0 && !loading" class="no-data-card">
+            <div class="no-data-card-container">
+              <div class="no-data-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+              </div>
+              <div class="no-data-content">
+                <span class="no-data-title">No Complaints Found</span>
+                <p class="no-data-description">It looks like there are no complaints at the moment.
+                  Please check back later!</p>
+              </div>
+            </div>
+          </div>
+          <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+            <app-pagination [paginator]="paginator" (onPageChange)="getAdminComplaintList()" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

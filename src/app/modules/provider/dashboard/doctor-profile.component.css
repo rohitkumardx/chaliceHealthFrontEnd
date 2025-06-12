@@ -1,228 +1,422 @@
 .left-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-    text-align: left;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: left;
 }
 
 .steps {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    position: relative;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
 }
 
 .steps li {
-    position: relative;
-    padding: 8px 0;
-    display: flex;
-    align-items: flex-start;
-    flex-direction: column;
-    text-align: left;
-    width: 100%;
+  position: relative;
+  padding: 8px 0;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
 }
 
 .step-content {
-    width: 100%;
+  width: 100%;
 }
 
 .step-number {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: #00876f;
-    color: white;
-    text-align: center;
-    line-height: 30px;
-    margin-right: 10px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #00876f;
+  color: white;
+  text-align: center;
+  line-height: 30px;
+  margin-right: 10px;
 }
 
 .step-content h3 {
-    margin: 0;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
+  margin: 0;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
 }
 
+
 .step-content p {
-    /* margin: 10px 0; */
-    font-size: 14px;
-    color: #666;
+ 
+  font-size: 14px;
+  color: #666;
 }
 
 .btn-primary {
-    padding: 10px 20px;
-    margin-top: 10px;
-    background-color: #00876f;
-    width: auto;
-    color: white;
-    border: none;
-    cursor: pointer;
+  /* / padding: 10px 20px; / */
+  margin-top: 10px;
+  background-color: #00876f;
+  width: auto;
+  font-size: 14px-;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
 .video-section {
-    width: 100%;
-    max-width: 35rem;
+  width: 100%;
+  max-width: 35rem;
 }
 
 video {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
-/* / / Align everything to the left on all screen sizes / / */
-
 .steps li.active .step-number {
-    background-color: #00876f;
-    color: #fff;
+  background-color: #00876f;
+  color: #fff;
 }
 
 .steps li .step-number:not(.active-number) {
-    background-color: #b2b2b2;
-    color: #fff;
+  background-color: #b2b2b2;
+  color: #fff;
 }
 
 .steps li.active-number {
-    border: 1px solid #00876f;
+  border: 1px solid #00876f;
 }
 
 .active-number {
-    border: 1px solid #00876f
+  border: 1px solid #00876f
 }
 
 .step-number.completed::before {
-    content: '\2713';
-    color: white;
-    font-size: 18px;
-    line-height: 30px;
-    text-align: center;
+  content: '\2713';
+  color: white;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
 }
 
 .step-number.completed {
-    background-color: #00876f;
-    color: white;
+  background-color: #00876f;
+  color: white;
 }
 
 /* .steps li.completed+li .step-number::before {
-    content: '';
-    position: absolute;
-    top: -20px;
-    left: 15px;
-    width: 2px;
-    height: 40px;
-    background: #00876f;
-    z-index: -1;
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: 15px;
+  width: 2px;
+  height: 40px;
+  background: #00876f;
+  z-index: -1;
 } */
 
 .steps li::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 30px;
-    width: 2px;
-    height: calc(100% - 60px);
-    background: #ccc;
-    background: repeating-linear-gradient(0deg,
-            #ccc,
-            #ccc 2px,
-            transparent 2px,
-            transparent 4px);
-    z-index: -1;
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 30px;
+  width: 2px;
+  height: calc(100% - 60px);
+  background: #ccc;
+  background: repeating-linear-gradient(0deg,
+          #ccc,
+          #ccc 2px,
+          transparent 2px,
+          transparent 4px);
+  z-index: -1;
 }
-
+p{
+  font-family: "Inter", sans-serif;
+}
+h1, h2, h3, h4 ,h5 ,h6{
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+}
 .steps li.completed::after {
-    background: repeating-linear-gradient(0deg,
-            #00876f,
-            #00876f 2px,
-            transparent 2px,
-            transparent 4px);
+  background: repeating-linear-gradient(0deg,
+          #00876f,
+          #00876f 2px,
+          transparent 2px,
+          transparent 4px);
 }
 
 .steps li:last-child::after {
-    display: none;
+  display: none;
 }
 
 @media (min-width: 992px) {
-    .steps li {
-        flex-direction: row;
-        text-align: left;
-        align-items: center;
-    }
+  .steps li {
+      flex-direction: row;
+      text-align: left;
+      align-items: center;
+  }
 
-    .step-content p {
-     margin: 10px 45px; 
-    }
+  .step-content p {
+   margin: 3px 45px; 
+  }
 
-    .btn-primary {
-        width: auto;
-        margin: 0px 45px;
-    }
+  .btn-primary {
+      width: auto;
+      margin: 0px 45px;
+  }
 }
 
 .card {
-    border: none !important;
+  border: none !important;
 }
 
 .profile img {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 550px;
-    height: 600px;
-    margin-bottom: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 480px;
+  height: 600px;
+  margin-bottom: 90px;
 }
 
 .profile {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .steps li.completed .step-number {
-    background-color: #00876f;
-    /* Green background for completed step */
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    font-size: 0;
-    /* Hide the original number by reducing font size */
+  background-color: #00876f;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-size: 0;
 }
 
 .steps li.completed .step-number::before {
-    content: '\2713';
-    /* Unicode for checkmark */
-    font-size: 18px;
-    /* Adjust font size */
-    color: white;
-    /* White color for the checkmark */
-}
+  content: '\2713';
+  font-size: 18px;
+  color: white;
 
-/* Hide the original number when the step is completed */
+}
 .steps li.completed .step-number::after {
-    content: '' !important;
-    /* This hides the number */
+  content: '' !important;
+
 }
-
-
-/* Non-completed step styles */
 .steps li .step-number {
-    background-color: #b2b2b2;
-    /* Default gray background for non-completed steps */
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+  background-color: #b2b2b2;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
 }
 
-/* Active step - keep the number */
 .steps li .step-number.active-number {
-    background-color: #00876f;
-    /* Green background for active step */
-    border: 2px solid #00876f;
-    color: white;
+  background-color: #00876f;
+  border: 2px solid #00876f;
+  color: white;
+}
+
+
+.feature-list li {
+  font-size: 0.7rem; 
+} 
+.feature-box {
+  background-color: #f8f9fa;
+}
+.feature-header {
+  color: #00b094;
+}
+.feature-list li:hover {
+  background-color: #e9ecef;
+}
+.d-flex {
+  display: flex;
+  flex-direction: row;
+}
+.feature-box {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+}
+.mat-tab-content table thead th {
+  background: linear-gradient(#00b094, #008f78) !important;
+  color: white !important;
+  padding: 12px !important;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.mat-tab-content  table tbody tr {
+  /* / / background-color: #e3e3e377 !important;  / / */
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+  font-weight: 500;
+  height: 50px !important;
+  vertical-align: middle;
+
+}
+
+.mat-tab-content table tr td {
+  color: rgba(0, 0, 0, 0.614) !important;
+  padding: 22px;
+
+}
+
+.mat-tab-content  table tbody tr:nth-child(odd) {
+  background-color: #f3f2f2;
+}
+
+.mat-tab-content table tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+
+
+.fa-pen-to-square {
+  cursor: pointer;
+}
+
+.fa-trash {
+  cursor: pointer;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: #00876F !important;
+}
+
+.mat-mdc-tab-group,
+.mat-mdc-tab-nav-bar {
+  --mdc-tab-indicator-active-indicator-color: #00483bca !important;
+  --mat-tab-header-disabled-ripple-color: #00876F;
+  --mat-tab-header-pagination-icon-color: #000;
+  --mat-tab-header-inactive-label-text-color: rgba(0, 0, 0, 0.6);
+  --mat-tab-header-active-label-text-color: #00876F;
+  --mat-tab-header-active-ripple-color: #00876F;
+  --mat-tab-header-inactive-ripple-color: #00876F;
+  --mat-tab-header-inactive-focus-label-text-color: rgba(0, 0, 0, 0.6);
+  --mat-tab-header-inactive-hover-label-text-color: rgba(0, 0, 0, 0.6);
+  --mat-tab-header-active-focus-label-text-color: #00876F;
+  --mat-tab-header-active-hover-label-text-color: #00876F;
+  --mat-tab-header-active-focus-indicator-color: #00483bca !important;
+  --mat-tab-header-active-hover-indicator-color: #00483bca !important;
+}
+.card-body {
+min-height: 0vh;}
+
+
+
+.card1 {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card1 h3 {
+  font-size: 1.5rem;
+  color: #00b094;
+}
+
+.card1 ul {
+  padding-left: 0;
+}
+
+.card1 ul li {
+  list-style: none;
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.card1 ul li::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  background-color: #008f78;
+  border-radius: 50%;
+}
+
+
+
+
+table thead th {
+/* / background: linear-gradient( #8c8c8ca7, #6e6e6e67) !important; / */
+background: linear-gradient(#00b094, #008f78) !important;
+color: white !important;
+padding: 12px !important;
+font-weight: bold;
+vertical-align: middle;
+}
+
+table tbody tr {
+ /* background-color: #e3e3e377 !important;   */
+border-top: 1px solid #bbb;
+border-bottom: 1px solid #bbb;
+font-weight: 500;
+height: 50px !important;
+vertical-align: middle;
+
+}
+
+table tr td {
+color: rgba(0, 0, 0, 0.614) !important;
+padding: 22px;
+
+}
+
+table tbody tr:nth-child(odd) {
+background-color: #f3f2f2;
+}
+
+table tbody tr:nth-child(even) {
+background-color: #fff;
+}
+
+
+.fa-pen-to-square {
+cursor: pointer;
+}
+
+.fa-trash {
+cursor: pointer;
+}
+
+.table-responsive {
+overflow-x: auto;
+}
+.update-box {
+
+padding: 10px 15px;
+border: 1px solid #ccc;
+border-radius: 8px;
+
+background-color: #f9f9f9;
+}
+
+@media (max-width:576px) {
+  .hok{
+    padding-left: 0%!important;
+    padding-right: 0%!important;
+  }
+  .steps p{
+    margin-left: 47px!important;
+  }
+  .okk{
+    padding-left: 0px!important;
+    padding-right: 0px!important;
+  }
+  .steps button{
+    margin-left: 47px!important;
+  }
 }

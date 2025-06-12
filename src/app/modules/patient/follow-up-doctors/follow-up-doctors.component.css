@@ -1,0 +1,38 @@
+.doctor-card {
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease-in-out;
+}
+ 
+.doctor-card:hover {
+  transform: translateY(-4px);
+}
+ 
+.doctor-name {
+  font-size: 1rem;
+  font-weight: 600;
+}
+ 
+.degree {
+  font-size: 0.9rem;
+  color: #888;
+}
+ 
+.rating i {
+  color: #ffa500;
+  margin-right: 2px;
+  font-size: 0.9rem;
+}
+.doctor-section-bg {
+  background-color: #f5f8fa;
+  border-radius: 16px;
+ 
+}
+ 
+.doctor-img-fix {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  object-position: center;
+}

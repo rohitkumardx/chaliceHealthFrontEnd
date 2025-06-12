@@ -1,0 +1,191 @@
+.main-banner {
+  background-color: #f9f9f9;
+  padding: 30px;
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.fas {
+  margin-right: 5px;
+  color: #00876ec8; 
+}
+
+.consultation-fee {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Aligns text and icons to the left */
+  gap: 5px; /* Adds spacing between items */
+}
+
+.fee-item {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Space between icon and text */
+}
+.dropdown-item:active, 
+.dropdown-item:focus {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: inherit !important;
+  outline: none !important;
+}
+
+.message-count-badge {
+  position: absolute;
+  top: -5px; 
+  right: -10px; 
+  background-color: #ff0000;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 50%;
+  line-height: 1;
+  min-width: 18px; 
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.content-wrapper {
+  max-width: 100%px;
+  width: 100%;
+  background-color: #f9f9f9;
+  /* padding: 40px; */
+  border-radius: 8px;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
+}
+
+.signup-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+.signup-card h3 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+th {
+  font-weight: 500 !important;
+  background-color: #D9D9D7 !important;
+  color: #333333 !important;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+
+label {
+  font-size: 14px;
+  color: #555;
+}
+
+.btn {
+  background-color: white !important;
+  border: 1px solid #008f78 !important;
+  color: #008f78 !important;
+}
+
+table thead th {
+  /* background: linear-gradient( #8c8c8ca7, #6e6e6e67) !important; */
+  background: linear-gradient(#00b094, #008f78) !important;
+  color: white !important;
+  padding: 12px !important;
+  font-weight: bold;
+}
+
+table tbody tr {
+  /* background-color: #e3e3e377 !important;  */
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+  font-weight: 500;
+  height: 50px !important;
+  vertical-align: middle;
+
+}
+
+table tr td {
+  color: rgba(0, 0, 0, 0.614) !important;
+  padding: 22px;
+
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #f3f2f2;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+
+.no-data-card {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.no-data-card-container {
+  display: inline-block;
+  border-radius: 10px;
+  padding: 40px;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.no-data-icon {
+  font-size: 60px;
+  color: #a4a4a4;
+  margin-bottom: 20px;
+}
+
+.no-data-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.no-data-description {
+  font-size: 16px;
+  color: #777;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .no-data-card-container {
+    padding: 20px;
+    width: 90%;
+  }
+
+  .no-data-title {
+    font-size: 20px;
+  }
+
+  .no-data-description {
+    font-size: 14px;
+  }
+}
+
+
+
+.btn:hover {
+  background-color: #00876ec8 !important;
+  color: white !important;
+}
+
+.custom-dropdown {
+  width: 12rem !important;
+  box-shadow: none !important;
+  /* margin-right: -60% !important; */
+  justify-items: center !important;
+  margin-left: 20% !important;
+}
+
+@media (max-width:576px) {
+  .consultation{
+    min-width: 200px!important;
+  }
+}

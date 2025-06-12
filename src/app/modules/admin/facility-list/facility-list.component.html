@@ -1,0 +1,102 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <h3 class=" mb-2">Facility Management</h3>
+                <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                    <div class="col-md-3 col-12 ">
+                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Facility Name"
+                            (input)="getAllFacilityList()" class="form-control bg-white">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th style=" min-width: 150px;" scope="col" (click)="sortData('facilityManagerName')">
+                                    Facility Name
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'facilityManagerName', 'fa-sort-up': sortColumn === 'facilityManagerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'facilityManagerName' && sortOrder === 'desc'}"></i>
+                                </th>
+
+                                <th style=" min-width: 150px;" scope="col" (click)="sortData('phoneNumber')">Phone
+                                    Number
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'phoneNumber', 'fa-sort-up': sortColumn === 'phoneNumber' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'phoneNumber' && sortOrder === 'desc'}"></i>
+                                </th>
+                                <th style=" min-width: 150px;" scope="col" (click)="sortData('encryptedEmail')">Email
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'encryptedEmail', 'fa-sort-up': sortColumn === 'encryptedEmail' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'encryptedEmail' && sortOrder === 'desc'}"></i>
+                                </th>
+                                <!-- <th scope="col">Email</th> -->
+                                <th scope="col">Activate/Deactivate</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of facilityList; let i = index">
+                                <td style="color: #009cff!important; cursor: pointer;"
+                                    (click)="viewClinicProfile(item.id)"> <u>{{item.facilityManagerName}}</u> </td>
+
+
+                                <td>{{ item.phoneNumber ? (item.phoneNumber | phoneFormat) : '-----' }}</td>
+                                <td>{{item.email}}</td>
+                                <td style=" justify-items: center;">
+
+                                    <label class="switch" disabled>
+                                        <input class="switch-input" type="checkbox" [checked]="item.isActive"
+                                            (change)="toggleStatus(item.id,item.isActive)">
+                                        <span class="switch-label"></span>
+                                        <span class="switch-handle"></span>
+                                    </label>
+
+                                </td>
+                                <td>
+
+                                    <button type="button" class="btn btn-primary m-0 " (click)="viewProviders(item.id)">
+                                        View Providers
+                                    </button>
+                                    <!-- <span class="icon-profile" title="View Profile"
+                                        style="color: #00a98d; font-size: 23px">
+                                        <i class="fas fa-user-circle cursor" (click)="viewProviders(item.id)"></i>
+                                    </span> -->
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="facilityList.length === 0 && !loading">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Facilites Found</span>
+                                            <p class="no-data-description">It looks like there are no facilities at the
+                                                moment.
+                                                Please check back later!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getAllFacilityList()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

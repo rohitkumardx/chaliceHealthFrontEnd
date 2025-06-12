@@ -1,0 +1,183 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+
+            <div class="bg-white rounded mt-2 p-4">
+                <h3 class="text-center">Announcement</h3>
+                <form [formGroup]="announcementForm" class="mt-4 p-4">
+                    <div class="row">
+                        <div class="form-group col-md-4 col-12">
+                            <label for="drugName">Send To <span class="red">*</span> </label>
+                            <select class="form-select form-select-sm cursor custom-dropdown mt-1"
+                                formControlName="sendTo"
+                                [ngClass]="{'is-invalid': announcementForm.get('sendTo')?.invalid &&  announcementForm.get('sendTo')?.touched}">
+                                <option disabled selected value="">Select </option>
+                                <option value=1>Patients</option>
+                                <option value=2>Providers</option>
+                                <option value=3>Facilities</option>
+                                <option value=4>All of them</option>
+                            </select>
+                            <div class="invalid-feedback"
+                                *ngIf="announcementForm.get('sendTo')?.touched && announcementForm.get('sendTo')?.hasError('required')">
+                                Required field.
+                            </div>
+                        </div>
+                        <div class="form-group col-md-4 col-12">
+                            <label for="drugName">Title <span class="red">*</span> </label>
+                            <input type="text" id="drugName" class="form-control form-control-sm mt-1"
+                                formControlName="title"
+                                [value]="announcementForm.get('title')?.value | capitalizeFirstLetter"
+                                [ngClass]="{'is-invalid': announcementForm.get('title')?.invalid && announcementForm.get('title')?.touched}">
+                            <div class="invalid-feedback"
+                                *ngIf="announcementForm.get('title')?.touched && announcementForm.get('title')?.hasError('required')">
+                                Title is required.
+                            </div>
+                            <div class="invalid-feedback"
+                        *ngIf="announcementForm.get('title')?.touched && announcementForm.get('title')?.hasError('pattern')">
+                        Title cannot be empty or only spaces.
+                       </div>
+                        </div>
+
+                        <div class="col-md-4 col-12">
+                            <div class="form-group">
+                              <label for="attachment">Attachment  </label>
+                              <input
+                                style="padding: 10px;"
+                                type="file"
+                                id="attachment"
+                                class="form-control form-control-sm mt-1 small-input"
+                                formControlName="attachmentsFileName"
+                                [ngClass]="{
+                                  'is-invalid':
+                                    announcementForm.get('attachmentsFileName')?.invalid &&
+                                    announcementForm.get('attachmentsFileName')?.touched
+                                }"
+                                (change)="onSelected($event)"
+                              />
+                          
+                              <div class="file mt-2" *ngIf="selectedFile != null">
+                                <span class="cursor" (click)="downloadFile(selectedFilePath)">
+                                  {{ selectedFile }}
+                                </span>
+                                <a>
+                                  <i
+                                    class="fa-solid fa-trash ms-1 red cursor"
+                                    title="Delete"
+                                    (click)="deleteImage()"
+                                  ></i>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          
+
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="body">Body </label>
+                            <textarea id="body" class="form-control form-control-sm mt-1" formControlName="body"
+                                [value]="announcementForm.get('body')?.value | capitalizeFirstLetter"
+                                [ngClass]="{'is-invalid': announcementForm.get('body')?.invalid && announcementForm.get('body')?.touched}"></textarea>
+                            <div class="invalid-feedback"
+                                *ngIf="announcementForm.get('body')?.touched && announcementForm.get('body')?.hasError('required')">
+                                Body is required.
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex">
+                        <div class="col-sm-12 d-flex justify-content-end pt-2">
+                            <button type="submit" class="btn custom-padding"
+                          style="background-color: #00876F!important;" (click)="addAnnouncement()">
+                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': loading1}"></i>
+                          <span *ngIf="!loading1" class="space">Send</span>
+                          <span *ngIf="loading1" class="space">Sending...</span>
+                        </button>
+                          
+                        </div>
+                    </div>
+                </form>
+
+                <div class="table-responsive" *ngIf="announcementList.length > 0">
+                    <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+
+
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" (click)="sortData('sendTo')">Send To
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'sendTo', 'fa-sort-up': sortColumn === 'sendTo' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'sendTo' && sortOrder === 'desc'}"></i>
+                                </th>
+                                <th scope="col" (click)="sortData('title')">Announcement Title
+                                  <i
+                                      [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'title', 'fa-sort-up': sortColumn === 'title' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'title' && sortOrder === 'desc'}"></i>
+                              </th>
+                              <th scope="col" (click)="sortData('body')">Announcement Body
+                                <i
+                                    [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'body', 'fa-sort-up': sortColumn === 'body' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'body' && sortOrder === 'desc'}"></i>
+                            </th>
+                               
+                                <th scope="col">Announcement Created Date</th>
+                                <th scope="col">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of announcementList; let i = index">
+                                <td style="width: 6rem;"> {{item.sendTo ? item.sendTo : '-----' }} </td>
+                                <td>{{ item.title ? item.title : '-----'}}</td>
+                                <td>{{ item.body ? item.body : '-----' }}</td>
+                                <td>{{ item.createdDate | date: 'MM-dd-yyyy'}}</td>
+                                <td>
+
+                                    <span class="icon-edit" title="Edit" style="color: #00876f; font-size: medium">
+                                        <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                            (click)="editItem(item.id)"></i>
+                                    </span>
+
+                                    <span class="icon-delete" title="Delete" style="color: #dc3545; font-size: medium">
+                                        <i class="fa-solid fa-trash cursor" (click)="deleteItem(item.id)"></i>
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="announcementList.length === 0 && !loading">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Announcement Found</span>
+                                            <p class="no-data-description">It looks like there are no announcement at
+                                                the
+                                                moment.
+                                                Please check back later!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getAnnouncementList()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

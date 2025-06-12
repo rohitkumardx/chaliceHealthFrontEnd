@@ -1,0 +1,25 @@
+<div class=" content-wrapper1" >
+    <!-- <div class="col-2 text-end"> -->
+        <div class="close-btn cursor text-end" (click)="closePopup()"><i class="fa-solid fa-xmark" ></i></div>
+    <!-- </div> -->
+    <div class="row d-flex ">
+        <div class="col-10 ">
+            <h3 class="ms-0"> Notification Details</h3>
+        </div>
+      
+    </div>
+    <div class="row">
+        <div class="col-7">
+            <p><b> Patient Name </b> : {{ transactionDetails.patientUniqueId }} </p>
+            <p><b> Provider Name </b> : {{ transactionDetails.patientName }} </p>
+            <p><b> Appointment Type </b> : {{ transactionDetails.meetingType }} </p>
+            <p><b> Appointment Date </b> : {{ transactionDetails.appointmentDateTime | date: 'MM-dd-yyyy' }}  </p>
+            <p><b> Status </b> : US,{{ transactionDetails.location }} </p>
+            <p><b> Reason for Complaint </b> : {{ transactionDetails.reasonForVisit }}min </p>
+        </div>
+
+        <div class="col-5 d-flex align-items-center justify-content-center">
+            <img src="../../../../assets/svg/icons/bell-line-icon.svg" alt="image" width="130px" height="130px">
+        </div>
+    </div>
+</div>

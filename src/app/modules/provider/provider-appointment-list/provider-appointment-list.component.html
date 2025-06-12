@@ -11,79 +11,171 @@
                 <span style="color: rgba(0, 0, 0, 0.914)">Today Appointment</span>
               </ng-template>
               <div class="mat-tab-content" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right;">
+                  <input style="width: 30%;" type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
+                    (input)="getTodayAppointmentsByUserId()" class="form-control">
+                </div>
                 <div class="row">
+
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mt-4 mb-2">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
-                        (input)="getTodayAppointmentsByUserId()"
-                        class="form-control">
-                    </div>
+
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col" (click)="sortData('patientUniqueId')">Patient  Code
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueId')">Patient Code
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueId', 'fa-sort-up': sortColumn === 'patientUniqueId' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueId' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('date')">Date & Time
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
                           </th>
                           <!-- <th scope="col" (click)="sortData('ProviderName')">Date & Time</th> -->
-                          <th scope="col" (click)="sortData('meetingType')">Service
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('meetingType')">Service Type
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'meetingType', 'fa-sort-up': sortColumn === 'meetingType' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'meetingType' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col">Location</th>
-                          <th scope="col">Visit Reason</th>
+                          <!-- <th scope="col">Location</th> -->
+                          <th scope="col">Reason for Visit</th>
                           <th scope="col">Status</th>
-                          <th scope="col">Action</th>
+                          <th scope="col">Share Intake</th>
+                          <th scope="col">Share Consent</th>
+                          <th scope="col" style="min-width: 70px!important;">Action</th>
                         </tr>
                       </thead>
                       <tbody class="">
                         <tr *ngFor="let item of todayAppointment; let i = index">
-                          <td (click)="showPatientDashboard(item.bookAppointmentId)"><u>{{item.patientUniqueId}}</u></td>
-                          <td class="pt-3">{{item.date}}<br>
-                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
-                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
-                          <td>{{item.meetingType}} Visit
-                            ({{item.serviceDuration}}-mins) </td>
-                          <!-- <td class="pt-3">{{item.gender}} </td> -->
-                          <td class="pt-3">{{item.location ? item.location : '--------'}}</td>
+                          <td (click)="showPatientDashboard(item.bookAppointmentId)"
+                            style="color: #009cff!important; cursor: pointer;"><u>{{item.patientUniqueId}}</u></td>
+                          <td class="pt-3">{{item.date | date:'MM-dd-yyyy'}}<br>
+                            {{item.date | date:'hh:mm a'}}</td>
+                          <td>
+                            <ng-container [ngSwitch]="item.meetingType">
+                              <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                                style="font-size: 15px; color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                                style="color: #00876ec8;"></i>
+                            </ng-container>
+                            {{ formatCategory(item.meetingType) }}
+                          </td>
+                          <!-- <td>{{ formatCategory(item.meetingType) }}</td> -->
+
                           <td class="pt-3">{{item.reasonForVisit}}</td>
                           <td class="pt-3">{{item.bookingStatus}}</td>
 
-                          <td>
-
-                            <span class="icon-meeting-type" [title]="getMeetingTypeTitle(item.meetingType)"
-                              *ngIf="item.bookingStatus =='Booked' " [style.color]="'#00bfff'"
-                              style="font-size: 19px; margin-right: 20px;">
-                              <i [class]="getMeetingTypeIcon(item.meetingType)" class="cursor"
-                                (click)="joinCall(item.bookAppointmentId, item.startTime,item.meetingType,item.serviceDuration)">
-                              </i>
-                            </span>
 
 
-                            <span class="icon-chat" title="Send Message" 
-                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
-                              <i class="fas fa-paper-plane cursor" (click)="sendMessage(item.bookAppointmentId)"></i>
-                            </span>
 
-                            <span class="icon-soap-notes" title="View SOAP Notes / Prescriptions" *ngIf="item.hasSoapNote"
-                            style="color: #00a98d; font-size: 19px; margin-right: 20px;">
-                            <i class="fas fa-file-alt cursor" (click)="viewSoapNotes(item.bookAppointmentId)"></i>
-                          </span>
 
-                            <span class="icon-flag" title="Report Appointment" *ngIf="item.bookingStatus == 'Booked'"
-                              style="color: red; font-size: 19px; margin-right: 20px;">
-                              <i class="fas fa-flag cursor mt-2" (click)="openReportPopUp(item.bookAppointmentId)"></i>
-                            </span>
-                            <span class="icon-delete" title="Cancel Appointment" *ngIf="item.bookingStatus =='Booked'"
-                              style="color: red; font-size: 21px; margin-right: 20px;">
-                              <i class="fas fa-xmark-circle cursor"
-                                (click)="cancelAppointment(item.bookAppointmentId)"></i>
+                          <td class="pt-3" *ngIf="item.intakeConsentStatus==0">
+                            <span class="icon-share" title="Share Intake"
+                              style="color: #00a98d; font-size: 21px; margin-right: 20px; position: relative;">
+                              <i class="fas fa-share-alt cursor"
+                                (click)="shareIntakeAppointment(item.bookAppointmentId, item.intakeDocumentId)"
+                                [class.disabled]="loadingState[item.bookAppointmentId]?.intake"></i>
+
+                              <!-- Loader Indicator for Intake -->
+                              <span *ngIf="loadingState[item.bookAppointmentId]?.intake" class="loader"></span>
                             </span>
                           </td>
+                          <td *ngIf="item.intakeConsentStatus == 'Pending'">
+                            {{item.intakeConsentStatus}}
+                          </td>
+                          <!-- Link for intake file -->
+                          <td *ngIf="item.intakeConsentStatus == 'Approved' && item.intakeFilePath">
+                            <a [href]="item.intakeFilePath" target="_blank" rel="noopener noreferrer">
+                              <u>{{ item.intakeFileName }}</u>
+                            </a>
+                          </td>
+
+                          <td class="pt-3" *ngIf="item.shareConsentStatus==0">
+                            <span class="icon-share" title="Share Consent"
+                              style="color: #00a98d; font-size: 21px; margin-right: 20px; position: relative;">
+                              <i class="fas fa-share-alt cursor"
+                                (click)="shareConsentAppointment(item.bookAppointmentId, item.consentDocumentId)"
+                                [class.disabled]="loadingState[item.bookAppointmentId]?.consent"></i>
+
+                              <!-- Loader Indicator for Consent -->
+                              <span *ngIf="loadingState[item.bookAppointmentId]?.consent" class="loader"></span>
+                            </span>
+                          </td>
+                          <td *ngIf="item.shareConsentStatus == 'Pending'">
+                            {{item.shareConsentStatus}}
+                          </td>
+
+                          <td *ngIf="item.shareConsentStatus == 'Approved' && item.filePath">
+                            <a [href]="item.filePath" target="_blank" rel="noopener noreferrer">
+                              <u>{{ item.consentFileName }}</u>
+                            </a>
+                          </td>
+
+
+                          <td class="d-flex justify-content-center align-items-center"
+                            style="cursor: pointer; text-align : center; height: 100%;">
+                            <div class="d-flex gap-2 align-items-center menu-container">
+
+                              <!-- OUTSIDE JOIN CALL -->
+                              <span
+                                *ngIf="item.bookingStatus === 'Booked' && userInfo.accountType === 'IndependentProvider'"
+                                data-bs-toggle="tooltip"
+                                [attr.title]="item.meetingType === 'VirtualVisit' ? 'Join Call' : 'Consult Now'"
+                                (click)="joinCall(item.bookAppointmentId, item.startTime, item.meetingType, item.serviceDuration, item.userId)">
+                                <i [class]="getMeetingTypeIcon(item.meetingType)" class="cursor me-2"
+                                  style="color: #00bfff; font-size: 19px;"></i>
+                              </span>
+
+                              <!-- OUTSIDE SEND MESSAGE -->
+                              <span data-bs-toggle="tooltip" title="Send Message"
+                                (click)="sendMessage(item.bookAppointmentId, item.userId)">
+                                <i class="fas fa-comments cursor me-2" style="color: #00a98d; font-size: 19px;"></i>
+                              </span>
+
+                              <!-- 3-DOT MENU -->
+                              <div class="position-relative">
+                                <span class="cursor" title="More Options" (click)="item.showMenu = !item.showMenu">
+                                  <i class="fas fa-ellipsis-v fs-4"></i>
+                                </span>
+
+                                <div *ngIf="item.showMenu"
+                                  class="dropdown-menu show mt-2 position-absolute menu-container"
+                                  style="top: -60px!important; left: -200px!important;">
+
+                                  <span class="dropdown-item"
+                                    *ngIf="item.bookingStatus === 'Booked' && (item.meetingType === 'InPersonVisit' || item.meetingType === 'IHomeCareVisit') && userInfo.accountType === 'IndependentProvider'"
+                                    (click)="joinCall(item.bookAppointmentId, item.startTime, item.meetingType, item.serviceDuration, item.userId)">
+                                    <i [class]="getMeetingTypeIcon(item.meetingType)"
+                                      style="color: #00bfff; font-size: 19px;"></i> Consult Now
+                                  </span>
+
+                                  <span class="dropdown-item"
+                                    *ngIf="item.bookingStatus === 'Booked' && userInfo.accountType !== 'IndependentProvider'"
+                                    (click)="copyLink(item.bookAppointmentId)">
+                                    <i class="fa fa-link" style="color: #00bfff; font-size: 19px;"></i> Copy Link
+                                  </span>
+
+                                  <span class="dropdown-item" *ngIf="item.hasSoapNote"
+                                    (click)="viewSoapNotes(item.bookAppointmentId)">
+                                    <i class="fas fa-file-alt" style="color: #00a98d; font-size: 19px;"></i> View SOAP
+                                    Notes
+                                  </span>
+
+                                  <span class="dropdown-item" *ngIf="item.bookingStatus === 'Booked'"
+                                    (click)="openReportPopUp(item.bookAppointmentId)">
+                                    <i class="fas fa-flag" style="color: red; font-size: 19px;"></i> Flag
+                                  </span>
+
+                                </div>
+                              </div>
+
+                            </div>
+                          </td>
+
+
+
+
+
+
 
                         </tr>
                         <tr *ngIf="loading">
@@ -101,7 +193,7 @@
                               </div>
                               <div class="no-data-content">
                                 <span class="no-data-title">No Appointments Found</span>
-                                <p class="no-data-description">It looks like there are no appointments at the moment.
+                                <p class="no-data-description">It looks like there are no Appointments at the moment.
                                   Please check back later!</p>
                               </div>
                             </div>
@@ -110,9 +202,10 @@
 
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
-                      <app-pagination [paginator]="paginator" (onPageChange)="getTodayAppointmentsByUserId()" />
-                    </div>
+
+                  </div>
+                  <div class="me-3 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getTodayAppointmentsByUserId()" />
                   </div>
                 </div>
               </div>
@@ -122,68 +215,135 @@
                 <span style="color: black">Upcoming Appointment</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input type="text" style="width: 30%;" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
+                    (input)="getUpcomingAppointmentsByUserId()" class="form-control">
+                </div>
                 <div class="row">
+
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mt-4 mb-2">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
-                        (input)="getUpcomingAppointmentsByUserId()" class="form-control">
-                    </div>
+
                     <table class="table ">
                       <thead>
                         <tr>
-                          <th scope="col" (click)="sortData('patientUniqueId')">Patient  Code
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueId')">Patient Code
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueId', 'fa-sort-up': sortColumn === 'patientUniqueId' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueId' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('date')">Date & Time
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
                           </th>
                           <!-- <th scope="col" (click)="sortData('ProviderName')">Date & Time</th> -->
-                          <th scope="col" (click)="sortData('meetingType')">Service
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('meetingType')">Service Type
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'meetingType', 'fa-sort-up': sortColumn === 'meetingType' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'meetingType' && sortOrder === 'desc'}"></i>
                           </th>
-                      
-                          <th scope="col">Location</th>
-                          <th scope="col">Reason For Visit</th>
+
+                          <!-- <th scope="col">Location</th> -->
+                          <th scope="col">Reason for Visit</th>
                           <th scope="col">Status</th>
+                          <th scope="col">Share Intake</th>
+                          <th scope="col">Share Consent</th>
                           <th scope="col">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of upcomingAppointment; let i = index">
-                          <td (click)="showPatientDashboard(item.bookAppointmentId)"><u>{{item.patientUniqueId}}</u></td>
-                          <td>{{item.date}}<br>
-                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
-                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
-                          <td>{{item.meetingType}} Visit
-                            ({{item.serviceDuration}}-mins) </td>
-                
-                          <td>{{item.location ? item.location : '--------'}}</td>
+                          <td (click)="showUpcomingPatientDashboard(item.bookAppointmentId)"
+                            style="color: #009cff!important; cursor: pointer;"><u>{{item.patientUniqueId}}</u></td>
+                          <td>{{item.date | date:'MM-dd-yyyy'}}<br>
+                            {{ item.date | date:'hh:mm a'}}</td>
+
+                          <td>
+                            <ng-container [ngSwitch]="item.meetingType">
+                              <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                                style="font-size: 15px; color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                                style="color: #00876ec8;"></i>
+                            </ng-container>
+                            {{ formatMeetingType(item.meetingType) }}
+                          </td>
+                          <!-- <td>{{formatMeetingType(item.meetingType)}}
+                             </td> -->
+
+                          <!-- <td>{{item.location ? item.location : '--------'}}</td> -->
                           <td>{{item.reasonForVisit}}</td>
                           <td>{{item.bookingStatus}}</td>
-                          <td>
-                            <!-- <span class="icon-meeting-type" [title]="getMeetingTypeTitle(item.meetingType)"
-                              [style.color]="'#00bfff'" style="font-size: 19px; margin-right: 20px;">
-                              <i [class]="getMeetingTypeIcon(item.meetingType)" class="cursor"
-                                (click)="joinCall(item.bookAppointmentId, item.startTime,item.meetingType,item.serviceDuration)">
-                              </i>
-                            </span> -->
-                            <span class="icon-chat" title="Send Message"
-                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
-                              <i class="fas fa-paper-plane cursor" (click)="sendMessage(item.bookAppointmentId)"></i>
-                            </span>
-                            <span class="icon-flag" title="Flag" *ngIf="item.bookingStatus =='Booked'"
-                              style="color: red; font-size: 19px; margin-right: 20px;">
-                              <i class="fas fa-flag cursor" (click)="openReportPopUp(item.bookAppointmentId)"></i>
-                            </span>
-                            <span class="icon-delete" title="Cancel Appointment" *ngIf="item.bookingStatus =='Booked'"
-                              style="color: red; font-size: 21px; margin-right: 20px;">
-                              <i class="fas fa-xmark-circle cursor"
-                                (click)="cancelAppointment(item.bookAppointmentId)"></i>
+
+                          <td class="pt-3" *ngIf="item.intakeConsentStatus==0">
+                            <span class="icon-share" title="Share Intake"
+                              style="color: #00a98d; font-size: 21px; margin-right: 20px; position: relative;">
+                              <i class="fas fa-share-alt cursor"
+                                (click)="shareIntakeAppointment(item.bookAppointmentId, item.intakeDocumentId)"
+                                [class.disabled]="loadingState[item.bookAppointmentId]?.intake"></i>
+
+
+                              <span *ngIf="loadingState[item.bookAppointmentId]?.intake" class="loader"></span>
                             </span>
                           </td>
+                          <td *ngIf="item.intakeConsentStatus == 'Pending'">
+                            {{item.intakeConsentStatus}}
+                          </td>
+                          <td *ngIf="item.intakeConsentStatus == 'Approved' && item.intakeFilePath">
+                            <a [href]="item.intakeFilePath" target="_blank" rel="noopener noreferrer">
+                              <u>{{ item.intakeFileName }}</u>
+                            </a>
+                          </td>
+
+                          <td class="pt-3" *ngIf="item.shareConsentStatus==0">
+                            <span class="icon-share" title="Share Consent"
+                              style="color: #00a98d; font-size: 21px; margin-right: 20px; position: relative;">
+                              <i class="fas fa-share-alt cursor"
+                                (click)="shareConsentAppointment(item.bookAppointmentId, item.consentDocumentId)"
+                                [class.disabled]="loadingState[item.bookAppointmentId]?.consent"></i>
+
+
+                              <span *ngIf="loadingState[item.bookAppointmentId]?.consent" class="loader"></span>
+                            </span>
+                          </td>
+                          <td *ngIf="item.shareConsentStatus == 'Pending'">
+                            {{item.shareConsentStatus}}
+                          </td>
+                          <td *ngIf="item.shareConsentStatus == 'Approved' && item.filePath">
+                            <a [href]="item.filePath" target="_blank" rel="noopener noreferrer">
+                              <u>{{ item.consentFileName }}</u>
+                            </a>
+                          </td>
+                          <td class="cursor" style="justify-items: center;">
+                            <div class="row d-flex justify-content-center flex-wrap cursor">
+
+                              <!-- OUTSIDE Send Message Icon -->
+                              <div class="col-12 text-end mb-1">
+                                <span class="me-3" data-bs-toggle="tooltip" title="Send Message"
+                                  (click)="sendMessage(item.bookAppointmentId, item.userId)">
+                                  <i class="fas fa-comments"
+                                    style="color: #00a98d; font-size: 20px; cursor: pointer;"></i>
+                                </span>
+
+                                <!-- 3-DOT MENU -->
+                                <div class="dropdown dropup d-inline-block">
+                                  <span class="icon-menu cursor" data-bs-toggle="dropdown" aria-expanded="false"
+                                    style="font-size: 20px; cursor: pointer;">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                  </span>
+                                  <ul class="dropdown-menu dropdown-menu-end text-start">
+
+                                    <!-- FLAG (still inside dropdown) -->
+                                    <li *ngIf="item.bookingStatus === 'Booked'">
+                                      <a class="dropdown-item" (click)="openReportPopUp(item.bookAppointmentId)">
+                                        <i class="fas fa-flag text-danger me-2" style="font-size: 19px;"></i> Flag
+                                      </a>
+                                    </li>
+
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+
+
                         </tr>
                         <tr *ngIf="loading">
                           <td colspan="7">
@@ -208,9 +368,10 @@
                         </tr>
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
-                      <app-pagination [paginator]="paginator" (onPageChange)=" getUpcomingAppointmentsByUserId()" />
-                    </div>
+
+                  </div>
+                  <div class="me-3 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
+                    <app-pagination [paginator]="paginator" (onPageChange)=" getUpcomingAppointmentsByUserId()" />
                   </div>
                 </div>
               </div>
@@ -222,33 +383,31 @@
                 <span style="color: black;">Past Appointment</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input style="width: 30%;" type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
+                    (input)="getPastAppointmentsByUserId()" class="form-control">
+                </div>
                 <div class="row">
+
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mt-4 mb-2">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
-                        (input)="getPastAppointmentsByUserId()" class="form-control">
-                    </div>
+
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col" (click)="sortData('patientUniqueId')">Patient  Code
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueId')">Patient Code
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueId', 'fa-sort-up': sortColumn === 'patientUniqueId' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueId' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('date')">Date & Time
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
                           </th>
                           <!-- <th scope="col" (click)="sortData('ProviderName')">Date & Time</th> -->
-                          <th scope="col" (click)="sortData('meetingType')">Service
+                          <th style=" min-width: 120px;" scope="col" (click)="sortData('meetingType')">Service Type
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'meetingType', 'fa-sort-up': sortColumn === 'meetingType' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'meetingType' && sortOrder === 'desc'}"></i>
                           </th>
-                          <!-- <th scope="col">Patient Unique Code</th>
-                          <th scope="col">Date & Time</th>
-                          <th scope="col">Service</th> -->
-                          <!-- <th scope="col">Gender</th> -->
-                          <th scope="col">Location</th>
+
                           <th scope="col">Reason For Visit</th>
                           <th scope="col">Status</th>
                           <th scope="col">Action</th>
@@ -256,22 +415,44 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of pastAppointment; let i = index">
-                          <td (click)="showPatientDashboard(item.bookAppointmentId)"><u>{{item.patientUniqueId}}</u></td>
-                          <td>{{item.date}}<br>
-                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
-                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
-                          <td>{{item.meetingType}} Visit
-                            ({{item.serviceDuration}}-mins) </td>
-                          <!-- <td>{{item.gender}} </td> -->
-                          <td>{{item.location ? item.location : '--------'}}</td>
+                          <td (click)="showPatientDashboard(item.bookAppointmentId)"
+                            style="color: #009cff!important; cursor: pointer;"><u>{{item.patientUniqueId}}</u></td>
+                          <td>{{item.date | date:'MM-dd-yyyy'}}<br>
+                            {{ item.date | date:'hh:mm a'}}</td>
+
+                          <td>
+                            <ng-container [ngSwitch]="item.meetingType">
+                              <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                                style="font-size: 15px; color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                                style="color: #00876ec8;"></i>
+                            </ng-container>
+                            {{ formatMeetingType(item.meetingType) }}
+                          </td>
+                          <!-- <td>{{formatMeetingType(item.meetingType)}} 
+                           </td> -->
+
                           <td>{{item.reasonForVisit}}</td>
                           <td>{{item.bookingStatus}}</td>
                           <td>
-                            <span class="icon-soap-notes" title="View SOAP Notes / Prescriptions" *ngIf="item.hasSoapNote"
-                            style="color: #00a98d; font-size: 19px; margin-right: 20px;">
-                            <i class="fas fa-file-alt cursor" (click)="viewSoapNotes(item.bookAppointmentId)"></i>
-                          </span>
+                            <div class="d-flex justify-content-end align-items-center gap-2">
+
+                              <!-- Send Message icon OUTSIDE -->
+                              <span title="Send Message me-3" data-bs-toggle="tooltip"
+                                (click)="sendMessage(item.bookAppointmentId, item.patientId)" style="cursor: pointer;">
+                                <i class="fas fa-comments me-2" style="color: #00a98d; font-size: 20px;"></i>
+                              </span>
+
+                              <span *ngIf="item.hasSoapNote" title="Soap Note me-3" data-bs-toggle="tooltip"
+                                (click)="viewSoapNotes(item.bookAppointmentId)" style="cursor: pointer;">
+                                <i class="fas fa-file-alt text-primary me-2" style="font-size: 20px;"></i>
+                              </span>
+
+                            </div>
                           </td>
+
+
                         </tr>
                         <tr *ngIf="loading">
                           <td colspan="7">
@@ -296,9 +477,10 @@
                         </tr>
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
-                      <app-pagination [paginator]="paginator" (onPageChange)=" getPastAppointmentsByUserId()" />
-                    </div>
+
+                  </div>
+                  <div class="me-3 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
+                    <app-pagination [paginator]="paginator" (onPageChange)=" getPastAppointmentsByUserId()" />
                   </div>
                 </div>
               </div>
@@ -310,45 +492,72 @@
                 <span style="color:black;">Cancelled Appointment</span>
               </ng-template>
               <div class="mat-tab-content" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input style="width: 30%;" type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
+                    (input)="getCancelledAppointmentsByUserId()" class="form-control">
+                </div>
                 <div class="row">
+
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mt-4 mb-2">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code"
-                        (input)="getCancelledAppointmentsByUserId()" class="form-control">
-                    </div>
+
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col" (click)="sortData('patientUniqueId')">Patient  Code
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueId')">Patient Code
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueId', 'fa-sort-up': sortColumn === 'patientUniqueId' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueId' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('date')">Date & Time
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
                           </th>
                           <!-- <th scope="col" (click)="sortData('ProviderName')">Date & Time</th> -->
-                          <th scope="col" (click)="sortData('meetingType')">Service
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('meetingType')">Service Type
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'meetingType', 'fa-sort-up': sortColumn === 'meetingType' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'meetingType' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col">Location</th>
-                          <th scope="col">Reason For Visit</th>
+                          <!-- <th scope="col">Location</th> -->
+                          <th style=" min-width: 145px;" scope="col">Reason For Visit</th>
                           <th scope="col">Reason For Cancel</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of cancelledAppointment; let i = index">
-                          <td (click)="showPatientDashboard(item.bookAppointmentId)"><u>{{item.patientUniqueId}}</u></td>
-                          <td>{{item.date}}<br>
-                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
-                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
-                          <td>{{item.meetingType}} Visit
-                            ({{item.serviceDuration}}-mins) </td>
-                          <td>{{item.location ? item.location : '--------'}}</td>
+                          <td (click)="showPatientDashboard(item.bookAppointmentId)"
+                            style="color: #009cff!important; cursor: pointer;"><u>{{item.patientUniqueId}}</u></td>
+                          <td>{{item.date | date:'MM-dd-yyyy'}}<br>
+                            {{ item.date | date:'hh:mm a'}}</td>
+                          <td>
+                            <ng-container [ngSwitch]="item.meetingType">
+                              <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                                style="font-size: 15px; color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                                style="color: #00876ec8;"></i>
+                            </ng-container>
+                            {{ formatMeetingType(item.meetingType) }}
+                          </td>
+                          <!-- <td>{{formatMeetingType(item.meetingType)}} 
+                           </td> -->
+                          <!-- <td>{{item.location ? item.location : '--------'}}</td> -->
                           <td>{{item.reasonForVisit}}</td>
-                          <td>{{item.reasonForCancellation}}</td>
-                 
+                          
+                          <td style="width: 100%; max-width: 35%;">
+                            <ng-container
+                              *ngIf="item.reasonForCancellation && item.reasonForCancellation.trim().length > 0; else noReason">
+                              <span *ngIf="!expanded">{{ getShortText(item.reasonForCancellation) }}</span>
+                              <span *ngIf="expanded">{{ item.reasonForCancellation }}</span>
+
+                              <a *ngIf="shouldShowToggle(item.reasonForCancellation)" href="#"
+                                (click)="toggleExpand($event)">
+                                {{ expanded ? 'See Less' : 'See More' }}
+                              </a>
+                            </ng-container>
+
+                            <ng-template #noReason>
+                              <span>--------</span>
+                            </ng-template>
+                          </td>
                         </tr>
                         <tr *ngIf="loading">
                           <td colspan="7">
@@ -357,6 +566,7 @@
                               [additionalClasses]="'mt-5'"></app-loader>
                           </td>
                         </tr>
+
                         <tr *ngIf="cancelledAppointment.length === 0 && !loading">
                           <td colspan="9" class="no-data-card">
                             <div class="no-data-card-container">
@@ -373,9 +583,9 @@
                         </tr>
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length > 0">
-                      <app-pagination [paginator]="paginator" (onPageChange)=" getCancelledAppointmentsByUserId()" />
-                    </div>
+                  </div>
+                  <div class="me-3 d-flex justify-content-end mt-4" *ngIf="roles.length > 0">
+                    <app-pagination [paginator]="paginator" (onPageChange)=" getCancelledAppointmentsByUserId()" />
                   </div>
                 </div>
               </div>

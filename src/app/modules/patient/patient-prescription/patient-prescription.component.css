@@ -322,3 +322,8 @@ li:hover {
   }
 }
 
+@media (max-width:576px) {
+  input{
+          width:100%!important;
+  }
+}

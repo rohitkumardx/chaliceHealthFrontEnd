@@ -1,0 +1,233 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <!-- <h3 class=" mb-2">Clinic Providers Management</h3> -->
+
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4">
+                        <h3 class="mb-0">Clinic Providers Management</h3>
+
+                    </div>
+                    <div class="col-md-2"></div>
+                    <div class="col-md-1"></div>
+
+                    <div class="col-md-1">
+
+                    </div>
+
+
+                </div>
+                <!-- <div class="row">
+                    <div class="col-sm-9 ">
+                        <button class="btn btn-light rounded-circle shadow-sm mb-2" (click)="goBack()">
+                            <i class="fa fa-arrow-left"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-md-3 col-12">
+
+                        <input type="text" [(ngModel)]="searchTerm" (input)="getClinicProvidersList()"
+                            placeholder="Search By Provider Name" class="form-control">
+                    </div>
+                </div> -->
+                <div class="row align-items-center mb-3">
+  <!-- Back Button -->
+  <div class="col-2 col-sm-1">
+    <button class="btn btn-light rounded-circle shadow-sm" (click)="goBack()">
+      <i class="fa fa-arrow-left"></i>
+    </button>
+  </div>
+
+  <!-- Spacer or Title (optional) -->
+  <div class="col-10 col-sm-7 d-none d-sm-block">
+    <!-- You can put a title here if needed -->
+  </div>
+
+  <!-- Search Input -->
+  <div class="col-12 col-sm-4 mt-2 mt-sm-0">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="getClinicProvidersList()"
+      placeholder="Search By Provider Name"
+      class="form-control"
+    />
+  </div>
+</div>
+
+                <!-- <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                   
+                    <div class="col-md-3 col-12 " >
+                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                            (input)="getClinicProvidersList()" class="form-control bg-white">
+                    </div>
+                    <div>
+                    </div>
+                </div> -->
+                <div class="table-responsive">
+
+
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th style=" min-width: 150px;" scope="col" (click)="sortData('legalPracticeName')">Legal
+                                    Practice
+                                    Name
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'legalPracticeName', 'fa-sort-up': sortColumn === 'legalPracticeName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'legalPracticeName' && sortOrder === 'desc'}"></i>
+                                </th>
+
+                                <th scope="col">Consultation Fee</th>
+                                <th scope="col"> No. of Appointments</th>
+                                <th scope="col">Profile Status</th>
+                                <th scope="col">Activate/Deactivate</th>
+                                <th scope="col">Actions</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="justify-content-center" *ngFor="let item of providerList; let i = index">
+
+
+                                <!-- <td  style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.id)">
+                                        <u>{{item.legalPracticeName || '------'}}</u> </td> -->
+
+                                <td style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.id)">
+                                    <u *ngIf="item.legalPracticeName">{{ item.legalPracticeName }}</u>
+                                    <span *ngIf="!item.legalPracticeName">--------</span>
+                                </td>
+
+
+
+                                <td class="consultation" *ngIf="item.licensedState.length > 0">
+                                    <div class="consultation-fee">
+                                        <div *ngIf="item.licensedState[0].telehealthVisitPrice !== ''" class="fee-item">
+                                            <i class="fas fa-video"></i>
+                                            <span>Telehealth - {{ item.licensedState[0].telehealthVisitPrice |
+                                                currency:'USD' }}</span>
+                                        </div>
+                                        <div *ngIf="item.licensedState[0].officeVisitPrice !== ''" class="fee-item">
+                                            <i class="fas fa-building"></i>
+                                            <span>&nbsp;Office Visit - {{ item.licensedState[0].officeVisitPrice |
+                                                currency:'USD' }}</span>
+                                        </div>
+                                        <div *ngIf="item.licensedState[0].inHomeVisitPrice !== ''" class="fee-item">
+                                            <i class="fas fa-home"></i>
+                                            <span>Home Visit - {{ item.licensedState[0].inHomeVisitPrice |
+                                                currency:'USD' }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+
+
+                                <td *ngIf="item.licensedState.length === 0">
+                                    ---------
+                                </td>
+                                <td style="color: #009cff!important; cursor: pointer;"
+                                    (click)="viewAppointments(item.id)"> <u>{{ item.bookingCount }}</u> </td>
+                                <!-- <td>{{ item.bookingCount  }}</td> -->
+                                <td>
+                                    <select class="form-select form-select-sm cursor bg-white custom-dropdown"
+                                        [value]="item.credentialStatus" (change)="onStatusChange($event,item.id)">
+                                        <option value="ApprovalPending">Approval Pending</option>
+                                        <option value="Incomplete">Incomplete</option>
+                                        <option value="CompletedAndApproved">Completed and Approved</option>
+                                        <option value="NeedMoreInformation">Need More Information</option>
+                                        <option value="InvalidInformation">Invalid Information</option>
+                                        <option value="NeedAttention">Need Attention</option>
+                                    </select>
+                                </td>
+
+
+
+                                <td style=" justify-items: center;">
+                                    <div class="col-md-4 col-lg-3 col-sm-12">
+                                        <label class="switch">
+                                            <input class="switch-input" type="checkbox" [checked]="item.isActive"
+                                                (change)="toggleStatus(item.id,item.isActive)">
+                                            <span class="switch-label"></span>
+                                            <span class="switch-handle"></span>
+                                        </label>
+
+                                    </div>
+                                </td>
+
+
+                                <td class="justify-content-center border-0">
+                                    <div class="row">
+                                        <div class="col-md-4 col-lg-3 col-sm-12">
+                                            <div class="dropdown">
+                                                <i class="fas fa-ellipsis-v cursor fs-4" data-bs-toggle="dropdown"
+                                                    style="color: rgba(0, 0, 0, 0.614) !important"></i>
+                                                <span *ngIf="item.messageCount > 0"
+                                                    class="badge bg-danger position-absolute top-0 start-100 translate-middle"
+                                                    style=" margin-left: 20px!important;">
+                                                    {{ item.messageCount }}
+                                                </span>
+                                                <ul class="dropdown-menu cursor">
+                                                    <li class="cursor">
+                                                        <a class="dropdown-item" (click)="redirectToMessage(item.id)">
+                                                            <i class="fas fa-comments"
+                                                                style="color: #00a98d; font-size: 18px;"></i> Send
+                                                            Message
+                                                            <span *ngIf="item.messageCount > 0"
+                                                                class="badge bg-danger ms-2">
+                                                                {{ item.messageCount }}
+                                                            </span>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- Flag Item Option (Only if patientCancellationReasons exists) -->
+                                                    <li *ngIf="item.patientCancellationReasons">
+                                                        <a class="dropdown-item" (click)="viewReport(item.id)">
+                                                            <i class="fas fa-flag"
+                                                                style="color: #FF5733; font-size: 18px;"></i> Flag Item
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="providerList.length === 0 && !loading">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Providers Found</span>
+                                            <p class="no-data-description">It looks like there are no providers at the
+                                                moment.
+                                                Please add your providers!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0 ">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getClinicProvidersList()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

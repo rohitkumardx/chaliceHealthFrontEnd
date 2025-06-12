@@ -1,0 +1,73 @@
+<div class="content-wrapper1 p-4">
+  
+    <div class="header">
+        <h3>Add Provider</h3>
+        <div class="close-btn" (click)="closePopup()"><i
+                class="fa-solid fa-xmark"></i></div>
+    </div>
+    <hr>
+    <div class="col-sm-12">
+        <label>Providers</label>
+        <div class="custom-dropdown">
+            <button type="button" id="multiSelectDropdown" class="form-select text-start form-select-sm dp-pd-l mt-1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                {{ selectedProvidersItems.length > 0 ? selectedProvidersItems.join(', ') : 'Select' }}
+            </button>
+            <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()" (click)="$event.stopPropagation()">
+                <li *ngFor="let item of staffList">
+                    <label>
+                        <input type="checkbox" [value]="item.id" [disabled]="item.disabled" class="cursor roleDropdwon"
+                            (change)="checkboxChangeOfProvider($event, item.fullName, item.userId)"
+                            [checked]="checkedProviderIds.includes(item.userId)">
+                        {{ item.fullName }}
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <form [formGroup]="assignChatForm" class="mt-2">
+            <div class="col-sm-12">
+                <label for="groupName"> Group Name <span class="red">*</span></label>
+                <input type="text" id="duration" formControlName="groupName" placeholder=""
+                    class="form-control form-control-sm mt-1"
+                    [ngClass]="{'is-invalid': assignChatForm.get('groupName')?.invalid && assignChatForm.get('groupName')?.touched}" />
+                <div class="invalid-feedback"
+                    *ngIf="assignChatForm.get('groupName')?.touched && assignChatForm.get('groupName')?.hasError('required')">
+                    Group Name is required.
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <label for="description"> Description <span class="red">*</span></label>
+                <textarea type="text" id="duration" formControlName="description" placeholder=""
+                    class="form-control form-control-sm mt-1"
+                    [ngClass]="{'is-invalid': assignChatForm.get('description')?.invalid && assignChatForm.get('description')?.touched}" ></textarea>
+                <div class="invalid-feedback"
+                    *ngIf="assignChatForm.get('description')?.touched && assignChatForm.get('description')?.hasError('required')">
+                    Description is required.
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row mt-2">
+        
+        <div class="col-sm-12 d-flex justify-content-end  "><button class="btn btn-success ms-4"
+                style="width: auto; display: flex; justify-content: center; align-items: center; padding: 5px 10px;"
+                [disabled]="assignChatForm.invalid"
+                (click)="createGroup()">
+                <span class="visually-hidden"></span>
+                <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': loading }" *ngIf="loading"></i>
+                <span *ngIf="!loading">Create</span>
+                <span *ngIf="loading" class="space ">Create</span>
+            </button>
+        </div>
+        <!-- <div class="col-sm-2">
+    <button type="button" class="btn btn-danger cancel" 
+        >
+        <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': loading1 }"></i>
+        <span *ngIf="!loading1" class="space">Cancel</span>
+        <span *ngIf="loading1" class="space"></span>
+    </button> 
+</div> -->
+    </div>
+</div>

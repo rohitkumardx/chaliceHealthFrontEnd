@@ -9,12 +9,11 @@ export class AuthGuard implements CanActivate {
     constructor(private authService: AuthService, private router: Router) {}
 
     canActivate(route: ActivatedRouteSnapshot): boolean {
-      debugger
         const userInfo = this.authService.getUserInfo();
-        const requiredRole = route.data['role']; // Get required role from route data
+        const requiredRole = route.data['role']; 
 
-        if (userInfo && userInfo.accountType == requiredRole) {
-            return true; // Allow access if user has the correct role
+        if (userInfo && requiredRole.includes(userInfo.accountType) ) {
+            return true; 
         } else {
             this.router.navigate(['/home-page']); // Redirect to login if role doesn't match
             return false;

@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { race } from 'rxjs';
 import { AuthService } from 'src/app/Services/auth.service';
 import { NotificationService } from 'src/app/Services/notification.service';
@@ -9,13 +9,15 @@ import { PatientService } from 'src/app/Services/patient.service';
 import { ProviderService } from 'src/app/Services/provider.service';
 import { getErrorMessage } from 'src/app/utils/httpResponse';
 import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-doctor-search',
   templateUrl: './doctor-search.component.html',
   styleUrls: ['./doctor-search.component.css']
 })
-export class DoctorSearchComponent {
+export class DoctorSearchComponent implements OnInit {
   doctorData: any;
   filterForm: FormGroup
   selectedGender: string | null = null;
@@ -27,30 +29,66 @@ export class DoctorSearchComponent {
   qualifications: any[] = [];
   selectedState: string | null = null; // Hold selected specialty
   searchName: any
-
+  location: any;
   InHomeVisit: boolean = false
   OfficeVisit: boolean = false
   TelehealthVisit: boolean = false
+  role: boolean = false;
+  searchTerm: string = '';
+  filteredSpecialities: any[] = [];
+  selectedSpecialities: any[] = [];
+  languages: any
+  //providerProfileId: any;
+  userInfo: any;
+  _ = _ ;
+  paginator: { pageNumber: number; pageSize: number; totalCount: number; totalPages: number } = {
+    pageNumber: 1,
+    pageSize: 6,
+    totalCount: 0,
+    totalPages: 0
+  };
+  filteredItems = []
+  roles: {
+    id: number,
+    numOfUsers: number,
+    name: string,
+    status: string
+  }[] = [];
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private providerService: ProviderService,
     private patientService: PatientService,
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private http: HttpClient,
+    private notificationService: NotificationService
   ) { }
 
   ngOnInit(): void {
-
+    this.route.queryParams.subscribe(params => {
+      if (params['search']||params['location']) {
+        this.searchName = params['search'];
+        this.location=params['location'];
+      }
+    });
     if (!localStorage.getItem('doctor-search-page')) {
       localStorage.setItem('doctor-search-page', 'true');
       window.location.reload();
+      this.getSpeciality();
     } else {
       localStorage.removeItem('doctor-search-page');
-
       this.getSpeciality();
       this.getState();
       this.getCredentials();
-      this.getLanguages()
-
+      this.getLanguages();
+      this.userInfo = this.authService.getUserInfo();
+      if (this.userInfo) {
+        let acctType = this.userInfo.accountType;
+        if (acctType == "Patient") {
+          this.role = true;
+        }
+      }
     }
 
     this.filterForm = this.fb.group({
@@ -58,15 +96,176 @@ export class DoctorSearchComponent {
       state: [''],
     })
 
-    this.applyFilters()
+    // Scroll to top when the component loads
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
   }
-  searchTerm: string = '';
-  filteredSpecialities: any[] = [];
-  selectedSpecialities: any[] = [];
-  languages: any
 
 
+  isSpecialityFoundInVisible(): boolean {
+    // Check if the search name matches any speciality in the hidden list
+    return this.visibleSpecialities.some(item => item.name.toLowerCase() === this.searchName.toLowerCase());
+  }
+  isSpecialityFoundInHidden(): boolean {
+    // Check if the search name matches any speciality in the hidden list
+    return this.hiddenSpecialities.some(item => item.name.toLowerCase() === this.searchName.toLowerCase());
+  }
+  selectSpecialityOnLoad(suggestion: any) {
+    this.selectedSpeciality = suggestion;
+    this.searchName = suggestion;
+   
+    if (this.searchName) {
+      if (!this.isSpecialityFoundInHidden()) {
+        //this.suggestionsSpeciality = [];
+        //this.selectedIndex = null;
+      }
+      else if (!this.isSpecialityFoundInVisible()) {
+        this.isSpecialityOptionsVisible = true;
+        this.showSpecialityMoreButton = false;
+      }
+ 
+    }
+    this.suggestionsSpeciality = [];
+    this.selectedIndex = null;
+  }
+ 
+
+  @HostListener('document:click', ['$event'])
+  clickOutside(event: MouseEvent) {
+    this.suggestionsSpeciality = []; // Close the dropdown
+    this.selectedIndex = null; // Reset index
+    this.suggestions=[];
+  }
+
+
+  parseLocalDate(dateStr: string | Date): Date {
+    if (typeof dateStr === 'string') {
+      // Force parsing in local time instead of UTC
+      const [year, month, day] = dateStr.split('-').map(Number);
+      return new Date(year, month - 1, day); // Local date (no time)
+    }
+    return new Date(dateStr);
+  }
+ 
+  isToday(date: string | Date): boolean {
+    const today = new Date();
+    const givenDate = this.parseLocalDate(date);
+    return today.toDateString() === givenDate.toDateString();
+  }
+ 
+  isTomorrow(date: string | Date): boolean {
+    const today = new Date();
+    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    const givenDate = this.parseLocalDate(date);
+    return tomorrow.toDateString() === givenDate.toDateString();
+  }
+
+  isNextWeek(date: string | Date): boolean {
+    const today = new Date();
+    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    const nextWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7);
+    const givenDate = this.parseLocalDate(date);
+ 
+    return givenDate > tomorrow && givenDate <= nextWeek;
+  }
+  redirectToBookAppointment(providerProfileId: any, id: string, date: any, time: any): void {
+    
+    const data: any = {}
+    ;
+    const formattedTime = this.convertTimeTo24HrFormat(time);
+    
+    data.date = date
+    data.time = formattedTime
+    ;
+    this.userInfo = this.authService.getUserInfo();
+    if (this.userInfo != null) {
+      this.router.navigate(['/patient/book-appointment'], {
+        queryParams: { providerProfileId: providerProfileId, slotId: id, data: JSON.stringify(data) }
+      });
+    }
+    else {
+      const obj = {
+        providerProfileId: providerProfileId,
+        id: id,
+        data: data
+      }
+      
+      this.authService.setAppointmentInfo(obj);
+      this.router.navigate(['/login'], {
+        queryParams: { request: 'PatientPortal' }
+      });
+    }
+
+  }
+  
+  redirectToProviderDetail(userId: any) {
+    if (this.role || this.userInfo ==null) {
+      this.router.navigate(['/patient/provider-detail'], {
+        queryParams: { request: 'PatientPortal', userId: userId }
+      });
+    }
+
+  }
+
+
+  getTodayOrNextSlots(availabilities: any[]): any[] {
+    const today = new Date().toISOString().split('T')[0];
+    const grouped: { [date: string]: any[] } = {};
+ 
+    for (const slot of availabilities) {
+      if (!grouped[slot.date]) grouped[slot.date] = [];
+      grouped[slot.date].push(slot);
+    }
+ 
+    const sortedDates = Object.keys(grouped).sort();
+    for (const date of sortedDates) {
+      if (date >= today) return grouped[date];
+    }
+ 
+    return [];
+  }
+ 
+
+  
+  
+
+  getStateAndCountry(item: any): string {
+    if (!item?.address || !item?.stateName) return item?.stateName || '';
+
+    // Extract country (assuming the last part after the last comma is the country)
+    const addressParts = item.address.split(',').map(part => part.trim());
+    const country = addressParts[addressParts.length - 1];
+
+    return `${item.stateName}, ${country}`;
+  } 
+
+  convertTimeTo24HrFormat(time: string): string {
+    // Regular expression to handle time parsing
+    const regex = /(\d{1,2}):(\d{2})\s([APap][Mm])/;
+    const matches = time.match(regex);
+
+    if (matches) {
+      let hours = parseInt(matches[1]);
+      const minutes = matches[2];
+      const period = matches[3].toUpperCase(); // AM or PM
+
+      // Convert to 24-hour format
+      if (period === 'AM' && hours === 12) {
+        hours = 0; // Midnight case
+      } else if (period === 'PM' && hours !== 12) {
+        hours += 12; // Convert PM times
+      }
+
+      // Format hours, minutes, and seconds to always be 2 digits
+      const hoursFormatted = hours.toString().padStart(2, '0');
+      const minutesFormatted = minutes.padStart(2, '0');
+      const secondsFormatted = '00'; // Always set seconds to 00
+
+      return `${hoursFormatted}:${minutesFormatted}:${secondsFormatted}`;
+    } else {
+      return 'Invalid time format';
+    }
+  }
   getLanguages() {
     this.providerService.getLanguages().subscribe((response: any) => {
       this.languages = response.items
@@ -78,7 +277,6 @@ export class DoctorSearchComponent {
     this.patientService.getState().subscribe(
       (data: any) => {
         this.states = data.items;
-
       }
     );
   }
@@ -89,13 +287,12 @@ export class DoctorSearchComponent {
   getCredentials() {
     this.providerService.getQualifications().subscribe(
       (data: any) => {
-        this.qualifications = data.items;
-
-
-        this.visibleQualifications = this.qualifications.slice(0, 4); 
-        this.hiddenQualifications = this.qualifications.slice(4); 
+        this.qualifications = data.items.filter(
+          (item) => item.inHomePage
+        );
         this.showMoreButton = true
-
+        this.visibleQualifications = this.qualifications.slice(0, 4);
+        this.hiddenQualifications = this.qualifications.slice(0, 10);
       },
       (error) => {
         console.error("Error fetching qualifications:", error);
@@ -104,111 +301,174 @@ export class DoctorSearchComponent {
   }
   clearFilters() {
     this.filterForm.reset();
-
+    // Reset filter-related variables
+    this.filterData = {};  // Reset filterData completely
+    this.selectedCredential = null;
+    this.selectedSpeciality = null;
+    this.states = [];
     this.selectedSpecialities = [];
     this.searchTerm = '';
+    this.searchName = '';
+    this.location = '';
     this.filteredSpecialities = [...this.specialities];
-
     this.selectedGender = '';
     this.selectedVisit = '';
     this.selectedAvailability = '';
-    debugger
+    this.selectedLanguages = [];
+    this.filterForm.get('state')?.setValue('');
+
+    // Reset all language selections
     this.languages.forEach(lang => lang.selected = false);
 
-    this.getLanguages()
-    // window.location.reload();
+    // Fetch updated state and language lists
+    this.getLanguages();
+    this.getState();
 
-    this.applyFilters();
+    // Call applyFilters after a short delay to ensure state reset is reflected
+    setTimeout(() => {
+      this.applyFilters();
+    }, 100);
   }
 
   filterData: any = {};
-  applyFilters() {
-    this.loading = true
-    this.filterData.InHomeVisit = false,
-      this.filterData.OfficeVisit = false,
-      this.filterData.TelehealthVisit = false
-
-    if (this.filterForm.value.credentials != "") {
-      this.filterData.QualificationIds = this.filterForm.value.credentials;
+  specialityList: any[] = [];
+  search() {
+    if (!this.searchName || this.searchName.trim() === '') {
+      this.clearFilters();
+      return;
     }
-    if (this.filterForm.value.state != "") {
+    else {
+      this.applyFilters();
+    }
+
+  }
+  conditionName: any;
+    applyFilters() {
+    this.loading = true;
+    this.filterData.InHomeVisit = false;
+    this.filterData.OfficeVisit = false;
+    this.filterData.TelehealthVisit = false;
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000; // offset in ms
+    const localISOTime = new Date(now.getTime() - offset).toISOString().slice(0, -1); // remove 'Z'
+    this.filterData.currentDateTime = localISOTime; 
+    if (this.selectedSpeciality) {
+      
+      this.filterData.SpecialtyName = this.selectedSpeciality;
+    }
+    if (this.searchName && this.searchName.trim() !== '') {
+      let matchedSpeciality = this.specialities.find(s =>
+        s.name.toLowerCase().startsWith(this.searchName.toLowerCase()) // Matches first few characters
+      );
+
+      if (matchedSpeciality) {
+        // If a match is found based on the first few characters, treat it as a specialty
+        this.filterData.SpecialtyName = matchedSpeciality.name;
+        this.filterData.specialistNames = this.selectedSpeciality;
+
+        // Remove FirstName filter
+        delete this.filterData.name;
+      } else {
+        // If no match is found in specialties, filter by FirstName
+        this.filterData.name = this.searchName;
+
+        // Remove SpecialtyName filter
+        delete this.filterData.SpecialtyName;
+        delete this.filterData.specialistNames;
+      }
+    }
+
+    if (this.selectedCredential) {
+      this.filterData.QualificationIds = this.selectedCredential;
+    } else {
+      delete this.filterData.QualificationIds;
+    }
+    if (this.filterForm.value.state) {
       this.filterData.StateIds = this.filterForm.value.state;
     }
-    if (this.searchName != '') {
-      this.filterData.FirstName = this.searchName;
-    } else if (this.searchName === '') {
-      delete this.filterData.FirstName;
-    }
+
     if (this.selectedVisit === 'telehealth') {
       this.filterData.TelehealthVisit = true;
     } else if (this.selectedVisit === 'in office') {
       this.filterData.OfficeVisit = true;
-    }
-    else if (this.selectedVisit === 'in home') {
+    } else if (this.selectedVisit === 'in home') {
       this.filterData.InHomeVisit = true;
-    }
-    else if (this.selectedVisit === null) {
-      this.filterData.InHomeVisit = false;
-      this.filterData.OfficeVisit = false;
-      this.filterData.TelehealthVisit = false;
     }
     if (this.selectedGender === 'male') {
       this.filterData.gender = 'Male';
     } else if (this.selectedGender === 'female') {
       this.filterData.gender = 'Female';
-    } else if (this.selectedGender == 'any') {
-      delete this.filterData.gender;
+    } else if (this.selectedGender === 'other') {
+      this.filterData.gender = 'Other'; // <-- fix here
     }
-
     if (this.selectedLanguages.length > 0) {
-      this.filterData.LanguageIds = this.selectedLanguages
-    } else if (this.selectedLanguages.length == 0) {
+      this.filterData.LanguageIds = this.selectedLanguages;
+    } else {
       delete this.filterData.LanguageIds;
     }
 
-
-    if (this.selectedSpecialities.length > 0) {
-      this.filterData.SpecialistIds = this.selectedSpecialities.map(speciality => speciality.id);
-    } else if (this.selectedLanguages.length == 0) {
-      delete this.filterData.LanguageIds;
+    // *Filter by Address*
+    if (this.location && this.location.trim() !== '') {
+      this.filterData.Address = this.location.trim();
+    } else {
+      delete this.filterData.Address;
     }
-    this.patientService.getFilteredProviderList(this.filterData).subscribe(
+    if (this.conditionName && this.conditionName.trim() !== '') {
+      this.filterData.conditionName = this.conditionName.trim();
+    } else {
+      delete this.filterData.conditionName;
+    }
+ 
+    debugger
+    this.patientService.getFilteredProviderList(this.filterData,this.paginator.pageNumber,this.paginator.pageSize).subscribe(
       (data: any) => {
-        this.loading = false
-        this.doctorData = data;
+        this.loading = false;
 
+            // Always reset doctor list
+        this.notificationService.scrollToTop();
+        this.doctorData = [];
+        this.filteredItems = [];
+       
+           if (data.items.length > 0) {
+                  this.roles = _.get(data, 'items');
+                  this.paginator = {
+                    ...this.paginator,
+                    pageNumber: _.get(data, 'pageNumber'),
+                    totalCount: _.get(data, 'totalCount'),
+                    totalPages: _.get(data, 'totalPages'),
+                  };
+                  this.doctorData = data.items
+                  if (data && data.items && Array.isArray(data.items)) {
+                    this.doctorData = data.items;
+                    this.filteredItems = [...this.doctorData];
+                  }
+                   this.doctorData = data.items;
         this.doctorData.forEach((doctor: any) => {
-
           if (doctor?.profilePicturePath) {
             doctor.profilePicturePath = environment.fileUrl + doctor.profilePicturePath;
           } else {
             doctor.profilePicturePath = undefined;
           }
-
           if (doctor.availabilities.length > 0) {
-            if (doctor.availabilities && doctor.availabilities.length > 5) {
-              doctor.availabilities = doctor.availabilities.slice(0, 5);
+            if (doctor.availabilities.length > 5) {
+              doctor.availabilities = doctor.availabilities;
             }
-
-            doctor.date = doctor.availabilities[0].date
+            doctor.date = doctor.availabilities[0].date;
             doctor.availabilities = doctor.availabilities.map((slot: any) => {
-              debugger
-
               if (typeof slot.startTime === 'string' && slot.startTime.includes(':')) {
                 const timeParts = slot.startTime.split(':');
                 const hours = parseInt(timeParts[0], 10);
                 const minutes = timeParts[1];
                 const suffix = hours >= 12 ? 'PM' : 'AM';
                 const hour12 = hours % 12 || 12;
-
                 slot.startTime = `${hour12}:${minutes} ${suffix}`;
               }
               return slot;
             });
           }
-
         });
-        console.log('doctor', this.doctorData)
+                }
+        console.log('Filtered doctors:', this.doctorData);
       },
       (error) => {
         console.error("Error fetching filtered providers:", error);
@@ -265,24 +525,30 @@ export class DoctorSearchComponent {
     );
   }
   getSpeciality() {
+    
     this.providerService.getSpeciality().subscribe((response: any) => {
       this.specialities = response
-      this.filteredSpecialities = this.specialities;
+      ;
+      this.applyFilters();
+      const filteredSpecialities = this.specialities.filter(
+        (speciality) => speciality.inHomePage
+      );
+      console.log("This is data", this.specialities);
+      this.visibleSpecialities = filteredSpecialities.slice(0, 4);
+      this.hiddenSpecialities = filteredSpecialities.slice(0, 10);
+      this.showSpecialityMoreButton = true
+      this.selectSpecialityOnLoad(this.searchName);
     })
   }
 
   getProviderList() {
     this.patientService.getProviderList().subscribe((data: any) => {
-      this.doctorData = data;
+      this.doctorData = data.items;
       this.doctorData.forEach((doctor: any) => {
-
         if (doctor.availabilitySlots && doctor.availabilitySlots.length > 5) {
           doctor.availabilitySlots = doctor.availabilitySlots.slice(0, 5);
         }
-
-
         doctor.availabilitySlots = doctor.availabilitySlots.map((slot: any) => {
-          debugger
 
           if (typeof slot.startTime === 'string' && slot.startTime.includes(':')) {
             const timeParts = slot.startTime.split(':');
@@ -303,30 +569,28 @@ export class DoctorSearchComponent {
   }
 
   toggleGender(gender: string): void {
-    if (this.selectedGender === gender) {
+    ;
+    if (this.selectedGender == gender) {
       this.selectedGender = null;
     } else {
       this.selectedGender = gender;
     }
   }
-  redirectToDoctorProfile(id: string): void {
-    this.router.navigate(['/patient/view-profile'], { queryParams: { providerProfileId: id } });
+  redirectToDoctorProfile(id: string, clinicId : any): void {
+   // this.router.navigate(['/patient/view-profile'], { queryParams: { providerProfileId: id, clinicId: clinicId } });
+    if(this.role || this.userInfo ==null){
+      this.router.navigate(['/patient/view-profile'], { queryParams: { providerProfileId: id, clinicId: clinicId } });
+    }
   }
 
-
-
-
   toggleAvailability(availability: string): void {
-    debugger
+    
     if (this.selectedAvailability === availability) {
       this.selectedAvailability = null;
     } else {
       this.selectedAvailability = availability;
     }
   }
-
-
-
 
   toggleVisit(visit: string): void {
 
@@ -335,31 +599,33 @@ export class DoctorSearchComponent {
     } else {
       this.selectedVisit = visit;
     }
-
   }
 
+  visibleQualifications = this.qualifications.slice(0, 3);
+  hiddenQualifications = this.qualifications.slice(3);
 
-
-
-
-
-
-
-
-
-
-
-  visibleQualifications = this.qualifications.slice(0, 3); 
-  hiddenQualifications = this.qualifications.slice(3); 
-
-  selectedCredential: any
+  selectedCredential = null
   isMoreOptionsVisible = false;
-  slideTransform = 'translateX(0)';
-  showMoreButton:  boolean = false;
 
+  showMoreButton: boolean = false;
+
+
+  visibleSpecialities = [];
+  hiddenSpecialities = [];
+  // selectedSpeciality: number | null = null;
+
+  // Controls visibility
+  isSpecialityOptionsVisible = false;
+  showSpecialityMoreButton = false;
 
   selectCredential(id: number) {
-     this.selectedCredential = id;
+    if (this.selectedCredential == id) {
+      this.selectedCredential = null
+    }
+    else {
+      this.selectedCredential = id;
+    }
+
   }
 
   showMoreOptions() {
@@ -372,4 +638,115 @@ export class DoctorSearchComponent {
     this.isMoreOptionsVisible = false;
     this.showMoreButton = true
   }
+
+  selectedSpeciality: string | null = null;
+  suggestionsSpeciality1: any[] = [];
+
+  selectSpeciality(suggestion: any, index: number) {
+    this.selectedSpeciality = suggestion;
+    this.searchName = suggestion.name;
+    this.suggestionsSpeciality = [];
+    this.selectedIndex = null;
+  }
+  selectedIndex1: number | null = null;
+  showSpecialityOptions() {
+    this.isSpecialityOptionsVisible = true;
+    this.showSpecialityMoreButton = false
+  }
+  hideSpecialityOptions() {
+    this.isSpecialityOptionsVisible = false;
+    this.showSpecialityMoreButton = true
+
+  }
+  suggestions: any[] = [];
+  suggestionsSpeciality: any[] = [];
+  onSpecialityChange(event: any): void {
+    const query = event.target.value;
+    if (query.length > 2) {
+      this.providerService.getSpecialitySearch(query).subscribe((response: any) => {
+        this.suggestionsSpeciality = response;
+        this.selectedIndex = null; // Reset index on new list
+      });
+    } else {
+      this.suggestionsSpeciality = [];
+      this.selectedIndex = null;
+    }
+  }
+
+  selectedIndex: number | null = null;
+
+@HostListener('document:keydown', ['$event'])
+handleKeydown(event: KeyboardEvent) {
+  if (this.suggestionsSpeciality.length === 0) return;
+
+  if (event.key === 'ArrowDown') {
+    event.preventDefault();
+    if (this.selectedIndex === null || this.selectedIndex >= this.suggestionsSpeciality.length - 1) {
+      this.selectedIndex = 0;
+    } else {
+      this.selectedIndex++;
+    }
+  } else if (event.key === 'ArrowUp') {
+    event.preventDefault();
+    if (this.selectedIndex === null || this.selectedIndex <= 0) {
+      this.selectedIndex = this.suggestionsSpeciality.length - 1;
+    } else {
+      this.selectedIndex--;
+    }
+  } else if (event.key === 'Enter' && this.selectedIndex !== null) {
+    this.selectSpeciality(this.suggestionsSpeciality[this.selectedIndex], this.selectedIndex);
+  }
+}
+
+ 
+  handleKeydown1(event: KeyboardEvent) {
+    if (this.suggestions.length === 0) return;
+  
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      this.selectedIndex1 = this.selectedIndex1 === null || this.selectedIndex1 >= this.suggestions.length - 1
+        ? 0
+        : this.selectedIndex1 + 1;
+      this.scrollToSelected();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      this.selectedIndex1 = this.selectedIndex1 === null || this.selectedIndex1 <= 0
+        ? this.suggestions.length - 1
+        : this.selectedIndex1 - 1;
+      this.scrollToSelected();
+    } else if (event.key === 'Enter' && this.selectedIndex1 !== null) {
+      this.selectSuggestion(this.suggestions[this.selectedIndex1], this.selectedIndex1);
+    }
+  }
+  
+  scrollToSelected() {
+    setTimeout(() => {
+      const selectedItem = document.querySelector('.selected-suggestion');
+      if (selectedItem) {
+        selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 100);
+  }
+  
+  selectSuggestion(suggestion: any, index: number): void {
+    this.selectedIndex1 = index;
+    this.location = suggestion.address;
+    this.suggestions = [];
+    this.selectedIndex1 = null;
+  }
+  
+  onAddressChange(event: any): void {
+    const query = event.target.value;
+    if (query.length > 2) {
+      this.providerService.getAddressSearch(query).subscribe((response: any) => {
+        this.suggestions = response;
+        this.selectedIndex1 = null; // Reset selected index when suggestions change
+      });
+    } else {
+      this.suggestions = [];
+    }
+  }
+
+ 
+  
 }

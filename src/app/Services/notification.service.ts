@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,13 @@ export class NotificationService {
   public alerts = [];
 
   constructor() {}
+
+  private notificationUpdate = new Subject<void>();
+  notificationUpdate$ = this.notificationUpdate.asObservable();
+
+  emitNotificationUpdate() {
+    this.notificationUpdate.next();
+  }
 
   addAlert(alert): void {
     this.alerts.push(alert);

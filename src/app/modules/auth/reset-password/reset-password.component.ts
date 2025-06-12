@@ -25,8 +25,9 @@ export function passwordPatternValidator(): ValidatorFn {
   styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent  {
-
+  userInfo: any;
   hidePassword: boolean = true;
+  hidePassword1: boolean = true;
   resetForm: FormGroup;
   passwordResetForm: FormGroup;
   email: string;
@@ -51,7 +52,7 @@ export class ResetPasswordComponent  {
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
       this.hash = params['hash'];
-      console.log('Hash:', this.hash);
+
       // Now you can use the 'hash' variable as needed in your component logic.
     });
     this.passwordResetForm = this.formBuilder.group({
@@ -62,16 +63,28 @@ export class ResetPasswordComponent  {
      this.passwordResetForm.get('password')?.valueChanges.subscribe(() => {
        this.passwordResetForm.get('confirmPassword')?.updateValueAndValidity();
      });
+     this.userInfo = this.authService.getUserInfo();
+     console.log("local storage from set password :", this.userInfo);
   }
   togglePasswordVisibility() {
     this.hidePassword = !this.hidePassword;
+  }
+
+
+  toggleConfirmPasswordVisibility() {
+    this.hidePassword1 = !this.hidePassword1;
+  }
+
+  redirectToHomePage(){
+    ;
+    this.router.navigate(['/home-page']);
   }
 
   initializePasswordResetForm() {
    
   }
   passwordResetFormSubmit() {
-    debugger
+    ;
     let resetPasswordObject = { 
       "NewPassword": _.get(this.passwordResetForm, 'value.password'),
       "ConfirmPassword": _.get(this.passwordResetForm, 'value.confirmPassword'),
@@ -81,10 +94,12 @@ export class ResetPasswordComponent  {
     this.authService.passwordReset(resetPasswordObject).subscribe(res => {
       this.passwordReset = true;
       this.loading = false;
+      ;
       this.router.navigate(['/thank-you']);
       // this.notificationService.showSuccess("Password reset sucessfully.")
     }, error => {
       this.loading = false;
+      ;
       this.notificationService.showDanger(getErrorMessage(error));
     });
   }
@@ -96,5 +111,10 @@ export class ResetPasswordComponent  {
       this.passwordInputState[1].eyeStateShow = !this.passwordInputState[1].eyeStateShow;
       this.passwordInputState[1].type = this.passwordInputState[1].type == "password" ? "text" : "password";
     }
+  }
+
+  navigateToLogin() {
+    
+    this.router.navigate(['/login']);
   }
 }

@@ -1,0 +1,82 @@
+<div class="px-4">
+  <div class=" mt-3 p-4 rounded shadow border border-2 mb-3 " style="background-color: #f5f7fa;">
+    <h4 class="bold fs-2">Review & Rating Management</h4>
+    <p class="text-muted fs-6">View and manage all doctors reviews and ratings in one place.</p>
+ 
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-3 flex-wrap">
+      <div class="row  justify-content-end w-100 d-flex">
+        <div class="col-md-3 col-sm-12 col-12 p-0 ps-2">
+          <div  style="position: relative;">
+            <input [(ngModel)]="searchTerm" type="text"  (input)="getReviewAndRatingByPatientId()" class="form-control form-control-sm " placeholder="Search By Provider Name..." />
+            <i class="fa fa-search position-absolute text-muted"
+              style="right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+ 
+    <div class="row mt-5">
+      <div class="provider-card1" *ngIf="ratingData?.length === 0">
+        <div class="provider-header">
+          <h2 class="text-center">No Reviews or Ratings Found</h2>
+        </div>
+        <br>
+        <div class="text-center">
+          <span>
+            It seems that there are no reviews or ratings available at the moment. We encourage you to check again later, as new feedback is constantly being added.
+          </span>
+        </div>
+        
+      </div>
+      <div class="col-md-3 col-sm-12 mb-4" *ngFor="let item of ratingData">
+        <div class="card h-100 d-flex flex-column shadow-sm border-0 rounded-4 overflow-hidden">
+ 
+          <!-- Image Section -->
+          <img *ngIf="item?.filePath != 'https://localhost:5001/undefined'" [src]="item.filePath" class="card-img-top me-3">
+      
+          <img *ngIf="item.filePath === 'https://localhost:5001/undefined'"
+          class="card-img-top me-3"
+          alt="Doctor Profile Default"
+          src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png">
+     
+ 
+          <!-- Body Section -->
+          <div class="card-body">
+            <div class="d-flex align-items-center mb-2">
+              <div>
+                <h3 class="mb-0 fw-semibold">{{ item.providerName }}</h3>
+                <div class="text-warning small">
+                  <ng-container *ngFor="let star of [1,2,3,4,5]">
+                    <mat-icon [ngClass]="{ 'filled': star <= item.rating }">star</mat-icon>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+ 
+            <p class="mb-2 text-muted" style="white-space: normal; word-wrap: break-word;">
+              {{ item.review }}
+            </p>
+            <div class="row">
+              <div class=" col-6 text-start small text-muted" style="font-weight: 500; ">
+                {{ item.date | date: 'MM-dd-yyyy' }}
+              </div>
+              <div class="col-6 text-end text-success">
+                <i class="fa-regular fa-pen-to-square cursor edit-animated-icon " style="font-weight: 700;" (click)="editItem(item.id)"></i>
+ 
+              </div>
+            </div>
+ 
+          </div>
+       
+        </div>
+      </div>
+      
+    </div>
+    <div class="mx-2 d-flex justify-content-end mt-2" >
+      <app-pagination [paginator]="paginator" (onPageChange)="getReviewAndRatingByPatientId()" />
+    </div>    
+
+  </div>
+</div>
+ 

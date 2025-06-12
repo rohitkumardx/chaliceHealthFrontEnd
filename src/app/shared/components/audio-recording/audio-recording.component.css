@@ -1,0 +1,73 @@
+.audio-recorder i {
+    font-size: 20px;
+    cursor: pointer;
+    color: #00876F;
+    transition: transform 0.3s;
+   
+  }
+ .trash-button{
+  border: none;
+  background-color: white;
+ }
+  .audio-recorder i:hover {
+    transform: scale(1.2); /* Slightly enlarge icon on hover */
+  }
+  
+  .audio-recorder i[style*="pointer-events: none"] {
+    color: #00876F; /* Change the color to gray when disabled */
+    cursor: not-allowed; /* Change cursor to indicate it's disabled */
+  }
+  
+  /* .audio-recorder .spinner {
+    
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+  }
+   */
+  /* @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  } /* @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  } */
+  
+  button[disabled] {
+    opacity: 0.5;
+  }
+  .recording {
+    color: red !important;
+    font-size: 15px;  /* Turns the icon red when recording */
+    animation: pulse 1s infinite;  /* Pulsing animation when recording */
+  }
+  
+  
+
+  .spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3); /* Light border */
+    border-top: 4px solid #3498db; /* Blue color */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-top: 10px;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.3);  /* Slightly increase the size of the icon */
+      opacity: 0.7;  /* Slightly fade out */
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }

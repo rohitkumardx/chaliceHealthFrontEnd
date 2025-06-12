@@ -1,9 +1,13 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'src/app/Services/auth.service';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { ProviderService } from 'src/app/Services/provider.service';
 import { getErrorMessage } from 'src/app/utils/httpResponse';
+import { ContactDetailsComponent } from '../contact-details/contact-details.component';
+import { ProviderMedicalLicenseInfoComponent } from '../provider-medical-license-info/provider-medical-license-info.component';
+import { ProviderDocumentsComponent } from '../provider-documents/provider-documents.component';
 
 
 
@@ -20,10 +24,14 @@ export class ProviderServicesComponent implements OnInit {
   loading1: boolean = false;
   specialities: any
   @Output() dialogClosed = new EventEmitter<void>();
+  userId : any
+  userInfo :any
 
   constructor(private fb: FormBuilder,
     public activeModel: NgbActiveModal,
     public notificationService: NotificationService,
+    public authService: AuthService,
+        private modalService: NgbModal,
     public providerService: ProviderService
   ) { }
 
@@ -39,6 +47,19 @@ export class ProviderServicesComponent implements OnInit {
       agesTreated: [''],
       servicePricing: [''],
     });
+
+    const userInfo = this.authService.getUserInfo()
+    this.userInfo = userInfo
+    if (userInfo.accountType == "IndependentProvider") {
+      this.userId = userInfo.userId
+   
+    }
+    if (localStorage.getItem('NewProviderId')){
+      this.userId = localStorage.getItem('NewProviderId')
+    }
+    if(userInfo.accountType != "IndependentProvider" && !localStorage.getItem('NewProviderId')){
+      this.userId = userInfo.userId
+    }
 
     this.getSpecialityDropDown()
     this.getEditServiceData()
@@ -61,8 +82,8 @@ export class ProviderServicesComponent implements OnInit {
 
   isDisabled : boolean = false
   getEditServiceData() {
-    this.providerService.getServiceDataById().subscribe((response: any) => {
-      debugger
+    this.providerService.getServiceDataById(this.userId).subscribe((response: any) => {
+     
       this.serviceForm.patchValue(response)
       if (response.serviceDetail != null) {
         this.serviceRows = [];
@@ -74,8 +95,8 @@ export class ProviderServicesComponent implements OnInit {
         });
       }
 
-      this.serviceForm.disable();
-      this.isDisabled = true
+      // this.serviceForm.disable();
+      // this.isDisabled = true
     })
   }
   serviceRows = [{ specialtyServiceId: '', price: null }];
@@ -145,9 +166,17 @@ export class ProviderServicesComponent implements OnInit {
       }));
 
     serviceForm.ServiceDetail.push(...convertedServiceRows);
-    this.providerService.postServiceAndPriceData(serviceForm).subscribe((data: any) => {
+    this.providerService.postServiceAndPriceData(serviceForm,this.userId).subscribe((data: any) => {
       this.notificationService.showSuccess("Service Info added successfully.");
-      this.modalClose()
+      if(this.userInfo.accountType == 'Admin'){
+        this.openDocumentPopUp();
+      }
+      else{
+        this.modalClose()
+      }
+      
+
+      
     },
       (error) => {
         this.notificationService.showDanger(getErrorMessage(error));
@@ -155,6 +184,23 @@ export class ProviderServicesComponent implements OnInit {
       }
     )
   }
+
+  openMedicalPopUp() {
+    this.activeModel.close();
+    this.modalService.open(ProviderMedicalLicenseInfoComponent, {
+      backdrop: 'static',
+      size: 'lg',
+      centered: true
+    });
+  }
+    openDocumentPopUp() {
+      this.activeModel.close();
+      this.modalService.open(ProviderDocumentsComponent, {
+        backdrop: 'static',
+        size: 'lg',
+        centered: true
+      });
+    }
 
 
   cancel() {

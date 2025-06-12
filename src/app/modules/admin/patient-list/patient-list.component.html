@@ -1,0 +1,133 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <h3 class=" mb-2">Patient Management</h3>
+
+                <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                    <div class="col-12 col-md-3 ">
+                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code/Name"
+                            (input)="getPatientList()" class="form-control bg-white">
+                    </div>
+                    <div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+
+
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueId')">Patient
+                                    Code
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueId', 'fa-sort-up': sortColumn === 'patientUniqueId' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueId' && sortOrder === 'desc'}"></i>
+                                </th>
+
+                                <th style=" min-width: 150px;" scope="col" (click)="sortData('patientName')">Patient
+                                    Name
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientName', 'fa-sort-up': sortColumn === 'patientName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientName' && sortOrder === 'desc'}"></i>
+                                </th>
+
+                                <!-- <th scope="col">Patient Code</th> -->
+
+                                <!-- <th scope="col">Patient Name</th> -->
+
+                                <th scope="col">No. of Appointments</th>
+                                <th scope="col">Activate/Deactivate</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of patientList; let i = index">
+                                <td style="color: #009cff!important; cursor: pointer;"
+                                    (click)="viewProfile(item.userId)"> <u>{{item?.patientUniqueId}}</u> </td>
+                                <td style="color: #009cff!important; cursor: pointer;"
+                                    (click)="viewProfile(item.userId)"> <u>{{item?.patientName}}</u> </td>
+                                <td style="color: #009cff!important; cursor: pointer;"
+                                    (click)="viewAppointments(item.userId)"> <u>{{ item.bookingCount }}</u> </td>
+                                <!-- <td> {{ item.bookingCount }} </td>  -->
+                                <td style=" justify-items: center;">
+                                    <label class="switch">
+                                        <input class="switch-input" type="checkbox" [checked]="item.isActive"
+                                            (change)="toggleStatus(item.userId,item.isActive)">
+                                        <span class="switch-label"></span>
+                                        <span class="switch-handle"></span>
+                                    </label>
+
+                                </td>
+                                <td style="justify-items: center;">
+                                    <div class="d-flex align-items-center gap-3 justify-content-end position-relative">
+                                  
+                                      <!-- Send Message Icon -->
+                                      <span title="Send Message"
+                                            data-bs-toggle="tooltip"
+                                            style="cursor: pointer; position: relative;"
+                                            (click)="redirectToMessage(item.userId)">
+                                        <i class="fas fa-comments" style="color: #00a98d; font-size: 18px;"></i>
+                                  
+                                        <!-- Message Count Badge -->
+                                        <span *ngIf="item.messageCount > 0"
+                                              class="badge bg-danger position-absolute top-0 start-100 translate-middle"
+                                              style="font-size: 10px;">
+                                          {{ item.messageCount }}
+                                        </span>
+                                      </span>
+                                  
+                                      <!-- Flag Item Icon -->
+                                      <span *ngIf="item.hasReport"
+                                            title="Flag Item"
+                                            data-bs-toggle="tooltip"
+                                            style="cursor: pointer;"
+                                            (click)="viewReport(item.userId)">
+                                        <i class="fas fa-flag" style="color: #FF5733; font-size: 18px;"></i>
+                                      </span>
+                                  
+                                    </div>
+                                  </td>
+                                  
+                                   
+
+
+                              
+
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="patientList.length === 0 && !loading">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Patients Found</span>
+                                            <p class="no-data-description">It looks like there are no patients at the
+                                                moment.
+                                                Please check back later!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getPatientList()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

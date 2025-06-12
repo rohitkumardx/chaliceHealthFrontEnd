@@ -18,8 +18,7 @@ export class SsnFormatDirective {
     if (value.length >= 3) {
       value = `${value.substring(0, 3)}-${value.substring(3, 5)}-${value.substring(5)}`;
     }
-
-    
+   
     this.renderer.setProperty(inputElement, 'value', value);
   }
 }

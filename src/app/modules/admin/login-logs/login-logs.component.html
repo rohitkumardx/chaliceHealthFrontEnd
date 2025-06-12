@@ -1,0 +1,85 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <h3 class=" mb-2">Login Logs</h3>
+                <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                    <div class="col-12 col-md-3">
+                    <input type="text" [(ngModel)]="searchTerm" placeholder="Search By User Name"
+                    
+                                                (input)="getLoginLogs()" class="form-control bg-white">
+                    </div>
+                    </div>
+                  <div class="table-responsive">
+                   
+                         
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th style=" min-width: 150px;" scope="col" (click)="sortData('name')">User Name
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'name', 'fa-sort-up': sortColumn === 'name' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'name' && sortOrder === 'desc'}"></i>
+                                </th>
+                                <th scope="col">Platform</th>                             
+                                <th scope="col">Browser</th>                              
+                                <th scope="col">Version</th> 
+                                <th scope="col">Request From</th>
+                                <th scope="col">IP Address</th> 
+                                <th style=" min-width: 150px;" scope="col" (click)="sortData('createdDate')">Created Date
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'createdDate', 'fa-sort-up': sortColumn === 'createdDate' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'createdDate' && sortOrder === 'desc'}"></i>
+                                </th>
+                               
+                            </tr>
+                        </thead>
+                         <tbody>
+                            <tr *ngFor="let item of loginLogs; let i = index">
+                                <td> {{ item.name }} </td> 
+                                <td> {{ item.platform }} </td> 
+                                <td> {{ item.browser }} </td> 
+                                <td> {{ item.version }} </td> 
+                                <td> {{ item.requestFrom }} </td> 
+                                <td> {{ item.ipAddress }} </td> 
+                                <td>
+                                    {{ item.createdDate| date:'MM-dd-yyyy' }} <br>
+                                    {{ item.createdDate| date:'hh:mm a' }}
+                                  </td>
+                                                                  
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loginLogs.length === 0 && !loading">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fa fa-history"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Login Logs Found</span>
+                                            <p class="no-data-description">It looks like there are no login logs at the
+                                                moment.
+                                                Please check back later!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody> 
+                    </table>
+                    
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getLoginLogs()" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

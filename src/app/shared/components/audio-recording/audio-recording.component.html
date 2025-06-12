@@ -1,0 +1,30 @@
+<div class="audio-recorder row">
+  <!-- Icon for recording and stopping -->
+   <div class="col-sm-1 "></div>
+  <div class="col-sm-8 d-flex mt-2" *ngIf="audioUrl && !isRecording">
+    <audio  [src]="audioUrl" controls></audio>
+      <!-- <i (click)="downloadRecording()"  class="fas fa-download ms-2"></i> -->
+  </div>
+  <div class="col-sm-1 d-flex align-items-center mt-2" >
+    <i class="fas" [ngClass]="{
+      'fa-microphone': !isRecording, 
+      'fa-circle': isRecording,
+      'recording': isRecording 
+    }" (click)="toggleRecording()" [ngStyle]="{ 'pointer-events': isRecording === null ? 'none' : 'auto' }">
+    </i>
+  </div>
+ 
+  <!-- Show loading indicator or status while recording -->
+  <!-- <div *ngIf="isRecording !== null">
+    <span>{{ isRecording ? 'Recording...' : 'Ready to record' }}</span>
+    <div class="spinner" *ngIf="isRecording"></div>
+  </div> -->
+  <!-- Show audio controls and file options after recording -->
+<div class="col-sm-1 d-flex align-items-center mt-2 " *ngIf="audioUrl && !isRecording">
+  <button (click)="discardRecording()" [disabled]="!audioUrl && !isRecording" class="trash-button">
+    <i class="fas fa-trash"></i>
+  </button>
+</div>
+
+
+</div>

@@ -1,0 +1,342 @@
+/* General Styles */
+.main-banner {
+    background-color: #f9f9f9;
+    padding: 30px;
+  }
+  
+  .wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .content-wrapper {
+    max-width: 100%px;
+    width: 100%;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .document-card {
+    width: 100%;
+    max-width:  100%;
+  }
+  
+  .document-card h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .red {
+    color: red;
+  }
+  
+  /* Form Styles */
+  .signup-form {
+    width: 100%;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  input[type="text"],
+  input[type="file"],
+  textarea,
+  select {
+    width: 100%;
+    /* padding: 10px; */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: border 0.3s;
+  }
+  
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: 00876F;
+    outline: none;
+  }
+  
+  textarea {
+    height: 120px;
+    resize: vertical;
+  }
+  
+  .custom-textarea {
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Custom Dropdown */
+  .custom-dropdown {
+    position: relative;
+  }
+  
+  .custom-dropdown select {
+    appearance: none;
+  }
+  
+  .dropdown-symbol {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  .dropdown-symbol i {
+    font-size: 16px;
+    color: #888;
+  }
+  
+  .invalid-feedback {
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+  }
+  
+  /* .is-invalid {
+    border-color: red;
+  } */
+  .is-invalid {
+    border: 1px solid #DC3545!important;
+  }
+  
+  /* Profile Picture Styles */
+  .selected-files {
+    margin-top: 10px;
+  }
+  
+  .selected-files ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .selected-files li {
+    background-color: #eee;
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .remove-icon {
+    color: red;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .error-message {
+    font-size: 12px;
+  }
+  
+  
+  .button{
+    background: #00876F!important;
+    color: white !important;
+    font-weight: 500 !important;
+    width: 15rem;
+    /* margin-left: 5.5rem; */
+  
+   
+  }
+  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+    color: #00876F!important;
+  }
+  
+  button:hover {
+    background-color: #00876F;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+  }
+  
+  .space {
+    margin-left: 5px;
+  }
+  
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .form-group.col-3,
+    .form-group.col-4,
+    .form-group.col-6,
+    .form-group.col-12 {
+      width: 100%;
+    }
+  
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  
+    .col-1,
+    .col-3,
+    .col-4,
+    .col-6,
+    .col-12 {
+      flex: 0 0 100%;
+      max-width: 100%;
+      padding: 0 15px;
+    }
+  
+    button {
+      width: 100%;
+    }
+  }
+  
+  /* thead {
+    background: #00876F!important;
+    color: white;
+    font-size: small;
+  }
+  table tr th {
+    color: #fff !important;
+    font-size: 12px;
+  } */
+  /* Table Header */
+  table thead th {
+    background-color: #d3d3d3; /* Light grey header */
+    color: #000; /* Black text */
+    text-align: center;
+    padding: 12px; /* Increase padding */
+    border-bottom: 3px solid #bbb; /* Slightly thicker bottom border */
+    font-weight: bold; /* Ensure bold text */
+  }
+  
+  /* Table Body Rows */
+  table tbody tr {
+    border-top: 1px solid #bbb; /* Add top border for rows */
+    border-bottom: 1px solid #bbb; /* Keep bottom border */
+  }
+  
+  /* Alternating Row Colors */
+  table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; 
+  }
+  
+  table tbody tr:nth-child(even) {
+    background-color: #fff; 
+  }
+  
+  /* Table Cell Padding */
+  table td {
+    padding: 12px; /* Increase padding */
+  }
+  
+  /* Action Icons */
+  .fa-pen-to-square {
+    color: #00876f; /* Green edit icon */
+    cursor: pointer;
+  }
+  
+  .fa-trash {
+    color: rgb(166, 7, 7); /* Red delete icon */
+    cursor: pointer;
+  }
+  
+  /* Responsive Table */
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .position-relative {
+    position: relative;
+  }
+  
+  .medicine-suggestions {
+    position: absolute;
+    top: 100%; /* Position below the input field */
+    left: 10;
+    z-index: 1050; /* Ensure it stays above other content */
+    background: white; /* Matches form field background */
+    border: 1px solid #ccc; /* Optional: Add border for clarity */
+    border-radius: 4px; /* Optional: Rounded corners */
+    max-height: 200px; /* Set a max height for scrolling */
+    overflow-y: auto; /* Enable scroll for large lists */
+    width: 95%; /* Match input field width */
+    padding: 0;
+    margin: 0;
+    list-style: none; /* Remove bullets */
+  }
+  
+  .medicine-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .medicine-item:hover {
+    background-color: #f0f0f0; /* Highlight on hover */
+  }
+  
+  
+  
+  
+/* Style for the search input field */
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 5px;
+  background-color: white;
+  border: 1px solid #ccc;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+li:hover {
+  background-color: #f0f0f0;
+  color: rgb(255, 255, 255) !important;
+}
+
+.medicine-suggestions {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+}
+.medicine-item {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.medicine-item:hover, .medicine-item.active {
+  background-color: #006952;
+  color: white;
+}

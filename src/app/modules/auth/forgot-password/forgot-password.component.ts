@@ -15,18 +15,20 @@ import { getErrorMessage } from 'src/app/utils/httpResponse';
 export class ForgotPasswordComponent {
   forgotPasswordForm!: FormGroup;
   loading: boolean = false;
+  showAccountType: boolean = false;
 
   constructor(private fb: FormBuilder,
-    private authService : AuthService,
+    private authService: AuthService,
     private notificationService: NotificationService,
-    private router: Router) {}
+    private router: Router) { }
 
   ngOnInit() {
     this.initForm();
   }
   initForm() {
     this.forgotPasswordForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      accountType: ['']
     });
   }
   isEmailInvalid(): boolean {
@@ -34,25 +36,52 @@ export class ForgotPasswordComponent {
     return emailControl ? emailControl.invalid && emailControl.touched : false;
   }
   sendResetLink() {
+
     // Implement the logic to send the reset link
     if (this.forgotPasswordForm.valid) {
       const email = this.forgotPasswordForm.get('email')?.value;
       console.log('Sending reset link to:', email);
     }
   }
-  submit(){
-    this.loading= true;
-    this.authService.sendResetLink(this.forgotPasswordForm.value.email).subscribe((response : any) => {
-      this.router.navigate(['otp-verify'], { queryParams: { request: 'forgot-password',userId : response.userId } });
+
+  checkEmail() {
+    if (this.showAccountType) {
+      this.submit()
+    }
+    else {
+      const checkData = {
+        email: this.forgotPasswordForm.value.email
+      };
+
+      this.authService.checkEmail(checkData).subscribe((data: any) => {
+        console.log("Check email response:", data);
+
+        if (data === true) {
+          this.showAccountType = true; // Show the dropdown if the email exists
+        } else {
+          this.showAccountType = false;
+          this.submit();
+        }
+      });
+    }
+
+  }
+
+
+  submit() {
+    this.loading = true;
+    this.authService.sendResetLink(this.forgotPasswordForm.value.email, this.forgotPasswordForm.value.accountType).subscribe((response: any) => {
+      const userId = btoa(response.userId);
+      this.router.navigate(['otp-verify'], { queryParams: { request: 'forgot-password', userId: userId } });
       // this.notificationService.showSuccess("Password-reset url send to your email sucessfully !")
-      this.loading= false;
-    },(error) =>{
+      this.loading = false;
+    }, (error) => {
       this.notificationService.showDanger(getErrorMessage(error));
-      this.loading= false;
+      this.loading = false;
     })
   }
   navigateToLogin() {
-    debugger
+
     this.router.navigate(['/login']);
   }
 

@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from 'src/app/Services/auth.service';
+import { NotificationService } from 'src/app/Services/notification.service';
 import { PatientService } from 'src/app/Services/patient.service';
 import { ProviderService } from 'src/app/Services/provider.service';
 
@@ -12,15 +13,16 @@ import { ProviderService } from 'src/app/Services/provider.service';
 export class ShareDocPopupComponent implements OnInit {
   dialogClosed: any;
   providerList = [];
-  selectedProviderId: number | null = null;
+  selectedProviderId: number = 0;
 
 
   @Input() documentData: any
   constructor(
     public activeModel: NgbActiveModal,
     private providerService: ProviderService,
+    private notificationService: NotificationService,
     private patientService: PatientService,
-    private authService:AuthService
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -33,17 +35,15 @@ export class ShareDocPopupComponent implements OnInit {
     })
   }
 
-  ShareDocument() 
-  
-  {
-    debugger
+  ShareDocument() {
+ 
     if (!this.selectedProviderId) {
       // alert('Please select a provider.');
       return;
     }
-  const userInfo=this.authService.getUserInfo()
+    const userInfo = this.authService.getUserInfo()
     const sharedDocumentData = {
-      id: 0, 
+      id: 0,
       patientId: userInfo.userId,
       providerId: this.selectedProviderId,
       patientDocumentId: this.documentData.data.id
@@ -52,7 +52,8 @@ export class ShareDocPopupComponent implements OnInit {
 
     this.patientService.addSharedDocuments(sharedDocumentData).subscribe(
       (response) => {
-        alert('Document shared successfully!');
+        this.notificationService.showSuccess('Document shared successfully.');
+        this.modalClose()
         this.closePopup();
       },
       (error) => {
@@ -60,6 +61,11 @@ export class ShareDocPopupComponent implements OnInit {
       }
     );
   }
+  modalClose() {
+    this.activeModel.close();
+    this.dialogClosed.emit();
+  }
+
 
 
   // ShareDocument() {

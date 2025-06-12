@@ -1,11 +1,15 @@
 import { Component, EventEmitter, numberAttribute, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'src/app/Services/auth.service';
 import { GlobalModalService } from 'src/app/Services/global-modal.service';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { PatientService } from 'src/app/Services/patient.service';
 import { ProviderService } from 'src/app/Services/provider.service';
 import { getErrorMessage } from 'src/app/utils/httpResponse';
+import { ProviderServicesComponent } from '../provider-services/provider-services.component';
+import { ContactDetailsComponent } from '../contact-details/contact-details.component';
+import { AdminService } from 'src/app/Services/admin.service';
 
 export function phonePatternValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -29,6 +33,8 @@ export class ProviderMedicalLicenseInfoComponent {
   collaboratingPhysicianForm!: FormGroup
   loading: boolean = false;
   loading1: boolean = false;
+  loading2: boolean = false;
+  loading3: boolean = false;
   qualifications: any
   speciality: any
   states: any
@@ -40,17 +46,22 @@ export class ProviderMedicalLicenseInfoComponent {
   mySelectedCollboratingItems: string[] = [];
   selectedCollaboratingItems: any[] = [];
   checkedCollaboratingStateIds: any[] = [];
+  userId: any
+  userInfo: any
 
   hovering: boolean = false;
 
   @Output() dialogClosed = new EventEmitter<void>();
 
   constructor(private fb: FormBuilder,
+    private modalService: NgbModal,
     private activeModel: NgbActiveModal,
     private notificationService: NotificationService,
     private providerService: ProviderService,
+    private authService: AuthService,
     private patientService: PatientService,
     private globalModalService: GlobalModalService,
+    private adminService: AdminService
   ) { }
 
   ngOnInit() {
@@ -60,6 +71,7 @@ export class ProviderMedicalLicenseInfoComponent {
       qualificationId: ['', Validators.required],
       specialtyId: ['', Validators.required],
       stateId: ['', Validators.required],
+      // stateId: [[], Validators.required],
       medicalLicenseNo: ['', Validators.required],
       malpracticeInsurance: ['', Validators.required],
       malpracticeInsurance2: [],
@@ -73,14 +85,29 @@ export class ProviderMedicalLicenseInfoComponent {
     this.collaboratingPhysicianForm = this.fb.group({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', [Validators.required, phonePatternValidator()]],
+      phoneNumber: ['', phonePatternValidator()],
       medicalLicenseNo: ['', Validators.required],
       qualificationId: ['', Validators.required],
       specialtyId: ['', Validators.required],
       NPI: ['', Validators.required],
-      stateId: ['', Validators.required],
+      statesId: ['', Validators.required],
 
     })
+
+    const userInfo = this.authService.getUserInfo()
+    this.userInfo = userInfo
+    if (userInfo.accountType == "IndependentProvider") {
+      this.userId = userInfo.userId
+
+    }
+    if (localStorage.getItem('NewProviderId')) {
+      this.userId = localStorage.getItem('NewProviderId')
+    }
+    if (userInfo.accountType != "IndependentProvider" && !localStorage.getItem('NewProviderId')) {
+      this.userId = userInfo.userId
+    }
+
+
 
     this.getQualificationDropdown()
     this.getStates();
@@ -152,12 +179,17 @@ export class ProviderMedicalLicenseInfoComponent {
   checkedBGIds = []
   isDisabled: boolean = false
   getMedicalDataById() {
-    this.providerService.getMedicalDataById().subscribe((response: any) => {
+
+    this.providerService.getMedicalDataById(this.userId).subscribe((response: any) => {
+      // Safely format phone number
+      response.phoneNumber = response.phoneNumber
+        ? this.globalModalService.formatPhoneNumberForDisplay(response.phoneNumber)
+        : '';
       if (response != null) {
         response.NPI = Number(response.npi);
         this.medicalForm.patchValue(response)
         this.medicalForm.get('certify').setValue(true)
-        debugger
+
         response.questions.forEach((item: any) => {
           this.checkedBGIds.push(item)
         })
@@ -174,7 +206,8 @@ export class ProviderMedicalLicenseInfoComponent {
               this.selectedItems.push(item.name);
               this.checkedStateIds.push(item.id);
             }
-          })
+          });
+          this.medicalForm.get('stateId').setValue(this.checkedStateIds)
         }
 
         const checkedSpecialityIds = [];
@@ -183,6 +216,7 @@ export class ProviderMedicalLicenseInfoComponent {
           response.specialtyId.forEach((item) => {
             checkedSpecialityIds.push(item);
           });
+
           this.speciality.forEach((item: any) => {
             if (checkedSpecialityIds.includes(item.id)) {
               item.checked = true
@@ -193,26 +227,35 @@ export class ProviderMedicalLicenseInfoComponent {
         }
         if (response.collaboratingPhysicians != null) {
           response.collaboratingPhysicians.NPI = Number(response.npi);
-        
+
           this.checkedCollaboratingStateIds = []
           const checkedCollaboratingStateIds = [];
-        
-          if (response.collaboratingPhysicians.stateId.length > 0) {
-            response.collaboratingPhysicians.stateId.forEach((item) => {
+
+          if (response.collaboratingPhysicians.statesId.length > 0) {
+            response.collaboratingPhysicians.statesId.forEach((item) => {
               checkedCollaboratingStateIds.push(item);
             });
+            // this.states1.forEach((item: any) => {
+            //   if (checkedCollaboratingStateIds.includes(item.id)) {
+            //     item.checked = true
+            //     this.mySelectedCollboratingItems.push(item.name);
+            //     this.checkedCollaboratingStateIds.push(item.id);
+            //   }
+            // })
             this.states1.forEach((item: any) => {
               if (checkedCollaboratingStateIds.includes(item.id)) {
                 item.checked = true
                 this.mySelectedCollboratingItems.push(item.name);
                 this.checkedCollaboratingStateIds.push(item.id);
               }
-            })
+            });
+            this.collaboratingPhysicianForm.get('statesId').setValue(this.checkedCollaboratingStateIds)
           }
+
 
           this.checkedCollaboratingSpecialityIds = []
           const checkedCollaboratingSpecialityIds = [];
-        
+
           if (response.collaboratingPhysicians.specialtyId.length > 0) {
             response.collaboratingPhysicians.specialtyId.forEach((item) => {
               checkedCollaboratingSpecialityIds.push(item);
@@ -228,8 +271,8 @@ export class ProviderMedicalLicenseInfoComponent {
 
           this.collaboratingPhysicianForm.patchValue(response.collaboratingPhysicians)
         }
-        this.disableAllControls();
-        this.isDisabled = true
+        // this.disableAllControls();
+        // this.isDisabled = true
       }
     })
   }
@@ -266,6 +309,11 @@ export class ProviderMedicalLicenseInfoComponent {
     })
   }
 
+  // formatPhoneNumber(event: any): void {
+  //   const input = event.target as HTMLInputElement;
+  //   const formattedValue = this.globalModalService.formatPhoneNumberForDisplay(input.value);
+  //   this.collaboratingPhysicianForm.get('phoneNumber').setValue(formattedValue);
+  // }
   formatPhoneNumber(event: any): void {
     const input = event.target as HTMLInputElement;
     const formattedValue = this.globalModalService.formatPhoneNumberForDisplay(input.value);
@@ -297,66 +345,162 @@ export class ProviderMedicalLicenseInfoComponent {
 
 
   submitData() {
-    const medicalForm = this.medicalForm.value
-    medicalForm.questions = this.checkBackgroundIds
-    medicalForm.experience = String(medicalForm.experience);
-    medicalForm.NPI = String(medicalForm.NPI);
-    if (medicalForm.collaboratingPhysician == false) {
-      medicalForm.collaboratingPhysician2 = false
-    }
-    if (medicalForm.malpracticeInsurance == false) {
-      medicalForm.malpracticeInsurance2 = false
-    }
-
-
-    this.medicalForm.get('malpracticeInsurance')?.valueChanges.subscribe(value => {
-      const malpracticeInsurance2Control = this.medicalForm.get('malpracticeInsurance2');
-      if (value === true) {
-        malpracticeInsurance2Control?.setValidators([Validators.required]);
-      } else {
-        malpracticeInsurance2Control?.clearValidators();
+    debugger;
+    if (this.userInfo.accountType == 'Admin') {
+      const medicalForm = this.medicalForm.value
+      medicalForm.questions = this.checkBackgroundIds
+      medicalForm.experience = String(medicalForm.experience);
+      medicalForm.NPI = String(medicalForm.NPI);
+      if (medicalForm.collaboratingPhysician == false) {
+        medicalForm.collaboratingPhysician2 = false
       }
-      malpracticeInsurance2Control?.updateValueAndValidity();
-    });
-
-    this.medicalForm.get('collaboratingPhysician')?.valueChanges.subscribe(value => {
-      const collaboratingPhysician2Control = this.medicalForm.get('collaboratingPhysician2');
-      if (value === true) {
-        collaboratingPhysician2Control?.setValidators([Validators.required]);
-      } else {
-        collaboratingPhysician2Control?.clearValidators();
+      if (medicalForm.malpracticeInsurance == false) {
+        medicalForm.malpracticeInsurance2 = false
       }
 
-      collaboratingPhysician2Control?.updateValueAndValidity();
-    });
-    if (this.medicalForm.invalid) {
-      this.notificationService.markFormGroupTouched(this.medicalForm);
-      return;
-    }
-    if (medicalForm.collaboratingPhysician2 == true) {
-      if (this.collaboratingPhysicianForm.invalid) {
-        this.notificationService.markFormGroupTouched(this.collaboratingPhysicianForm);
+
+      this.medicalForm.get('malpracticeInsurance')?.valueChanges.subscribe(value => {
+        const malpracticeInsurance2Control = this.medicalForm.get('malpracticeInsurance2');
+        if (value === true) {
+          malpracticeInsurance2Control?.setValidators([Validators.required]);
+        } else {
+          malpracticeInsurance2Control?.clearValidators();
+        }
+        malpracticeInsurance2Control?.updateValueAndValidity();
+      });
+
+      this.medicalForm.get('collaboratingPhysician')?.valueChanges.subscribe(value => {
+        const collaboratingPhysician2Control = this.medicalForm.get('collaboratingPhysician2');
+        if (value === true) {
+          collaboratingPhysician2Control?.setValidators([Validators.required]);
+        } else {
+          collaboratingPhysician2Control?.clearValidators();
+        }
+
+        collaboratingPhysician2Control?.updateValueAndValidity();
+      });
+      if (this.medicalForm.invalid) {
+        this.notificationService.markFormGroupTouched(this.medicalForm);
         return;
       }
-    }
-    this.loading = true;
-    if (medicalForm.collaboratingPhysician2 == true) {
-      medicalForm.CollaboratingPhysicians = this.collaboratingPhysicianForm.value
-      medicalForm.CollaboratingPhysicians.NPI = String(medicalForm.CollaboratingPhysicians.NPI)
-      if (medicalForm.CollaboratingPhysicians.phoneNumber !== undefined && medicalForm.CollaboratingPhysicians.phoneNumber !== null) {
-        medicalForm.CollaboratingPhysicians.phoneNumber = medicalForm.CollaboratingPhysicians.phoneNumber.replace(/\D/g, '');
+      if (medicalForm.collaboratingPhysician2 == true) {
+        if (this.collaboratingPhysicianForm.invalid) {
+          this.notificationService.markFormGroupTouched(this.collaboratingPhysicianForm);
+          return;
+        }
+      }
+      this.loading = true;
+      if (medicalForm.collaboratingPhysician2 == true) {
+        medicalForm.CollaboratingPhysicians = this.collaboratingPhysicianForm.value
+        medicalForm.CollaboratingPhysicians.NPI = String(medicalForm.CollaboratingPhysicians.NPI)
+        if (medicalForm.CollaboratingPhysicians.phoneNumber !== undefined && medicalForm.CollaboratingPhysicians.phoneNumber !== null) {
+          medicalForm.CollaboratingPhysicians.phoneNumber = medicalForm.CollaboratingPhysicians.phoneNumber.replace(/\D/g, '');
 
+        }
       }
+
+      if (
+        this.collaboratingPhysicianForm.value.phoneNumber !== undefined &&
+        this.collaboratingPhysicianForm.value.phoneNumber !== null
+      ) {
+        this.collaboratingPhysicianForm.patchValue({
+          phoneNumber: this.collaboratingPhysicianForm.value.phoneNumber.replace(/\D/g, ''),
+          practicePhoneNumber: this.collaboratingPhysicianForm.value.practicePhoneNumber?.replace(/\D/g, '')
+        });
+      }
+
+      this.adminService.updateMedicalInfo(medicalForm, this.userId).subscribe((response: any) => {
+        this.notificationService.showSuccess("Medical License Info updated successfully.");
+        if (this.userInfo.accountType == 'Admin') {
+          this.openServicePopUp();
+        }
+        else {
+          this.modalClose()
+        }
+      },
+        (error) => {
+          this.notificationService.showDanger(getErrorMessage(error));
+          this.loading = false;
+        }
+      )
     }
-    this.providerService.postMedicalLicenseInfo(medicalForm).subscribe((response: any) => {
-      this.notificationService.showSuccess("Medical License Info updated successfully.");
-      this.modalClose();
-    },
-      (error) => {
-        this.notificationService.showDanger(getErrorMessage(error));
-        this.loading = false;
+    else {
+      const medicalForm = this.medicalForm.value
+      medicalForm.questions = this.checkBackgroundIds
+      medicalForm.experience = String(medicalForm.experience);
+      medicalForm.NPI = String(medicalForm.NPI);
+      if (medicalForm.collaboratingPhysician == false) {
+        medicalForm.collaboratingPhysician2 = false
       }
-    )
+      if (medicalForm.malpracticeInsurance == false) {
+        medicalForm.malpracticeInsurance2 = false
+      }
+
+
+      this.medicalForm.get('malpracticeInsurance')?.valueChanges.subscribe(value => {
+        const malpracticeInsurance2Control = this.medicalForm.get('malpracticeInsurance2');
+        if (value === true) {
+          malpracticeInsurance2Control?.setValidators([Validators.required]);
+        } else {
+          malpracticeInsurance2Control?.clearValidators();
+        }
+        malpracticeInsurance2Control?.updateValueAndValidity();
+      });
+
+      this.medicalForm.get('collaboratingPhysician')?.valueChanges.subscribe(value => {
+        const collaboratingPhysician2Control = this.medicalForm.get('collaboratingPhysician2');
+        if (value === true) {
+          collaboratingPhysician2Control?.setValidators([Validators.required]);
+        } else {
+          collaboratingPhysician2Control?.clearValidators();
+        }
+
+        collaboratingPhysician2Control?.updateValueAndValidity();
+      });
+      if (this.medicalForm.invalid) {
+        this.notificationService.markFormGroupTouched(this.medicalForm);
+        return;
+      }
+      if (medicalForm.collaboratingPhysician2 == true) {
+        if (this.collaboratingPhysicianForm.invalid) {
+          this.notificationService.markFormGroupTouched(this.collaboratingPhysicianForm);
+          return;
+        }
+      }
+      this.loading = true;
+      if (medicalForm.collaboratingPhysician2 == true) {
+        medicalForm.CollaboratingPhysicians = this.collaboratingPhysicianForm.value
+        medicalForm.CollaboratingPhysicians.NPI = String(medicalForm.CollaboratingPhysicians.NPI)
+        if (medicalForm.CollaboratingPhysicians.phoneNumber !== undefined && medicalForm.CollaboratingPhysicians.phoneNumber !== null) {
+          medicalForm.CollaboratingPhysicians.phoneNumber = medicalForm.CollaboratingPhysicians.phoneNumber.replace(/\D/g, '');
+
+        }
+      }
+           if (
+        this.collaboratingPhysicianForm.value.phoneNumber !== undefined &&
+        this.collaboratingPhysicianForm.value.phoneNumber !== null
+      ) {
+        this.collaboratingPhysicianForm.patchValue({
+          phoneNumber: this.collaboratingPhysicianForm.value.phoneNumber.replace(/\D/g, ''),
+          practicePhoneNumber: this.collaboratingPhysicianForm.value.practicePhoneNumber?.replace(/\D/g, '')
+        });
+      }
+      this.providerService.postMedicalLicenseInfo(medicalForm, this.userId).subscribe((response: any) => {
+        this.notificationService.showSuccess("Medical License Info updated successfully.");
+        if (this.userInfo.accountType == 'Admin') {
+          this.openServicePopUp();
+        }
+        else {
+          this.modalClose()
+        }
+      },
+        (error) => {
+          this.notificationService.showDanger(getErrorMessage(error));
+          this.loading = false;
+        }
+      )
+    }
+
   }
 
 
@@ -414,26 +558,42 @@ export class ProviderMedicalLicenseInfoComponent {
     this.medicalForm.get('stateId').setValue(this.checkedStateIds)
     this.updateValidation();
   }
+
+
+
   checkboxChangeCollborating(event: any, clientName: string, stationId: string) {
     if (event.target.checked) {
       this.selectedCollaboratingItems.push(clientName);
-      this.mySelectedCollboratingItems.push(clientName)
+      this.mySelectedCollboratingItems.push(clientName);
       this.checkedCollaboratingStateIds.push(stationId);
     } else {
-      const index = this.selectedCollaboratingItems.indexOf(clientName);
-      if (index !== -1) {
-        this.selectedCollaboratingItems.splice(index, 1);
-        this.checkedCollaboratingStateIds.splice(index, 1);
-        this.mySelectedCollboratingItems.splice(index, 1)
+      // Remove from selectedCollaboratingItems
+      const nameIndex = this.selectedCollaboratingItems.indexOf(clientName);
+      if (nameIndex !== -1) {
+        this.selectedCollaboratingItems.splice(nameIndex, 1);
+      }
+
+      // Remove from mySelectedCollboratingItems
+      const myNameIndex = this.mySelectedCollboratingItems.indexOf(clientName);
+      if (myNameIndex !== -1) {
+        this.mySelectedCollboratingItems.splice(myNameIndex, 1);
+      }
+
+      // Remove from checkedCollaboratingStateIds by stationId
+      const stateIndex = this.checkedCollaboratingStateIds.indexOf(stationId);
+      if (stateIndex !== -1) {
+        this.checkedCollaboratingStateIds.splice(stateIndex, 1);
       }
     }
-    this.collaboratingPhysicianForm.get('stateId').setValue(this.checkedCollaboratingStateIds)
+
+    this.collaboratingPhysicianForm.get('statesId')?.setValue(this.checkedCollaboratingStateIds);
     this.updateValidationForCollaborating();
   }
-selectedSpecialityItems = []
-checkedSpecialityIds  = []
+
+  selectedSpecialityItems = []
+  checkedSpecialityIds = []
   checkboxChangeOfSpeciality(event: any, name: string, specialtyId: string) {
-    debugger
+
     if (event.target.checked) {
       this.selectedSpecialityItems.push(name);
       this.checkedSpecialityIds.push(specialtyId);
@@ -449,7 +609,7 @@ checkedSpecialityIds  = []
   }
   selectedCollaboratingSpeciality = []
   checkedCollaboratingSpecialityIds = []
-  checkboxChangeCollboratingSpeciality(event: any,name: string, specialtyId: string) {
+  checkboxChangeCollboratingSpeciality(event: any, name: string, specialtyId: string) {
     if (event.target.checked) {
       this.selectedCollaboratingSpeciality.push(name);
       // this.selectedCollaboratingSpeciality.push(name)
@@ -467,10 +627,15 @@ checkedSpecialityIds  = []
   }
 
   updateValidationForCollaborating() {
+    // if (this.selectedCollaboratingItems.length > 0) {
+    //   this.collaboratingPhysicianForm.get('stateId').setErrors(null);
+    // } else {
+    //   this.collaboratingPhysicianForm.get('stateId').setErrors({ 'required': true });
+    // }
     if (this.selectedCollaboratingItems.length > 0) {
-      this.collaboratingPhysicianForm.get('stateId').setErrors(null);
+      this.collaboratingPhysicianForm.get('statesId').setErrors(null);
     } else {
-      this.collaboratingPhysicianForm.get('stateId').setErrors({ 'required': true });
+      this.collaboratingPhysicianForm.get('statesId').setErrors({ 'required': true });
     }
   }
   getDropdownWidth(): number {
@@ -479,6 +644,24 @@ checkedSpecialityIds  = []
       return button.offsetWidth;
     }
     return 0;
+  }
+
+  openServicePopUp() {
+    this.activeModel.close();
+    this.modalService.open(ProviderServicesComponent, {
+      backdrop: 'static',
+      size: 'lg',
+      centered: true
+    });
+  }
+
+  openContactPopUp() {
+    this.activeModel.close();
+    this.modalService.open(ContactDetailsComponent, {
+      backdrop: 'static',
+      size: 'lg',
+      centered: true
+    });
   }
 
 

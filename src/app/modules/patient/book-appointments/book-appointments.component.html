@@ -2,14 +2,15 @@
   <div class="wrapper d-flex">
     <div class="content-wrapper">
       <div class="appointment-card py-2 px-4">
-        
-        <h3>Book Appointment</h3>
-        <i class="fa fa-arrow-circle-left pt-0" (click)="goBack()"
-        style="color: #00876ee4; font-size: 38px; cursor: pointer;margin-top: -5%; transition: transform 0.3s ease; float: right;"></i>
+        <div class="d-flex">
+          <h3>Book Appointment</h3>
+          <i class="fa fa-arrow-circle-left pt-0 ms-auto " (click)="goBack()"
+            style="color: #00876ee4; font-size: 38px; cursor: pointer; transition: transform 0.3s ease; float: right;"></i>
+        </div>
         <div class="appointment-form">
           <form [formGroup]="appointmentForm">
             <div class="row companyContent mt-2 ">
-              <div class="col-6 mb-2">
+              <div class="col-12 col-sm-12 col-md-6 mb-2">
                 <label for="appointment">Who is this appointment for?<span class="red">*</span></label>
                 <select class="form-select form-select-sm cursor mt-1" formControlName="prefix"
                   [ngClass]="{'is-invalid': appointmentForm.get('prefix')?.invalid &&  appointmentForm.get('prefix')?.touched}">
@@ -22,7 +23,7 @@
                   Who is this appointment for is required.
                 </div>
               </div>
-              <div class=" col-6 mb-2" *ngIf="appointmentForm.get('relationshipType')?.enabled">
+              <div class="col-12 col-sm-12 col-md-6 mb-2" *ngIf="appointmentForm.get('relationshipType')?.enabled">
                 <label>Relationship <span class="red">*</span></label>
                 <select class="form-select form-select-sm cursor mt-1" formControlName="relationshipType"
                   (change)="getBookAppointment()"
@@ -42,21 +43,9 @@
                   Relationship is required.
                 </div>
               </div>
-              <!-- <div class="col-6">
-                        <label for="relationship">Relationship to you<span class="red">*</span></label>
-                        <select class="form-select form-select-sm cursor mt-1" formControlName="relationship"
-                            [ngClass]="{'is-invalid': appointmentForm.get('relationship')?.invalid &&  appointmentForm.get('relationship')?.touched}">
-                            <option value="" disabled selected>Select</option>
-                            <option value= 1>Child</option>
-                        </select>
-                        <div class="invalid-feedback"
-                            *ngIf="appointmentForm.get('relationship')?.touched && appointmentForm.get('relationship')?.hasError('required')">
-                            Relationship to you is required.
-                        </div>
-                    </div> -->
             </div>
             <div class="row mt-2">
-              <div class="form-group col-6 mb-3">
+              <div class="form-group col-12 col-sm-12 col-md-6 mb-3">
                 <label for="fullName">Full Name <span class="red">*</span> </label>
                 <input type="text" id="fullName" class="form-control form-control-sm mt-1" formControlName="fullName"
                   [ngClass]="{'is-invalid': appointmentForm.get('fullName')?.invalid && appointmentForm.get('fullName')?.touched}">
@@ -65,7 +54,7 @@
                   Full Name is required.
                 </div>
               </div>
-              <div class="col-6 mb-3">
+              <div class="col-12 col-sm-12 col-md-6 mb-3">
                 <label for="dob"> Date of Birth <span class="red">*</span> </label>
                 <input type="date" id="dob" class="form-control form-control-sm mt-1" formControlName="dob"
                   [ngClass]="{'is-invalid': appointmentForm.get('dob')?.invalid && appointmentForm.get('dob')?.touched}">
@@ -76,7 +65,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-6 mb-3">
+              <div class="col-12 col-sm-12 col-md-6 mb-3">
                 <label for="gender">Gender<span class="red">*</span></label>
                 <select class="form-select form-select-sm cursor mt-1" formControlName="gender"
                   [ngClass]="{'is-invalid': appointmentForm.get('gender')?.invalid &&  appointmentForm.get('gender')?.touched}">
@@ -90,7 +79,7 @@
                   Gender is required.
                 </div>
               </div>
-              <div class=" col-6 mb-3">
+              <div class="col-12 col-sm-12 col-md-6 mb-3">
                 <label for="email">Email <span class="red">*</span></label>
                 <input type="text" id="email" class="form-control form-control-sm mt-1" formControlName="email"
                   placeholder="Enter Email"
@@ -107,9 +96,57 @@
 
             </div>
             <div class="row mt-2">
-              <div class="col-6">
-                <div class="form-group">
-                  <label for="fileName">Upload Document</label>
+              <div class="col-12 col-sm-12 col-md-6 ">
+                <label class="form-label mb-0" for="meetingType">Meeting Type <span class="red">*</span></label>
+                <div class="radio-group okk row">
+                  <div class="col-12 col-md-4" *ngIf="servicePrice.telehealthVisitPrice">
+                    <label class="w-100  rounded px-1 py-3 d-flex align-items-center gap-2">
+                      <input
+                        type="radio"
+                        id="meetingTypeVirtual"
+                        formControlName="meetingType"
+                        [value]="1"
+                        (change)="setConsultationFee(1)"
+                        class="form-check-input"
+                      />
+                      <span>Telehealth <b>({{ servicePrice.telehealthVisitPrice | currency: 'USD' }})</b></span>
+                    </label>
+                  </div>
+                 
+                  <div class="col-12 col-md-4" *ngIf="servicePrice.officeVisitPrice">
+                    <label class="w-100  rounded px-0 py-3 d-flex align-items-center gap-2">
+                      <input
+                        type="radio"
+                        id="meetingTypeInPersonVisit"
+                        formControlName="meetingType"
+                        [value]="2"
+                        (change)="setConsultationFee(2)"
+                        class="form-check-input"
+                      />
+                      <span>Office Visit <b>({{ servicePrice.officeVisitPrice | currency: 'USD' }})</b></span>
+                    </label>
+                  </div>
+                 
+                  <div class="col-12   col-md-4" *ngIf="servicePrice.inHomeVisitPrice">
+                    <label class="w-100  rounded px-0 py-3 d-flex align-items-center gap-2">
+                      <input
+                        type="radio"
+                        id="meetingTypeHomeCareVisit"
+                        formControlName="meetingType"
+                        [value]="3"
+                        (change)="setConsultationFee(3)"
+                        class="form-check-input"
+                      />
+                      <span>Home Visit <b>({{ servicePrice.inHomeVisitPrice | currency: 'USD' }})</b></span>
+                    </label>
+                  </div>
+                </div>
+                 
+              </div>
+              
+              <div class="col-12 col-sm-12 col-md-6">
+                <div class="form-group okk">
+                  <label class="border-0" for="fileName">Upload Document</label>
                   <input type="file" id="document" class="form-control form-control-sm mt-1 small-input"
                     formControlName="document"
                     [ngClass]="{'is-invalid': appointmentForm.get('document')?.invalid && appointmentForm.get('document')?.touched}"
@@ -128,26 +165,12 @@
                   </div>
                 </div>
               </div>
-              <div class="col-6 mt-2">
-                <label class="form-label" for="meetingType">Meeting Type</label>
-                <div class="radio-group">
-                  <label *ngIf="servicePrice.telehealthVisitPrice">
-                    <input type="radio" id="meetingTypeVirtual" formControlName="meetingType" [value]="1" (change)="setConsultationFee(1)"/>
-                    Virtual
-                  </label>
-                  <label *ngIf="servicePrice.officeVisitPrice">
-                    <input type="radio" id="meetingTypeInPersonVisit" formControlName="meetingType" [value]="2" (change)="setConsultationFee(2)"/>
-                    In-Person Visit
-                  </label>
-                  <label *ngIf="servicePrice.inHomeVisitPrice">
-                    <input type="radio" id="meetingTypeHomeCareVisit" formControlName="meetingType" [value]="3" (change)="setConsultationFee(3)" />
-                    Home Care Visit
-                  </label>
-                </div>
-              </div>
+            </div>
+            <div class="cancellation-policy-container cursor">
+              <a (click)="redirectTotermofservice()" class="cancellation-link">View Cancellation Policy</a>
             </div>
             <div class="row mt-4">
-              <div class="form-group col-12 mt-3">
+              <div class="form-group col-md-12 mt-3">
                 <label for="reasonForVisit">Reason for Visit <span class="red">*</span></label>
                 <textarea id="reasonForVisit" class="form-control form-control-sm mt-1" formControlName="reasonForVisit"
                   [ngClass]="{'is-invalid': appointmentForm.get('reasonForVisit')?.invalid && appointmentForm.get('reasonForVisit')?.touched}"></textarea>
@@ -155,43 +178,82 @@
                   *ngIf="appointmentForm.get('reasonForVisit')?.touched && appointmentForm.get('reasonForVisit')?.hasError('required')">
                   Reason for Visit is required.
                 </div>
+                <div class="invalid-feedback"
+                  *ngIf="appointmentForm.get('reasonForVisit')?.touched && appointmentForm.get('reasonForVisit')?.hasError('pattern')">
+                  Reason for Visit cannot be empty or only spaces.
+                </div>
               </div>
             </div>
-
-
-            <div class="row mt-3 align-items-center">
+            <div class="row mt-2 align-items-center">
               <!-- Slot Details Text -->
-              <div class="col-lg-7 col-md-8 col-sm-12">
-                <h2 class="mb-2" style="font-weight: 500;">Slot Time </h2>
-                <p class="text-muted mb-1">
-                  <span style="font-size: medium;">{{formatDate}}</span>
-                  &nbsp; <span class="time-slot p-2 ms-3">{{formatTime}}</span>
-
+              <div class="col-lg-12 col-md-12 col-sm-12 d-flex flex-column flex-sm-row flex-wrap">
+                <h2 class="mb-2 me-2" style="font-weight: 600;">Appointment Time:</h2>
+                <p class="text-muted mb-1 mb-sm-0 ms-0 ms-sm-1">
+                  <span style="font-size: medium;">{{ formatDate }}</span>
+                  <span class="time-slot ms-sm-3 d-inline-block mt-1 mt-sm-0">{{ formatTime }}</span>
+                  <span class="modifyAppointmentBtn ms-sm-3 d-inline-block mt-1 mt-sm-0" (click)="bookNewSlot()">Pick New Time</span>
                 </p>
-                <p class="text-muted mb-0" *ngIf="selectedFee">
-                  <b style="font-size: medium;">Consultation fees:</b> <strong> ${{ selectedFee }}</strong>
-                </p>
-              </div>
-
-
-              <!-- Empty space for alignment (if needed) -->
-              <div class="col-lg-3 col-md-2 col-sm-6"></div>
-              <div class="col-lg-2 col-md-2 col-sm-6"></div>
-            </div>
-
-            <div class="row">
-              <div class="col-3"></div>
-              <div class="col-3"></div>
-              <div class="col-3"></div>
-              <div class="col-3">
-                <button type="submit" class="btn custom-padding mb-3" style="background-color: #00876F!important; "
-                  (click)="postBookAppointment()">
-                  <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading">
-                    <span class="visually-hidden">Loading...</span></span>Book Appointment
-                </button>
+              </div>          
+              <!-- Fees Section -->
+              <div>
+                <div class="row mt-1">
+                  <div class="col-sm-12 d-flex flex-wrap align-items-center">
+                    <b style="font-size: large; color: black;">Consultation Fees
+                      <div class="circle cursor ms-2" (mouseenter)="onHover(true)" 
+                        (mouseleave)="onHover(false)" >
+                        <span>&#161;</span>
+                      </div>
+                    </b>
+                    <b class="ms-4 mt-2 mt-sm-0">{{ selectedFee | currency:'USD' }}</b>
+                  </div>
+                </div>
               </div>
             </div>
+ 
+            <div *ngIf="isHovered" class="popup mt-5">
+              <div class="popup-content">
+                <h3 class="mb-0">What's Included?</h3>
+                <hr class="mt-0">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <b>Provider Fee </b>
+                  </div>
+                  <div class="col-sm-4">
+                   <b>{{amountBreakdown.providerPrice | currency:'USD'}}</b> 
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-8">
+                    <b>Service Fee </b>
+                  </div>
+                  <div class="col-sm-4">
+                   <b>{{amountBreakdown.applicationFee | currency:'USD'}}</b> 
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+            <div class="row justify-content-end">
+             
+              <div class="col-md-3 col-sm-6 ">
+                
+                <button *ngIf="!appointmentId" type="submit" class="btn custom-padding mb-3"
+                          style="background-color: #00876F!important;" (click)="postBookAppointment()">
+                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': loading}"></i>
+                          <span *ngIf="!loading" class="space">Book Appointment</span>
+                          <span *ngIf="loading" class="space">Book Appointment</span>
+                        </button>
 
+
+
+                        <button *ngIf="appointmentId"  type="submit" class="btn custom-padding mb-3"
+                        style="background-color: #00876F!important;" (click)="postBookAppointment()">
+                        <i class="fas" [ngClass]="{'fa-spinner fa-spin': loading}"></i>
+                        <span *ngIf="!loading" class="space">Reschedule Appointment</span>
+                        <span *ngIf="loading" class="space">Reschedule Appointment</span>
+                      </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>

@@ -1,0 +1,323 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <h3>Conditions & Symptoms</h3>
+                <div class="signup-form">
+                    <mat-tab-group (selectedTabChange)="onSettingsChange($event)" class="custom-tab-group">
+                        <mat-tab value="addCondition">
+                            <ng-template mat-tab-label>
+                                <span class="tab-label ">Add Condition
+                                </span>
+                            </ng-template>
+                            <div class="mat-tab-content" style="overflow: hidden !important;">
+                                <div class="container-fluid px-4 mt-4">
+                                    <div class="row g-4">
+                                        <div class="col-12">
+                                            <div class=" rounded h-100 p-2">
+                                                <form [formGroup]="conditionForm">
+                                                    <div class="card">
+                                                        <div class="rounded p-4">
+                                                            <!-- <div class=" mb-3">
+                                                                <h1 class="m-0 text-center">Add Condition</h1>
+                                                            </div> -->
+                                                            <div class="row">
+                                                                <!-- First Name -->
+                                                                <div class="col-12 col-sm-4">
+                                                                    <label for="conditionName">Condition Name <span
+                                                                            class="red">*</span></label>
+                                                                    <input type="text" id="conditionName"
+                                                                        class="form-control form-control-sm mt-1"
+                                                                        formControlName="conditionName"
+                                                                        [ngClass]="{'is-invalid': conditionForm.get('conditionName')?.invalid && conditionForm.get('conditionName')?.touched}"
+                                                                        [value]="conditionForm.get('conditionName')?.value | capitalizeFirstLetter">
+                                                                    <div class="invalid-feedback"
+                                                                        *ngIf="conditionForm.get('conditionName')?.touched && conditionForm.get('conditionName')?.hasError('required')">
+                                                                        Condition Name required.
+                                                                    </div>
+                                                                    <div class="invalid-feedback"
+                                                                        *ngIf="conditionForm.get('conditionName')?.touched && conditionForm.get('conditionName')?.hasError('pattern')">
+                                                                        Condition Name cannot be empty or only spaces.
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm-4">
+                                                                    <label>Specialty<span class="red">*</span></label>
+                                                                    <select id="specialtyId"
+                                                                        class="form-select form-select-sm cursor mt-1"
+                                                                        formControlName="specialtyId"
+                                                                        [ngClass]="{'is-invalid': conditionForm.get('specialtyId')?.invalid && conditionForm.get('specialtyId')?.touched}">
+                                                                        <option value="" disabled selected>Select
+                                                                            Specialty</option>
+                                                                        <option *ngFor="let item of speciality"
+                                                                            [value]="item.id">{{ item.name }}
+                                                                        </option>
+                                                                    </select>
+                                                                    <div class="invalid-feedback"
+                                                                        *ngIf="conditionForm.get('specialtyId')?.touched && conditionForm.get('specialtyId')?.hasError('required')">
+                                                                        Specialty is required.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <!-- Button -->
+                                                            <div class="text-end mt-3">
+                                                                <div class=" d-flex justify-content-end pt-2">
+                                                                    <button type="button" class="btn custom-padding"
+                                                                        style="background-color: #00876f;"
+                                                                        (click)="submitData()"> <span
+                                                                            class="spinner-border text-light small-spinner"
+                                                                            role="status" *ngIf="loading1">
+                                                                            <span
+                                                                                class="visually-hidden">Loading...</span></span>
+                                                                        Save
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+
+
+
+                                                <div class="row mt-3">
+                                                    <div class="col-sm-9 ">
+                                                        <h1 class="">Condition List</h1>
+                                                    </div>
+
+                                                    <div class="col-sm-3 ">
+
+                                                        <input type="text" [(ngModel)]="searchTerm"
+                                                            (input)="getConditionList()" placeholder="Search Condition"
+                                                            class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="table-responsive mt-1">
+
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+
+
+                                                                <th scope="col">Condition Name
+
+                                                                </th>
+                                                                <th scope="col">Specialty</th>
+
+                                                                <th scope="col">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr *ngFor="let items of condtionListData">
+
+                                                                <td>{{items.conditionName}}</td>
+                                                                <td>{{items.specialtyName}}</td>
+
+                                                                <td>
+                                                                    <span class="icon-edit" title="Edit"
+                                                                        style="color: #00876f; font-size: medium">
+                                                                        <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                                                            (click)="editCondition(items.id)"></i>
+                                                                    </span>
+
+                                                                    <span class="icon-delete" title="Delete"
+                                                                        style="color: #dc3545; font-size: medium">
+                                                                        <i class="fa-solid fa-trash cursor"
+                                                                            (click)="deleteItem(items.id)"></i>
+                                                                    </span>
+
+                                                                </td>
+
+                                                            </tr>
+
+
+                                                        </tbody>
+                                                    </table>
+
+                                                </div>
+                                                <div class="d-flex justify-content-end mt-2 flex-wrap w-100"
+                                                    *ngIf="roles.length > 0">
+                                                    <div class="pagination-container">
+                                                        <app-pagination [paginator]="paginator"
+                                                            (onPageChange)="getConditionList()" />
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab value="addSpecialty">
+                            <ng-template mat-tab-label>
+                                <span class="tab-label">
+                                    Add Specialty
+
+                                </span>
+                            </ng-template>
+
+                            <div class="mat-tab-content" style="overflow: hidden !important;">
+                                <div class="px-4">
+                                    <div class="row g-4">
+                                        <div class="col-sm-12 ">
+                                            <div class=" rounded h-100 p-2 mt-4">
+
+                                                <div class="col-sm-12 card">
+                                                    <div class=" rounded  p-4">
+
+                                                        <!-- <div class="">
+                                                            <h1 class="text-center">Add Specialty </h1>
+
+                                                        </div> -->
+
+                                                        <form [formGroup]="specializationForm">
+                                                            <div class="row p-2">
+                                                                <!-- Specialization Name -->
+                                                                <div class="col-12 col-sm-4">
+                                                                    <label class="mb-2">Specialty Name <span
+                                                                            class="red">*</span></label>
+                                                                    <input type="text"
+                                                                        class="form-control form-control-sm"
+                                                                        formControlName="name"
+                                                                        [ngClass]="{'is-invalid': specializationForm.get('name')?.invalid && specializationForm.get('name')?.touched}">
+                                                                    <div class="invalid-feedback"
+                                                                        *ngIf="specializationForm.get('name')?.hasError('required')">
+                                                                        Specialty Name required.
+                                                                    </div>
+                                                                    <div class="invalid-feedback"
+                                                                        *ngIf="specializationForm.get('name')?.hasError('pattern')">
+                                                                        Specialty Cannot be empty or only spaces.
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Home Page -->
+                                                                <div class="col-12 col-sm-4">
+                                                                    <label class="mb-2">Home Page </label>
+                                                                    <select class="form-select form-select-sm"
+                                                                        formControlName="inHomePage">
+                                                                        <!-- <option value="" disabled>Select</option> -->
+                                                                        <option [ngValue]="null" disabled>Select
+                                                                        </option>
+                                                                        <option [ngValue]="true">True</option>
+                                                                        <option [ngValue]="false">False</option>
+                                                                    </select>
+                                                                    <div class="invalid-feedback"
+                                                                        *ngIf="specializationForm.get('inHomePage')?.hasError('required')">
+                                                                        Home Page selection is required.
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Service Category -->
+                                                                <div class="col-12 col-sm-4">
+                                                                    <label class="mb-2">Service Category <span
+                                                                            class="red">*</span></label>
+                                                                    <select class="form-select form-select-sm"
+                                                                        formControlName="serviceCategoryId">
+                                                                        <!-- <option value="" disabled>Select</option> -->
+                                                                        <option [ngValue]="null" disabled>Select
+                                                                        </option>
+                                                                        <option *ngFor="let cat of serviceCategories"
+                                                                            [value]="cat.id">{{ cat.serviceName }}
+                                                                        </option>
+                                                                    </select>
+                                                                    <div class="invalid-feedback"
+                                                                        *ngIf="specializationForm.get('serviceCategoryId')?.hasError('required')">
+                                                                        Service Category is required.
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Submit -->
+                                                            <div class="d-flex justify-content-end pt-2">
+                                                                <button type="button" class="btn btn-success"
+                                                                    (click)="submitForm()">
+                                                                    Save
+                                                                </button>
+                                                            </div>
+                                                        </form>
+
+
+                                                        <hr>
+
+                                                        <div class="row">
+                                                            <div class="col-sm-9 ">
+                                                                <h1 class="">Specialty List</h1>
+                                                            </div>
+
+                                                            <div class="col-sm-3 ">
+                                                                <input type="text" [(ngModel)]="searchTerm"
+                                                                    (input)="filterItems()"
+                                                                    placeholder="Search Specialty" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <!-- Table -->
+                                                        <div class="table-responsive mt-1">
+
+                                                            <table class="table">
+                                                                <thead>
+                                                                    <tr>
+
+                                                                        <th scope="col" style="min-width: 150px;"
+                                                                            (click)="sortData('name')">Specialty Name
+                                                                            <i
+                                                                                [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'name', 'fa-sort-up': sortColumn === 'name' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'name' && sortOrder === 'desc'}"></i>
+                                                                        </th>
+                                                                        <th scope="col" style="min-width: 150px;"
+                                                                            (click)="sortData('serviceCategoryName')">
+                                                                            Service Category Name
+                                                                            <i
+                                                                                [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'serviceCategoryName', 'fa-sort-up': sortColumn === 'serviceCategoryName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'serviceCategoryName' && sortOrder === 'desc'}"></i>
+                                                                        </th>
+
+                                                                        <th scope="col">Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let items of specializationData">
+                                                                        <td>{{ items.name }}</td>
+                                                                        <td>{{ items.serviceCategoryName || '—' }}</td>
+                                                                        <td class="text-center">
+                                                                            <span class="icon-edit" title="Edit"
+                                                                                style="color: #00876f; font-size: medium">
+                                                                                <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                                                                    (click)="getSpecializationById(items.id)"></i>
+                                                                            </span>
+                                                                            <span class="icon-delete" title="Delete"
+                                                                                style="color: #dc3545; font-size: medium">
+                                                                                <i class="fa-solid fa-trash cursor"
+                                                                                    (click)="deleteSpecialization(items.id)"></i>
+                                                                            </span>
+                                                                        </td>
+                                                                    </tr>
+
+
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="mx-2 d-flex justify-content-end"
+                                                            *ngIf="specializationData.length >0 && !loading">
+                                                            <app-pagination [paginator]="paginator"
+                                                                (onPageChange)="getSpecializationList()" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </mat-tab>
+
+
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

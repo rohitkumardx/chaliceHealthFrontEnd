@@ -4,15 +4,7 @@
       <div class="signup-card ">
 
         <h3 class="section-title">Prescriptions/Medications</h3>
-        <!-- <div class="button-group">
-            <button class="btn btn-primary add-medication-button" (click)="openAddMedicationPopUp()">Add Medication</button>
-            <div class="search-container">
-              <input type="text" class="form-control search-input" placeholder="Search">
-              <button class="btn btn-secondary search-button">Search</button>
-            </div>
-          </div> -->
 
-        <!-- <h3>Prescriptions/Medications</h3> -->
         <div class="signup-form">
           <mat-tab-group (selectedTabChange)="onTabChange($event)">
             <mat-tab value="Prescription">
@@ -20,40 +12,63 @@
                 <span style="color: #00876F!important;">Prescription</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input type="text" style="width: 30%;" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
+                    (input)="getPrescriptionByUserId()" class="form-control" />
+                </div>
+
                 <div class="row">
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mb-2 mt-1">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
-                        (input)="filterPrescriptions()" class="form-control" />
-                    </div>
+
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <!-- <th scope="col" (click)="sortData('providerName')">Drug Name
+                        
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('medicationName')">Drug Name
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'medicationName', 'fa-sort-up': sortColumn === 'medicationName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'medicationName' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('createdDate')">Date
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'createdDate', 'fa-sort-up': sortColumn === 'createdDate' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'createdDate' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th scope="col">Frequency</th>
+                          <th scope="col">Duration</th>
+                          <th style=" min-width: 120px;" scope="col">Dose Form</th>
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('providerName')">Provider Name
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
-                            <i
-                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
-                          </th> -->
-                          <th scope="col">Drug Name</th>
-                          <th scope="col">Date</th>
-                          <th scope="col">Frequency</th>
-                          <th scope="col">Duration</th>
-                          <th scope="col">Dose Form</th>
-                          <th scope="col">Provider Name</th>
+                          <!-- <th scope="col">Provider Name</th> -->
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of prescription; let i = index">
-                          <td style="width: 40%;">{{ item.medicationName }}</td>
-                          <td>{{ item.createdDate | date: 'yyyy-MM-dd' }}</td>
-                          <td>{{ item.frequency }}</td>
-                          <td>{{ item.duration }}</td>
+                          <!-- <td style="max-width: 40%;">                           
+                              {{item.medicationName}}                            
+                          </td> -->
+                          <td style="max-width: 30%;">
+                            <span *ngIf="!item.showFullMedicationName">
+                              {{ item?.medicationName | slice: 0:50 }}<span
+                                *ngIf="item?.medicationName.length > 50">...</span>
+                            </span>
+                            <span *ngIf="item.showFullMedicationName">{{ item.medicationName }}</span>
+                            <a *ngIf="item.medicationName.length > 50" href="#"
+                              (click)="toggleShowMore(item, 'MedicationName', $event)">
+                              {{ item.showFullMedicationName ? 'See less' : 'Show more' }}
+                            </a>
+                          </td>
+
+                          <td>{{ item.createdDate | date: 'MM-dd-yyyy' }}</td>
+                          <td>{{ formatFrequencyType(item.frequency) }}</td>
+                          <td>{{ item.durationInDays + ' days' }}</td>
                           <td>{{ item.doseForm }}</td>
-                          <td>{{ item.providerName }}</td>
+                          <td style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewProviderProfile(item.providerId)">
+                            <u>{{ item.providerName }}</u>
+                          </td>
                         </tr>
+
                         <tr *ngIf="prescription.length === 0">
                           <td colspan="9" class="no-data-card">
                             <div class="no-data-card-container">
@@ -68,12 +83,13 @@
                             </div>
                           </td>
                         </tr>
+
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length > 0 && !loading">
-                      <app-pagination [paginator]="paginator"
-                        (onPageChange)="getPrescriptionByUserId()"></app-pagination>
-                    </div>
+
+                  </div>
+                  <div class="me-5 d-flex justify-content-end mt-4" *ngIf="roles.length > 0">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getPrescriptionByUserId()"></app-pagination>
                   </div>
                 </div>
               </div>
@@ -83,26 +99,41 @@
                 <span style="color: #00876F!important;">Current Medication</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+
+                <div class="row justify-content-end align-items-center">
+                  <!-- Search Input -->
+                  <div class="col-12 col-md-4 mt-3 mb-2">
+                    <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
+                      (input)="getCurrentMedicationByUserId()" class="form-control w-100" />
+                  </div>
+
+                  <!-- Add Medication Button -->
+                  <div class="col-12 col-md-2 mb-2 text-md-end">
+                    <button class="btn btn-primary w-100 w-md-auto add-medication-button"
+                      (click)="openAddMedicationPopUp()">
+                      Add Medication
+                    </button>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="table-responsive">
-                    <div class="row">
-                      <div class="col-3"></div>
-                      <div class="col-3"></div>
-                      <div class="col-1"></div>
-                      <div class="col-3 mt-3 mb-2">
-                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
-                          (input)="filterCurrentMedications()" class="form-control" />
-                      </div>
-                      <div class="col-2 mb-1">
-                        <button class="btn btn-primary add-medication-button" (click)="openAddMedicationPopUp()">Add
-                          Medication</button>
-                      </div>
-                    </div>
+
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th scope="col">Drug Name</th>
-                          <th scope="col">Start Date</th>
+                          <th style=" min-width: 150px;" scope="col" (click)="sortCurrentMedicationData('drugName')">
+                            Drug Name
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'drugName', 'fa-sort-up': sortColumn === 'drugName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'drugName' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <!-- <th scope="col">Drug Name</th> -->
+                          <th style=" min-width: 150px;" scope="col" (click)="sortCurrentMedicationData('startDate')">
+                            Start Date
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'startDate', 'fa-sort-up': sortColumn === 'startDate' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'startDate' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <!-- <th scope="col">Drug Name</th>
+                          <th scope="col">Start Date</th> -->
                           <th scope="col">Strength</th>
                           <th scope="col">Duration</th>
                           <th scope="col">Direction</th>
@@ -110,10 +141,20 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of currentPrescription; let i = index">
-                          <td>{{ item.drugName }}</td>
-                          <td>{{ item.startDate }}</td>
+                          <!-- <td>{{ item.drugName }}</td> -->
+                          <td style="max-width: 40%;">
+                            <span *ngIf="!item.showFullDrugName">
+                              {{ item.drugName | slice: 0:50 }}<span *ngIf="item.drugName.length > 50">...</span>
+                            </span>
+                            <span *ngIf="item.showFullDrugName">{{ item.drugName }}</span>
+                            <a *ngIf="item.drugName.length > 50" href="#"
+                              (click)="toggleShowMore(item, 'DrugName', $event)">
+                              {{ item.showFullDrugName ? 'See less' : 'Show more' }}
+                            </a>
+                          </td>
+                          <td>{{ item.startDate |date:'MM-dd-yyyy'}}</td>
                           <td>{{ item.strength }}</td>
-                          <td>{{ item.duration }}</td>
+                          <td>{{ item.durationInDays + 'days' }}</td>
                           <td>{{ item.direction }}</td>
                         </tr>
                         <tr *ngIf="currentPrescription.length === 0">
@@ -133,10 +174,11 @@
                         </tr>
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length > 0 && !loading">
-                      <app-pagination [paginator]="paginator"
-                        (onPageChange)="getCurrentMedicationByUserId()"></app-pagination>
-                    </div>
+
+                  </div>
+                  <div class="me-5 d-flex justify-content-end mt-4" *ngIf="roles.length > 0 && !loading">
+                    <app-pagination [paginator]="paginator"
+                      (onPageChange)="getCurrentMedicationByUserId()"></app-pagination>
                   </div>
                 </div>
               </div>
@@ -147,19 +189,29 @@
                 <span style="color: #00876F!important;">Past Medication</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input type="text" style="width: 30%;" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
+                    (input)="getPastMedicationByUserId()" class="form-control" />
+                </div>
                 <div class="row">
                   <div class="table-responsive">
-                    <div class="row">
-                      <div class="col-3 offset-9 mt-3 mb-2">
-                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Drug Name"
-                          (input)="filterPastMedications()" class="form-control" />
-                      </div>
-                    </div>
+
                     <table class="table table-hover">
                       <thead>
                         <tr>
-                          <th scope="col">Drug Name</th>
-                          <th scope="col">Start Date</th>
+                          <th style=" min-width: 150px;" scope="col" (click)="sortPastMedicationData('drugName')">Drug
+                            Name
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'drugName', 'fa-sort-up': sortColumn === 'drugName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'drugName' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <!-- <th scope="col">Drug Name</th> -->
+                          <th style=" min-width: 150px;" scope="col" (click)="sortPastMedicationData('startDate')">Start
+                            Date
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'startDate', 'fa-sort-up': sortColumn === 'startDate' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'startDate' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <!-- <th scope="col">Drug Name</th>
+                          <th scope="col">Start Date</th> -->
                           <th scope="col">Strength</th>
                           <th scope="col">Duration</th>
                           <th scope="col">Direction</th>
@@ -168,9 +220,9 @@
                       <tbody>
                         <tr *ngFor="let item of pastPrescription; let i = index">
                           <td>{{ item.drugName }}</td>
-                          <td>{{ item.startDate }}</td>
+                          <td>{{ item.startDate|date:'MM-dd-yyyy' }}</td>
                           <td>{{ item.strength }}</td>
-                          <td>{{ item.duration }}</td>
+                          <td>{{ item.durationInDays + ' days' }}</td>
                           <td>{{ item.direction }}</td>
                         </tr>
                         <tr *ngIf="pastPrescription.length === 0">
@@ -180,9 +232,9 @@
                                 <i class="fas fa-exclamation-triangle"></i>
                               </div>
                               <div class="no-data-content">
-                                <span class="no-data-title">No medications Found</span>
+                                <span class="no-data-title">No Past medications Found</span>
                                 <p class="no-data-description">
-                                  It looks like there are no medications at the moment. Please check back later!
+                                  It looks like there are no past medications at the moment. Please check back later!
                                 </p>
                               </div>
                             </div>
@@ -190,10 +242,11 @@
                         </tr>
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length > 0 && !loading">
-                      <app-pagination [paginator]="paginator"
-                        (onPageChange)="getPastMedicationByUserId()"></app-pagination>
-                    </div>
+
+                  </div>
+                  <div class="me-5 d-flex justify-content-end mt-4" *ngIf="roles.length > 0 && !loading">
+                    <app-pagination [paginator]="paginator"
+                      (onPageChange)="getPastMedicationByUserId()"></app-pagination>
                   </div>
                 </div>
               </div>

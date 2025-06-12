@@ -1,0 +1,184 @@
+<div class="px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 ">
+            <div class=" rounded h-100 p-2 mt-4">
+
+                <div class="col-sm-12 card">
+                    <div class=" rounded  p-4">
+
+                        <div class="">
+                            <h1 class="text-center">Role Management</h1>
+
+                        </div>
+                        <form [formGroup]="roleForm">
+                            <div class="row p-2">
+                                <!-- Col-1 -->
+                                <div class="col-12 col-sm-4">
+                                    <label for="roleName"> Role Name <span class="red">*</span> </label>
+                                    <input type="text" id="roleName" class="form-control form-control-sm"
+                                        formControlName="roleName"
+                                        [ngClass]="{'is-invalid': roleForm.get('roleName')?.invalid && roleForm.get('roleName')?.touched}"
+                                        [value]="roleForm.get('roleName')?.value">
+                                    <div class="invalid-feedback"
+                                        *ngIf="roleForm.get('roleName')?.touched && roleForm.get('roleName')?.hasError('required')">
+                                        Role Name required.
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="roleForm.get('roleName')?.touched && roleForm.get('roleName')?.hasError('pattern')">
+                                        Role Name cannot be empty or only spaces.
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-8">
+                                    <label for="description"> Description <span class="red">*</span> </label>
+                                    <input type="text" id="description" class="form-control form-control-sm"
+                                        formControlName="description"
+                                        [ngClass]="{'is-invalid': roleForm.get('description')?.invalid && roleForm.get('description')?.touched}"
+                                        [value]="roleForm.get('description')?.value">
+                                    <div class="invalid-feedback"
+                                        *ngIf="roleForm.get('description')?.touched && roleForm.get('description')?.hasError('required')">
+                                        Description is required.
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="roleForm.get('description')?.touched && roleForm.get('description')?.hasError('pattern')">
+                                        Description cannot be empty or only spaces.
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col">
+                                <div class=" d-flex justify-content-end pt-2">
+                                    <button type="button" class="btn custom-padding" style="background-color: #00876f;"
+                                        (click)="postRole()"> <span class="spinner-border text-light small-spinner"
+                                            role="status" *ngIf="loading1">
+                                            <span class="visually-hidden">Loading...</span></span>
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-sm-9 ">
+                                <h1 class="">Role List</h1>
+                            </div>
+
+                            <div class="col-sm-3 ">
+
+                                <input type="text" [(ngModel)]="searchTerm" (input)="filterItems()"
+                                    placeholder="Search Role" class="form-control">
+                            </div>
+                        </div>
+                        <div class="table-responsive mt-1">
+
+                            <table class="table">
+                                <thead>
+                                    <tr>
+
+                                        <th style=" min-width: 150px;" scope="col" (click)="sortData('roleName')">Role
+                                            Name
+                                            <i
+                                                [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'roleName', 'fa-sort-up': sortColumn === 'roleName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'roleName' && sortOrder === 'desc'}"></i>
+                                        </th>
+                                        <th style=" min-width: 130px;" scope="col" (click)="sortData('description')">
+                                            Description
+                                            <i
+                                                [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'description', 'fa-sort-up': sortColumn === 'description' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'description' && sortOrder === 'desc'}"></i>
+                                        </th>
+                                        <th style=" min-width: 150px;" scope="col" (click)="sortData('createdDate')">
+                                            Created Date
+                                            <i
+                                                [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'createdDate', 'fa-sort-up': sortColumn === 'createdDate' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'createdDate' && sortOrder === 'desc'}"></i>
+                                        </th>
+                                        <th style=" min-width: 150px;" scope="col">Status
+
+                                        </th>
+                                        <th style=" min-width: 120px;" scope="col">Permission</th>
+
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let items of roleData">
+
+                                        <td>{{items.roleName}}</td>
+                                        <td style="width: 100%; max-width: 35%;">
+                                            <span *ngIf="!expandedItems[items.id]">{{ getShortText(items.description)
+                                                }}</span>
+                                            <span *ngIf="expandedItems[items.id]">{{ items.description }}</span>
+
+                                            <a *ngIf="shouldShowToggle(items.description)" href="#"
+                                                (click)="toggleExpand($event, items.id)">
+                                                {{ expandedItems[items.id] ? 'See Less' : 'See More' }}
+                                            </a>
+                                        </td>
+
+                                        <!-- <td style="width: 100%; max-width: 35%;">
+                                            <span *ngIf="!expanded">{{ getShortText(items.description) }}</span>
+                                            <span *ngIf="expanded">{{ items.description }}</span>
+                                          
+                                            <a *ngIf="shouldShowToggle(items.description)" href="#" (click)="toggleExpand($event)">
+                                              {{ expanded ? 'See Less' : 'See More' }}
+                                            </a>
+                                          </td> -->
+                                        <td>{{items.createdDate |date:'MM-dd-yyyy'}}</td>
+                                        <td>
+
+                                            <label class="switch" style="margin-left: 30% !important;">
+                                                <input class="switch-input" type="checkbox" [checked]="items.status"
+                                                    (change)="toggleStatus(items.id,items.status)">
+                                                <span class="switch-label"></span>
+                                                <span class="switch-handle"></span>
+                                            </label>
+
+
+                                        </td>
+                                        <td> <button type="button" class="btn"
+                                                style=" background-color: #00876f!important;"
+                                                (click)="permissionPopup(items.id)">
+
+                                                <span>Permission</span>
+                                            </button></td>
+
+
+                                        <td class="text-center">
+                                            <span class="icon-edit" title="Edit"
+                                                style="color: #00876f; font-size: medium">
+                                                <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                                    (click)="getRoleById(items.id)"></i>
+                                            </span>
+                                        </td>
+                                    </tr>
+
+
+                                </tbody>
+
+                                <tr style="width:100%!important; max-width: 100%!important;"
+                                    *ngIf="roleData?.length === 0 && searchTerm">
+                                    <td colspan="6">
+                                        <div class="provider-card1"
+                                            style="width:100%!important; max-width: 100%!important;">
+                                            <div class="provider-header">
+                                                <h2 class="text-center">Nothing Found</h2>
+                                            </div>
+                                            <br>
+                                            <div class="text-center">
+                                                <span>Sorry, but nothing matched your search terms. Please try again
+                                                    with some different
+                                                    keywords.</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="mx-2 d-flex justify-content-end" *ngIf="roles.length >0 && !loading">
+                            <app-pagination [paginator]="paginator" (onPageChange)="getRoleList()" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

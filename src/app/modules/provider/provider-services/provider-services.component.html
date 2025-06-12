@@ -7,10 +7,12 @@
                 <h4 style="font-weight:500;"> Service pricing statement &nbsp;
                 </h4>
                 <p>
-                <b>For primary care :</b> We recommend $24 - $49 telehealth consults <br>
-                <b>For specialty care : </b> We recommend $49 - $79 telehealth consults <br>
-               <i>ChaliceHealth adds a 10% consumer fee ( $30 min , $100 max ) to all provider pricing, this is <br>
- excluded from the above recommendations</i></p>
+                    <b>For primary care :</b> We recommend $24 - $49 telehealth consults <br>
+                    <b>For specialty care : </b> We recommend $49 - $79 telehealth consults <br>
+                    <i>Chalice Health adds a 10% consumer fee ( $30 min , $100 max ) to all provider pricing, this is
+                        <br>
+                        excluded from the above recommendations</i>
+                </p>
 
                 <!-- <input class="w-100" style="border: none; border-bottom:2px solid #dedada;" type="text"
                     placeholder="Type your answer here" formControlName="servicePricing"
@@ -23,8 +25,9 @@
             <div class="col-sm-12 px-2 pb-0 pt-3 ">
                 <h4 style="font-weight: 500;">
                     1. Ages treated &nbsp;
-                    <div class="tooltip-container" (mouseenter)="showTooltip()" (mouseleave)="hideTooltip()" (click)="toggleTooltip()">
-                        <i class="fas fa-question-circle cursor ms-1"></i>
+                    <div class="tooltip-container" (mouseenter)="showTooltip()" (mouseleave)="hideTooltip()"
+                        (click)="toggleTooltip()">
+                        <i class="fas fa-info-circle cursor ms-1"></i>
                         <div *ngIf="isTooltipVisible" class="custom-tooltip">
                             Information about ages treated
                         </div>
@@ -42,27 +45,27 @@
     </form>
     <form [formGroup]="serviceForm" class="mt-2">
         <div class="row px-2">
-            <h3 style="font-weight: 500; margin: 0%!important;">Please select the services you are interested</h3>
+            <h3 style="font-weight: 500; margin: 0%!important;">Please select the services you are interested <span class="red">*</span></h3>
             <div class="col-sm-5">
-                <div class="col-sm-12 p-2 pb-0 d-flex">
+                <div class="col-sm-12  pb-0 d-flex">
                     <span><input type="radio" class="cursor" formControlName="serviceInterestedType" [value]="1"
                             [ngClass]="{'is-invalid': serviceForm.get('serviceInterestedType')?.invalid &&  serviceForm.get('serviceInterestedType')?.touched}"></span>
                     <span class="px-2">
-                        New patient telehealth visit
+                        New patient telehealth
                     </span>
                 </div>
             </div>
             <div class="col-sm-5">
-                <div class="col-sm-12 p-2 pb-0 d-flex">
+                <div class="col-sm-12  pb-0 d-flex">
                     <span><input type="radio" class="cursor" formControlName="serviceInterestedType" [value]="2"
                             [ngClass]="{'is-invalid': serviceForm.get('serviceInterestedType')?.invalid &&  serviceForm.get('serviceInterestedType')?.touched}"></span>
                     <span class="px-2">
-                        Existing patient telehealth visit
+                        Existing patient telehealth
                     </span>
                 </div>
             </div>
             <div class="col-sm-2">
-                <div class="col-sm-12 p-2 pb-0 d-flex">
+                <div class="col-sm-12  pb-0 d-flex">
                     <span><input type="radio" class="cursor" formControlName="serviceInterestedType" [value]="3"
                             [ngClass]="{'is-invalid': serviceForm.get('serviceInterestedType')?.invalid &&  serviceForm.get('serviceInterestedType')?.touched}"></span>
                     <span class="px-2">
@@ -75,7 +78,7 @@
                 Atleast one service is required.
             </div>
         </div>
-        <div class="row p-2">
+        <div class="row ">
             <div class="col-sm-6">
                 <label for="credetials">Service Duration<span class="red">*</span></label>
                 <select class="form-select form-select-sm cursor mt-1" formControlName="serviceDuration"
@@ -93,29 +96,29 @@
             </div>
         </div>
 
-        <div class="row p-2">
+        <div class="row ">
             <div class="col-sm-6">
-                <label for="phoneNumber">Telehealth Visit Price (in $)<span class="red">*</span></label>
+                <label for="phoneNumber">Telehealth Price (in $)<span class="red">*</span></label>
                 <input type="number" id="phoneNumber" class="form-control form-control-sm mt-1"
                     formControlName="telehealthVisitPrice"
                     [ngClass]="{'is-invalid':serviceForm.get('telehealthVisitPrice')?.invalid && serviceForm.get('telehealthVisitPrice')?.touched}"
                     [value]="serviceForm.get('telehealthVisitPrice')?.value">
                 <div class="invalid-feedback"
                     *ngIf="serviceForm.get('telehealthVisitPrice')?.touched && serviceForm.get('telehealthVisitPrice')?.hasError('required')">
-                    Telehealth Visit Price is required.
+                    Telehealth Price is required.
                 </div>
             </div>
             <div class="col-sm-6">
-                <label for="phoneNumber">Telehealth Visit (Existing patient) (in $)</label>
+                <label for="phoneNumber">Telehealth (Existing patient) (in $)</label>
                 <input type="number" id="phoneNumber" class="form-control form-control-sm mt-1"
                     formControlName="visitExistingPatient"
                     [ngClass]="{'is-invalid':serviceForm.get('visitExistingPatient')?.invalid && serviceForm.get('visitExistingPatient')?.touched}"
                     [value]="serviceForm.get('visitExistingPatient')?.value">
             </div>
         </div>
-        <div class="row p-2">
+        <div class="row ">
             <div class="col-sm-6">
-                <label for="phoneNumber">In-Home Visit Price (in $)</label>
+                <label for="phoneNumber">Home Visit Price (in $)</label>
                 <input type="number" id="number" class="form-control form-control-sm mt-1"
                     formControlName="inHomeVisitPrice"
                     [ngClass]="{'is-invalid':serviceForm.get('inHomeVisitPrice')?.invalid && serviceForm.get('inHomeVisitPrice')?.touched}"
@@ -133,13 +136,13 @@
         </div>
     </form>
 
-    <div class="row p-2" *ngIf="isDisabled && serviceRows.length > 0">
+    <div class="row " *ngIf="isDisabled && serviceRows.length > 0">
         <h3 style="color: black;"><u style="font-weight: 500;">Specialty Service</u> <br>Service Name</h3>
 
         <div *ngFor="let item of serviceRows; let i = index" class="row">
             <div class="col-sm-6">
                 <label>Specialty</label>
-                <select [(ngModel)]="item.specialtyServiceId" class="form-select form-select-sm cursor mt-1"
+                <select [(ngModel)]="item.specialtyServiceId" class="form-select form-select-sm cursor"
                     [disabled]="isDisabled">
                     <option value="" disabled selected>Select</option>
                     <option [value]="item.id" *ngFor="let item of specialities">{{item.name}}</option>
@@ -173,21 +176,35 @@
             </div>
         </div>
     </div>
-    <div class="row p-2">
-        <div class="col-sm-5"></div>
-        <div class="mt-4 col-sm-7">
+    <div class="row ">
+        <div class="col-sm-2"></div>
+        <div class="mt-4 col-sm-10">
             <button type="button" class="btn m-2 custom-padding cancelButton" (click)="cancel()"
                 >
                 <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading1">
                     <span class="visually-hidden">Loading...</span>
                 </span>Cancel</button>
-            <button type="button" class="btn m-2 custom-padding" style="background-color: #00876f;"
-                [disabled]="isDisabled" (click)="submitData()"><span class="spinner-border text-light small-spinner"
+                <button type="button" class="btn m-2 custom-padding" (click)="openDocumentPopUp()"
+                *ngIf="userInfo.accountType == 'Admin'"><span class="spinner-border text-light small-spinner"
                     role="status" *ngIf="loading">
+                    <span class="visually-hidden">Loading...</span>
+                </span>Next
+            </button>
+            <button type="button" class="btn m-2 custom-padding" style="background-color: #00876f;"
+                  (click)="submitData()"><span
+                    class="spinner-border text-light small-spinner" role="status" *ngIf="loading">
                     <span class="visually-hidden">Loading...</span>
                 </span>Save
             </button>
+            <button type="button" class="btn m-2 custom-padding" (click)="openMedicalPopUp()"
+                *ngIf="userInfo.accountType == 'Admin'"><span class="spinner-border text-light small-spinner"
+                    role="status" *ngIf="loading">
+                    <span class="visually-hidden">Loading...</span>
+                </span>Back
+            </button>
+         
         </div>
-    </div>  
+ 
+    </div>
 
 </div>

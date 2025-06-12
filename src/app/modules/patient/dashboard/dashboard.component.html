@@ -1,0 +1,301 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+
+      <div class="bg-white rounded px-0 py-3">
+        <h3 class="text-center mb-0">Dashboard</h3>
+
+
+        <div class="dashboard-container px-4 py-2">
+
+          <!-- Updates Box -->
+          <div class="update-box border border-2 rounded p-3 mb-3" *ngFor="let item of announcementData">
+            <div class="update-content d-flex justify-content-between align-items-center">
+              <div class="text-section">
+                <h5 class="mb-1 text-primary">📢 New Announcement!</h5>
+                <p class="mb-0 text-muted">You have a new update from <strong>Chalice Health</strong>.
+                  Click the button below to view the details.</p>
+              </div>
+              <button class="view-button btn btn-outline-success btn-sm" (click)="viewAnnouncement(item)">
+                View Announcement
+              </button>
+            </div>
+          </div>
+
+
+          <div class="row pt-3">
+            <div class="col-md-12">
+              <div class="row align-items-center mt-1">
+                <!-- Buttons Section (Always on top in mobile, left on desktop) -->
+                <div class="col-12 col-md-9 mb-2 mb-md-0">
+                  <div class="d-flex flex-wrap gap-2">
+                    <h1 class="ms-2">Upcoming Appointment</h1>
+                  </div>
+                </div>
+
+                <!-- Search Bar Section -->
+                <div class="col-12 col-md-3">
+                  <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                    (input)="getUpcomingAppointmentsByUserId()" class="form-control" />
+                </div>
+              </div>
+
+              <div class="table-container border mt-1" style="max-height: 300px;">
+                <div class="table-responsive" style="height: 260px;overflow-y: auto;">
+                  <table class="appointment-table  table ">
+                    <thead class="sticky-header">
+                      <tr>
+                        <th class="text-center" scope="col" (click)="sortData('providerName')">
+                          Provider Name
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}">
+                          </i>
+                        </th>
+                        <th class=" text-center" scope="col" (click)="sortData('date')">Date &
+                          Time
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}">
+                          </i>
+                        </th>
+
+                        <th style="min-width: 170px;" class=" text-center" scope="col">Service Type</th>
+                        <th class=" text-center" scope="col">Reason For Visit</th>
+                        <th class=" text-center" scope="col">Intake Form</th>
+                        <th class=" text-center" scope="col">Consent Form</th>
+                        <th class=" text-center" scope="col">Status</th>
+                        <th class=" text-center" scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody style="height: 2vh !important;">
+                      <tr style="height: 2vh !important;" *ngFor="let item of upcomingAppointment; let i = index">
+                        <td *ngIf="item.accountType == 'IndependentProvider'"
+                          style="color: #009cff!important; cursor: pointer;"
+                          (click)="viewProviderProfile(item.providerId, item.bookAppointmentId)">
+                          <u>{{item.providerName}}</u>
+                        </td>
+                        <td *ngIf="item.accountType == 'PrivatePractices' || item?.accountType == 'Facility'"
+                          style="color: #009cff!important; cursor: pointer;"
+                          (click)="viewProviderProfile(item.providerId, item.bookAppointmentId)">
+                          <u>{{item.legalPracticeName}}</u>
+                        </td>
+                        <td class="pt-3 text-center">{{item.date | date:'MM-dd-yyyy'}}<br>
+                          {{item.date | date:'hh:mm a'}}
+                        </td>
+                        <td>
+                          <ng-container [ngSwitch]="item.meetingType">
+                            <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                              style="font-size: 15px; color: #00876ec8;"></i>
+                            <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                            <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                              style="color: #00876ec8;"></i>
+                          </ng-container>
+                          {{ formatServiceType(item.meetingType) }}
+                        </td>
+
+
+
+                        <td>{{item.reasonForVisit}}</td>
+                        <td>
+                          <!-- When intake is shared and status is Pending -->
+                          <div *ngIf="item.hasShareIntake && item.intakeConsentStatus == 'Pending'">
+                            <ul class="dot" style="list-style: none; padding-left: 0; margin: 0;">
+                              <li style="margin-bottom: 5px;">
+                                <a (click)="downloadIntakeDocument(item.bookAppointmentId)"
+                                  title="Please download intake form"
+                                  style="display: flex; align-items: center; text-decoration: none; cursor: pointer;">
+                                  <i class="fa fa-file-download text-primary me-2" style="width: 20px;"></i>
+                                  <span>Download Intake</span>
+                                </a>
+                              </li>
+                              <li>
+                                <a (click)="browseIntakeDocument(item.shareIntakeId)" title="Please upload intake form"
+                                  style="display: flex; align-items: center; text-decoration: none; cursor: pointer;">
+                                  <i class="fa fa-folder-open text-warning me-2" style="width: 20px; "></i>
+                                  <span>Upload Intake</span>
+                                </a>
+                               <input type="file" #fileInput1 style="display: none"
+                                    (change)="onFileSelected1($event, item.shareIntakeId, i)">
+                              </li>
+                            </ul>
+                          </div>
+
+                          <!-- When intake is shared and status is Approved -->
+                          <div class="dropdown" *ngIf="item.hasShareIntake && item.intakeConsentStatus == 'Approved'">
+                            <span class="icon-chat" title="Intake Form Shared" style="font-size: 14px;">
+                              {{ item.intakeConsentStatus }}
+                            </span>
+                          </div>
+
+                          <!-- When intake is not shared -->
+                          <div class="dropdown" *ngIf="!item.hasShareIntake">
+                            <span class="icon-chat" title="Intake Form Shared" style="font-size: 14px;">
+                              {{ item.intakeConsentStatus === 0 ? 'Pending' : item.intakeConsentStatus }}
+                            </span>
+                          </div>
+                        </td>
+
+
+                        <td>
+                          <!-- When consent is shared and status is Pending -->
+                          <div *ngIf="item.hasShareConsent && item.shareConsentStatus == 'Pending'">
+                            <ul class="dot" style="list-style: none; padding-left: 0; margin: 0;">
+                              <li style="margin-bottom: 5px;">
+                                <a (click)="downloadConsentDocument(item.bookAppointmentId)"
+                                  title="Please download consent form"
+                                  style="display: flex; align-items: center; text-decoration: none; cursor: pointer;">
+                                  <i class="fa fa-file-download text-primary me-2" style="width: 20px;"></i>
+                                  <span>Download Consent</span>
+                                </a>
+                              </li>
+                              <li>
+                                <a (click)="browseConsentDocument(item.shareConsentId)" title="Please upload consent form"
+                                  style="display: flex; align-items: center; text-decoration: none; cursor: pointer;">
+                                  <i class="fa fa-folder-open text-warning me-2" style="width: 20px;"></i>
+                                  <span>Upload Consent</span>
+                                </a>
+                                <input type="file" #fileInput style="display: none"
+                                  (change)="onFileSelected($event, item.shareConsentId, i)">
+                              </li>
+                            </ul>
+                          </div>
+
+                          <!-- When consent is shared and status is Approved -->
+                          <div class="dropdown" *ngIf="item.hasShareConsent && item.shareConsentStatus == 'Approved'">
+                            <span class="icon-chat" title="Consent Form Shared" style="font-size: 14px;">
+                              {{item.shareConsentStatus}}
+                            </span>
+                          </div>
+
+                          <!-- When consent is not shared -->
+                          <div class="dropdown" *ngIf="!item.hasShareConsent">
+                            <span class="icon-chat" title="Consent Form Shared" style="font-size: 14px;">
+                              {{item.shareConsentStatus === 0 ? 'Pending' : item.shareConsentStatus}}
+                            </span>
+                          </div>
+                        </td>
+
+
+                        <!-- <td>{{item.intakeConsentStatus === 0 ? 'Pending' : item.intakeConsentStatus}}</td>
+                                                <td>{{ item.shareConsentStatus === 0 ? 'Pending' : item.shareConsentStatus }}</td> -->
+                        <td>{{item.bookingStatus}}</td>
+
+
+                        <td class="cursor" style="justify-items: center;">
+                          <div class="row d-flex justify-content-center flex-wrap cursor">
+
+                            <div class="col-12 text-end d-flex justify-content-end align-items-center gap-2">
+
+                              <!-- Send Message Icon (outside dropdown) -->
+                              <a class="btn btn-sm d-flex align-items-center"
+                                style="background-color: transparent!important; color: #00a98d!important; margin-top: -3px!important;"
+                                (click)="sendMessage(item.bookAppointmentId, item.providerId)" data-bs-toggle="tooltip"
+                                title="Send Message">
+                                <i class="fas fa-comments" style="font-size: 20px;"></i>
+                              </a>
+
+                              <!-- Dropdown for other options -->
+                              <div class="dropdown dropup">
+                                <span class="icon-menu cursor" data-bs-toggle="dropdown" aria-expanded="false"
+                                  style="font-size: 20px; cursor: pointer;">
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </span>
+                                <ul class="dropdown-menu dropdown-menu-end text-start">
+
+                                  <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="rescheduleAppointment(item.bookAppointmentId, item.providerId, item.meetingType)">
+                                      <i class="fas fa-calendar-alt"
+                                        style="color: #1e8af9; width: 20px; text-align: center;"></i>
+                                      <span>Reschedule</span>
+                                    </a>
+                                  </li>
+
+                                  <li *ngIf="item.refundStatus === 'Refunded'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2">
+                                      <i class="fas fa-check-circle text-success"></i> Refunded
+                                    </a>
+                                  </li>
+
+                                  <li *ngIf="item.refundStatus === 'Pending'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2">
+                                      <i class="fas fa-times-circle" style="color:orange;"></i> Refund Pending
+                                    </a>
+                                  </li>
+
+                                  <li *ngIf="item.refundStatus !== 'Refunded' && item.refundStatus !== 'Pending'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="showDetails(item.bookAppointmentId)">
+                                      <i class="fas fa-times-circle text-danger" style="font-size: 19px;"></i>
+                                      <span>Cancel Appointment</span>
+                                    </a>
+                                  </li>
+
+                                  <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="addToCalender(item.bookAppointmentId)">
+                                      <i class="fas fa-calendar-plus text-warning" style="font-size: 19px;"></i>
+                                      <span>Add To Calendar</span>
+                                    </a>
+                                  </li>
+
+                                  <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="followUp(item.providerId)">
+                                      <i class="fas fa-user-clock text-primary" style="font-size: 19px;"></i>
+                                      <span>Follow Up</span>
+                                    </a>
+                                  </li>
+
+                                </ul>
+                              </div>
+
+                            </div>
+                          </div>
+                        </td>
+
+                        <!-- <td><button class="btn btn-success"
+                                                    (click)="addToCalender(item.bookAppointmentId)">Add to
+                                                    Calender</button></td> -->
+                      </tr>
+                      <tr *ngIf="loading">
+                        <td colspan="7">
+                          <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                            [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                            [additionalClasses]="'mt-5'"></app-loader>
+                        </td>
+                      </tr>
+                      <tr *ngIf="upcomingAppointment.length === 0 && !loading">
+
+                        <td colspan="9" class="no-data-card">
+                          <div class="text-center">
+                            <div class="no-data-card-container">
+                              <div class="no-data-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                              </div>
+                              <div class="no-data-content">
+                                <span class="no-data-title">No Appointments Found</span>
+                                <p class="no-data-description">It looks like there are
+                                  no
+                                  appointments at the moment.
+                                  Please check back later!</p>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+              <div class="mx-2 d-flex justify-content-end mt-1 mb-4">
+                <app-pagination [paginator]="paginator" (onPageChange)="getUpcomingAppointmentsByUserId()" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

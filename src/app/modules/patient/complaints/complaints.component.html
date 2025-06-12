@@ -1,0 +1,75 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <h3>Complaint List</h3>
+                <div class="table-responsive">
+                    <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                        <div class="col-3 me-2">
+                            <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                                (input)="getComplaintListByUserId()" class="form-control">
+                        </div>
+
+                    </div>
+                                       
+                    <table class="table">
+                        <thead>
+                            <tr>                               
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Provider Name</th>
+                                <th scope="col">Appointment Date & Time</th>
+                                <th scope="col">Appointment Type</th>
+                                <!-- <th scope="col">Profiles</th> -->
+                                <th scope="col">Reason</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr  *ngFor="let item of complaintData; let i = index">
+                                <td> {{item.patientName || '--------'}} </td>
+                                <td> {{item.providerName || '--------'}}  </td>
+                                <td> {{ item.complaintDate ? (item.complaintDate | date:'MM-dd-yyyy') : '--------' }} </td>
+                                <td> {{ formatMeetingType(item.meetingType) || '--------' }} </td>
+                                <td> {{item.reason || '--------'}} </td>
+                                <td> {{item.status || '--------'}} </td>                                
+                                <td><span class="icon-delete" title="Delete" (click)="deleteComplaintData(item.complaintId)"
+                                        style="color: #dc3545; font-size: medium">
+                                        <i class="fa-solid fa-trash cursor" ></i>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="complaintData.length === 0 && !loading">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-exclamation-triangle"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Complaints Found</span>
+                                            <p class="no-data-description">It looks like there are no complaints at the
+                                                moment.
+                                                Please add your Complaints!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                        <app-pagination [paginator]="paginator" (onPageChange)="getComplaintListByUserId()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

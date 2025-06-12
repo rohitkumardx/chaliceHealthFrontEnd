@@ -1,0 +1,72 @@
+<div class="doctor-section-bg pb-3">
+  
+  <div class="container-fluid px-4">
+   
+<div class="row p-4" >
+  <h2 class="fw-bold mb-4" style="color: #fb8501; font-family: 'Montserrat'; font-size: 24px;">
+    Follow-Up Doctor Appointments
+  </h2>
+ 
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3 mt-3" *ngFor="let item of doctors">
+    <div class="card doctor-card text-center p-4 border-0 shadow-sm h-100">
+      <!-- Profile Image -->
+      <img
+        *ngIf="item?.profilePicturePath"
+        [src]="item.profilePicturePath"
+        class="rounded-circle mx-auto doctor-img-fix mb-3"
+        alt="Doctor"  width="100px" height="100px"
+      />
+      <img
+        *ngIf="!item?.profilePicturePath"
+        src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png"
+        class="rounded-circle mx-auto doctor-img-fix mb-3"
+        alt="Default Doctor" width="100px" height="100px"
+      />
+   
+      <!-- Name -->
+      <h5 class="doctor-name text-dark mb-1">
+         {{ item.firstName }} {{ item.lastName }}
+        <span class="text-muted">, {{ item.qualificationName }}</span>
+      </h5>
+   
+      <!-- Location -->
+      <p class="location text-muted small mb-1">
+        {{ getStateAndCountry(item) }}
+      </p>
+   
+      <!-- Booking Count -->
+      <p class="medium text-secondary mb-2">
+        <strong>Booking count:</strong> {{ item.bookingCount }}
+      </p>
+   
+      <!-- Specialist -->
+      <p class="degree text-muted small mb-2">
+         {{ getSpecialistNames(item.specialist) }}
+      </p>
+   
+      <!-- Services -->
+      <p class="services text-muted small mb-3">
+        <span *ngIf="item.telehealthVisitPrice !== ''">
+          <i class="fas fa-camera me-1 text-success"></i>Telehealth
+        </span>
+        <span *ngIf="item.telehealthVisitPrice !== '' && (item.officeVisitPrice !== '' || item.inHomeVisitPrice !== '')">, </span>
+        <span *ngIf="item.officeVisitPrice !== ''">
+          <i class="fa fa-building me-1 text-success"></i>Office Visit
+        </span>
+        <span *ngIf="item.officeVisitPrice !== '' && item.inHomeVisitPrice !== ''">, </span>
+        <span *ngIf="item.inHomeVisitPrice !== ''">
+          <i class="fa fa-home me-1 text-success"></i>Home Visit
+        </span>
+      </p>
+   
+      <!-- Button -->
+      <button class="btn btn-outline-primary px-4 py-2 btn-sm fw-semibold" (click)="redirectToDoctorProfile(item.userId)">
+        Follow up
+      </button>
+    </div>
+   
+  </div>
+</div>
+</div>
+</div>
+ 

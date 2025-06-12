@@ -21,7 +21,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  /* margin-bottom: 15px; */
 }
 
 .popup-header h2 {
@@ -35,7 +35,7 @@
   border: none!important;
   font-size: 1.5em;
   cursor: pointer;
-  margin-top: -2%;
+  margin-top: -10%;
 }
 
 .appointment-info p {

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { ProviderService } from 'src/app/Services/provider.service';
@@ -16,42 +16,39 @@ export class ReportAppointmentComponent {
   reportReason: string = '';
   reasonForCancellation: string = '';
   comment: string = '';
-  reportOptions: any
-  appointmentDetails: any
+  reportOptions: any[] = [];
+  appointmentDetails: any = {};
+  
   @Output() dialogClosed = new EventEmitter<void>();
-  @Input() bookingId: any
+  @Input() bookingId: any;
 
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private activeModel: NgbActiveModal,
     private datePipe: DatePipe,
     private notificationService: NotificationService,
     private providerService: ProviderService
-  ) { }
+  ) {}
 
   ngOnInit() {
-    debugger
-    if (this.bookingId.type == 'Report') {
-      this.getReportTypeList()
+    if (this.bookingId?.type == 'Report') {
+      this.getReportTypeList();
     }
-    this.getAppointmentDetails()
+    this.getAppointmentDetails();
   }
+
   confirmCancellation() {
     if (!this.reasonForCancellation.trim()) {
-      // alert('Please enter the reason for cancellation.');
-      this.notificationService.showDanger('Please enter ')
+      this.notificationService.showDanger('Please enter the reason for cancellation.');
       return;
     }
 
-    const bookingId = this.bookingId.bookingId; // Extract booking ID from input
-    const reason = this.reasonForCancellation; // Get reason for cancellation
-    const obj =
-    {
-      reasonForCancellation: reason
-    }
+    const bookingId = this.bookingId.bookingId;
+    const obj = { reasonForCancellation: this.reasonForCancellation };
+
     this.providerService.appointmentCancellationStatus(bookingId, obj).subscribe(
-      (response: any) => {
-        this.notificationService.showSuccess('Appointment cancelled successfully.')
-        console.log('Cancellation successful:', response);
+      () => {
+        this.notificationService.showSuccess('Appointment cancelled successfully.');
         this.modalClose();
       },
       (error) => {
@@ -60,55 +57,85 @@ export class ReportAppointmentComponent {
     );
   }
 
+  // getFormattedAppointment() {
+  //   if (!this.appointmentDetails?.startTime) return 'N/A';
+
+  //   const formattedDate = this.datePipe.transform(this.appointmentDetails.appointmentDateTime, 'MM-dd-yyyy') ;
+  //   const timeParts = this.appointmentDetails.startTime?.split(':') || [];
+    
+  //   if (timeParts.length < 2) return formattedDate;
+
+  //   let hour = parseInt(timeParts[0], 10);
+  //   const minutes = timeParts[1];
+  //   const ampm = hour >= 12 ? 'PM' : 'AM';
+  //   hour = hour % 12 || 12;
+
+  //   return `${formattedDate} (${hour}:${minutes} ${ampm})`;
+  // }
+  
   getFormattedAppointment() {
-    const formattedDate = this.datePipe.transform(this.appointmentDetails.date, 'MM/dd/yyyy');
-    const timeParts = this.appointmentDetails.startTime.split(':');
-    let hour = parseInt(timeParts[0], 10);
-    const minutes = timeParts[1];
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12 || 12;
-    const formattedTime = `${hour}:${minutes} ${ampm}`;
-    return `${formattedDate}  (${formattedTime})`;
+    if (!this.appointmentDetails?.appointmentDateTime) return 'N/A';
+  
+    const appointmentDateTime = new Date(this.appointmentDetails.appointmentDateTime);
+    const formattedDate = this.datePipe.transform(appointmentDateTime, 'MM-dd-yyyy');
+  
+    let hours = appointmentDateTime.getHours();
+    const minutes = appointmentDateTime.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+  
+    return `${formattedDate} (${hours}:${minutes} ${ampm})`;
   }
+  
 
   getAppointmentDetails() {
-    this.providerService.getBookingDetails(this.bookingId.bookingId).subscribe((response: any) => {
-      this.appointmentDetails = response
-    })
+    if (!this.bookingId?.bookingId) return;
+
+    this.providerService.getBookingDetails(this.bookingId.bookingId).subscribe(
+      (response: any) => {
+        this.appointmentDetails = response || {};
+      },
+      (error) => {
+        console.error('Error fetching appointment details:', error);
+      }
+    );
   }
+
   getReportTypeList() {
-    this.providerService.getReportList().subscribe((response: any) => {
-      this.reportOptions = response
-    })
+    this.providerService.getReportList().subscribe(
+      (response: any) => {
+        this.reportOptions = response || [];
+      },
+      (error) => {
+        console.error('Error fetching report options:', error);
+      }
+    );
   }
 
   formatTime(time: string): string {
+    if (!time) return 'N/A';
+    
     const [hours, minutes] = time.split(":").map(Number);
     const period = hours >= 12 ? "PM" : "AM";
-    const adjustedHours = hours % 12 || 12; // Convert to 12-hour format, replacing 0 with 12
+    const adjustedHours = hours % 12 || 12;
+    
     return `${adjustedHours}:${minutes.toString().padStart(2, '0')} ${period}`;
   }
 
   formatDOB(dob: string): string {
+    if (!dob) return 'N/A';
+    
     const birthDate = new Date(dob);
     const today = new Date();
+    const formattedDate = `${birthDate.getMonth() + 1}/${birthDate.getDate()}/${birthDate.getFullYear()}`;
 
-    // Format date as YYYY-MM-DD
-    const formattedDate = birthDate.toISOString().split('T')[0];
-
-    // Calculate age
     let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDifference = today.getMonth() - birthDate.getMonth();
-    const dayDifference = today.getDate() - birthDate.getDate();
-
-    // Adjust if the birthday hasn't occurred yet this year
-    if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+    if (today.getMonth() < birthDate.getMonth() || (today.getMonth() === birthDate.getMonth() && today.getDate() < birthDate.getDate())) {
       age--;
     }
 
     return `${formattedDate} (${age} yrs)`;
   }
-
 
   cancel() {
     this.activeModel.close();
@@ -118,34 +145,22 @@ export class ReportAppointmentComponent {
     this.activeModel.close();
     this.dialogClosed.emit();
   }
+
   submitFeedback() {
-    // Reset validation flags
-    this.isReportReasonInvalid = !this.reportReason; // Invalid if reportReason is null or empty
-    this.isCommentInvalid = !this.comment || !this.comment.trim(); // Invalid if comment is empty or whitespace only
+    this.isReportReasonInvalid = !this.reportReason;
+    this.isCommentInvalid = !this.comment.trim();
 
-    // If any validation fails, return early
-    if (this.isReportReasonInvalid || this.isCommentInvalid) {
-      return;
-    }
+    if (this.isReportReasonInvalid || this.isCommentInvalid) return;
 
-    // Construct feedback object
     const feedbackObj = {
       bookAppointmentId: this.bookingId.bookingId,
       reportTypeId: this.reportReason,
       comment: this.comment
     };
 
-    // Submit the feedback
-    this.providerService.submitReport(feedbackObj).subscribe(
-      (response: any) => {
-        this.notificationService.showSuccess('Appointment reported successfully.')
-        this.modalClose();
-      },
-      (error: any) => {
-        console.error('Error submitting feedback:', error);
-      }
-    );
-    this.modalClose();
+    this.providerService.submitReport(feedbackObj).subscribe(() => {
+      this.notificationService.showSuccess('Appointment reported successfully.');
+      this.modalClose();
+    });
   }
-
 }

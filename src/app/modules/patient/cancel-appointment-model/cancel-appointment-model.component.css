@@ -1,0 +1,16 @@
+.cancel{
+    background-color: #dc3545!important;
+    border-color: #dc3545!important;
+}
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+button{
+    width: 100%;
+}

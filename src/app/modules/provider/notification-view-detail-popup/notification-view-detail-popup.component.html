@@ -1,0 +1,22 @@
+<div class=" content-wrapper1 px-4 py-3 " >
+    <div class="d-flex">
+        <h2 class=" text-center mb-0">Notification Details</h2>
+        <div class="close-btn ms-auto mt-1" (click)="closePopup()"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+    <hr class="mb-2 mt-0">
+    <div class="row">
+        <div class="col-md-8 col-sm-12">
+            <p><b> Patient Code </b> : {{ transactionDetails.patientUniqueId }} </p>
+            <p><b> Patient Name </b> : {{ transactionDetails.patientName }} </p>
+            <p><b> Consultation Type </b> : {{ formatMeetingType(transactionDetails.meetingType) }} </p>
+            <p><b> Appointment Date </b> : {{ transactionDetails.appointmentDateTime  | date: 'MM-dd-yyyy' }}  </p>
+            <p><b>Appointment Time </b> : {{transactionDetails.appointmentDateTime  | date: 'hh:mm a'}} </p>
+            <p><b> Location </b> : US,{{ transactionDetails.location }} </p>
+            <p><b> Reason for Visit </b> : {{ transactionDetails.reasonForVisit }} </p>
+        </div>
+
+        <div class="col-4 d-flex align-items-center justify-content-center image">
+            <img src="../../../../assets/svg/icons/bell-line-icon.svg" alt="image" width="130px" height="130px">
+        </div>
+    </div>
+</div>

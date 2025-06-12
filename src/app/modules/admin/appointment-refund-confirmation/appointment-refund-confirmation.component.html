@@ -1,0 +1,78 @@
+<div class="content-wrapper1 p-4">
+    <div class="row align-items-center justify-content-between">
+        <div class=" col-md-10 col-9">
+          <h2 class="mb-0">Appointment Details</h2>
+        </div>
+        <div class="col-2 col-sm-2  text-end">
+          <i class="fa fa-times cursor fa-2x" (click)="closePopup()"></i>
+        </div>
+      </div>
+      
+    <hr>
+    <div class="row">
+        <div class="col-sm-6 mt-1"><b>Patient Name</b>: {{data?.patientName}}</div>
+        <div class="col-sm-6 mt-1"><b>Provider Name</b>: {{data?.providerName}}</div>
+    </div>
+  
+    <div class="row">
+        <div class="col-sm-6 mt-1"><b>Payment Date/Applied Date</b>: {{data?.paymentDate | date:'MM-dd-yyyy'}}</div>
+
+        <div class="col-sm-6 mt-1">
+            <b>Appointment Date & Time</b>: {{ data?.appointmentDateTime | date:'MM-dd-yyyy hh:mm a' }}
+        </div>
+    </div>
+   
+    <div *ngIf="data?.refundStatus == 'Refunded'" class="row mt-1">
+        <div class="col-sm-6 "><b>Payment Status</b>: {{data?.refundStatus}}</div>
+    </div>
+    <hr *ngIf="data?.isTimeBelow3Hrs && data?.refundStatus !== 'Refunded'">
+  
+    <table class="table mt-2">
+        <thead>
+            <tr>
+                <th>Paid/Total Amt.</th>
+                <th>Service Fee</th>
+                <!-- <th>Platform Fee.</th> -->
+                <th>Refundable Amt.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{data?.totalAmount | currency:'USD'}}</td>
+                <!-- <td> {{data?.gatewayProcessingFee | currency:'USD'}}</td>
+                <td>{{ data.platformServiceFee && data.platformServiceFee !== 0 ? (data.platformServiceFee | currency:'USD') : 'NA' }}</td> -->
+                <td>
+                    {{ (data?.gatewayProcessingFee || 0) + (data?.platformServiceFee || 0) > 0 
+                        ? ((data?.gatewayProcessingFee || 0) + (data?.platformServiceFee || 0) | currency:'USD') 
+                        : 'NA' }}
+                </td>
+                  
+               
+                <td>{{data.refundAmount != null ? (data.refundAmount | currency:'USD') : 'NA'}}</td>
+            </tr>
+            <!-- <tr>
+                <td>{{data?.totalAmount | currency:'USD'}}</td>
+                <td> {{data?.gatewayProcessingFee | currency:'USD'}}</td>
+                <td>{{ data.platformServiceFee && data.platformServiceFee !== 0 ? (data.platformServiceFee | currency:'USD') : 'NA' }}</td>
+                <td>{{data.refundAmount != null ? (data.refundAmount | currency:'USD') : 'NA'}}</td>
+            </tr> -->
+        </tbody>
+    </table>
+    <div *ngIf="button"  class="row mt-2">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-2"><button class="btn btn-success ms-4" (click)="confirmRefund()"
+                style="width: auto; display: flex; justify-content: center; align-items: center; padding: 5px 10px;">
+                <span class="visually-hidden"></span>
+                <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': loading }" *ngIf="loading"></i>
+                <span *ngIf="!loading">Confirm</span>
+                <span *ngIf="loading" class="space">Confirm</span>
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-danger cancel" (click)="closePopup()">
+                <span class="space">Cancel</span>
+            </button>
+        </div>
+    </div>
+
+</div>

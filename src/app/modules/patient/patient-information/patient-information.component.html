@@ -4,7 +4,7 @@
       <div class="signup-card">
         <h3>Patient Profile</h3>
         <div class="signup-form">
-          <mat-tab-group #tabGroup>
+          <mat-tab-group #tabGroup [(selectedIndex)]="selectedTabIndex">
             <mat-tab label="General Information">
               <ng-template mat-tab-label>
 
@@ -26,15 +26,19 @@
                           *ngIf="generalForm.get('firstName')?.touched && generalForm.get('firstName')?.hasError('required')">
                           First Name is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="generalForm.get('firstName')?.touched && generalForm.get('firstName')?.hasError('pattern')">
+                        First Name cannot be empty or only spaces.
+                       </div>
                       </div>
 
                       <!-- Middle Name Field -->
                       <div class="form-group col-4">
-                        <label for="middleName">Middle Name</label>
-                        <input type="text" id="middleName" placeholder="A" class="form-control form-control-sm mt-1"
-                          formControlName="middleName"
-                          [ngClass]="{'is-invalid': generalForm.get('middleName')?.invalid && generalForm.get('middleName')?.touched}">
-                      </div>
+                        <label>Middle Name</label>
+                        <input class="form-control form-control-sm mt-1" type="text" aria-label="default input example"
+                            formControlName="middleName" [value]="generalForm.get('middleName')?.value | capitalizeFirstLetter">
+                    </div>
+                    
 
                       <!-- Last Name Field -->
                       <div class="form-group col-4">
@@ -46,6 +50,10 @@
                           *ngIf="generalForm.get('lastName')?.touched && generalForm.get('lastName')?.hasError('required')">
                           Last Name is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="generalForm.get('lastName')?.touched && generalForm.get('lastName')?.hasError('pattern')">
+                        Last Name cannot be empty or only spaces.
+                       </div>
                       </div>
                     </div>
 
@@ -110,6 +118,10 @@
                           *ngIf="generalForm.get('gender')?.touched && generalForm.get('gender')?.hasError('required')">
                           Gender is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="generalForm.get('gender')?.touched && generalForm.get('gender')?.hasError('pattern')">
+                        Gender cannot be empty or only spaces.
+                       </div>
                       </div>
                       <div class="form-group col-4">
                         <label for="dateOfBirth">Date of Birth <span class="red">*</span></label>
@@ -120,6 +132,10 @@
                           *ngIf="generalForm.get('dateOfBirth')?.touched && generalForm.get('dateOfBirth')?.hasError('required')">
                           Date Of Birth is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="generalForm.get('dateOfBirth')?.touched && generalForm.get('dateOfBirth')?.hasError('pattern')">
+                        Date of Birth cannot be empty or only spaces.
+                       </div>
                       </div>
                       <div class="col-sm-4">
                         <div class="form-group">
@@ -150,18 +166,24 @@
                         <label for="address">Address <span class="red">*</span></label>
                         <textarea id="address" class="form-control form-control-sm mt-1" formControlName="address"
                           (input)="onAddressChange($event)"
+                            (keydown)="onKeyDown1($event)"
                           [ngClass]="{'is-invalid': generalForm.get('address')?.invalid && generalForm.get('address')?.touched}"></textarea>
-                        <ul *ngIf="suggestions.length">
-
-                          <li *ngFor="let suggestion of suggestions"
-                            (click)="selectSuggestion(suggestion.address.label)">
-                            {{ suggestion.address.label }}
-                          </li>
-                        </ul>
+                          <ul *ngIf="suggestions.length" class="suggestion-list">
+                            <li *ngFor="let suggestion of suggestions; let i = index" 
+                                (click)="selectSuggestion(suggestion)" 
+                                [class.active]="i === selectedIndex">
+                              {{ suggestion.address }}
+                            </li>
+                          </ul>
+                          
                         <div class="invalid-feedback"
                           *ngIf="generalForm.get('address')?.touched && generalForm.get('address')?.hasError('required')">
                           Address is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="generalForm.get('address')?.touched && generalForm.get('address')?.hasError('pattern')">
+                        Address cannot be empty or only spaces.
+                       </div>
                       </div>
                     </div>
 
@@ -175,6 +197,10 @@
                           *ngIf="generalForm.get('city')?.touched && generalForm.get('city')?.hasError('required')">
                           city is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="generalForm.get('city')?.touched && generalForm.get('city')?.hasError('pattern')">
+                        City cannot be empty or only spaces.
+                       </div>
                       </div>
                       <div class="form-group col-4">
                         <label for="stateId">State <span class="red">*</span></label>
@@ -188,29 +214,36 @@
                           State is required.
                         </div>
                       </div>
+
                       <div class="form-group col-4">
-                        <label for="zipCode">ZIP/ Postal Code <span class="red">*</span></label>
+                        <label for="zipCode">ZIP/ Postal Code<span class="red">*</span> </label>
                         <input type="number" id="zipCode" placeholder="" class="form-control form-control-sm mt-1"
                           formControlName="zipCode"
+                          (input)="limitGeneralZipCodeLength($event)"
                           [ngClass]="{'is-invalid': generalForm.get('zipCode')?.invalid && generalForm.get('zipCode')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="generalForm.get('zipCode')?.touched && generalForm.get('zipCode')?.hasError('required')">
+                        
+                        <div class="invalid-feedback" *ngIf="generalForm.get('zipCode')?.touched && generalForm.get('zipCode')?.hasError('required')">
                           ZIP/ Postal Code is required.
                         </div>
+                        <div class="invalid-feedback" *ngIf="generalForm.get('zipCode')?.touched && generalForm.get('zipCode')?.hasError('pattern')">
+                          ZIP/ Postal Code must be exactly 5 digits.
+                        </div>
                       </div>
-
+                    
                     </div>
-
-
-
                     <div class="row">
                       <div class="form-group col-4">
-                        <label for="race"> Race </label>
-                        <select id="stateId" class="form-select form-select-sm cursor mt-1"
-                          formControlName="raceId">
+                        <label for="race"> Race<span class="red">*</span> </label>
+                        <select id="raceId" class="form-select form-select-sm cursor mt-1"
+                          formControlName="raceId"
+                          [ngClass]="{'is-invalid': generalForm.get('raceId')?.invalid && generalForm.get('raceId')?.touched}">
                           <option value="" disabled>Select</option>
                           <option *ngFor="let item of raceList" [value]="item.id">{{ item.raceName }}</option>
                         </select>
+                        <div class="invalid-feedback"
+                          *ngIf="generalForm.get('stateId')?.touched && generalForm.get('stateId')?.hasError('required')">
+                          Race is required.
+                        </div>
                       </div>
 
                       <div class="form-group col-4">
@@ -222,12 +255,17 @@
                       </select>
                       </div>
                       <div class="form-group col-4">
-                        <label for="ethnicity">Ethnicity </label>
+                        <label for="ethnicity">Ethnicity<span class="red">*</span> </label>
                         <select id="stateId" class="form-select form-select-sm cursor mt-1"
-                          formControlName="ethnicityId">
+                          formControlName="ethnicityId"
+                          [ngClass]="{'is-invalid': generalForm.get('ethnicityId')?.invalid && generalForm.get('ethnicityId')?.touched}">
                           <option value="" disabled>Select</option>
                           <option *ngFor="let item of ethnicityList" [value]="item.id">{{ item.ethnicityName }}</option>
                         </select>
+                         <div class="invalid-feedback"
+                          *ngIf="generalForm.get('stateId')?.touched && generalForm.get('stateId')?.hasError('required')">
+                          Ethnicity is required.
+                        </div>
                         
                       </div>
                     </div>
@@ -242,9 +280,9 @@
                       <div class="col-3">
                         <button type="submit" class="btn m-2 custom-padding"
                           style="background-color: #00876F!important;" (click)="PostGeneralInformation()">
-                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
-                          <span *ngIf="!isLoading" class="space">Save and Next</span>
-                          <span *ngIf="isLoading" class="space">Save and Next...</span>
+                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading2}"></i>
+                          <span *ngIf="!isLoading2" class="space">Save and Next</span>
+                          <span *ngIf="isLoading2" class="space">Save and Next...</span>
                         </button>
                       </div>
                     </div>
@@ -275,15 +313,19 @@
                           *ngIf="familyMemberForm.get('firstName')?.touched && familyMemberForm.get('firstName')?.hasError('required')">
                           First Name is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="familyMemberForm.get('firstName')?.touched && familyMemberForm.get('firstName')?.hasError('pattern')">
+                        First Name cannot be empty or only spaces.
+                       </div>
                       </div>
 
                       <!-- Middle Name Field -->
                       <div class="form-group col-4">
-                        <label for="middleName">Middle Name</label>
-                        <input type="text" id="middleName" placeholder="A" class="form-control form-control-sm mt-1"
-                          formControlName="middleName"
-                          [ngClass]="{'is-invalid': familyMemberForm.get('middleName')?.invalid && familyMemberForm.get('middleName')?.touched}">
-                      </div>
+                        <label>Middle Name</label>
+                        <input class="form-control form-control-sm mt-1" type="text" aria-label="default input example"
+                            formControlName="middleName" [value]="familyMemberForm.get('middleName')?.value | capitalizeFirstLetter">
+                    </div>
+                     
 
                       <!-- Last Name Field -->
                       <div class="form-group col-4">
@@ -295,6 +337,10 @@
                           *ngIf="familyMemberForm.get('lastName')?.touched && familyMemberForm.get('lastName')?.hasError('required')">
                           Last Name is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="familyMemberForm.get('lastName')?.touched && familyMemberForm.get('lastName')?.hasError('pattern')">
+                        Last Name cannot be empty or only spaces.
+                       </div>
                       </div>
                     </div>
 
@@ -340,26 +386,24 @@
                         </div>
                       </div>
 
-                      <!-- <div class="form-group col-4">
-                          <label for="dob">Date Of Birth</label>
-                          <input type="date" id="dob" formControlName="dob" placeholder="" class="form-control form-control-sm mt-1"
-                          [ngClass]="{'is-invalid': familyMemberForm.get('dob')?.invalid && familyMemberForm.get('dob')?.touched}" />
-                          <div class="invalid-feedback" *ngIf="familyMemberForm.get('dob')?.touched && familyMemberForm.get('dob')?.hasError('required')">
-                              Date Of Birth is required.
-                            </div>
-                        </div> -->
                     </div>
                     <div class="row">
+                  
                       <div class="form-group col-4">
                         <label for="dob">Date of Birth <span class="red">*</span></label>
-                        <input type="date" id="dob" formControlName="dob" placeholder=""
+                        <input 
+                          type="date" 
+                          id="dob" 
+                          formControlName="dob" 
                           class="form-control form-control-sm mt-1"
                           [ngClass]="{'is-invalid': familyMemberForm.get('dob')?.invalid && familyMemberForm.get('dob')?.touched}" />
-                        <div class="invalid-feedback"
-                          *ngIf="familyMemberForm.get('dob')?.touched && familyMemberForm.get('dob')?.hasError('required')">
-                          Date Of Birth is required.
+                      
+                        <div class="invalid-feedback" *ngIf="familyMemberForm.get('dob')?.touched">
+                          <span *ngIf="familyMemberForm.get('dob')?.hasError('required')">Date Of Birth is required.</span>
+                          <span *ngIf="familyMemberForm.get('dob')?.hasError('futureDate')">Date of Birth must be a valid past date.</span>
                         </div>
                       </div>
+                      
                       <div class="form-group col-4">
                         <label>Relationship <span class="red">*</span></label>
                         <select class="form-select form-select-sm cursor mt-1" formControlName="relationshipType"
@@ -399,17 +443,24 @@
                         <label for="address">Address <span class="red">*</span></label>
                         <textarea id="address" class="form-control form-control-sm mt-1" formControlName="address"
                           (input)="onAddressChangeInFamilyMember($event)"
+                          (keydown)="onKeyDown($event)" 
                           [ngClass]="{'is-invalid': familyMemberForm.get('address')?.invalid && familyMemberForm.get('address')?.touched}"></textarea>
+                        
                         <ul *ngIf="address1Suggestions.length">
-
-                          <li *ngFor="let suggestion of address1Suggestions"
-                            (click)="selectSuggestionFamilyMember(suggestion.address.label)">
-                            {{ suggestion.address.label }}
+                          <li *ngFor="let suggestion of address1Suggestions; let i = index"
+                            [class.active]="i === selectedIndex"
+                            (click)="selectSuggestionFamilyMember(suggestion)">
+                            {{ suggestion.address }}
                           </li>
                         </ul>
+                    
                         <div class="invalid-feedback"
                           *ngIf="familyMemberForm.get('address')?.touched && familyMemberForm.get('address')?.hasError('required')">
                           Address is required.
+                        </div>
+                        <div class="invalid-feedback"
+                          *ngIf="familyMemberForm.get('address')?.touched && familyMemberForm.get('address')?.hasError('pattern')">
+                          Address cannot be empty or only spaces.
                         </div>
                       </div>
                     </div>
@@ -437,18 +488,28 @@
                           *ngIf="familyMemberForm.get('city')?.touched && familyMemberForm.get('city')?.hasError('required')">
                           city is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="familyMemberForm.get('city')?.touched && familyMemberForm.get('city')?.hasError('pattern')">
+                         City cannot be empty or only spaces.
+                       </div>
                       </div>
 
                       <div class="form-group col-4">
-                        <label for="zipCode">ZIP / Postal Code <span class="red">*</span></label>
+                        <label for="zipCode">ZIP/ Postal Code<span class="red">*</span> </label>
                         <input type="number" id="zipCode" placeholder="" class="form-control form-control-sm mt-1"
                           formControlName="zipCode"
+                          (input)="limitFamilyZipCodeLength($event)"
                           [ngClass]="{'is-invalid': familyMemberForm.get('zipCode')?.invalid && familyMemberForm.get('zipCode')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="familyMemberForm.get('zipCode')?.touched && familyMemberForm.get('zipCode')?.hasError('required')">
+                        
+                        <div class="invalid-feedback" *ngIf="familyMemberForm.get('zipCode')?.touched && familyMemberForm.get('zipCode')?.hasError('required')">
                           ZIP/ Postal Code is required.
                         </div>
+                        <div class="invalid-feedback" *ngIf="familyMemberForm.get('zipCode')?.touched && familyMemberForm.get('zipCode')?.hasError('pattern')">
+                          ZIP/ Postal Code must be exactly 5 digits.
+                        </div>
                       </div>
+
+                      
                     </div>
                     <div class="row">
 
@@ -476,10 +537,16 @@
 
                     <!-- Save and Next Button -->
                     <div class="row">
-                      <div class="col-3"></div>
-                      <div class="col-3"></div>
-                      <div class="col-3"></div>
-                      <div class="col-3">
+                     
+                      <div class="col-4"></div>
+                       <div class="col-2"></div>
+                       <div class="col-2">
+                         <button type="submit" class="btn m-2 custom-padding" (click)="goBack()">
+                          Back
+                        </button>
+                      </div>
+                      
+                      <div class="col-2">
                         <button type="submit" class="btn m-2 custom-padding" (click)="postFamilyMember()">
                           <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
                           <span *ngIf="!isLoading" class="space">Save</span>
@@ -487,16 +554,20 @@
                           <!-- <span *ngIf="isLoading" class="space">Save and Next...</span> -->
                         </button>
                       </div>
+                      <div class="col-2">
+                         <button type="submit" class="btn m-2 custom-padding" (click)="goToEmergencyContact()">
+                          Next
+                        </button>
+                      </div>
                     </div>
-
                     <div class="row mt-4">
                       <div class="table-responsive mt-5">
                         <table class="table table-hover">
                           <thead>
                             <tr>
                               <th scope="col">First Name</th>
-                              <th scope="col">Phone Number</th>
-                              <th scope="col">DOB</th>
+                              <th scope="col" style=" min-width: 150px;">Phone Number</th>
+                              <th scope="col" style=" min-width: 150px;">DOB</th>
                               <th scope="col">Gender</th>
                               <th scope="col">Action</th>
                             </tr>
@@ -505,7 +576,7 @@
                             <tr *ngFor="let item of familyMemberData; let i = index">
                               <td>{{ item.firstName }}</td>
                               <td>{{ item.phoneNumber }}</td>
-                              <td>{{ item.dob | date: 'yyyy-MM-dd' }}</td>
+                              <td>{{ item.dob |date:'MM-dd-yyyy' }}</td>
                               <td>{{ item.genderType }}</td>
                               <td>
                                 <i class="fa-solid fa-pen-to-square me-3" (click)="editItem(i)" title="edit"></i>
@@ -530,8 +601,6 @@
                 <form [formGroup]="emergencyContactForm">
                   <div class="companyInfo">
                     <div class="row companyContent mt-2">
-
-
                       <!-- First Name Field -->
                       <div class="form-group col-4">
                         <label for="firstName">First Name <span class="red">*</span></label>
@@ -542,12 +611,16 @@
                           *ngIf="emergencyContactForm.get('firstName')?.touched && emergencyContactForm.get('firstName')?.hasError('required')">
                           First Name is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="emergencyContactForm.get('firstName')?.touched && emergencyContactForm.get('firstName')?.hasError('pattern')">
+                        First Name cannot be empty or only spaces.
+                       </div>
                       </div>
 
                       <!-- Middle Name Field -->
                       <div class="form-group col-4">
                         <label for="middleName">Middle Name</label>
-                        <input type="text" id="middleName" placeholder="A" class="form-control form-control-sm mt-1"
+                        <input type="text" id="middleName"  class="form-control form-control-sm mt-1"
                           formControlName="middleName"
                           [ngClass]="{'is-invalid': emergencyContactForm.get('middleName')?.invalid && emergencyContactForm.get('middleName')?.touched}">
                       </div>
@@ -562,6 +635,10 @@
                           *ngIf="emergencyContactForm.get('lastName')?.touched && emergencyContactForm.get('lastName')?.hasError('required')">
                           Last Name is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="familyMemberForm.get('lastName')?.touched && familyMemberForm.get('lastName')?.hasError('pattern')">
+                        Last Name cannot be empty or only spaces.
+                       </div>
                       </div>
                     </div>
 
@@ -625,24 +702,30 @@
                         </div>
                       </div>
                     </div>
-
-
                     <div class="row">
                       <div class="form-group col-12">
                         <label for="address">Address <span class="red">*</span></label>
                         <textarea id="address" class="form-control form-control-sm mt-1" formControlName="address"
+                        
                           (input)="onAddressChangeInEmergencyContact($event)"
+                          (keydown)="onKeyDown3($event)" 
                           [ngClass]="{'is-invalid': emergencyContactForm.get('address')?.invalid && emergencyContactForm.get('address')?.touched}"></textarea>
                         <ul *ngIf="address2Suggestions.length">
-                          <li *ngFor="let suggestion of address2Suggestions"
-                            (click)="selectSuggestionEmergencyContact(suggestion.address.label)">
-                            {{ suggestion.address.label }}
+                          <li *ngFor="let suggestion of address2Suggestions; let i = index"
+                            [class.active]="i === selectedIndex"
+                            (click)="selectSuggestionEmergencyContact(suggestion)">
+                            {{ suggestion.address }}
                           </li>
                         </ul>
+                        
                         <div class="invalid-feedback"
                           *ngIf="emergencyContactForm.get('address')?.touched && emergencyContactForm.get('address')?.hasError('required')">
                           Address is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="emergencyContactForm.get('address')?.touched && emergencyContactForm.get('address')?.hasError('pattern')">
+                        Address cannot be empty or only spaces.
+                       </div>
                       </div>
 
                     </div>
@@ -656,6 +739,10 @@
                           *ngIf="emergencyContactForm.get('city')?.touched && emergencyContactForm.get('city')?.hasError('required')">
                           city is required.
                         </div>
+                        <div class="invalid-feedback"
+                        *ngIf="emergencyContactForm.get('city')?.touched && emergencyContactForm.get('city')?.hasError('pattern')">
+                        City cannot be empty or only spaces.
+                       </div>
                       </div>
                       <div class="form-group col-4">
                         <label for="stateId">State <span class="red">*</span></label>
@@ -670,28 +757,38 @@
                         </div>
                       </div>
                       <div class="form-group col-4">
-                        <label for="zipCode">ZIP/ Postal Code <span class="red">*</span></label>
+                        <label for="zipCode">ZIP/ Postal Code<span class="red">*</span> </label>
                         <input type="number" id="zipCode" placeholder="" class="form-control form-control-sm mt-1"
                           formControlName="zipCode"
+                          (input)="limitEmergencyZipCodeLength($event)"
                           [ngClass]="{'is-invalid': emergencyContactForm.get('zipCode')?.invalid && emergencyContactForm.get('zipCode')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="emergencyContactForm.get('zipCode')?.touched && emergencyContactForm.get('zipCode')?.hasError('required')">
+                        
+                        <div class="invalid-feedback" *ngIf="emergencyContactForm.get('zipCode')?.touched && emergencyContactForm.get('zipCode')?.hasError('required')">
                           ZIP/ Postal Code is required.
                         </div>
+                        <div class="invalid-feedback" *ngIf="emergencyContactForm.get('zipCode')?.touched && emergencyContactForm.get('zipCode')?.hasError('pattern')">
+                          ZIP/ Postal Code must be exactly 5 digits.
+                        </div>
                       </div>
+                     
 
                     </div>
 
                     <!-- Save and Next Button -->
                     <div class="row">
+                      <div class="col-4"></div>
                       <div class="col-3"></div>
                       <div class="col-3"></div>
-                      <div class="col-3"></div>
-                      <div class="col-3">
+                       <div class="col-1">
+                         <button type="submit" class="btn m-2 custom-padding" (click)="goBack()">
+                          Back
+                        </button>
+                      </div>
+                      <div class="col-1">
                         <button type="submit" class="btn m-2 custom-padding" (click)="PostEmergencyContact()">
-                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
-                          <span *ngIf="!isLoading" class="space">Save</span>
-                          <span *ngIf="isLoading" class="space">Save</span>
+                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading1}"></i>
+                          <span *ngIf="!isLoading1" class="space">Save</span>
+                          <span *ngIf="isLoading1" class="space">Save</span>
 
                         </button>
                       </div>

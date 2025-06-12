@@ -258,21 +258,37 @@
     position: relative;
   }
   
-  .medicine-suggestions {
+  /* .medicine-suggestions {
     position: absolute;
-    top: 100%; /* Position below the input field */
-    left: 10;
-    z-index: 1050; /* Ensure it stays above other content */
-    background: white; /* Matches form field background */
-    border: 1px solid #ccc; /* Optional: Add border for clarity */
-    border-radius: 4px; /* Optional: Rounded corners */
-    max-height: 200px; /* Set a max height for scrolling */
-    overflow-y: auto; /* Enable scroll for large lists */
-    width: 95%; /* Match input field width */
+    top: 100%; 
+    z-index: 1050; 
+    background: white; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    max-height: 200px;
+    overflow-y: auto; 
+    width: 95%;
     padding: 0;
     margin: 0;
-    list-style: none; /* Remove bullets */
+    list-style: none; 
+  } */
+
+
+  .medicine-suggestions {
+    max-height: 200px; /* Adjust height for mobile view */
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 1000;
+    background-color: white;
+    width: 95%;
+    border: 1px solid #ccc;
+    border-top: none;
+    padding-left: 0;
+    margin-top: 0;
+    list-style: none;
   }
+  
   
   .medicine-item {
     padding: 8px;
@@ -319,6 +335,41 @@ li {
 
 li:hover {
   background-color: #f0f0f0;
-  color: black !important;
+  color: rgb(255, 255, 255) !important;
+}
+.medicine-suggestions {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+}
+.medicine-item {
+  padding: 5px 10px;
+  cursor: pointer;
 }
 
+
+.medicine-item:hover, .medicine-item.active {
+  background-color: #006952;
+  color: white;
+}
+
+canvas {
+  touch-action: none;
+}
+
+@media (max-width : 576px) {
+
+  .signature-container{
+    max-width: 100%!important;
+  }
+  
+}
+
+
+label{
+  margin-top: 15px!important;
+}

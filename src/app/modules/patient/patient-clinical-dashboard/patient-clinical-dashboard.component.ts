@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AdminService } from 'src/app/Services/admin.service';
 import { PatientService } from 'src/app/Services/patient.service';
 import { environment } from 'src/environments/environment';
 
@@ -8,22 +9,52 @@ import { environment } from 'src/environments/environment';
   templateUrl: './patient-clinical-dashboard.component.html',
   styleUrls: ['./patient-clinical-dashboard.component.css']
 })
-export class PatientClinicalDashboardComponent implements OnInit{
+export class PatientClinicalDashboardComponent implements OnInit {
   @Output() dialogClosed = new EventEmitter<void>();
   @Input() bookingId: any;
-  patientList: any;
-  documentList: any;
+  @Input() patientId: any;
+  @Input() userId: any;
+  showAll: boolean = false;
 
+  patientList: any;
+
+  documentList: any[] = [];
+  visibleDocuments: any[] = [];
   constructor(
     private activeModel: NgbActiveModal,
-  private patientService: PatientService) { }
-  ngOnInit(): void {
-    this.getPatientByBookingId();
-    this.getPatientDocumentsByBookingId();
-    console.log("my id", this.bookingId)
-    throw new Error('Method not implemented.');
-    
+    private patientService: PatientService,
+    private adminService: AdminService) { }
+  ngOnInit() {
+    if (this.patientId == undefined) {
+      this.getPatientByBookingId();
+      this.getPatientDocumentsByBookingId();
+    }
+    else {
+      this.getPatientData()
+    }
+
   }
+
+
+  getPatientData() {
+    this.adminService.getPatientDashboardByPatientId(this.patientId).subscribe(
+      (response: any) => {
+        this.patientList = {
+          ...response,
+          formattedDateOfBirth: this.formatDate(response.dateOfBirth),
+          age: this.calculateAge(response.dateOfBirth),
+          profilePicturePath: response.profilePicturePath ? environment.fileUrl + response.profilePicturePath : undefined
+          // profilePicturePath: undefined
+        };
+        
+        console.log("Formatted dashboard data :", this.patientList);
+      },
+      (error: any) => {
+        console.error("Error fetching patient data:", error);
+      }
+    );
+  }
+
   getPatientByBookingId() {
     this.patientService.getPatientDashboardByBookingId(this.bookingId).subscribe(
       (response: any) => {
@@ -31,7 +62,8 @@ export class PatientClinicalDashboardComponent implements OnInit{
           ...response,
           formattedDateOfBirth: this.formatDate(response.dateOfBirth),
           age: this.calculateAge(response.dateOfBirth),
-          profilePicturePath:environment.fileUrl+response.profilePicturePath
+           profilePicturePath:environment.fileUrl+response.profilePicturePath
+          // profilePicturePath: undefined
         };
         console.log("Formatted dashboard data :", this.patientList);
       },
@@ -40,10 +72,30 @@ export class PatientClinicalDashboardComponent implements OnInit{
       }
     );
   }
+
+  formatServiceType(meetingType: string): string {
+    return meetingType ? meetingType.replace(/([a-z])([A-Z])/g, '$1 $2') : '--------';
+  }
+
+  formatProviderName(providerName: string): string {
+    return providerName ? providerName.replace(/([a-z])([A-Z])/g, '$1 $2') : '--------';
+  }
+
+  getVisibleAppointments() {
+    return this.showAll ? this.patientList.appointmentDetails : this.patientList.appointmentDetails.slice(0, 1);
+}
+
+toggleAppointments() {
+    this.showAll = !this.showAll;
+}
   formatDate(dateString: string): string {
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
   }
+
 
   calculateAge(dateString: string): number {
     const birthDate = new Date(dateString);
@@ -58,42 +110,43 @@ export class PatientClinicalDashboardComponent implements OnInit{
   }
 
 
-  // getPatientByBookingId() {
-  //   this.patientService.getPatientDashboardByBookingId(this.bookingId).subscribe(
-  //     (response: any) => {
-  //       // Since the response contains an object and not a list, wrap it in an array
-  //       this.patientList = response;
-  //       console.log("Formatted dashboard data :", this.patientList);
-  //     },
-  //     (error: any) => {
-  //       console.error("Error fetching patient data:", error);
-  //     }
-  //   );
-  // }
   getPatientDocumentsByBookingId() {
     this.patientService.getPatientDashboardDocumentsByBookingId(this.bookingId).subscribe((response: any) => {
-      // Ensure response is an array and update the filePath for each document
       this.documentList = response.map((doc: any) => {
         return {
           ...doc,
           filePath: doc.filePath ? environment.fileUrl + doc.filePath : undefined,
         };
       });
-      console.log("my dashboard documents data :", this.documentList);
+
+      // Set the initial visible documents (first 5 items)
+      this.updateVisibleDocuments();
+      console.log(this.documentList);
     });
   }
-  
+  updateVisibleDocuments() {
+    if (this.showMore) {
+      this.visibleDocuments = [...this.documentList];  // Show all documents
+    } else {
+      this.visibleDocuments = this.documentList.slice(0, 5);  // Show first 5 documents
+    }
+  }
+  maxDocsToShow = 5;
+  showMore = false;
 
-  // getPatientDocumentsByBookingId(){
-  //   this.patientService.getPatientDashboardDocumentsByBookingId(this.bookingId).subscribe((response: any) => {
-  //     this.documentList = response
-  //     console.log("my dashboard documents data :", this.documentList)
-  //   })
+  // showMoreDocuments() {
+  //   if (this.showMore) {
+  //     this.maxDocsToShow = 5;
+  //   } else {
+  //     this.maxDocsToShow = this.documentList.length;
+
+  //   }
+  //   this.showMore = !this.showMore;
   // }
-
-  
-   
-
+  showMoreDocuments() {
+    this.showMore = !this.showMore;
+    this.updateVisibleDocuments();  // Update visible documents based on the flag
+  }
 
 
 

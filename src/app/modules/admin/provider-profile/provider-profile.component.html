@@ -1,0 +1,220 @@
+<div class="container py-3  px-4">
+  <div class="header">
+      <h2 class="mt-1 text-center mb-0 text-success">Provider Profile</h2>
+      <div class="close-btn" (click)="modalClose()"><i class="fa-solid fa-xmark"></i></div>
+  </div>
+  <hr class="mt-1 mb-4">
+  <!-- <div class="w-100 text-end"> <i class="fa-solid fa-xmark cancel-icon text-end cursor" (click)="modalClose()"></i></div> -->
+  <div class="card shadow-sm p-4 mb-1  mt-2 rounded-lg">
+      <div class="row ">
+        <!-- Patient Image Section -->
+        <div class="col-md-3 text-center">
+          <img *ngIf="providerList?.profilePicturePath" [src]="providerList.profilePicturePath" class="rounded-circle img-fluid profile-image mb-1">
+          <img *ngIf="!providerList?.profilePicturePath" class="rounded-circle img-fluid profile-image mb-1" alt="Doctor Profile Default"
+            src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png"
+            >
+         
+          <h5  *ngIf="providerList.accountType == 'IndependentProvider'" class="mb-0 mt-0 text-success " style="font-size: 1rem; font-weight: 800;">{{ providerList.firstName || '' }} {{ providerList.lastName || '' }}, {{ providerList.qualificationName || '' }}</h5>
+         <h5 *ngIf="providerList.accountType == 'PrivatePractices' || providerList.accountType == 'Facility'" class="mb-0 mt-0 text-success " style="font-size: 1rem; font-weight: 800;">{{ providerList.legalPracticeName || '' }}, {{ providerList.qualificationName || '' }}</h5>
+
+        </div>
+    
+        <!-- Patient Details Section -->
+        <div class="col-md-5 pt-1">
+          
+    
+          <!-- <p class="mb-1">
+            <i class="fa-solid fa-envelope text-success me-1"></i> 
+            {{ providerList.email || 'Not Provided' }}
+          </p> -->
+          
+          <p class=" mb-1">
+              <strong>Gender:</strong> {{ providerList.gender || 'Not Provided' }}
+            </p>
+            <p class=" mb-1">
+              <strong>Booking Count:</strong> {{ providerList.bookingCount || 'Not Provided' }}
+            </p>
+            <p class=" mb-1">
+              <strong>Experience:</strong> {{ providerList?.experience ? providerList.experience + ' years' : '' }}
+            </p>
+      
+        </div>
+        <div class="col-md-4 mt-1">
+          <p class=" mb-1">
+              <i class="fa-solid fa-location-dot text-success  me-1"></i>
+              {{ providerList.city ? providerList.city + ',' : '------' }} {{ providerList.stateName }} </p>
+              <!-- <p class=" mb-1">
+                <i class="fa-solid fa-location-dot  me-2"></i>
+                Messaging </p> -->
+                <span class="icon-message cursor" *ngIf="userInfo.accountType == 'Admin'|| userInfo.accountType == 'Patient'" (click)="redirectToMessage(providerList.id)"  title="Send Message" style="color:#4e73df; position: relative; font-size: 15px;">
+      
+                  <i class="fas fa-comments" ></i> 
+                  <span  class=" ms-2">Messaging</span>
+                  <span *ngIf="providerList.messageCount > 0" class="message-count-badge"> 
+                      {{ providerList.messageCount }}
+                  </span>
+              </span>
+            <p class=" mb-1">
+              <strong>Bio:</strong>
+              {{ expandedBio ? providerList.providerBio : (providerList.providerBio | slice: 0: 90) + '...' }}
+              <span *ngIf="isBioLong(providerList.providerBio)">
+                <a style="color: blue; cursor: pointer;" (click)="toggleBio(); $event.stopPropagation()">
+                  <u>{{ expandedBio ? 'Show less' : 'See more' }}</u>
+                </a>
+              </span>
+            </p>
+        </div>
+      </div>
+    
+      <!-- Additional Info Section -->
+      
+      <div class="row">
+        <div class="col-md-12 ps-4">
+      
+          
+        </div>
+        <div class="col-md-0">
+          
+        </div>
+      </div>
+    </div>
+
+
+
+  <!-- Medical History Section -->
+  <div class="row mt-4">
+    <!-- Vital Info Section -->
+    <div class="col-md-6 mb-4">
+        <div class="info-card shadow-sm border px-4 py-3 rounded-md">
+            
+            <!-- Specialties -->
+            <div class="info-item">
+                <p><strong>Specialties:</strong> 
+                    <span *ngIf="providerList.specialist?.length > 0; else noSpecialties">
+                        <span *ngFor="let item of providerList.specialist; let isLast = last">
+                            {{ item.specialistNames }}<span *ngIf="!isLast">, </span>
+                        </span>
+                    </span>
+                    <ng-template #noSpecialties><span class="text-muted">Not Available</span></ng-template>
+                </p>
+            </div>
+
+            <!-- Languages -->
+            <div class="info-item">
+                <p><strong>Languages:</strong> 
+                    <span *ngIf="providerList.language?.length > 0; else noLanguages">
+                        <span *ngFor="let item of providerList.language; let isLast = last">
+                            {{ item.languageNames }}<span *ngIf="!isLast">, </span>
+                        </span>
+                    </span>
+                    <ng-template #noLanguages><span class="text-muted">Not Available</span></ng-template>
+                </p>
+            </div>
+
+            <hr class="my-2">
+
+            <!-- Price List Section -->
+            <div class="price-list pt-0">
+                <h5 class="text-center mb-2">Price List</h5>
+                <div class="price-item d-flex justify-content-between align-items-center">
+                    <p class="mb-0 px-3 py-2">Telehealth : </p>
+                    <p class="mt-2 me-3"><span class="price-value pt-1">{{ providerList.telehealthVisitPrice | currency:'USD' }}</span></p>
+                </div>
+                <div class="price-item d-flex justify-content-between align-items-center ">
+                    <p class="mb-0 px-3 py-2">Home Visit : </p>
+                    <p class="mt-2 me-3" ><span class="price-value">{{ providerList.inHomeVisitPrice | currency:'USD' }}</span></p>
+                </div>
+                <div class="price-item d-flex justify-content-between align-items-center ">
+                    <p class="mb-0 px-3 py-2">Office Visit : </p>
+                    <p class="mt-2 me-3" ><span class="price-value">{{ providerList.officeVisitPrice | currency:'USD' }}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review & Rating Section -->
+     <div class="col-md-6 mb-4">
+  <div class="review-card shadow-sm border px-4 py-3 rounded-md">
+    <h4 class="text-center mb-2">Review and Rating</h4>
+
+    <!-- Rating -->
+    <div *ngIf="providerList?.reviews?.length > 0; else noReviews">
+      <div class="d-flex justify-content-center align-items-center">
+        <div class="px-0">Average Rating: &nbsp;</div>
+        <div class="rating-stars mb-2 d-flex">
+          <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+            <ng-container [ngSwitch]="getStarType(star, providerList.averageRating)">
+              <mat-icon *ngSwitchCase="'full'" class="text-warning">star</mat-icon>
+              <mat-icon *ngSwitchCase="'half'" class="text-warning">star_half</mat-icon>
+              <mat-icon *ngSwitchCase="'empty'" class="text-secondary">star</mat-icon>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Reviews -->
+      <div class="reviews-container">
+        <div *ngFor="let review of providerList.reviews" class="review-item shadow-custom p-3 mb-2 rounded-lg">
+          <strong>{{ review.patientName }}</strong>
+          <div class="review-rating mt-1">
+            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+              <mat-icon [ngClass]="{'filled': star <= review.rating}">star</mat-icon>
+            </ng-container>
+          </div>
+          <p class="mt-2">{{ review.review }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State (Shown when no reviews exist) -->
+   <ng-template #noReviews>
+  <div class="provider-card1">
+    <div class="provider-header text-center">
+      <!-- Exclamation icon with warning color -->
+      <mat-icon class="text-warning" style="font-size: 48px; width: 48px; height: 48px;">warning</mat-icon>
+      <h2 class="mt-2">No reviews and ratings found.</h2>
+    </div>
+    <br>
+  </div>
+</ng-template>
+  </div>
+</div>
+    <!-- <div class="col-md-6 mb-4">
+        <div class="review-card shadow-sm border px-4 py-3 rounded-md">
+            <h4 class="text-center mb-2">Review and Rating</h4>
+
+           
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="px-0">
+                Average Rating: &nbsp;
+              </div>
+              <div class="rating-stars mb-2 d-flex">
+                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                  <ng-container [ngSwitch]="getStarType(star, providerList.averageRating)">
+                    <mat-icon *ngSwitchCase="'full'" class="text-warning">star</mat-icon>
+                    <mat-icon *ngSwitchCase="'half'" class="text-warning">star_half</mat-icon>
+                    <mat-icon *ngSwitchCase="'empty'" class="text-secondary">star</mat-icon>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div> 
+
+           
+            <div class="reviews-container">
+              <div *ngFor="let review of providerList.reviews" class="review-item shadow-custom p-3 mb-2 rounded-lg">
+                  <strong>{{ review.patientName }}</strong>
+                  <div class="review-rating mt-1">
+                      <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                          <mat-icon [ngClass]="{'filled': star <= review.rating}">star</mat-icon>
+                      </ng-container>
+                  </div>
+                  <p class="mt-2">{{ review.review }}</p>
+              </div>
+          </div>
+       
+        </div>
+    </div> -->
+</div>
+  
+  
+</div>

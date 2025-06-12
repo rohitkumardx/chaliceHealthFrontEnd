@@ -1,0 +1,87 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="bg-white rounded plan generate-content-table mt-2 p-4">
+        <h2 class="text-center">Dashboard</h2>
+        <div class="row mb-4">
+          <div class="col-sm-2">
+            <select class="form-select form-select-sm cursor mt-1" (change)="onChange($event, 'year')">
+              <option value="" disabled>Select</option>
+              <option *ngFor="let option of yearOptions" [value]="option" [selected]="option === currentYear">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+          <div class="col-sm-3">
+              <div class="custom-dropdown">
+                <button type="button" id="facilityDropdown" class="form-select form-select-sm cursor"
+                  data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ selectedFacilityName || 'Select' }}
+                </button>
+                <ul class="dropdown-menu mt-0 p-2 shadow-lg" style="width: 100%;">
+                  <li class="dropdown-header">
+                    <input type="text" class="form-control dropdown-search" placeholder="Search..."
+                      [(ngModel)]="facilitySearchTerm" (input)="filterFacilityOptions()" />
+                  </li>
+                  <li *ngFor="let facility of filteredFacilities" class="dropdown-item"
+                    (click)="selectFacility(facility)">
+                    {{ facility.facilityName }}
+                  </li>
+                </ul>
+              </div>
+            <!-- <select class="form-select form-select-sm cursor mt-1" (change)="onChange($event, 'facility')"
+              [(ngModel)]="selectedFacility">
+              <option value="" disabled selected>Select</option>
+              <option *ngFor="let facility of facilityData" [value]="facility.id">
+                {{ facility.facilityName }}
+              </option>
+            </select> -->
+          </div>
+         
+          <div class="col-sm-12 text-end mt-3">
+            <i class="fas fa-download cursor " (click)="downloadCSV()"></i>
+            </div>
+            
+        </div>
+        <div class="chart-container cursor">
+          <canvas class="chart-container" baseChart [datasets]="barChartData" [labels]="barChartLabels2"
+            [options]="barChartOptions2">
+          </canvas>
+        </div>
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <canvas baseChart [datasets]="barChartData1" [labels]="barChartLabels" [options]="barChartOptions"
+              [legend]="barChartLegend" class="barChart mb-4 cursor">
+            </canvas>
+          </div>
+
+          <div class="col-md-6">
+            <canvas baseChart [datasets]="barChartData2" [labels]="barChartLabels" [options]="barChartOptions"
+              [legend]="barChartLegend" class="barChart mb-4 cursor">
+            </canvas>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isClick" class="popup-overlay">
+        <div class="popup">
+          <div class="row">
+            <div class=" col">
+              <p class="mb-0">Do you want to download "all_chart_data.csv" ?</p>
+            </div>
+            <div class="col text-end"><i (click)="closePopUp()" class="fas fa-times cursor"></i></div>
+          </div>
+          <hr class="mt-1">
+          <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12"></div>
+            <div class="col-md-8 col-sm-8 col-sm-12">
+              <b class="cursor text-primary" (click)="preview()">Preview</b>
+              <b class="cursor text-primary ps-2" (click)="download()">Download</b>
+            </div>
+          </div>
+        </div>
+      </div>
+ 
+    </div>
+  </div>
+</section>

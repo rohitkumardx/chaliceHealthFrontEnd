@@ -1,0 +1,17 @@
+<div class="thankyou-container ">
+    <div class="thankyou">
+        <img src="../../../../assets/svg/icons//delete.png" alt="" width="70rem" height="70rem">
+        <h2>Are you sure?</h2>
+        <h5>Do you really want to permanently delete this selected {{deleteProperty}}?<br> This action cannot be undone.
+        </h5>
+
+        <div class="form-group d-flex justify-content-center">
+            <button type="button" class="btn btn-danger m-2 custom-padding cancelButton" (click)="delete()">
+                Delete
+            </button>
+            <button type="button" class="btn btn-primary m-2 custom-padding reset-button" (click)="modalClose()">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>

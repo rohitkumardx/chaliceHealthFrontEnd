@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { AuthService } from 'src/app/Services/auth.service';
@@ -8,7 +8,22 @@ import { NotificationService } from 'src/app/Services/notification.service';
 import { ProviderService } from 'src/app/Services/provider.service';
 
 import {  tap } from 'rxjs/operators';
+import { noWhitespaceValidator } from 'src/app/shared/validators/no-whitespace-validator';
 
+export function noPastDateValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null; // If no value, let required validator handle it
+
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+    
+    // Reset time to 00:00:00 for an accurate date-only comparison
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    return selectedDate < today ? { pastDate: true } : null;
+  };
+}
 export enum Frequency {
   OnceDaily = 1,
   TwiceDaily = 2,
@@ -47,6 +62,8 @@ export enum doseStrength {
 })
 
 export class AddPrescriptionComponent implements OnInit {
+  today: string = new Date().toISOString().split('T')[0]; // Set today's date in YYYY-MM-DD format
+
 
   prescriptionForm!: FormGroup;
   editItemIndex: any;
@@ -80,6 +97,7 @@ export class AddPrescriptionComponent implements OnInit {
     unSelectAllText: 'UnSelect All',
   };
 
+  
   private apiUrl = 'https://api.fda.gov/drug/ndc.json';
 
 
@@ -102,15 +120,16 @@ export class AddPrescriptionComponent implements OnInit {
     private http: HttpClient,
   ) { }
 
+  isPastDate: boolean = false;
   ngOnInit(): void {
     this.prescriptionForm = this.fb.group({
-      medicationCode: ['', Validators.required],
-      medicationName: ['', Validators.required],
-      frequency: ['', Validators.required],
-      doseForm: ['', Validators.required],
-      doseStrength: ['', Validators.required],
-      duration: ['', Validators.required],
-      directionOfUse: ['', Validators.required],
+      medicationCode: ['', [Validators.required, noWhitespaceValidator()]],
+      medicationName: ['', [Validators.required, noWhitespaceValidator()]],
+      frequency: ['', [Validators.required, noWhitespaceValidator()]],
+      doseForm: ['', [Validators.required, noWhitespaceValidator()]],
+      doseStrength: ['', [Validators.required, noWhitespaceValidator()]],
+      duration: ['', [Validators.required, noWhitespaceValidator(),noPastDateValidator()]],
+      directionOfUse: ['', [Validators.required, noWhitespaceValidator()]],
       remarks: [''],
       signature: [''],
       // userId: [''],
@@ -120,36 +139,62 @@ export class AddPrescriptionComponent implements OnInit {
       this.bookingId = parama.appointmentId;
     });
     // this.getPrescriptionById();
-
-
+    const currentDate = new Date();
+    this.today = currentDate.toISOString().split('T')[0];
+    
+    
+     // Scroll to top when the component loads
+     window.scrollTo({ top: 0, behavior: 'smooth' });
 
   }
 
 
+// ngAfterViewInit() {
+//   this.resizeCanvas();
+//   window.addEventListener('resize', this.resizeCanvas.bind(this));
+// }
+
+resizeCanvas() {
+  const canvas = this.signaturePad.nativeElement;
+  const parentWidth = canvas.parentElement?.offsetWidth || 450;
+
+  canvas.width = parentWidth;
+  canvas.height = parentWidth * 0.44; // Maintain 450x200 ratio (0.44)
+
+  // Optional: redraw content if needed
+}
+
+  validateDate() {
+    const selectedDate = this.prescriptionForm.get('duration')?.value;
+    if (selectedDate && selectedDate < this.today) {
+        this.isPastDate = true;
+        this.prescriptionForm.get('duration')?.setErrors({ pastDate: true });
+    } else {
+        this.isPastDate = false;
+        this.prescriptionForm.get('duration')?.setErrors(null);
+    }
+}
+ 
   search(event: any): void {
     this.medicines = []
     const query = event.target.value;
 
     if (query) {
+      this.authService.getMedication(query).subscribe((data:any)=>{
+        
+        this.medicines = data.medications;
+        console.log("This is medicines",this.medicines);
+        this.activeIndex = -1; 
     
-      // Call the service method and update the medicines array with results
-      this.searchMedicines(query).subscribe(
-        (data) => {
-          // Ensure the results are unique based on generic_name (or product_id, product_ndc)
-          this.medicines = this.removeDuplicates(data.results);
-        },
-        (error) => {
-          console.error('Error fetching medicines:', error);
-        }
-      );
-    } else {
-      this.medicines = []; // Clear results if the search input is empty
+      })
+     
+      this.medicines = []; 
     }
   }
   selectMedicine(medicine: any): void {
     this.prescriptionForm.patchValue({
-      medicationName: medicine.generic_name,
-      medicationCode: medicine.product_ndc
+      medicationName: medicine,
+      // medicationCode: medicine.product_ndc
     });
     this.medicines = []; // Clear the suggestions list
   }
@@ -197,17 +242,15 @@ export class AddPrescriptionComponent implements OnInit {
     if (this.signaturePad) {
       this.ctx = this.signaturePad.nativeElement.getContext('2d')!;
     }
+
+    this.resizeCanvas();
+  window.addEventListener('resize', this.resizeCanvas.bind(this));
   }
-  // getFrequencyText(value: number): string {
-  //   return Frequency[value] || '';
-  // }
-
-
 
 
   prescriptionsList: any[] = []; // Temporary storage for prescriptions
   postPrescriptionToList() {
-    debugger;
+  
     this.Loading = true;
 
     if (this.prescriptionForm.invalid) {
@@ -257,39 +300,39 @@ export class AddPrescriptionComponent implements OnInit {
       this.prescriptionForm.reset();
     }
   }
-
-
   editPrescription(index: number) {
-
     this.editItemIndex = index;
     const prescription = this.prescriptionsList[index];
-    this.prescriptionForm.patchValue(prescription);
+  
+    this.prescriptionForm.patchValue({
+      medicationCode: prescription.medicationCode,
+      medicationName: prescription.medicationName,
+      doseForm: String(prescription.doseForm), // ensure it's string if form expects it as such
+      frequency: String(prescription.frequency),
+      doseStrength: String(prescription.doseStrength),
+      duration: prescription.duration,
+      directionOfUse: prescription.directionOfUse,
+      remarks: prescription.remarks || '',
+      id: prescription.id || '0'
+    });
+  
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // optional: scroll up for better UX
   }
+  
+
+  // editPrescription(index: number) {
+
+  //   this.editItemIndex = index;
+  //   const prescription = this.prescriptionsList[index];
+  //   this.prescriptionForm.patchValue(prescription);
+  // }
   deletePrescription(index: number){
     this.prescriptionsList.splice(index, 1);
      this.notificationService.showSuccess("Prescription deleted successfully.");
   }
-  // deleteProcedure(index: number, id: any) {
-
-  //   if (id == null) {
-  //     this.prescriptionsList.splice(index, 1);
-  //     this.notificationService.showSuccess("Prescription deleted successfully.");
-  //   }
-  //   else {
-  //     this.providerService.deleteProcedureById(id).subscribe((data) => {
-  //       this.prescriptionsList.splice(index, 1);
-
-  //       this.notificationService.showSuccess("Prescription deleted successfully.");
-  //     },
-  //       error => {
-  //         this.notificationService.showDanger(getErrorMessage(error));
-  //       }
-  //     );
-  //   }
-  // }
+ 
   submitAllPrescriptions() {
     this.saveSignature();  // Ensure the signature is saved before sending the payload
-    debugger
     const payload = {
       bookAppointmentId: this.bookingId,
       prescriptions: this.prescriptionsList,
@@ -359,5 +402,36 @@ export class AddPrescriptionComponent implements OnInit {
     console.log('Signature saved as: ', dataUrl);
   }
 
+  activeIndex: number = -1;
 
+  navigateList(direction: 'up' | 'down') {
+    const maxIndex = this.medicines.length - 1;
+    if (direction === 'down') {
+      this.activeIndex = this.activeIndex < maxIndex ? this.activeIndex + 1 : 0;
+    } else {
+      this.activeIndex = this.activeIndex > 0 ? this.activeIndex - 1 : maxIndex;
+    }
+  
+    // Scroll into view
+    setTimeout(() => {
+      const activeElement = document.querySelector('.medicine-item.active');
+      activeElement?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    });
+  }
+  
+//   navigateList(direction: 'up' | 'down') {
+//     if (this.medicines.length === 0) return;
+
+//     if (direction === 'down') {
+//         this.activeIndex = (this.activeIndex + 1) % this.medicines.length;
+//     } else if (direction === 'up') {
+//         this.activeIndex = (this.activeIndex - 1 + this.medicines.length) % this.medicines.length;
+//     }
+// }
+
+selectHighlightedMedicine() {
+    if (this.activeIndex !== -1 && this.medicines.length > 0) {
+        this.selectMedicine(this.medicines[this.activeIndex]);
+    }
+}
 }

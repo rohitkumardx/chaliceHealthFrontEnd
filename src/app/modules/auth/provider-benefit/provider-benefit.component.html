@@ -1,0 +1,178 @@
+<app-header></app-header>
+  
+<!-- content -->
+ <div class="maincont">
+    <div class="subcont">
+        <div class="cont py-3">
+            <div class="row sideboth align-items-center">
+               
+                <div class="col-md-6 left mt-4 mt-md-0"  >
+                    <img src="../../../../assets/svg/pbeni.png" class="img-fluid" style="max-width: 400px;" alt="Doctor Image">
+                </div>
+                <div class="col-md-6 right text-md-start text-center pt-5" [@slideInRight] >
+                  <h1 class="bold mb-3" style="line-height: 45px;">Join Chalice Health – Flexible Care Options for Providers</h1>
+                  <p class="text-muted">
+                    Expand your practice and connect with a diverse patient base through Chalice Health. Enjoy flexibility, seamless scheduling, and a better work-life balance—all while delivering high-quality, personalized care. Focus on what matters most—improving patient health and well-being.
+                  </p>
+                  <button class="btn btn-success px-4 py-2 mt-3" (click)="redirectToProviderSignup()">List Your Practice</button>
+              </div>
+            </div>
+            
+        </div>
+       
+    </div>
+ </div>
+ <!-- sec3 -->
+
+<div class="benefits-section">
+<div class="container">
+    <h2 class="benefits-title  text-center">Benefits of Using Chalice Health</h2>
+    <div class="row gy-4 mt-3" [@slideInTop]>
+        <div class="col-md-4 ">
+            <div class="benefit-box">
+                <h2 style="color: #ec861acb;">1</h2>
+                <h3>Flexible Care Options</h3>
+                <p> Offer healthcare your way—choose from virtual care, home visits, or in-office consultations. Provide care in the setting that works best for you and your patients.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="heilight">
+                <h2 style="color: #ec861acb;">2</h2>
+                <h3>Seamless Access for Patients & Providers</h3>
+                <p>Chalice Health makes it easy for patients to connect with providers, ensuring smooth and efficient healthcare experiences.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="benefit-box">
+                <h2 style="color: #ec861acb;">3</h2>
+                <h3>Expand Your Reach</h3>
+                <p>Grow your practice beyond geographical limits. Connect with more patients, including those in remote areas, and increase your visibility.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="heilight ">
+                <h2 style="color: #ec861acb;">4</h2>
+                <h3>Boost Efficiency & Revenue</h3>
+                <p> See more patients in less time with our streamlined platform. Expand your practice without the overhead costs of physical growth.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="benefit-box">
+                <h2 style="color: #ec861acb;">5</h2>
+                <h3>Enjoy Better Work-Life Balance</h3>
+                <p> Set your own hours and work remotely with ease. Conduct virtual consultations efficiently while maintaining high-quality care.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="heilight ">
+                <h2 style="color: #ec861acb;">6</h2>
+                <h3> Save on Costs</h3>
+                <p> Lower operational expenses while helping patients save on travel and healthcare costs. A win-win for everyone.</p>
+            </div>
+        </div>
+
+    </div>
+    <h1 class="mt-4 fs-5 text-success ">Join Chalice Health today and take your practice to the next level!</h1>
+    <div class=" text-center mt-4"><button class="btn btn-success" (click)="redirectToProviderSignup()"
+      >Join For Free</button>
+    </div>
+  
+</div>
+
+</div>
+  <!-- sec3 -->
+ <!-- content -->
+
+ <footer class="mainfooter bg-white">
+  <hr>
+  <div class="subfooter">
+    <div class="footer ">
+      <div class="footer-container">
+        <div class="logo-section pe-5">
+          <a href="/home-page">
+            <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo">
+          </a>
+             <p style="color: #333333; padding-top: 20px; font-size: 16px; font-family: Arial,  sans-serif;">Quick and
+            Affordable Healthcare </p>
+        </div>
+        <div class="footer-column mt-3 mt-md-0">
+          <h3>Services</h3>
+          <ul>
+            <li *ngFor="let item of serviceData" (click)="redirectToServiceListing(item)"><span> <i class="fas fa-chevron-right"></i></span> {{item.categoryName}}</li>
+           
+          </ul>
+        </div>
+        <div class="footer-column">
+                <h3>Popular</h3>
+                <ul>
+                    <li (click)="navigateToBlogContent()">
+                      <span><i class="fas fa-chevron-right"></i></span> 
+                       Blogs</li>
+                    <!-- <li><span><i class="fas fa-chevron-right"></i></span> Partnerships</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> RX Saving Card</li> -->
+                    <li  (click)=" FAQS()"><span><i class="fas fa-chevron-right"></i></span> FAQs</li>
+                    <li (click)="contact()"><span><i class="fas fa-chevron-right"></i></span> Contact Us</li>
+                  
+                </ul>
+            </div>
+        
+        <div class="footer-column mt-3 mt-md-0">
+          <h3>Social</h3>
+          <ul>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.facebook.com/ChalicehealthX/" target="_blank" rel="noopener noreferrer"> <i class="fab fa-facebook ms-2"></i> Facebook</a></li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.linkedin.com/company/chalicehealth/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin ms-2"></i> LinkedIn</a> </li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.instagram.com/chalicehealth/" target="_blank" rel="noopener noreferrer"> <i class="fab fa-instagram ms-2"></i> Instagram</a></li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.youtube.com/@ChaliceHealth" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube ms-2 "></i> YouTube</a> </li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.tiktok.com/@chalicehealth" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok ms-2"></i> TikTok</a></li>
+          </ul>
+        </div>
+        <!-- next -->
+        <div class="footer-column mt-3 mt-md-0">
+          
+          <div class="">
+            <h3>Join Our Community</h3>
+            <p>Be the first  to know we offer deals.</p>
+            <form [formGroup]="communityForm">
+              <div class="subscribe-form position-relative">
+    
+                <input type="text" id="email" class="form-control" formControlName="email" placeholder="Enter Email"
+                  [ngClass]="{'is-invalid': communityForm.get('email')?.invalid && communityForm.get('email')?.touched}">
+               
+                <div class="invalid-feedback position-absolute mb-3" style="top: 37px;"
+                *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('required')">
+                Email is required.
+              </div>
+              <!-- <div class="fv-plugins-message-container invalid-feedback position-absolute" style="top:37px;"
+                *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('email')">
+                <div>Email is not valid</div>
+              </div> -->
+              <div class="fv-plugins-message-container invalid-feedback d-block position-absolute" style="top:37px;"
+               *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('invalidEmail')">
+                 Please enter a valid email address.
+              </div>
+              
+                <button type="submit" (click)="postJoinOurCommunity()"><i class="fas fa-envelope"></i>
+                </button>
+              </div>
+             
+            </form>
+            
+            <div class="d-flex justify-content-between mt-3 ">
+              <img src="../../../../assets/svg/homepage/unnamed.png" width="120px" height="100px" alt="">
+              <img src="../../../../assets/svg/homepage/HIPAA-logo.png" width="150px" height="80px" alt="" class="mt-2 ms-2">
+            </div>
+        </div>
+        </div>
+      </div>
+      <hr class="mt-0">
+      <!-- Bottom section -->
+      <div class="footer-bottom d-flex flex-column flex-md-row mb-2 justify-content-center mx-auto" style="width: 85%;">
+        <p class="text-nowrap mb-2 mt-mb-0  ">&copy; 2024 Chalice Health. All Rights Reserved.</p>
+        <span class="w-md-75 w-100 d-flex justify-content-md-end justify-content-center cursor">
+          <a (click)="redirectTotermofservice()">Term of Service</a>
+          <a (click)="redirectToprivacypolicy()">Privacy Policy</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>

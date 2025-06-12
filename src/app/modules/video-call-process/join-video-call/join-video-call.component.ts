@@ -32,6 +32,7 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
   isVideoEnabled: boolean = true;
   isVirtual = false
   userInfo: any
+  showVideoCall = true
   @ViewChild('signaturePad', { static: false }) signaturePad: ElementRef<HTMLCanvasElement>;
   private context: CanvasRenderingContext2D;
   private isDrawing = false;
@@ -45,8 +46,9 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
   private messageSubscription: Subscription | undefined;
   isChatOpen: boolean = false;
   meetingType: any
-
+  receiverId :  any;
   messageList = []
+  hash: any
 
   @ViewChild('fileInput') fileInput!: ElementRef;
 
@@ -68,21 +70,32 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
     this.userInfo = this.authService.getUserInfo()
     this.route.queryParams.subscribe((parama: any) => {
       this.bookingId = parama.appointmentId;
+      this.hash = parama.hash;
+      this.receiverId = parama.receiverId;
       this.meetingType = parama.request
-      if (parama.request == 'Virtual') {
+      if (parama.request == 'VirtualVisit') {
         this.isVirtual = true
+        this.getJoinCallDetails()
       }
     });
-    if (this.isVirtual) {
-      this.providerService.getJoinDetails(this.bookingId).subscribe((data: any) => {
-        this.token = data.token;
-        this.appId = data.appId
-        this.userId = this.userInfo.userId
-        this.channelName = data.channelName;
-        this.joinChannel();
-        this.subscribeToRemoteUsers();
-      });
+    if (this.hash) {
+   
+      this.providerService.decodeAppointmentId(this.hash).subscribe((response: any) => {
+        this.bookingId = response.appointmentId
+        this.meetingType = response.meetingType
+        this.soapNotesForm.get('bookAppointmentId').setValue(this.bookingId)
+        if (response.meetingType == 'VirtualVisit') {
+          this.isVirtual = true
+        
+          this.userInfo.userId = response.userId
+        
+         this.getJoinCallDetails()
+
+        }
+          this.userInfo.accountType = 'IndependentProvider'
+      })
     }
+
     this.soapNotesForm = this.fb.group({
       subjective: [''],
       objective: [''],
@@ -97,29 +110,63 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
     })
 
     const now = new Date();
-    // Get the local time in HH:mm format
-    const hours = now.getHours().toString().padStart(2, '0'); // Ensure two digits
-    const minutes = now.getMinutes().toString().padStart(2, '0'); // Ensure two digits
-
+    debugger;
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
     const formattedTime = `${hours}:${minutes}`;
     this.soapNotesForm.patchValue({ arrivalTime: formattedTime });
-
     this.getMessageList()
 
     this.messageSubscription = this.signalRService.message$.subscribe(
       (newMessage) => {
         this.getMessageList()
-        // this.messageList.push({
-        //   messageContent: newMessage.messageContent,
-        //   senderId: 'other', // Assuming 'other' indicates messages from the server
-        //   messageId: newMessage.messageId,
-        // });
-        console.log('New message received and added to list:', newMessage);
       }
     );
-    this.signalRService.addReceiveMessageListener();
+    // this.signalRService.addReceiveMessageListener();
+    this.getReceiverData()
+
+
+    
   }
 
+
+
+
+
+  
+  getJoinCallDetails(){
+    this.providerService.getJoinDetails(this.bookingId).subscribe((data: any) => {
+      this.token = data.token;
+      this.appId = data.appId
+      this.userId = this.userInfo.userId
+      this.channelName = data.channelName;
+      this.joinChannel();
+      this.subscribeToRemoteUsers();
+    });
+  }
+  messageReceiverData: any
+  getReceiverData() {
+    this.providerService.getMessageReceiverData(this.userInfo.userId).subscribe((response: any) => {
+      this.messageReceiverData = response
+      // if (this.messageReceiverData.profilePicturePath) {
+      //   this.messageReceiverData.profilePicturePath = environment.fileUrl + this.messageReceiverData.profilePicturePath;
+      // } else {
+      //   this.messageReceiverData.profilePicturePath = undefined;
+      // }
+    })
+  }
+  superParentMessageId: any
+  markUnreadMessages() {
+    const userInfo = this.authService.getUserInfo()
+    const obj = {
+      superParentMessageId: this.superParentMessageId,
+      senderId: userInfo.userId
+    }
+
+    this.providerService.markMessagesUnread(obj).subscribe((response: any) => {
+      this.providerService.notifyMessageUpdate();
+    })
+  }
 
 
   async toggleScreenShare(): Promise<void> {
@@ -139,13 +186,12 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
 
         this.isScreenSharing = false;
       } else {
-        // Start screen sharing
+
         const screenTrack = await AgoraRTC.createScreenVideoTrack({
           encoderConfig: '1080p_1',
           optimizationMode: 'detail',
         });
 
-        // Attach event listener for when screen sharing is stopped
         const screenMediaStreamTrack = Array.isArray(screenTrack)
           ? screenTrack[0].getMediaStreamTrack()
           : screenTrack.getMediaStreamTrack();
@@ -169,7 +215,6 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
       }
     } catch (error) {
       console.error('Failed to toggle screen share:', error);
-      alert('Screen sharing failed. Please check your browser permissions.');
     }
   }
 
@@ -183,12 +228,13 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
       if (localVideoContainer) {
         this.localVideoTrack.play(localVideoContainer);
       }
-
       await this.client.publish([this.localAudioTrack, this.localVideoTrack]);
+      console.log('Joined channel successfully');
     } catch (error) {
       console.error('Failed to join the channel:', error);
     }
   }
+
 
   subscribeToRemoteUsers() {
     this.client.on('user-published', async (user, mediaType) => {
@@ -236,21 +282,32 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
     }
   }
 
+
   async leaveChannel(): Promise<void> {
     try {
+     
+      
+
+      if (this.localVideoTrack) {
+        this.isVideoEnabled = !this.isVideoEnabled;
+        this.localVideoTrack.setEnabled(this.isVideoEnabled);
+        this.localVideoTrack.stop();
+        this.localVideoTrack.close();
+      }
       if (this.localAudioTrack) {
         this.localAudioTrack.stop();
         this.localAudioTrack.close();
-      }
-      if (this.localVideoTrack) {
-        this.localVideoTrack.stop();
-        this.localVideoTrack.close();
       }
 
       await this.client.leave();
       console.log('Left the channel successfully');
     } catch (error) {
       console.error('Failed to leave the channel:', error);
+    }
+
+    this.showVideoCall = false
+    if (this.userInfo.accountType == 'Patient') {
+      this.router.navigate(['/patient/appointment-list']);
     }
   }
 
@@ -274,7 +331,8 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
 
   // Handle file upload
   handleFileUpload(event: any) {
-    debugger
+   
+    
     this.selectedFile = []
     // this.selectedFilePath = null
     // this.profilePicture = []
@@ -292,7 +350,8 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
   }
 
   replyMessage() {
-    debugger
+   
+    
     const userInfo = this.authService.getUserInfo()
     const obj = {
       messageId: Number(this.messageId),
@@ -301,7 +360,8 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
       messageContent: this.message,
       createdBy: Number(userInfo.userId),
       FileName: null,
-      senderId: userInfo.userId
+      senderId: userInfo.userId,
+      receiverId: this.receiverId
     }
     if (this.selectedFile != null) {
       obj.FileName = this.selectedFile[0],
@@ -326,7 +386,8 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
       messageContent: this.message,
       createdBy: Number(userInfo.userId),
       FileName: null,
-      senderId: userInfo.userId
+      senderId: userInfo.userId,
+      receiverId: this.receiverId
     }
     const formData = new FormData;
     Object.keys(obj).forEach(key => {
@@ -340,7 +401,8 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
   }
 
   sendMessage() {
-    debugger
+   
+    
     if (this.messageList.length > 0) {
       this.replyMessage()
     }
@@ -348,37 +410,40 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
       this.createMessage()
     }
   }
-  endMeet(){
+  endMeet() {
     this.notificationService.markFormGroupTouched(this.soapNotesForm);
     if (this.soapNotesForm.invalid) {
       this.notificationService.markFormGroupTouched(this.soapNotesForm);
       return;
     }
-    const data  = {
-      bookAppointmentId : this.bookingId,
-      bookingStatus : this.soapNotesForm.get('statusOfVisit').value
+    const data = {
+      bookAppointmentId: this.bookingId,
+      bookingStatus: this.soapNotesForm.get('statusOfVisit').value
     }
-    debugger
-    this.providerService.endMeetAppointment(data).subscribe((response : any)=>{
-      
+   
+    
+    this.providerService.endMeetAppointment(data).subscribe((response: any) => {
+
       this.router.navigate(['/provider/appointment-list']);
     })
   }
-  endMeetFromPatient(){
+  endMeetFromPatient() {
     this.router.navigate(['/patient/appointment-list']);
   }
 
 
   getMessageList() {
-    this.providerService.getMessageList(this.bookingId).subscribe((response: any) => {
+    this.providerService.getMessageList(this.receiverId).subscribe((response: any) => {
       this.messageList = response
-      debugger
+     
+      
       if (this.messageList && this.messageList.length > 0) {
         const lastMessage = this.messageList[this.messageList.length - 1];
         const lastMessageId = lastMessage.messageList[lastMessage.messageList.length - 1];
-        this.messageId = lastMessageId.messageId; // Store the last messageId
+        this.messageId = lastMessageId.messageId;
+        this.superParentMessageId = lastMessageId.superParentMessageId
       } else {
-        this.messageId = null; // Handle case when the list is empty
+        this.messageId = null;
       }
       this.messageList.forEach((item: any) => {
         item.messageList.forEach((message: any) => {
@@ -389,7 +454,7 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
           }
         })
       })
-
+      this.markUnreadMessages()
     })
   }
 
@@ -402,12 +467,12 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
     }
     const formData = this.soapNotesForm.value;
     formData.meetingType = this.meetingType
-    if(formData.exitTime == ""){
+    if (formData.exitTime == "") {
       const now = new Date();
       // Get the local time in HH:mm format
       const hours = now.getHours().toString().padStart(2, '0'); // Ensure two digits
       const minutes = now.getMinutes().toString().padStart(2, '0'); // Ensure two digits
-  
+
       const formattedTime = `${hours}:${minutes}`;
       formData.exitTime = formattedTime
     }
@@ -419,27 +484,45 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
 
     formData.signature = this.signature
     this.providerService.addSoapNotes(formData).subscribe((response: any) => {
-      this.router.navigate(['/provider/add-prescription'], { queryParams: { appointmentId: this.bookingId } });
+      if (this.hash) {
+        this.router.navigate(['call/post-prescription'], { queryParams: { hash: this.hash } });
+      }
+      else {
+        this.router.navigate(['/provider/add-prescription'], { queryParams: { appointmentId: this.bookingId } });
+      }
+
     })
   }
+  
+  // formatTimeToSeconds(time: string): string {
+  //   if (time.includes(':') && !time.toLowerCase().includes('am') && !time.toLowerCase().includes('pm')) {
+  //     return `${time}:00`;
+  //   }
+
+  //   // Handle 12-hour format with AM/PM
+  //   const [hours, minutes] = time.split(':'); // Split the time string
+  //   const [cleanMinutes, period] = minutes.split(' '); // Extract minutes and AM/PM
+  //   let formattedHours = parseInt(hours, 10);
+
+  //   if (period.toUpperCase() === 'PM' && formattedHours !== 12) {
+  //     formattedHours += 12; // Convert PM hours to 24-hour format
+  //   } else if (period.toUpperCase() === 'AM' && formattedHours === 12) {
+  //     formattedHours = 0; // Convert 12 AM to 00
+  //   }
+
+  //   return `${formattedHours.toString().padStart(2, '0')}:${cleanMinutes}:00`;
+  // }
   formatTimeToSeconds(time: string): string {
-    if (time.includes(':') && !time.toLowerCase().includes('am') && !time.toLowerCase().includes('pm')) {
-      return `${time}:00`; 
-    }
-
-    // Handle 12-hour format with AM/PM
-    const [hours, minutes] = time.split(':'); // Split the time string
-    const [cleanMinutes, period] = minutes.split(' '); // Extract minutes and AM/PM
-    let formattedHours = parseInt(hours, 10);
-
-    if (period.toUpperCase() === 'PM' && formattedHours !== 12) {
-      formattedHours += 12; // Convert PM hours to 24-hour format
-    } else if (period.toUpperCase() === 'AM' && formattedHours === 12) {
-      formattedHours = 0; // Convert 12 AM to 00
-    }
-
-    return `${formattedHours.toString().padStart(2, '0')}:${cleanMinutes}:00`;
+    debugger;
+    if (!time) return '';
+  
+    const [hour, minute] = time.split(':');
+    const formattedHour = hour.padStart(2, '0');
+    const formattedMinute = minute.padStart(2, '0');
+  
+    return `${formattedHour}:${formattedMinute}:00`;
   }
+  
 
 
   formatTime(time: string): string {
@@ -452,6 +535,7 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
     window.open(downloadUrl, '_blank');
   }
   ngAfterViewInit() {
+  
     const canvas = this.signaturePad.nativeElement;
     this.context = canvas.getContext('2d');
     this.context.strokeStyle = '#000';  // Black color for signature
@@ -462,6 +546,20 @@ export class JoinVideoCallComponent implements OnInit, OnDestroy {
 
   startDrawing(event: MouseEvent | TouchEvent): void {
     event.preventDefault();
+    const canvas = this.signaturePad.nativeElement;
+    this.context = canvas.getContext('2d');
+    this.context.strokeStyle = '#000';  // Black color for signature
+    this.context.lineWidth = 2;  // Line width for signature
+    this.context.lineJoin = 'round';  // Rounded joins for smooth strokes
+    this.context.lineCap = 'round';  // Rounded caps for smooth strokes
+    
+    // Ensure context is available
+    if (!this.context) {
+     
+      console.error('Canvas context is not initialized');
+      return;
+    }
+
     const { offsetX, offsetY } = this.getEventCoordinates(event);
     this.context.beginPath();
     this.context.moveTo(offsetX, offsetY);

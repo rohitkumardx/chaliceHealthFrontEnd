@@ -1,0 +1,519 @@
+ 
+.footer {
+margin: auto;
+border-radius: 25px;
+background-color: white;
+color: rgba(15, 23, 39, .65);
+
+}
+
+.footer-container {
+padding: 10px 16px;
+text-align: left;
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+flex-wrap: wrap;
+}
+
+.footer-left {
+max-width: 300px;
+}
+
+.footer-left h1 {
+font-size: 1.8rem;
+font-weight: 400;
+}
+
+footer {
+background-color: #f9f9f9;
+padding: 20px 0px 0px 0px;
+color: #333;
+}
+
+.footer-container {
+display: flex;
+justify-content: space-between;
+max-width: 1300px;
+margin: auto;
+}
+
+.footer i {
+padding-right: 3px;
+font-size: 14px;
+}
+
+.logo-section {
+flex: 1;
+}
+
+.logo-section img {
+width: 200px;
+margin-bottom: 2px;
+}
+
+.footer-column {
+flex: 1;
+line-height: 1.6;
+min-width: 250px;
+}
+
+.footer-column h3 {
+font-size: 20px;
+color: #00876f;
+margin-bottom: 10px;
+font-weight: 500;
+font-weight: 700;
+}
+.subscribe-form {
+display: flex;
+}
+.subscribe-form input {
+flex: 1;
+padding: 8px;
+border: 1px solid #ccc;
+border-radius: 5px 0 0 5px;
+}
+.subscribe-form button {
+padding: 8px 15px;
+border: none;
+background: #009688;
+color: white;
+border-radius: 0 5px 5px 0;
+}
+.footer-column ul {
+list-style-type: none;
+padding: 0;
+}
+
+.footer-column ul li {
+margin-bottom: 5px;
+font-size: 17px;
+}
+
+.footer-column ul li:hover {
+color: #01876f;
+cursor: pointer;
+}
+
+.footer-left input[type="email"] {
+padding: 10px;
+width: 100%;
+margin-top: 20px;
+border: none;
+border-radius: 5px;
+}
+
+.footer-left button {
+margin-top: 10px;
+padding: 10px 15px;
+border: none;
+border-radius: 5px;
+background-color: white;
+color: #333;
+font-size: 1rem;
+cursor: pointer;
+}
+
+.social-icons {
+display: flex;
+gap: 10px;
+margin-top: 20px;
+}
+
+.footer-right {
+display: flex;
+justify-content: space-around;
+flex-wrap: wrap;
+}
+
+.footer-right .column {
+margin-right: 50px;
+flex-basis: 150px;
+}
+
+.footer-right h2 {
+font-size: 1.5rem;
+margin-bottom: 20px;
+}
+
+.footer-right ul {
+list-style: none;
+padding: 0;
+line-height: 1 !important;
+font-size: 14px;
+}
+
+.footer-right ul li {
+margin-bottom: 10px;
+}
+
+.footer-right ul li a {
+text-decoration: none;
+color: white;
+
+}
+
+.footer-bottom {
+text-align: center;
+font-size: 14px;
+}
+
+.footer-bottom a {
+color: rgba(15, 23, 39, .65);
+margin: 0 14px;
+text-decoration: none;
+justify-content: end;
+font-size: 14px;
+}
+
+@media (max-width:768px) {
+.footer-container{
+  padding: 24px  16px;
+}
+
+}
+
+
+
+@media (min-width:320px) and (max-width:992px){
+.sideboth{
+ display: block!important;
+}
+.left, .right{
+  width:100%;
+  text-align: center!important;
+
+}
+.right {
+object-fit:cover!important;
+overflow: hidden!important;
+}
+}
+.footer a {
+text-decoration:none!important;
+color: rgba(15, 23, 39, .65)!important;
+}
+
+.footer a:hover {
+ color: #198754!important;
+}
+
+.selected-suggestion {
+background-color:#006952 !important;
+color: white !important;
+}
+
+.list-group-item:hover {
+background-color: #006952 !important;
+color: white !important;
+}
+
+
+  
+@media (max-width: 768px) {
+  .nav-link, .dropdown-toggle {
+    font-size: 14px !important;
+    margin-left: 5px !important;
+  }
+
+  .header {
+    width: 100%;
+    padding: 5px;
+  }
+
+  .header .dropdown-item a {
+    font-size: 14px !important;
+    padding: 2px 20px !important;
+  }
+
+
+  .Listing, .Listing1, .Search {
+    width: 95%;
+    margin: auto;
+  }
+
+ 
+  .provider-card, .provider-card1 {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 12px;
+  }
+
+  .provider-img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+
+  .provider-header h2 {
+    font-size: 18px;
+  }
+
+  .doctor-name {
+    font-size: 10px;
+  }
+
+  
+  .rating, .details {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rating-bar {
+    width: 80px;
+  }
+
+
+  .gender button, .availability button {
+    font-size: 14px;
+    padding: 5px;
+  }
+
+
+  .footer-container {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .footer-column, .footer-left, .footer-right {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
+  .footer-right .column {
+    margin-right: 0;
+  }
+
+  .subscribe-form {
+    flex-direction: column;
+    align-items: left;
+  }
+
+  .subscribe-form input {
+    width: 100%;
+    border-radius: 5px;
+  }
+
+  .subscribe-form button {
+    width: 100%;
+    border-radius: 5px;
+    margin-top: 5px;
+  }
+
+
+  .footer-right ul {
+    font-size: 14px;
+  }
+
+  .footer-bottom {
+    font-size: 12px;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .nav-link, .dropdown-toggle {
+    font-size: 12px !important;
+  }
+
+  .provider-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .provider-header h2 {
+    font-size: 19px;
+  }
+
+  .doctor-name {
+    font-size: 16px;
+  }
+
+  .rating-bar {
+    width: 60px;
+  }
+
+  .footer-container {
+    padding: 10px;
+  }
+
+  .footer-column h3 {
+    font-size: 18px;
+  }
+
+
+}
+@media (max-width: 576px) {
+  .service {
+    display: block !important;
+    margin-top: 4px; 
+  }
+}
+
+.service {
+  display: inline-block;
+}
+@media (max-width: 767px) {
+  .custom-search-container {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 95%!important;
+  }
+.mobile{
+  display: flex;
+  width: 100%!important;
+}
+.mobile input{
+  width: 100%!important;
+}
+.location{
+/* border-top:1px solid #aeaeae !important; */
+/* border-left: 0px solid #aeaeae!important; */
+border-radius:0px!important;
+}
+.rounded-circle{
+  margin: auto;
+}
+  .custom-search-container .input-group-text {
+    border-left: 4px solid #00876f!important;
+    border-radius: 8px 8px 0 0!important;
+    width: 50px;
+    font-size: 14px;
+    margin-top: 8px;
+    margin-right: 0%;
+    padding-right: 0%;
+    margin-bottom: 8px;
+    position:static!important;
+  }
+  .arrow{
+    width: 100%;
+    text-align: center;
+    margin-top: 0px!important;
+    margin-bottom: 0px!important;
+  }
+  .arrow button{
+    margin-top: 0px!important;
+    margin-bottom: 0px!important;
+  }
+  .arrow .search-button{
+    border-radius: 2px!important;
+    width: 100%!important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+  }
+.img-fluid{
+  text-align: center;
+}
+.hero{
+  width: 95%!important;
+}
+.mobile-full-img {
+  max-width: 100% !important;
+  height: auto !important;
+}
+ 
+.chalice-health-other .chalice-health-table th:first-child {
+  text-align:center!important;  
+}
+  .custom-search-container input.form-control {
+    width: 100%;
+    padding: 12px 6px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
+.form-control{
+  width: 100%;
+}
+  .custom-search-container .search-button {
+    width: 35px;
+    height: 45px;
+    border-radius: 8px;
+    box-shadow: rgba(0, 135, 111, 0.35) 0px 5px 21px;
+    background-color: #00876f;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin: auto;
+  }
+ 
+  .suggestions-list {
+    width: 100% !important;
+  }
+  
+  .hello-card {
+    padding-left: 14px!important;
+    padding-right: 14px!important;
+  }
+ 
+}
+.form-control{
+  background-color: transparent!important;
+  border: none;
+}
+ 
+/* .location{
+  border-left:2px solid #aeaeae;
+} */
+
+.location1{
+  border-left:2px solid #aeaeae;
+}
+
+
+.selected-suggestion {
+  background-color: #f0f8ff;
+  border-left: 4px solid #007bff;
+
+}
+ 
+.suggestions-list .list-group-item {
+  border: 0px solid #e0e0e0;
+  margin-bottom: 5px;
+  padding: 30px auto;
+  word-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 20px;
+
+}
+ 
+.suggestions-list .list-group-item:hover, .suggestions-list-location .list-group-item:hover {
+  background-color: #f1f1f1;
+}
+.suggestions-list .list-group-item, .suggestions-list-location .list-group-item{
+  border: 0px solid #e0e0e0;
+  margin-bottom: 5px;
+  padding: 10px 15px;
+  word-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+.suggestions-list, .suggestions-list-location {
+  max-height: 300px; /* Adjust the height according to your design */
+  overflow-y: auto;  /* Enables vertical scroll when the list exceeds max height */
+}
+.suggestions-list-location {
+  width: 100% !important;  
+}
+@media (min-width:576px) {
+  .list-group-l{
+    width: 100%!important;
+  }
+}
+.list-group{
+z-index: 999;
+}
+ 
+.list-group{
+  width: 350px!important;
+}
+ 
+
+

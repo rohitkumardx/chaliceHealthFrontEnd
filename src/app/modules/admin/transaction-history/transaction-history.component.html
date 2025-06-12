@@ -1,0 +1,160 @@
+<section class="main-banner">
+  <div class="content-wrapper">
+
+    <div class="col-md-12 col-sm-12">
+      <div class="card">
+
+        <div class="p-3">
+          <div style="position: relative; margin: 0% !important;">
+            <h2 class="fw-bold">Filter </h2>
+            <select class="form-select form-select-sm cursor bg-white custom-dropdown"
+              (change)="getTransactionHistory()" style="width: 30%; margin-top: -1%;box-shadow: none;"
+              [(ngModel)]="selectedValue">
+              <option value="Week">This Week</option>
+              <option value="Month"> This Month</option>
+              <option value="6Months">Last 6 Months</option>
+              <option value="1Year">This Year</option>
+            </select>
+            <div class="row pt-2 ">
+
+
+              <!-- <div class="col-2">
+
+              </div> -->
+              <div class="col-md-4 d-flex align-items-center">
+                <div class="card w-100">
+                  <canvas id="donutChart" class="my-3"></canvas>
+                </div>
+              </div>
+              <div class="col-md-4 d-flex align-items-center">
+                <div class="card w-100">
+                  <canvas id="donutChart1" class="my-3"></canvas>
+                </div>
+              </div>
+              <div class="col-md-4  d-flex align-items-center justify-content-center">
+                <div class=" w-100 card py-1">
+                  <div class="amount-card mt-4 p-4 text-center">
+                    <img src="../../../../assets/svg/icons/image_2025_01_27T05_08_57_984Z.png" alt="Total Amount Icon"
+                      class="mx-auto d-block rounded" height="90" width="100" />
+                    <h2 class="card-title mt-3">Refund Amount</h2>
+                    <!-- <p class="text-success mb-1" >Total amount is the complete value of all items or charges combined.</p> -->
+                    <p class="text-success">Total Amount of Refund --- {{totalRefundAmount.totalRefundAmount|
+                      currency:'USD'}}</p>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-4">
+                <canvas id="donutChart1"></canvas>
+              </div>
+              <div class="col-4">
+                <canvas id="donutChart2"></canvas>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="table-responsive">
+      <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+
+        <div>
+        </div>
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" (click)="sortData('patientUniqueCode')">Patient Code
+              <i
+                [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueCode', 'fa-sort-up': sortColumn === 'patientUniqueCode' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueCode' && sortOrder === 'desc'}"></i>
+            </th>
+            <th class="okk" scope="col" (click)="sortData('providerName')">Provider Name
+              <i
+                [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+            </th>
+            <th class="okk" scope="col" (click)="sortData('consultationType')">Consultation Type
+              <i
+                [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'consultationType', 'fa-sort-up': sortColumn === 'consultationType' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'consultationType' && sortOrder === 'desc'}"></i>
+            </th>
+
+            <th scope="col">Appointment Date</th>
+            <th scope="col">Consultation Fees</th>
+            <th scope="col">Transaction Date</th>
+
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of transactionHistoryList; let i = index">
+            <td style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.patientId)">
+              <u>{{item.patientUniqueCode}}</u> </td>
+
+            <!-- <td style="color: #009cff!important; cursor: pointer;" (click)="viewProviderProfile(item.providerId)"> <u>{{item.providerName}}</u> </td>      -->
+            <td  *ngIf="item.accountType == 'IndependentProvider'"
+              style="color: #009cff!important; cursor: pointer;" (click)="viewProviderProfile(item.providerId)">
+              <u>{{item.providerName}}</u>
+            </td>
+            <td  *ngIf="item.accountType == 'PrivatePractices' || item.accountType == 'Facility'"
+              style="color: #009cff!important; cursor: pointer;" (click)="viewProviderProfile(item.providerId)">
+              <u>{{item.legalPracticeName}}</u>
+            </td>
+            <td>
+              <ng-container [ngSwitch]="item.consultationType">
+                <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                  style="font-size: 15px; color: #00876ec8;"></i>
+                <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2" style="color: #00876ec8;"></i>
+              </ng-container>
+              {{ formatConsulationType(item.consultationType) }}
+            </td>
+            <!-- <td>{{ formatConsulationType(item.consultationType) }} </td> -->
+            <td>{{ item.appointmentDateTime | date: 'MM-dd-yyyy' }}</td>
+            <td> {{item.totalAmount| currency:'USD'}}
+
+            </td>
+
+            <td>{{ item.createdDate | date: 'MM-dd-yyyy'}}</td>
+            <td>
+              <button type="button" class="btn btn-primary m-0" style="font-size: 11px;" (click)="showDetails(item.id)">
+                Show Details
+              </button>
+            </td>
+
+          </tr>
+
+          <tr *ngIf="loading">
+            <td colspan="8">
+              <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                [additionalClasses]="'mt-5'"></app-loader>
+            </td>
+          </tr>
+
+          <tr *ngIf="transactionHistoryList.length === 0 && !loading">
+            <td colspan="9" class="no-data-card">
+              <div class="no-data-card-container">
+                <div class="no-data-icon">
+                  <i class="fas fa-user-slash"></i>
+                </div>
+                <div class="no-data-content">
+                  <span class="no-data-title">No Transactions Found</span>
+                  <p class="no-data-description">It looks like there are no transactions at the
+                    moment.
+                    Please check back later!</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+      <app-pagination [paginator]="paginator" (onPageChange)="getTransactionHistory()" />
+    </div>
+
+  </div>
+
+</section>

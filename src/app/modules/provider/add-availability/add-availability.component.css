@@ -4,24 +4,24 @@
   } */
  
   .wrapper {
-    width: 100%;
+    /* width: 100%; */
     display: flex;
     justify-content: center;
   }
   
   .content-wrapper {
-    max-width: 100%px;
+
     width: 100%;
     background-color: #fff;
-    padding: 40px;
+    padding:  20px 40px 20px 40px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
   
-  .signup-card {
+  /* .signup-card {
     width: 100%;
     max-width:  100%;
-  }
+  } */
   
   .signup-card h3 {
     font-size: 24px;
@@ -32,8 +32,11 @@
     display: flex;
     justify-content:space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
+  /* input,select {
+    width: 15rem
+  } */
   
   .close-btn {
     background: none;
@@ -99,7 +102,7 @@
   max-width: 100%;
   width: 100%;
   background-color: #fff;
-  padding: 40px;
+  padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -123,7 +126,27 @@ p {
     background: none;
     border: none;
     font-size: 20px;
-    cursor: pointer;
-   
+    cursor: pointer;  
 }
 
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 5px;
+  font-size: 14px;
+}
+
+.dropdown-menu {
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.dropdown-toggle::after {
+  display: none; /* Removes the default dropdown caret if undesired */
+}
+
+label{
+  margin-top: 10px!important;
+}

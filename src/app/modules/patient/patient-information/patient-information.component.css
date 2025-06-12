@@ -1,4 +1,4 @@
-/* General Styles */
+
 .main-banner {
   background-color: #f9f9f9;
   padding: 30px;
@@ -8,6 +8,13 @@
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+input[type="date"]::-webkit-datetime-edit {
+  text-align: left!important;
+}
+input[type="date"] {
+  text-align: left!important;
 }
 
 .content-wrapper {
@@ -210,12 +217,11 @@ table tr th {
 } */
 /* Table Header */
 table thead th {
-  background-color: #d3d3d3; /* Light grey header */
-  color: #000; /* Black text */
+  background: linear-gradient(#00b094, #008f78) !important; 
+  color: white !important;; 
   text-align: center;
-  padding: 12px; /* Increase padding */
-  border-bottom: 3px solid #bbb; /* Slightly thicker bottom border */
-  font-weight: bold; /* Ensure bold text */
+  padding: 12px;
+  font-weight: bold; 
 }
 
 /* Table Body Rows */
@@ -300,4 +306,27 @@ textarea {
   --mat-tab-header-active-hover-label-text-color: #00876F;
   --mat-tab-header-active-focus-indicator-color: #00876F!important;
   --mat-tab-header-active-hover-indicator-color: #00876F!important;
+}
+ul li.active {
+  background-color: #00876f;
+  color: white;
+}
+.suggestion-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: white;
+  border: 1px solid #ccc;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.suggestion-list li {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-list li.active {
+  background: #00876f;
+  color: white;
 }

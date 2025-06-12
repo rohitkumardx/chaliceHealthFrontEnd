@@ -1,0 +1,178 @@
+<div class="container-fluid px-4 mt-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class=" rounded h-100 p-2">
+                <form [formGroup]="userForm">
+                    <div class="card">
+                        <div class="rounded p-4">
+
+                            <!-- Header -->
+                            <div class=" mb-3">
+                                <h1 class="m-0 text-center">{{ userId ? 'Edit User' : 'Add User' }}</h1>
+                            </div>
+
+                            <!-- Row-0: Clinic Name, Middle Name, Last Name -->
+                            <div class="row">
+                                <!-- First Name -->
+                                <div class="col-12 col-sm-4">
+                                    <label for="FirstName">First Name <span class="red">*</span></label>
+                                    <input type="text" id="firstName" class="form-control form-control-sm"
+                                        formControlName="firstName"
+                                        [ngClass]="{'is-invalid': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}"
+                                        [value]="userForm.get('firstName')?.value | capitalizeFirstLetter">
+                                    <div class="invalid-feedback"
+                                        *ngIf="userForm.get('firstName')?.touched && userForm.get('firstName')?.hasError('required')">
+                                        First Name is required.
+                                    </div>
+                                    <div class="invalid-feedback"
+                                   *ngIf="userForm.get('firstName')?.touched && userForm.get('firstName')?.hasError('pattern')">
+                                    First Name cannot be empty or only spaces.
+                                   </div>
+                                </div>
+
+                                <!-- Middle Name -->
+                                <div class="col-12 col-sm-4">
+                                    <label for="MiddleName">Middle Name </label>
+                                    <input type="text" id="middleName" class="form-control form-control-sm"
+                                        formControlName="middleName"
+                                        [ngClass]="{'is-invalid': userForm.get('middleName')?.invalid && userForm.get('middleName')?.touched}"
+                                        [value]="userForm.get('middleName')?.value | capitalizeFirstLetter">
+                                    <div class="invalid-feedback"
+                                        *ngIf="userForm.get('middleName')?.touched && userForm.get('middleName')?.hasError('required')">
+                                        Middle Name is required.
+                                    </div>
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="col-12 col-sm-4">
+                                    <label for="LastName">Last Name <span class="red">*</span></label>
+                                    <input type="text" id="lastName" class="form-control form-control-sm"
+                                        formControlName="lastName"
+                                        [ngClass]="{'is-invalid': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}"
+                                        [value]="userForm.get('lastName')?.value | capitalizeFirstLetter">
+                                    <div class="invalid-feedback"
+                                        *ngIf="userForm.get('lastName')?.touched && userForm.get('lastName')?.hasError('required')">
+                                        Last Name is required.
+                                    </div>
+                                    <div class="invalid-feedback"
+                                     *ngIf="userForm.get('lastName')?.touched && userForm.get('lastName')?.hasError('pattern')">
+                                    Last Name cannot be empty or only spaces.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Gender -->
+                                <div class="col-12 col-sm-4">
+                                    <label for="gender">Gender <span class="red">*</span></label>
+                                    <select id="gender" class="form-select form-select-sm cursor"
+                                        formControlName="gender"
+                                        [ngClass]="{'is-invalid': userForm.get('gender')?.invalid && userForm.get('gender')?.touched}">
+                                        <option value="" disabled selected>Select Gender</option>
+                                        <option *ngFor="let gender of genders" [value]="gender.name">{{ gender.value }}
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback"
+                                        *ngIf="userForm.get('gender')?.touched && userForm.get('gender')?.hasError('required')">
+                                        Gender is required.
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-4">
+                                    <label for="email">Email ID <span class="red">*</span></label>
+                                    <input type="email" id="email" class="form-control form-control-sm"
+                                        formControlName="email" [readonly]="userId ? true : false"
+                                        [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}">
+                                    <div class="invalid-feedback"
+                                        *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid">
+                                        <div *ngIf="userForm.get('email')?.errors?.['required']">Email is required.
+                                        </div>
+                                        <div *ngIf="userForm.get('email')?.errors?.['email']">Please enter a valid
+                                            email address.</div>
+                                        <div *ngIf="userForm.get('email')?.errors?.['maxlength']">Email cannot be
+                                            more than 255 characters long.</div>
+                                    </div>
+                                </div>
+
+                                <!-- Profile Type -->
+
+                                <div class="col-12 col-sm-4">
+                                    <label for="dateOfBirth">Date of Birth <span class="red">*</span></label>
+                                    <input type="date" id="dateOfBirth" class="form-control form-control-sm"
+                                        formControlName="dateOfBirth" [appMinAge]="18"
+                                        [ngClass]="{'is-invalid': userForm.get('dateOfBirth')?.invalid && userForm.get('dateOfBirth')?.touched}">
+                                        <div class="invalid-feedback"
+                                        *ngIf="userForm.get('dateOfBirth')?.touched && userForm.get('dateOfBirth')?.hasError('required')">
+                                        Date of Birth is required.
+                                    </div>
+                                    
+                                    <div class="text-danger"
+                                        *ngIf="userForm.get('dateOfBirth')?.touched 
+                                               && !userForm.get('dateOfBirth')?.hasError('required') 
+                                               && userForm.get('dateOfBirth')?.hasError('minAge')">
+                                        You must be at least 18 years old.
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <!-- Row-1: Email, Phone Number, Date of Birth -->
+                            <div class="row">
+                              
+                                <!-- Phone Number -->
+                                <div class="col-12 col-sm-4">
+                                    <label for="phoneNumber">Phone Number <span class="red">*</span></label>
+                                    <input type="text" class="form-control form-control-sm"
+                                        formControlName="phoneNumber" maxlength="14" (input)="formatPhoneNumber($event)"
+                                        [ngClass]="{'is-invalid': userForm.get('phoneNumber')?.invalid && userForm.get('phoneNumber')?.touched}">
+                                    <div class="invalid-feedback"
+                                        *ngIf="userForm.get('phoneNumber')?.touched && userForm.get('phoneNumber')?.hasError('required')">
+                                        Phone Number is required.
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="userForm.get('phoneNumber')?.touched && userForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                                        Phone number is invalid.
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-12 selector form-group">
+                                    <label for="">Role <span class="red">*</span></label>
+
+                                    <select id="gender" class="form-select form-select-sm cursor"
+                                        formControlName="roleId"
+                                        [ngClass]="{'is-invalid': userForm.get('roleId')?.invalid && userForm.get('roleId')?.touched}">
+                                        <option value="" disabled selected>Select Role</option>
+                                        <option *ngFor="let item of roleData" [value]="item.id">{{ item.roleName }}
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback"
+                                        *ngIf="userForm.get('roleId')?.touched && userForm.get('roleId')?.hasError('required')">
+                                        Role is required.
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Button -->
+                            <div class="text-end mt-3">
+                                <div class=" d-flex justify-content-end pt-2">
+                                    <button type="button" class="btn custom-padding" style="background-color: #00876f;"
+                                        (click)="submitProvider()"> <span
+                                            class="spinner-border text-light small-spinner" role="status"
+                                            *ngIf="loading">
+                                            <span class="visually-hidden">Loading...</span></span>
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- <div class="card">
+                                <div class="card-body">
+                                    The user will receive a link to create their password
+                                </div>
+                              
+                            </div> -->
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

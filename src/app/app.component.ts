@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+
 import { NotificationService } from './Services/notification.service';
+import { IdleService } from './Services/idle.service';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +10,7 @@ import { NotificationService } from './Services/notification.service';
 })
 export class AppComponent {
   title = 'ChaliceHealth';
-  constructor(public notificationService: NotificationService){}
+  constructor(public notificationService: NotificationService,private idleService: IdleService){}
+
 
 }

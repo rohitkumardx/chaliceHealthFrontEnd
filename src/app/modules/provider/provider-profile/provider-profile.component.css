@@ -63,33 +63,41 @@ label .fa-question-circle {
     position: relative;
     display: inline-block;
     cursor: pointer;
-  }
-  
-  .custom-tooltip {
+}
+
+.custom-tooltip {
     position: absolute;
-    top: 50%;
-    left: 120%; 
+    top: 90%;
+    /* width: 50%; */
+    left: -240%;
     background-color: #fff;
     color: #333;
     padding: 5px 10px;
     border-radius: 3px;
-    font-size: 14px;
+    font-size: 13px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 1px solid #ccc;
     white-space: nowrap;
+    /* text-overflow: ellipsis;
+    overflow: hidden; */
     z-index: 100;
-  }
-  
-  .custom-tooltip::after {
+    line-height: 18px !important;
+    font-weight: 400;
+    font-family: "Inter", sans-serif;
+}
+
+.custom-tooltip::after {
     content: '';
     position: absolute;
-    top: -5x; 
-    left: 10px; 
-    /* transform: translateY(-50%); */
+    /* top: -5x; 
+    left: 10px;  */
+    transform: translateY(-50%);
     border-width: 1px;
     border-style: solid;
-    border-color: transparent transparent transparent #fff; 
+    border-color: transparent transparent transparent #fff;
     box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  
+}
+
+label{
+    margin-top: 15px!important;
+}

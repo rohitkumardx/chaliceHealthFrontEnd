@@ -69,10 +69,13 @@ label .fa-question-circle {
     border-bottom: 1px solid #ddd; 
 }
 
-.table th {
-    background-color: #f8f8f8; 
+table thead th {
+    background: linear-gradient(#00b094, #008f78) !important; 
+    color: white !important;; 
+    text-align: center;
+    padding: 12px;
     font-weight: bold; 
-}
+  }
 
 .table tbody tr:hover {
     background-color: #f1f1f1; 
@@ -131,4 +134,22 @@ label .fa-question-circle {
 
 .small-input {
     padding: 5px !important;
+}
+
+.custom-dropdown {
+    width: 14rem !important;
+    box-shadow: none !important;
+    margin-left: -15% !important;
+    justify-items: center !important;
+  }
+
+
+  @media (max-width: 576px) {
+    .custom-dropdown{
+        margin-left: 0px!important;
+      }
+  }
+
+  label{
+    margin-top: 15px!important;
 }

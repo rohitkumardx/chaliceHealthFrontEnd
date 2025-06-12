@@ -1,0 +1,93 @@
+<section class="main-banner">
+  <div class="wrapper">
+      <div class="content-wrapper">
+          <div class="signup-card">
+              <h3 class="notifications-title mb-0">Notifications</h3>
+              <div class="search-box">
+                  <input type="text" placeholder="Search Notifications..." class="search-input"
+                      [(ngModel)]="searchTerm" (input)="getNotification()">
+                  <i class="fas fa-search search-icon"></i>
+              </div>
+
+              <div class="timeline border border-2 mt-3">
+                  <div *ngFor="let item of notificationListData; let i = index" class="timeline-item"
+                      [ngClass]="{'highlight-unread': !item.isProviderRead}">
+                      <div class="timeline-marker"></div>
+                      <div class="timeline-content bg-white p-3">
+                          <div class="up row d-flex w-100">
+                            <h6 class="timeline-title col-md-4">
+                              Patient Code: <Span style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.patientId)">{{ item.patientUniqueId }}</Span> 
+                              <span 
+                                *ngIf="!item.isProviderRead" 
+                                class="notification-label cursor ms-2" 
+                                (click)="ViewDetails(item.id)">
+                                New
+                              </span>
+                            </h6>
+                          </div>
+                          
+                          <div class="row data d-flex align-items-center">
+                            <div class="col-md-3">
+                              <strong>Appointment:</strong>
+                              {{ item?.appointmentDateTime | date:'MM-dd-yyyy' }}
+                              <!-- {{ item?.appointmentDateTime | date:'hh:mm a' }} -->
+                            </div>
+                            <div class="col-md-2">
+                              <strong>Location: </strong>
+                              <span *ngIf="item.city && item.state">{{ item.city }}, {{ item.state }}</span>
+                              <span *ngIf="item.city && !item.state">{{ item.city }}</span>
+                              <span *ngIf="!item.city && item.state">{{ item.state }}</span>
+                            </div>
+                          
+                            <div class="col-md-3">
+                              <strong>DOB:</strong> {{ formatDateWithAge(item.dob) }}
+                            </div>
+                            <div class="col-md-2">
+                              <strong>Type:</strong> {{ formatMeetingType(item.meetingType) }}
+                            </div>
+                            <div class="col-md-2">
+                              <button class="btn btn-success" (click)="ViewDetails(item.id)">
+                                View Details
+                              </button>
+                            </div>
+                            <div class="col-12">
+                              <strong>Reason for Visit:</strong> {{ item.reasonForVisit }}
+                            </div>
+                          </div>
+                          
+                          <span 
+                            *ngIf="!item.isProviderRead" 
+                            class="timeline-action cursor pb-2" 
+                            (click)="markAsRead(item.id)">
+                            <i class="fas fa-bell"></i> Mark as Read
+                          </span>
+                        </div>
+                        
+                  </div>
+                  <div *ngIf="loading" class="loading-card">
+                      <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                          [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                          [additionalClasses]="'mt-5'"></app-loader>
+                  </div>
+                  <div *ngIf="notificationListData.length === 0 && !loading" class="no-data-card">
+                      <div class="no-data-card-container">
+                          <div class="no-data-icon">
+                              <i class="fas fa-user-slash"></i>
+                          </div>
+                          <div class="no-data-content">
+                              <span class="no-data-title">No Notifications Found</span>
+                              <p class="no-data-description">It looks like there are no notifications at the moment.
+                                  Please check back later!</p>
+                          </div>
+                      </div>
+                  </div>
+                  
+              </div>
+              
+          </div>
+          <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+            <app-pagination [paginator]="paginator" (onPageChange)="getNotification()" />
+        </div>
+      </div>
+  </div>
+</section>

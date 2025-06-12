@@ -1,0 +1,216 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="document-card">
+                <div class="px-3 py-4">
+                    <!-- <span class="close-icon" (click)="cancel()">&times;</span> -->
+                    <h1 class="mt-1"><b> Prescription</b></h1>
+                    <form [formGroup]="prescriptionForm" class="mt-2">
+                        <div class="row p-2">
+                            <div class="col-sm-4">
+                                <label for="medicationCode">Medication Code<span class="red">*</span></label>
+                                <input type="text" id="medicationCode" class="form-control form-control-sm mt-2"
+                                    formControlName="medicationCode"
+                                    [ngClass]="{'is-invalid':prescriptionForm.get('medicationCode')?.invalid && prescriptionForm.get('medicationCode')?.touched}"
+                                    [value]="prescriptionForm.get('medicationCode')?.value | capitalizeFirstLetter">
+                                <div class="invalid-feedback"
+                                    *ngIf="prescriptionForm.get('medicationCode')?.touched && prescriptionForm.get('medicationCode')?.hasError('required')">
+                                    Medication Code is required.
+                                </div>
+                            </div>
+                            <div class="col-sm-4 position-relative">
+                                <label for="medicationName">Medication Name<span class="red">*</span></label>
+                                <input type="text" id="medicationName" class="form-control form-control-sm mt-2"
+                                    formControlName="medicationName" 
+                                    (input)="search($event)" 
+                                    (keydown.arrowDown)="navigateList('down')"
+                                    (keydown.arrowUp)="navigateList('up')"
+                                    (keydown.enter)="selectHighlightedMedicine()"
+                                    [ngClass]="{'is-invalid': prescriptionForm.get('medicationName')?.invalid && prescriptionForm.get('medicationName')?.touched}"
+                                    [value]="prescriptionForm.get('medicationName')?.value | capitalizeFirstLetter">
+                                
+                                    <div class="invalid-feedback"
+                                        *ngIf="prescriptionForm.get('medicationName')?.touched && prescriptionForm.get('medicationName')?.hasError('required')">
+                                        Medication Name is required.
+                                    </div>
+                                    <div class="text-danger" *ngIf="prescriptionForm.get('medicationName')?.hasError('whitespace')">
+                                        Medication Name cannot be just spaces.
+                                    </div>
+                                    
+                                    <ul *ngIf="medicines.length > 0" class="medicine-suggestions">
+                                        <li *ngFor="let medicine of medicines; let i = index" 
+                                            [class.active]="i === activeIndex"
+                                            class="medicine-item"
+                                            (click)="selectMedicine(medicine)"> 
+                                            {{ medicine }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            <div class="col-sm-4">
+                                <label for="frequency">Frequency<span class="red">*</span></label>
+                                <select class="form-select form-select-sm cursor mt-2" formControlName="frequency"
+                                    [ngClass]="{'is-invalid': prescriptionForm.get('frequency')?.invalid &&  prescriptionForm.get('frequency')?.touched}">
+                                    <option value="" disabled selected>Select</option>
+                                    <option *ngFor="let option of frequencies" [value]="option.value">{{ option.key }}
+                                    </option>
+
+                                    <!-- <option *ngFor="let option of frequencies" [value]="option.value">{{ option.key }}</option> -->
+
+                                    <!-- <option value="" disabled selected>Select</option> -->
+                                </select>
+                                <div class="invalid-feedback"
+                                    *ngIf="prescriptionForm.get('frequency')?.touched && prescriptionForm.get('frequency')?.hasError('required')">
+                                    Frequency is required.
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row p-2">
+                            <div class="col-sm-4">
+                                <label for="doseForm">Dose Form<span class="red">*</span></label>
+                                <select class="form-select form-select-sm cursor mt-2" formControlName="doseForm"
+                                    [ngClass]="{'is-invalid': prescriptionForm.get('doseForm')?.invalid &&  prescriptionForm.get('doseForm')?.touched}">
+                                    <option value="" disabled selected>Select</option>
+                                    <option *ngFor="let option of doses" [value]="option.value">{{ option.key }}
+                                    </option>
+                                    <!-- <option value="" disabled selected>Select</option> -->
+                                </select>
+                                <div class="invalid-feedback"
+                                    *ngIf="prescriptionForm.get('doseForm')?.touched && prescriptionForm.get('doseForm')?.hasError('required')">
+                                    Dose Form is required.
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label for="doseStrength">Dose Strength<span class="red">*</span></label>
+                                <select class="form-select form-select-sm cursor mt-2" formControlName="doseStrength"
+                                    [ngClass]="{'is-invalid': prescriptionForm.get('doseStrength')?.invalid &&  prescriptionForm.get('doseStrength')?.touched}">
+                                    <option value="" disabled selected>Select</option>
+                                    <option *ngFor="let option of strength" [value]="option.value">{{ option.key }}
+                                    </option>
+
+                                    <!-- <option value="" disabled selected>Select</option> -->
+                                </select>
+                                <div class="invalid-feedback"
+                                    *ngIf="prescriptionForm.get('doseStrength')?.touched && prescriptionForm.get('doseStrength')?.hasError('required')">
+                                    Dose Strength is required.
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="duration"> Duration <span class="red">*</span></label>
+                                <input type="date" id="duration" formControlName="duration" class="form-control form-control-sm mt-1"
+                                    [ngClass]="{'is-invalid': prescriptionForm.get('duration')?.invalid && prescriptionForm.get('duration')?.touched}"/>
+                            
+                                <div class="invalid-feedback"
+                                    *ngIf="prescriptionForm.get('duration')?.touched && prescriptionForm.get('duration')?.hasError('required')">
+                                    Duration is required.
+                                </div>
+                            
+                                <div class="text-danger"
+                                    *ngIf="prescriptionForm.get('duration')?.touched && prescriptionForm.get('duration')?.hasError('pastDate')">
+                                    Past dates are not allowed.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <div class="col-sm-4">
+                                <label for="directionOfUse">Directions For Use<span class="red">*</span></label>
+                                <input type="text" id="directionOfUse" class="form-control form-control-sm mt-2"
+                                    formControlName="directionOfUse"
+                                    [ngClass]="{'is-invalid':prescriptionForm.get('directionOfUse')?.invalid && prescriptionForm.get('directionOfUse')?.touched}"
+                                    [value]="prescriptionForm.get('directionOfUse')?.value | capitalizeFirstLetter">
+                                <div class="invalid-feedback"
+                                    *ngIf="prescriptionForm.get('directionOfUse')?.touched && prescriptionForm.get('directionOfUse')?.hasError('required')">
+                                    Directions For Use is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <div class="form-group col-12">
+                                <label for="remarks">Remarks</label>
+                                <textarea id="remarks" class="form-control form-control-sm mt-1"
+                                    formControlName="remarks"
+                                    [ngClass]="{'is-invalid': prescriptionForm.get('remarks')?.invalid && prescriptionForm.get('remarks')?.touched}"></textarea>
+                                <!-- <div class="invalid-feedback"
+                                    *ngIf="documentForm.get('remarks')?.touched && documentForm.get('remarks')?.hasError('required')">
+                                    Remarks is required.
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <div class="row p-2 d-flex">
+                            <div class="col-sm-12 d-flex justify-content-end pt-2">
+                                <button type="button" class="btn custom-padding" style="background-color: #00876f;"
+                                    (click)="postPrescriptionToList()">Add
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Optional Table -->
+
+                        <div class="table-responsive mt-5">
+                            <table class="table table-hover ">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Medication Code</th>
+                                        <th scope="col">Medication Name </th>
+                                        <th scope="col">Dose Strength</th>
+                                        <th scope="col">Frequency</th>
+                                        <th scope="col">Dose Form</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let prescription of prescriptionsList; ; let i = index">
+                                        <td>{{ prescription.medicationCode }}</td>
+                                        <td>{{ prescription.medicationName }}</td>
+                                        <td>{{ prescription.doseStrengthName || prescription.doseStrength }}</td>
+                                        <td>{{ prescription.frequencyName || prescription.frequency }}</td>
+                                        <td>{{ prescription.doseFormName || prescription.doseForm }}</td>
+                                        <td>
+                                            <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                                style="color:#00876f;font-size: medium;"
+                                                (click)="editPrescription(i)"></i>
+                                            <i class="fa-solid fa-trash cursor" (click)="deletePrescription(i)"
+                                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
+                                        </td>
+                                    </tr>
+                            
+                                </tbody>
+                            </table>
+                        </div>
+                        <label for="signature" class="d-block mb-2"> Signature </label>
+                        <canvas #signaturePad width="450" height="200" style="border:0.5px solid #000;"
+                            (mousedown)="startDrawing($event)" (mouseup)="stopDrawing()" (mouseleave)="stopDrawing()"
+                            (mousemove)="draw($event)" (touchstart)="startDrawing($event)" (touchend)="stopDrawing()"
+                            (touchmove)="draw($event)">
+                        </canvas>
+
+                        <div *ngIf="signatureUrl">
+                            <h4>Saved Signature:</h4>
+                            <img [src]="signatureUrl" alt="Signature" width="200" />
+                        </div>
+
+
+                        <i *ngIf="isSignatureFilled" class="fa-solid fa-trash cursor"
+                            style="color:rgb(166, 7, 7);margin-left: 20px; font-size: medium;"
+                            (click)="clearSignature()"></i>
+
+                        <div class="row p-2 d-flex">
+                            <div class="col-sm-12 d-flex justify-content-end pt-2">
+                                <button type="button" class="btn custom-padding" style="background-color: #00876f;"
+                                    (click)="submitAllPrescriptions()">
+                                    Submit
+                                </button>
+                            </div>
+                        </div>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

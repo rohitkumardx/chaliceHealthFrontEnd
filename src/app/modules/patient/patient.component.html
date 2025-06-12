@@ -1,67 +1,130 @@
+
+<app-message-pop-up [message]="message" [show]="show"></app-message-pop-up>
 <!-- <router-outlet>
 </router-outlet> -->
-<div class="sidebar d-flex flex-column vh-100 " style="display: flex; background-color:#84c0b0!important;">
+<div *ngIf="userInfo != null&& !withoutLogin" class="sidebar d-flex flex-column vh-100 "
+  style="display: flex; background-color:#84c0b0!important;">
 
 
-  <nav class="navbar  navbar-light flex-grow-1 ps-2">
-    <a class="navbar-brand mx-4 mb-3">
-      <!-- <h3 class="text-primary"> <img src="../../../assets/svg/Background/logo.png" class="w-100"></h3> -->
+  <!-- <div class="sidebar d-flex flex-column vh-100" 
+  [class.open]="isSidebarOpen" 
+  style="background-color: #84c0b0!important;">
+   -->
+  <nav class="navbar  navbar-light flex-grow-1 ps-2" style="overflow-y: auto; scrollbar-width: none;">
+    <a href="/home-page" class="navbar-brand mx-4 mb-3">
       <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Logo" width="150px" height="60px">
     </a>
 
     <div class="navbar-nav w-100 px-3 mt-4 ">
       <div class="nav-item dropdown ">
-        <a href="/supperAdmin/dashboard" class="nav-link cursor disabled"
-          [ngClass]="{'active': openSubmenus.dashboard}">
+        <a routerLink="/patient/dashboard" routerLinkActive="active" class="nav-link cursor "
+          [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
           <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+        </a>
+      </div>
+
+      <div class="nav-item dropdown">
+        <a routerLink="/patient/patient-information" class="nav-link cursor " routerLinkActive="active"
+          [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
+          <i class="fas fa-user-cog me-2"></i>Profile
         </a>
       </div>
 
       <!-- Clinic Management Dropdown -->
       <div class="nav-item dropdown">
-        <a class="nav-link  cursor" href="/patient/appointment-list" [ngClass]="{'active': openSubmenus.plan }"
-          (click)="toggleSubmenu('plan')"><i class="fas fa-clock me-2 "></i>Appointment</a>
-        <!-- Add the 'show' class when openSubmenus.plan is true -->
+        <a routerLink="/patient/appointment-list" class="nav-link  cursor" routerLinkActive="active"
+          [ngClass]="{'active': openSubmenus.plan }" (click)="toggleSubmenu('plan')"><i
+            class="fas fa-clock me-2 "></i>Appointment</a>
+        <!-- Add the 'show' class when openSub-menus.plan is true -->
       </div>
 
-
       <div class="nav-item dropdown">
-        <a href="/patient/prescription" class="nav-link cursor " [ngClass]="{'active': openSubmenus.dashboard}">
-          <i class="fas fa-stethoscope me-2"></i>Prescriptions
-        </a>
-      </div>
-      <div class="nav-item dropdown">
-        <a href="/patient/patient-information" class="nav-link cursor " [ngClass]="{'active': openSubmenus.dashboard}">
-          <i class="fas fa-user-cog me-2"></i>Profile Setup
-        </a>
-      </div>
-      <div class="nav-item dropdown">
-        <a href="/patient/patient-health-records" class="nav-link cursor"
-          [ngClass]="{'active': openSubmenus.dashboard}">
+        <a routerLink="/patient/patient-health-records" routerLinkActive="active" class="nav-link cursor"
+          [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
           <i class="fas fa-calendar-alt me-2"></i>Health Records
         </a>
       </div>
       <div class="nav-item dropdown">
-        <a href="/patient/message-list" class="nav-link cursor"
-          [ngClass]="{'active': openSubmenus.dashboard}">
-          <i class="fas fa-bell me-2"></i>
-          Messages
-          <span *ngIf="newMessages > 0" class="badge badge-circle bg-danger ms-2">{{ newMessages }}</span>
+        <a routerLink="/patient/prescription" class="nav-link cursor " routerLinkActive="active"
+          [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
+          <i class="fas fa-pills me-2"></i>Prescriptions
         </a>
-    </div>
-    
+      </div>
 
       <div class="nav-item dropdown">
-        <a href="/patient/patient-documents" class="nav-link cursor " [ngClass]="{'active': openSubmenus.dashboard}">
+        <a routerLink="/patient/message-list" routerLinkActive="active" class="nav-link cursor"
+          [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
+          <i class="fas fa-comments cursor me-2"></i>Messages
+          <span *ngIf="newMessages > 0" class="badge badge-circle bg-danger ms-2">{{ newMessages }}</span>
+        </a>
+      </div>
+
+      <div class="nav-item dropdown">
+        <a routerLink="/patient/billing-payments" routerLinkActive="active" class="nav-link cursor"
+          [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
+          <i class="fas fa-money-check-alt me-2"></i>Billing & Payments
+        </a>
+      </div>
+
+
+
+      <div class="nav-item dropdown">
+        <a routerLink="/patient/patient-documents" routerLinkActive="active" class="nav-link cursor "
+          [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
           <i class="fas fa-file-alt me-2"></i>Manage Documents
         </a>
       </div>
+
       <div class="nav-item dropdown">
-        <a href="/supperAdmin/dashboard" class="nav-link cursor disabled"
-          [ngClass]="{'active': openSubmenus.dashboard}">
-          <i class="fas fa-cog me-2"></i>Settings
+        <a routerLink="/patient/rating" routerLinkActive="active" class="nav-link cursor "
+          [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
+          <i class="fas fa-star me-2"></i>Ratings
         </a>
       </div>
+
+
+      <div class="nav-item dropdown">
+        <a class="nav-link  cursor" href="#" role="button" (click)="toggleNotificationDropdown($event)">
+          <i class="fas fa-cog me-2"></i>Settings
+
+          <span [ngClass]="{'rotate-icon': isNotificationDropdownOpen}"> <i class="fas fa-angle-down"> </i>
+          </span>
+        </a>
+
+        <ul class="dropdown-menu py-1 px-2" style="margin-top: 0;   background: #00876f;  "
+          *ngIf="isNotificationDropdownOpen">
+          <li>
+            <a routerLink="/patient/patient-notification" routerLinkActive="active" class="nav-link cursor"
+              [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
+              <span style="font-size: 14px !important;"><i class="fas fa-bell"
+                  style=" margin-right: 5px!important;"></i>Notifications & Alerts
+                <span *ngIf="newNotification?.totalCount > 0" class="badge badge-circle1 bg-danger mb-1">
+                  {{ newNotification.totalCount }}
+                </span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/patient/support" routerLinkActive="active" class="nav-link cursor"
+              [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
+              <Span style="font-size: 14px !important;"><i class="fas fa-headset me-2"
+                  style=" margin-right: 5px!important;"></i>Support</Span>
+            </a>
+          </li>
+
+          <li>
+            <a routerLink="/patient/patient-faq" routerLinkActive="active" class="nav-link cursor"
+              [ngClass]="{'active': openSubmenus.dashboard}" (click)="onSidebarItemClick()">
+              <span style="font-size: 14px !important;"><i class="fas fa-question-circle me-2"
+                  style=" margin-right: 5px!important;"></i>FAQ's</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+
+
+
     </div>
   </nav>
 
@@ -76,55 +139,115 @@
 
 
 
-<div class="content">
-  <!-- <nav class="navbar navbar-expand bg-light navbar-light sticky-top py-2 mobile-view-toggle">
+<div class="content"
+  [ngStyle]="(userInfo == null || (userInfo != null && withoutLogin)) ? { 'width': '100%', 'margin-left': '0' } : {}"
+  style="background-color:white;  z-index:999!important;">
 
-    <a (click)="onClickSidebarToggler()" class="sidebar-toggler flex-shrink-0">
-      <i class="fa fa-bars"></i>
-    </a>
-  </nav> -->
   <!-- Navbar Start -->
-  <nav class="navbar navbar-expand navbar-light sticky-top px-5 py-0 d-flex align-items-center"
-    [ngClass]="{'shadow-bottom': isScrolled}" style="background-color:white;">
-    <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
-      <h2 class="text-primary mb-0"><i class="fa fa-hashtag"></i></h2>
-    </a>
-    <a class="sidebar-toggler flex-shrink-0 bg-light cursor" (click)="onClickSidebarToggler()" *ngIf="this.userInfo">
-      <i class="fa fa-bars" style="color:#00876f;"></i>
-    </a>
-    <h1 class="pt-3 ps-4 minlogo">Chalice
-      <span style="color: #00876f;">Health</span>
-    </h1>
-    <h2 class="ps-5 pt-3" style="color: blcak;  font-family: 'Montserrat'; 
-    font-size: 18px; font-weight: 500; color: #fb8501;
-   "> Patient Portal</h2>
-    <!-- <form class="d-none d-md-flex ms-4">
-          <input class="form-control border-0" type="search" placeholder="Search">
-      </form> -->
-    <div class="navbar-nav d-flex align-items-center ms-auto">
-      <h1 class="px-3 py-1 mt-3 rounded-5 d-flex align-items-center cursor" (click)="redirectToDoctorSearch()" style="color
-     :#fb8501; font-weight: 400; font-family: 'Montserrat'; border: 1px solid #fb8501; font-size: 16px;">Book
-        Appointment</h1>
-      <div class="nav-item d-flex align-items-center">
-        <!-- <a class="nav-link text-black ">
-                  <i class="fa fa-user me-2 bg-light" style="color: #00876f; font-weight: 500;"></i><span style="color: #00876f; font-weight: 500; font-size:18px ;"> Dr. Smith</span>
-                </a> -->
-        <a class="nav-link text-black " *ngIf="!userInfo" (click)="navigateToPatientSignup()">
-          <i class="fa fa-user" style="color: #00876f; font-weight: 500;"></i><span
-            style="color: #00876f; font-weight: 500;">Signup/Login</span>
-        </a>
-        <a class="nav-link text-black " *ngIf="userInfo">
-          <i class="fa fa-user" style="color: #00876f; font-weight: 500;"></i><span
-            style="color: #00876f; font-weight: 500;">{{userInfo.firstName}} {{userInfo.lastName}}</span>
-        </a>
-        <!-- <a class="nav-link text-black ">
-                  <i class="fa fa-user me-2"></i>Rahul koranga 
-                </a> -->
-        <!-- <h3 class="d-flex fs-2 pt-4" style="color: #00876f; font-weight: 500;">Welcome Maddie</h3> -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top px-2 py-2" [ngClass]="{'shadow-bottom': isScrolled}"
+    style="background-color:white;">
+
+    <div class="container-fluid">
+
+      <!-- Sidebar Toggle -->
+      <a *ngIf="userInfo!= null && !withoutLogin" class="sidebar-toggler bg-light cursor me-2"
+        (click)="onClickSidebarToggler()">
+        <i class="fa fa-bars" style="color:#00876f;"></i>
+      </a>
+
+      <!-- Logo -->
+      <!-- <a href="/home-page" class="navbar-brand mb-0 d-flex flex-column align-items-start ps-2 pt-2">
+        <h1 class="minlogo mb-0" style="font-size: 23px;">
+          Chalice <span style="color: #fb8501;">Health</span>
+        </h1>
+        
+        <h2 *ngIf="userInfo" class="fw-bold mt-1 type" style="font-size: 16px; font-family: 'Montserrat'; color: #fb8501;">
+          {{ formatAccountType(userInfo.accountType) }}
+        </h2>
+      </a> -->
+
+      <!-- Logo and brand -->
+      <div class="d-flex align-items-center">
+        <div class="text-start me-2">
+          <a href="/home-page">
+            <h1 class="mb-0 minlogo" style="font-size: 23px;">
+              <span class="me-1" style="color: #00876f;">Chalice</span> <span style="color: #fb8501;">Health</span>
+            </h1>
+          </a>
+          <div class="d-block d-md-none text-orange fw-bold"
+            style="font-size: 16px; font-family: 'Montserrat'; color: #fb8501;" *ngIf="userInfo">
+            <!-- Show only on mobile -->
+            {{ formatAccountType(userInfo.accountType) }}
+          </div>
+        </div>
+
+        <div class="d-none d-md-block text-orange ms-2 fw-bold"
+          style="font-size: 16px; font-family: 'Montserrat'; color: #fb8501;" *ngIf="userInfo">
+          <!-- Show only on desktop -->
+          {{ formatAccountType(userInfo.accountType) }}
+        </div>
       </div>
+
+
+
+
+
+      <!-- <a href="/home-page" class="navbar-brand mb-0">
+        <h1 class="pt-2 ps-2 minlogo mb-0" style="font-size: 23px;">
+          Chalice <span style="color: #fb8501;">Health</span>
+        </h1>
+      </a>
+ 
+      
+      <h2 class="d-block pt-2 mt-3 ps-3 fw-bold"
+        *ngIf="userInfo" style="font-size: 16px; font-family: 'Montserrat'; color: #fb8501;">
+        {{formatAccountType(userInfo.accountType)}}
+      </h2> -->
+
+      <!-- Toggler Button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Collapsible Content -->
+      <div class="collapse ms-auto navbar-collapse " id="navbarNav">
+        <ul
+          class="navbar-nav w-100 flex-column flex-lg-row align-items-center justify-content-end gap-2 ps-0 text-center text-lg-end">
+
+
+          <!-- Book Appointment -->
+          <li class="nav-item" *ngIf="userInfo?.accountType == 'Patient'">
+            <h1 class="px-3 py-1 mt-3 rounded-5 cursor" (click)="redirectToDoctorSearch()" style="color:#fb8501; font-weight: 400; font-family: 'Montserrat';
+              border: 1px solid #fb8501; font-size: 16px;">
+              Book Appointment
+            </h1>
+          </li>
+
+          <!-- Signup/Login (if not logged in) -->
+          <li class="nav-item cursor  " *ngIf="!userInfo">
+            <a class="nav-link text-black" (click)="navigateToPatientSignup()">
+              <i class="fa fa-user" style="color: #00876f; font-weight: 500;"></i>
+              <span style="color: #00876f; font-weight: 500;">Signup/Login</span>
+            </a>
+          </li>
+
+          <!-- Username (if logged in) -->
+          <li class="nav-item" *ngIf="userInfo">
+            <a class="nav-link text-black okk">
+              <i class="fa fa-user" style="color: #00876f; font-weight: 500;"></i>
+              <span style="color: #00876f; font-weight: 500;">
+                {{userInfo.firstName}} {{userInfo.lastName}}
+              </span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
     </div>
   </nav>
-  <div class="main-content" style=" background-color: #f1f1f2b1!important;">
+
+  <div class="main-content" style="background-color: #f1f1f2b1!important;">
     <router-outlet></router-outlet>
   </div>
   <app-footer></app-footer>

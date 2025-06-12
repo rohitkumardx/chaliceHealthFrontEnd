@@ -1,87 +1,204 @@
-
 .main-banner {
-    background-color: #f9f9f9;
-    padding: 30px;
-  }
-  
-  .wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    max-width: 80%;
-    margin: auto;
-  }
-  
-  .content-wrapper {
-    max-width: 100%px;
-    width: 100%;
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  .appointment-card {
-    width: 100%;
-    max-width:  100%;
-  }
-  
-  .appointment-card h3 {
-    font-size: 24px;
-    font-weight: 500;
-    color: #333;
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  .time-slot {
-    background-color: #e6f4ea; 
-    color: #00876F; 
-    border-radius: 8px; 
-    font-weight: 600;
-    font-size: 0.95rem; 
-    padding: 6px 12px;
-    display: inline-block; 
+  background-color: #f9f9f9;
+  padding: 30px;
+}
 
-  }
-  .red {
-    color: red;
-  }
-  
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  max-width: 95%;
+  margin: auto;
+}
 
-  .signup-form {
-    width: 100%;
-  }
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  label {
-    font-size: 14px;
-    color: #555;
-  }
-  .form-group {
-    margin-bottom: 16px;
-  }
-  
-  .form-label {
-
-    margin-bottom: 8px;
-    display: block;
-  }
-  
-  .radio-group {
-    display: flex;
-    align-items: center;
-  }
-  
-  .radio-group label {
-    margin-right: 16px;
-    font-size: 14px;
-  }
-  
-  input[type="radio"] {
-    margin-right: 8px;
-  }
+.cancellation-link {
+  margin-top: 8px;
+  display: block;
+}
 
 
-  
+.content-wrapper {
+  max-width: 100%px;
+  width: 100%;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-card {
+  width: 100%;
+  max-width: 100%;
+}
+
+.appointment-card h3 {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.time-slot {
+  background-color: #e6f4ea;
+  color: #00876F;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 6px 12px;
+  display: inline-block;
+
+}
+
+.modifyAppointmentBtn {
+  background-color: #e6f4ea;
+  color: #00876F;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  display: inline-block;
+  border: 2px solid #00876F;
+}
+
+.red {
+  color: red;
+}
+
+
+.signup-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 14px;
+  color: #555;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+
+  margin-bottom: 8px;
+  display: block;
+}
+
+.radio-group {
+  display: flex;
+  align-items: center;
+}
+
+.radio-group label {
+  margin-right: 16px;
+  font-size: 14px;
+}
+
+input[type="radio"] {
+  margin-right: 8px;
+}
+.circle {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid #999;
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: bold;
+  color: #999;
+  text-align: center;
+  line-height: 1; /* Ensure the icon is centered vertically */
+}
+.circle span {
+  transform: translateY(-2px); /* Moves the icon upwards */
+}
+/* .popup {
+color: black;
+border: 1px solid black;
+position: absolute;
+margin-left:13%;
+transform: translateY(-10px); 
+} */
+.popup {
+  margin-top: 4%!important;
+  position: absolute;
+  left: 330px;
+  background-color:white;
+  color: black;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 100; 
+  transform: translateY(-50px); 
+  width:15%;
+  border: 2px solid #00876F;
+  /* opacity: 0; */
+  transition: opacity 0.3s ease-in-out;
+}
+.popup-content {
+  font-size: 16px;
+}
+
+.popup .row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.popup .row:last-child {
+  margin-bottom: 0;
+}
+
+/* .popup .col-sm-6 {
+  width: 100%;
+} */
+
+.popup .col-sm-8 b {
+  color: #00876F;
+  font-weight: bold;
+}
+
+/* Show popup with smooth fade-in */
+.popup.ng-enter, .popup.ng-leave {
+  opacity: 1;
+}
+
+.popup.ng-enter-active, .popup.ng-leave-active {
+  opacity: 0;
+}
+
+@media (max-width:576px) {
+  .content-wrapper{
+    padding: 20px 0px!important;
+  }
+
+  .okk{
+    margin-top: 18px!important;
+  }
+  .popup{
+    left: 50px!important; 
+    width: 66%;
+    margin-top: 8%!important;
+   
+}
+}
+
+@media (max-width:576px) {
+  .content-wrapper{
+    padding: 20px 0px!important;
+  }
+  .okk label{
+    border: 0.5px solid #dedada;
+    padding-left: 5px!important;
+  }
+}
+
+

@@ -1,30 +1,52 @@
 .modal-content {
-    border-radius: 8px;
-    padding: 20px;
-    border: none !important;
-  }
-  
-  .patient-info p {
-    margin: 0;
-    font-size: 14px;
-  }
-  
-  .encounter-details h6 {
-    font-size: 16px;
-    margin-bottom: 8px;
-  }
-  
-  .encounter-details p,
-  .encounter-details ul {
-    font-size: 14px;
-  }
-  
-  .encounter-details ul {
-    padding-left: 20px;
-  }
-  
-  .modal-header .btn-close {
-    background-color: transparent;
-    border: none;
-  }
-  
+  border-radius: 12px;
+  border: none;
+  padding: 0;
+  background-color: #fdfdfd;
+}
+
+.patient-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.encounter-details h6 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.encounter-details p {
+  font-size: 14px;
+  color: #444;
+}
+
+.table {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.table-bordered th,
+.table-bordered td {
+  vertical-align: middle;
+
+}
+ thead th{
+  color: white!important;
+  background: linear-gradient(#00b094, #008f78) !important;
+  font-weight: 500;
+
+}
+.signature-box {
+  border: 1px solid #ddd;
+  background-color: #fafafa;
+}
+
+.cancel-icon {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.cancel-icon:hover {
+  color: #e74c3c;
+}

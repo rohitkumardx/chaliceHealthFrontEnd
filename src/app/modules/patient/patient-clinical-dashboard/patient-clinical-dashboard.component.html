@@ -1,93 +1,108 @@
 <div class="container my-2 pb-3">
-    <div class="header">
-        <h3 class="mt-2"><u>Patient Clinical Dashboard</u></h3>
-        <div class="close-btn" (click)="modalClose()"><i class="fa-solid fa-xmark"></i></div>
+    <div class="header d-flex justify-content-between align-items-center">
+        <h3 class="mt-2 text-start w-100">Patient Clinical Dashboard</h3>
+        <div class="close-btn position-absolute end-0 me-3 mt-2" (click)="modalClose()">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
     </div>
-<!-- <div class="w-100 text-end"> <i class="fa-solid fa-xmark cancel-icon text-end cursor" (click)="modalClose()"></i></div> -->
-    <div class="row g-4 profile-card  text-start align-items-center">
-        <!-- Patient Image and Name Section -->
-        <div class="col-md-3 text-center">
+    <hr class="mt-0 mb-4">
+ 
+    <div class="row g-4 profile-card text-center text-md-start">
+        <!-- Patient Image -->
+        <div class="col-12 col-md-2">
             <img *ngIf="patientList?.profilePicturePath" [src]="patientList.profilePicturePath" class="profile-image">
+            <img *ngIf="!patientList?.profilePicturePath" class="profile-image" alt="Profile Default"
+                src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png">
 
-            <!-- <img src="../../../../assets/svg/customer01.jpg" alt="Default Profile Picture" class="profile-image"> -->
-            <h5 class="mt-2">{{patientList.patientName || '--------'}}</h5>
+                <p class="text-success fs-5 " style="font-weight: 400!important;"><b> {{patientList?.patientName}}</b></p>
         </div>
-        <!-- Patient Details Section -->
-        <div class="col-md-3">
-            <p class="text-muted mb-1">
-                <strong>Age:</strong> {{patientList.age || '--------'}} Yrs, {{patientList.gender|| '--------'}}
-            </p>
-            <p class="text-muted small">
-                <strong>DOB:</strong> {{patientList.formattedDateOfBirth|| '--------'}}<br>
-                <strong>Code:</strong> {{patientList.uniqueId|| '--------'}}
-            </p>
+ 
+        <!-- Patient Details -->
+        <div class="col-12 col-md-2 border-left-custom">
+            <p class="text-muted mb-1"><strong>Age:</strong> {{ patientList.age ? patientList.age + ' Yrs' : '------' }}</p>
+            <p class="text-muted mb-1"><strong>DOB:</strong> {{ patientList.formattedDateOfBirth || '------' }}</p>
+            <p class="text-muted mb-1"><strong>Gender:</strong> {{ patientList.gender || '------' }}</p>
+            <p class="text-muted mb-1"><strong>Code:</strong> {{ patientList.uniqueId || '------' }}</p>
         </div>
-        <!-- Contact Information Section -->
-        <div class="col-md-3">
-            <p class="contact-info mb-1">
-                <i class="fa-solid fa-phone text-success me-2"></i> {{patientList.phoneNumber|| '--------'}}
-            </p>
-            <p class="contact-info mb-1">
-                <i class="fa-solid fa-envelope text-primary me-2"></i> {{patientList.email|| '--------'}}
-            </p>
+ 
+        <!-- Contact Info -->
+        <div class="col-12 col-md-4 border-left-custom">
             <p class="contact-info">
-                <i class="fa-solid fa-location-dot text-danger me-2"></i> {{patientList.address|| '--------'}}
+                <i class="fa-solid fa-phone text-success me-2"></i> {{patientList.phoneNumber | phoneFormat}}
+            </p>
+            <p class="contact-info mb-1">
+                <i class="fa-solid fa-envelope text-primary me-2"></i> {{patientList.email || '--------'}}
+            </p>
+            <p class="contact-info d-flex justify-content-center justify-content-md-start align-items-start">
+                <i class="fa-solid fa-location-dot text-danger me-2 mt-1"></i>
+                <span class="ms-2">{{patientList.address || '--------'}}</span>
             </p>
         </div>
-        <div class="col-md-3" *ngFor="let item of documentList; let i = index" style="margin-top: -1px!important;">
-        <!-- <p class="py-0 my-0">{{item.fileName}}</p> -->
-        <a [href]="item.filePath" target="_blank">{{item.fileName}}</a>
-
-        <!-- <p class="py-0 my-0">Document 2</p>
-        <p class="py-0 my-0">Document 3</p>
-        <p class="py-0 my-0">Document 3</p> -->
-
-       
+ 
+        <!-- Appointment Section -->
+        <div class="col-12 col-md-4">
+            <h5 class="mb-2 mt-0 text-center text-md-start" *ngIf="patientList.appointmentDetails?.length">Appointments</h5>
+            <div class="appointment-container border-left-custom overflow-auto custom-scroll px-2"
+                style="max-height: 140px;" *ngIf="patientList.appointmentDetails?.length">
+                <div *ngFor="let appointment of patientList.appointmentDetails; let i = index" class="appointment-item">
+                    <p class="contact-info">
+                        <strong class="me-2">{{ i + 1 }}.</strong>
+                        <b> Provider Name</b>: {{ formatProviderName(appointment.providerName) }}
+                    </p>
+                    <p class="contact-info ms-4">
+                        <b>Service Type</b>: {{ formatServiceType(appointment.meetingType) || '--------' }}
+                    </p>
+                    <p class="contact-info ms-4">
+                        <b>Appointment Status</b>: {{ appointment.bookingStatus || '--------' }}
+                    </p>
+                    <hr class="my-2" *ngIf="i < patientList.appointmentDetails.length - 1">
+                </div>
+            </div>
         </div>
     </div>
-    
-    
-
-    <!-- Medical History Section -->
+ 
+    <!-- Vitals and Medical History -->
     <div class="row mt-4">
-        <div class="col-md-6">
-
+        <!-- Vital Info -->
+        <div class="col-12 col-md-6 mb-4 mb-md-0">
             <div class="vital-info-card">
-                <h5 class="vital-title">Vital Info</h5>
+                <h5 class="vital-title text-center text-md-center">Vital Info</h5>
                 <div class="row text-center">
-                    <div class="col-md-4 vital-item">
+                    <div class="col-md-4 col-sm-12  vital-item">
                         <p class="vital-label">Heart Beat</p>
-                        <p class="vital-value">{{patientList.heartRate|| '--------'}}</p>
+                        <p class="vital-value">{{ patientList.heartRate ? patientList.heartRate + ' bpm' : '--------' }}</p>
                     </div>
-                    <div class="col-md-4 vital-item">
+                    <div class="col-md-4 col-sm-12 vital-item">
                         <p class="vital-label">BP</p>
-                        <p class="vital-value">{{patientList.bloodPressure|| '--------'}}</p>
+                        <p class="vital-value">{{ patientList.bloodPressure ? patientList.bloodPressure + ' mmHg' : '--------' }}</p>
                     </div>
-                    <div class="col-md-4 vital-item">
+                    <div class="col-md-4 col-sm-12 vital-item">
                         <p class="vital-label">Temperature</p>
-                        <p class="vital-value">{{patientList.temperature|| '--------'}}°C</p>
+                        <p class="vital-value">{{ patientList.temperature ? patientList.temperature + ' °F' : '--------' }}</p>
                     </div>
                 </div>
-                <hr>
-                <div class="row text-center">
-                    <div class="col-md-4 vital-item">
+                <hr class="p-0 m-0">
+                <div class="row text-center mt-2">
+                    <div class="col-4 vital-item">
                         <p class="vital-label">Height</p>
-                        <p class="vital-value">{{patientList.height|| '--------'}}</p>
+                        <p class="vital-value">{{ patientList.height ? patientList.height + ' in' : '--------' }}</p>
                     </div>
-                    <div class="col-md-4 vital-item">
+                    <div class="col-4 vital-item">
                         <p class="vital-label">Weight</p>
-                        <p class="vital-value">{{patientList.weight|| '--------'}}</p>
+                        <p class="vital-value">{{ patientList.weight ? patientList.weight + ' lb' : '--------' }}</p>
                     </div>
-                    <div class="col-md-4 vital-item">
+                    <div class="col-4 vital-item">
                         <p class="vital-label">Vital Date</p>
-                        <p class="vital-value">{{patientList.vitalDate|| '--------'}}</p>
+                        <p class="vital-value">{{ patientList.vitalDate ? (patientList.vitalDate | date:'MM-dd-yyyy') : '--------' }}</p>
                     </div>
                 </div>
             </div>
         </div>
-       <div class="col-md-6">
-            <div class="medical-history p-4">
-                <h5 class="section-title mb-3">Medical History</h5>
+ 
+        <!-- Medical History -->
+        <div class="col-12 col-md-6">
+            <div class="medical-history p-3">
+                <h5 class="section-title text-center mb-3">Medical History</h5>
                 <div class="table-responsive">
                     <table class="table table-hover table-striped align-middle">
                         <thead class="table-header">
@@ -98,10 +113,9 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>{{patientList.conditionName|| '--------'}}</td>
-                                <td>{{patientList.dateOfDiagnosis|| '--------'}}</td>
+                                <td>{{patientList.conditionName || '--------'}}</td>
+                                <td>{{patientList.dateOfDiagnosis ? (patientList.dateOfDiagnosis | date:'MM-dd-yyyy') : '--------'}}</td>
                             </tr>
-                           
                         </tbody>
                     </table>
                 </div>
@@ -109,3 +123,5 @@
         </div>
     </div>
 </div>
+ 
+ 

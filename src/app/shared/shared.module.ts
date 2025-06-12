@@ -4,7 +4,6 @@ import { NumbersOnlyDirective } from './directives/numbers-only/numbers-only.dir
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ConditionalValidationDirective } from './directives/conditional-validation/conditional-validation.directive';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { SingleSelectDropDownComponent } from './components/single-select-drop-down/single-select-drop-down.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -24,6 +23,11 @@ import { NoConsecutiveSpacesDirective} from './directives/no-trailing-spaces/no-
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { CapitalizeFirstLetterPipe } from './pipes/capitalize-first-letter.pipe';
+import { DeletePopupComponent } from './components/delete-popup/delete-popup.component';
+import { AudioRecordingComponent } from './components/audio-recording/audio-recording.component';
+import { MinAgeValidatorDirective } from './directives/validators/min-age.directive';
+import { HeaderComponent } from './components/header/header.component';
+import { MainFooterComponent } from './components/main-footer/main-footer.component';
 
 
 
@@ -38,7 +42,6 @@ import { CapitalizeFirstLetterPipe } from './pipes/capitalize-first-letter.pipe'
     NotFoundComponent,
     NumbersOnlyDirective,
     ConditionalValidationDirective,
-    DashboardComponent,
     LoaderComponent,
     SingleSelectDropDownComponent,
     TreeviewComponent,
@@ -56,6 +59,11 @@ import { CapitalizeFirstLetterPipe } from './pipes/capitalize-first-letter.pipe'
     SidebarComponent,
     FooterComponent,
     CapitalizeFirstLetterPipe,
+    DeletePopupComponent,
+    AudioRecordingComponent,
+    MinAgeValidatorDirective,
+    HeaderComponent,
+    MainFooterComponent 
 
   
   ],
@@ -64,7 +72,6 @@ import { CapitalizeFirstLetterPipe } from './pipes/capitalize-first-letter.pipe'
     NumbersOnlyDirective,
     NgbModule,
     ConditionalValidationDirective,
-    DashboardComponent,
     LoaderComponent,
     SingleSelectDropDownComponent,
     PhoneFormatPipe,
@@ -80,7 +87,12 @@ import { CapitalizeFirstLetterPipe } from './pipes/capitalize-first-letter.pipe'
     NoConsecutiveSpacesDirective,
     SidebarComponent,
     FooterComponent,
+    AudioRecordingComponent,
     CapitalizeFirstLetterPipe,
+    MinAgeValidatorDirective,
+    HeaderComponent,
+    CommonModule,
+    MainFooterComponent
   ]
 })
 export class SharedModule {

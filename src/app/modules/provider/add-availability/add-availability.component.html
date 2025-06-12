@@ -1,7 +1,5 @@
-
-
 <section class="main-banner">
-    <div class="wrapper d-flex">
+    <div class="wrapper d-flex ">
         <div class="content-wrapper" *ngIf="!bookedDetails">
             <div class="signup-card">
                 <div class="signup-form">
@@ -12,28 +10,67 @@
                         </div>
                         <form [formGroup]="availabilityForm">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-md-4">
                                     <label for="date">Date <span class="red">*</span></label>
                                     <input type="date" id="date" formControlName="date" placeholder=""
-                                        class="form-control form-control-sm mt-1"
+                                        class="form-control form-control-sm mt-1" (change)="updateWeekDay()"
                                         [ngClass]="{'is-invalid': availabilityForm.get('date')?.invalid && availabilityForm.get('date')?.touched}" />
                                     <div class="invalid-feedback"
                                         *ngIf="availabilityForm.get('date')?.touched && availabilityForm.get('date')?.hasError('required')">
                                         Date is required.
                                     </div>
-                                 
                                 </div>
-                                <div class="col-6">
+                                <div class="col-md-4">
+                                    <label for="startTime">Start Time <span class="red">*</span></label>
+                                    <div class="dropdown">
+                                        <input type="text" id="startTime"
+                                            class="form-control form-control-sm mt-1 dropdown-toggle"
+                                            formControlName="startTime"
+                                            [ngClass]="{'is-invalid': availabilityForm.get('startTime')?.invalid && availabilityForm.get('startTime')?.touched}"
+                                            data-bs-toggle="dropdown" placeholder="Select or type time" />
+                                        <ul class="dropdown-menu">
+                                            <li *ngFor="let time of timeSlots" (click)="setTime('startTime', time)">
+                                                <a class="dropdown-item">{{ time }}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="availabilityForm.get('startTime')?.touched && availabilityForm.get('startTime')?.hasError('required')">
+                                        Start Time is required.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="endTime">End Time <span class="red">*</span></label>
+                                    <div class="dropdown">
+                                        <input type="text" id="endTime"
+                                            class="form-control form-control-sm mt-1 dropdown-toggle"
+                                            formControlName="endTime"
+                                            [ngClass]="{'is-invalid': availabilityForm.get('endTime')?.invalid && availabilityForm.get('endTime')?.touched}"
+                                            data-bs-toggle="dropdown" placeholder="Select or type time" />
+                                        <ul class="dropdown-menu">
+                                            <li *ngFor="let time of timeSlots" (click)="setTime('endTime', time)">
+                                                <a class="dropdown-item">{{ time }}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="availabilityForm.get('endTime')?.touched && availabilityForm.get('endTime')?.hasError('required')">
+                                        End Time is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-4">
                                     <label for="frequency">Frequency <span class="red">*</span></label>
                                     <select id="frequency" formControlName="frequency"
                                         class="form-select form-select-sm cursor mt-1"
                                         [ngClass]="{'is-invalid': availabilityForm.get('frequency')?.invalid && availabilityForm.get('frequency')?.touched}">
-                                        <option value="" disabled selected>Select</option>
-                                        <option value="1">For a Week</option>
-                                        <option value="2">For a Month</option>
-                                        <!-- <option value="3">Two Month</option>
-                                        <option value="4">Three Month</option> -->
-                                        <!-- <option value="5"> Do Not Repeat</option> -->
+                                        <option value="6">Does not Repeat</option>
+                                        <option value="5">Daily</option>
+                                        <option value="1">Weekly on {{weekday}}</option>
+                                        <option value="3">Every Weekday</option>
+                                        <option value="4">Every Weekend</option>
                                     </select>
                                     <div class="invalid-feedback"
                                         *ngIf="availabilityForm.get('frequency')?.touched && availabilityForm.get('frequency')?.hasError('required')">
@@ -43,84 +80,17 @@
                             </div>
 
 
-                            <div class="row mt-2">
-                                <div class="col-6">
-                                    <label for="startTime">Start Time <span class="red">*</span></label>
-                                    <input type="time" id="startTime" formControlName="startTime"
-                                        class="form-control form-control-sm mt-1"
-                                        [ngClass]="{'is-invalid': availabilityForm.get('startTime')?.invalid && availabilityForm.get('startTime')?.touched}">
-                                    <div class="invalid-feedback"
-                                        *ngIf="availabilityForm.get('startTime')?.touched && availabilityForm.get('startTime')?.hasError('required')">
-                                        Start Time is required.
-                                    </div>
-                                  
-                                </div>
-
-                                <div class="col-6">
-                                    <label for="endTime">End Time <span class="red">*</span></label>
-                                    <input type="time" id="endTime" formControlName="endTime"
-                                        class="form-control form-control-sm mt-1"
-                                        [ngClass]="{'is-invalid': availabilityForm.get('endTime')?.invalid && availabilityForm.get('endTime')?.touched}">
-                                    <div class="invalid-feedback"
-                                        *ngIf="availabilityForm.get('endTime')?.touched && availabilityForm.get('endTime')?.hasError('required')">
-                                        End Time is required.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="weekdays-selector mt-5 py-4 px-4">
-                                <div class="row weekdays-label text-center">
-                                    <div class="col-6">
-                                        <h4 class="text-start mb-0">Week Days</h4>
-                                    </div>
-                                    <div class="col-6 d-flex justify-content-end mt-1">
-                                        <label class="select-all my-0 ">
-                                            <input class="pt-0 mt-0 mb-0" type="checkbox"
-                                                (change)="toggleSelectAll($event)" /> Select All
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="row d-flex weekdays  mt-3">
-                                    <div class="col-4">
-
-                                        <label><input type="checkbox" (change)="onCheckboxChange($event)" value="Monday"
-                                                [checked]="isChecked('Monday')" /> Monday</label>
-                                        <label><input type="checkbox" (change)="onCheckboxChange($event)"
-                                                value="Tuesday" [checked]="isChecked('Tuesday')" /> Tuesday</label>
-                                        <label><input type="checkbox" (change)="onCheckboxChange($event)"
-                                                value="Wednesday" [checked]="isChecked('Wednesday')" />
-                                            Wednesday</label>
-
-                                    </div>
-                                    <div class="col-4">
-
-                                        <label><input type="checkbox" (change)="onCheckboxChange($event)"
-                                                value="Thursday" [checked]="isChecked('Thursday')" /> Thursday</label>
-                                        <label><input type="checkbox" (change)="onCheckboxChange($event)" value="Friday"
-                                                [checked]="isChecked('Friday')" /> Friday</label>
-                                        <label><input type="checkbox" (change)="onCheckboxChange($event)"
-                                                value="Saturday" [checked]="isChecked('Saturday')" /> Saturday</label>
-
-
-
-
-                                    </div>
-                                    <div class="col-4">
-
-                                        <label><input type="checkbox" (change)="onCheckboxChange($event)" value="Sunday"
-                                                [checked]="isChecked('Sunday')" /> Sunday</label>
-                                    </div>
-                                </div>
-                                <div *ngIf="availabilityForm.get('weekDay').touched && availabilityForm.get('weekDay').invalid"
-                                    class="invalid">
-                                    Please select at least one weekday.
-                                </div>
-
-                            </div>
                             <div class="save-button px-2">
-                                <button (click)="saveAvailability()" class="btn mt-2 custom-padding">Save</button>
+                                <button type="button" class="btn mt-2 custom-padding" [disabled]="isLoading"
+                                    (click)="saveAvailability()">
+                                    <span *ngIf="!isLoading">Save</span>
+                                    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status"
+                                        aria-hidden="true"></span>
+                                    <span *ngIf="isLoading"> Saving...</span>
+                                </button>
                             </div>
+
+
                         </form>
                     </div>
                 </div>
@@ -128,44 +98,43 @@
             <div class="row w-100 " *ngIf="data != null">
                 <hr class="w-100 mt-2" style="box-shadow: 0 4px 12px  rgba(0, 0, 0, 0.1); height:2px ;">
 
-                <div class="col-7">
+                <div class="col-md-7">
 
                     <h2 class="mb-0"><b><u>Remove Availability</u></b> </h2>
                     <h3 class="mb-0 pt-0 "> Do you want to remove the availability of {{data.weekDay}}, {{ data.date |
                         date: 'MMMM d' }} ? </h3>
 
                 </div>
-                <div class="col-5 mt-5  px-2">
+                <div class="col-md-5 mt-5  px-2">
                     <button class="btn custom-padding cancelButton"
                         (click)="removeAvailability(data.date)">Remove</button>
                 </div>
             </div>
         </div>
-    </div>   
+    </div>
 </section>
 
 <div class=" content-wrapper1" *ngIf="bookedDetails">
-      <div class="row d-flex ">
-        <div class="col-10 ">
+    <div class="row d-flex ">
+        <div class="col-md-10 ">
             <h3 class="ms-0"> Appointment Details</h3>
         </div>
-        <div class="col-2 text-end">
+        <div class="col-md-2 text-end">
             <div class="close-btn" (click)="closePopup()"><i class="fa-solid fa-xmark"></i></div>
-        </div>           
-      </div>
-        <div class="row">
-            <div class="col-7">
-                <p><b> Patient Name </b> : {{ appointmentDetails.patientName }} </p>
-                <p><b> Date </b> : {{ appointmentDetails.date | date: 'dd MMMM yyyy' }} </p>
-                <p><b> Time </b> : {{ appointmentDetails.time }} </p>
-                <p><b> Gender </b> : {{ appointmentDetails.gender }} </p>
-                <p><b> Dob </b> : {{ appointmentDetails.dob | date: 'MM/dd/yyyy' }} ({{ age }} years)</p>
-                <p><b> Reason for Visit </b> : {{ appointmentDetails.reasonForVisit }} </p>
-            </div>  
-       
-        <div class="col-5  d-flex align-items-center justify-content-center">
-            <img src="../../../../assets/svg/flags/51950.jpg" alt="image" width="150px" height="150px">
-        </div>           
-    </div>           
+        </div>
     </div>
- 
+    <div class="row">
+        <div class="col-md-7">
+            <p><b> Patient Name </b> : {{ appointmentDetails.patientName }} </p>
+            <p><b> Date </b> : {{ appointmentDetails.date |date:'MM-dd-yyyy' }} </p>
+            <p><b> Time </b> : {{ appointmentDetails.time }} </p>
+            <p><b> Gender </b> : {{ appointmentDetails.gender }} </p>
+            <p><b> Dob </b> : {{ appointmentDetails.dob |date:'MM-dd-yyyy' }} ({{ age }} years)</p>
+            <p><b> Reason for Visit </b> : {{ appointmentDetails.reasonForVisit }} </p>
+        </div>
+
+        <div class="col-md-5  d-flex align-items-center justify-content-center">
+            <img src="../../../../assets/svg/flags/51950.jpg" alt="image" width="150px" height="150px">
+        </div>
+    </div>
+</div>

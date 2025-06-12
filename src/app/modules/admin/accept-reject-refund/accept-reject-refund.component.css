@@ -1,0 +1,35 @@
+.cancel{
+  background-color: #dc3545!important;
+  border-color: #dc3545!important;
+}
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+button{
+  width: 100%;
+}
+
+
+.btn .space {
+  visibility: visible; 
+}
+
+.btn.loading .space {
+  visibility: hidden; 
+}
+
+
+.btn .space {
+  transition: visibility 0.3s ease;
+}
+table thead th {
+  background: linear-gradient(#00b094, #008f78) !important;
+  color: white !important;
+}

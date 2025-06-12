@@ -1,0 +1,79 @@
+ 
+.carousel {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+ 
+.carousel-item {
+    padding: 20px;
+   
+}
+ 
+.date {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+ 
+.time-btn {
+    background-color: #00876F;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+ 
+.time-btn:hover {
+    background-color: #006f59;
+}
+ 
+ 
+ 
+ 
+.carousel-control-prev-icon {
+    background-color: #006f59;
+   height : 30px!important;
+   width : 30px!important;
+   margin-right : 6px!important;
+   border-radius : 17px!important;
+}
+ 
+.carousel-control-next-icon {
+    background-color: #006f59;
+   height : 30px!important;
+   width : 30px!important;
+   margin-left: 6px!important;
+   border-radius: 17px!important;
+}
+ 
+.carousel-control-prev, .carousel-control-next{
+    width: 40px;
+    height: 40px;
+    background-color: #006f59;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%);
+ 
+}
+.carousel-control-next.next-slide {
+    margin-right: -35px;
+}
+ 
+@media (min-width: 320px) and (max-width: 576px) {
+    .mb-0.bold {
+        font-size: 24px !important;
+    }
+    .date{
+        margin-top: 10px!important;
+    }
+}
+ 
+ 

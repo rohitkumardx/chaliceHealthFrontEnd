@@ -1,0 +1,36 @@
+<div class="content-wrapper1">
+    <div class="header d-flex">
+        <h2 class="mt-1 text-center mb-0">Reported Appointments</h2>
+        <div class="close-btn ms-auto " (click)="closeModal()"><i class="fa-solid fa-xmark fs-4 mt-2"></i></div>
+    </div>
+<hr class="mt-1 mb-3 ">
+
+    <div class="row">
+        <div
+            class="col-md-12"
+            *ngFor="let item of reportData; let i = index"
+            style="margin-bottom: 20px;"
+        >
+            <div class="card custom-card">
+                <div class="card-body">
+                    <p>
+                        <span class="field-label">Reported By: </span>
+                        <span class="field-value"> {{ item.providerName || '--------' }}</span>
+                    </p>
+                    <p>
+                        <span class="field-label">Reason For Visit: </span>
+                        <span class="field-value"> {{ item.reasonForVisit || '--------' }}</span>
+                    </p>
+                    <p>
+                        <span class="field-label">Report Name: </span>
+                        <span class="field-value"> {{ item.reportName || '--------' }}</span>
+                    </p>
+                    <p>
+                        <span class="field-label">Comments: </span>
+                        <span class="field-value"> {{ item.comment || '--------' }}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

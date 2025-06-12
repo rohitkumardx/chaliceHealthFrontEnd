@@ -1,0 +1,330 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="">
+      <div class="card shadow border-0 rounded mt-4 mb-4">
+        <div class="card1 p-4">
+          <h2 class="text-center mb-4">Document Selection</h2>
+          <p class="text-center mb-4">Please select one of the following options to proceed with your documents.</p>
+          <div class="form-group col-md-12">
+            <label for="formType">Select Form Type</label>
+            <select class="form-select form-select-sm cursor mt-1" [(ngModel)]="selectedFormType">
+              <option value="" disabled selected>Select a Form Type</option>
+              <option value="consent">Use Consent Form</option>
+              <option value="intake">Use Intake Form</option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-12" *ngIf="selectedFormType === 'consent'">
+            <label for="formChoice" class="font-weight-bold">Choose Consent Form</label>
+            <select class="form-select form-select-sm cursor mt-1" [(ngModel)]="selectedForm" name="formChoice"
+              (change)="getproviderConsentForm()">
+              <option value="" disabled selected>Select a Consent Form</option>
+              <option value="applicationForm">Use Application Consent Form</option>
+              <option value="uploadForm">Upload Your Own Consent Form</option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-12"  *ngIf="selectedFormType === 'intake'">
+            <label for="formChoice" class="font-weight-bold">Choose Intake Form</label>
+            <select class="form-select form-select-sm cursor mt-1" [(ngModel)]="selectedForm1" name="formChoice"
+              (change)="getproviderIntakeForm()">
+              <option value="" disabled selected>Select a Intake Form</option>
+              <option value                                                                                                                                                                                                                                                                                ="applicationIntakeForm">Use Application Intake Form</option>
+              <option value="uploadIntakeForm">Upload Your Own Intake Form</option>
+            </select>
+          </div>
+          <!-- <div *ngIf="oneFormAtTime || oneFormAtTime1">
+            <button class="btn offset-8 mb-2 mt-0" (click)="postActivateStatus()" >Activate</button>            
+          </div> -->
+          <section class="main-banner" *ngIf="selectedForm === 'applicationForm' && oneFormAtTime">
+            <form [formGroup]="applicationConsentForm" class="mt-1">
+
+            <div>
+              <button class="btn mb-2 mt-0" (click)="postActivateStatus(applicationConsentForm.value.id)" >Activate</button>            
+            </div>
+            <div class="wrapper d-flex">
+              <div class="content-wrapper mt-2">
+                <div class="document-card">
+                  <div class="px-1 py-1">
+                    <h1 class="text-center mb-2"><b>Application Consent Form</b></h1>
+                  </div>
+                  <div class="my-form">
+                      <div class="row mb-3">
+                        <!-- <div class="col-md-6">
+                          <label for="documentName">Document Name </label>
+                          <input type="text" id="documentName" readonly class="form-control form-control-md mt-1"
+                            formControlName="documentName"
+                            [ngClass]="{'is-invalid': applicationConsentForm.get('documentName')?.invalid && applicationConsentForm.get('documentName')?.touched}">
+                          <div class="invalid-feedback"
+                            *ngIf="applicationConsentForm.get('documentName')?.touched && applicationConsentForm.get('documentName')?.hasError('required')">
+                            Document Name is required.
+                          </div>
+                        </div> -->
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="fileName">Upload Document</label>
+                            <!-- File Input -->
+                            <input type="file" id="document" class="form-control form-control-md mt-1 small-input"
+                              (change)="onDocumentSelected($event)" />
+
+                          </div>
+
+                          <!-- Existing File Information -->
+                          <div *ngIf="!showEditTimeFile" style="margin-top: -4%">
+                            <div class="file-name" *ngIf="editDocument != null">
+                              <span class="cursor" (click)="downloadFile(editDocument.filePath)" >
+                                {{ editDocument.fileName }}
+                              </span>
+                              <!-- <a (click)="deleteDocument(editDocument)">
+                                <i class="fa-solid fa-trash ms-2 cursor" style="color: rgb(166, 7, 7);"></i>
+                              </a> -->
+                              <br />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3"></div>
+
+
+
+                      </div>
+
+                      <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-3"></div>
+                        <div class="col-3"></div>
+                        <div class="col-3">
+                          <!-- <button type="submit" class="btn mt-2 m-2 custom-padding"
+                            style="background-color: #00876F!important;" (click)="PostIntakeInformation()"> Save
+                          
+                          </button> -->
+                        </div>
+                      </div>                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          </section>
+
+
+          <section class="main-banner" *ngIf="selectedForm === 'uploadForm'&& oneFormAtTime">
+            <form [formGroup]="ConsentForm" class="mt-1">
+            <div>
+              <button class="btn mb-2 mt-0" (click)="postActivateStatus(ConsentForm.value.id)" >Activate</button>            
+            </div>
+            <div class="wrapper d-flex">
+              <div class="content-wrapper mt-2">
+                <div class="document-card">
+                  <div class="px-4 py-3">
+                    <h1 class="text-center mb-2"><b>Consent Form</b></h1>
+                  </div>
+
+                  <div class="my-form">
+                      <div class="row mb-3">
+                        
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="fileName">Upload Document</label>
+                            <!-- File Input -->
+                            <input type="file" id="document" class="form-control form-control-md mt-1 small-input"
+                              [ngClass]="{'is-invalid': ConsentForm.get('fileName')?.invalid && ConsentForm.get('fileName')?.touched}"
+                              (change)="onConsentDocumentSelected($event)" />
+                            <div class="invalid-feedback"
+                              *ngIf="ConsentForm.get('fileName')?.touched && ConsentForm.get('fileName')?.hasError('required')">
+                              Document is required.
+                            </div>
+                          </div>
+
+                          <!-- Existing File Information -->
+                          <div *ngIf="!showConsentEditTimeFile" style="margin-top: -4%">
+                            <div class="file-name" *ngIf="editConsentDocument != null">
+                              <span class="cursor" (click)="downloadConsentFile(editConsentDocument.filePath)">
+                                {{ editConsentDocument.fileName }}
+                              </span>
+                              <a (click)="deleteConsentDocument(editConsentDocument)">
+                                <i class="fa-solid fa-trash ms-2 cursor" style="color: rgb(166, 7, 7);"></i>
+                              </a>
+                              <br />
+                            </div>
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="col-md-3"></div>
+
+
+
+                      </div>
+
+                      <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-3"></div>
+                        <div class="col-3"></div>
+                        <div class="col-3">
+                          <button type="submit" class="btn mt-2 m-2 custom-padding" [disabled]="isLoading"
+                            style="background-color: #00876F!important;" (click)="PostConsentFormInformation()">
+                            <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i> <!-- Loader icon -->
+                            <span *ngIf="!isLoading" class="space">Save</span> <!-- Normal text when not loading -->
+                            <span *ngIf="isLoading" class="space">Saving...</span> <!-- Text when loading -->
+                          </button>
+                        </div>
+                      </div>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          </section>
+
+
+          <section class="main-banner" *ngIf="selectedForm1 === 'applicationIntakeForm'&& oneFormAtTime1">
+            <form [formGroup]="applicationIntakeForm" class="mt-1">
+            <div>
+              <button class="btn  mb-2 mt-0" (click)="postActivateStatus(applicationIntakeForm.value.id)" >Activate</button>            
+            </div>
+            <div class="wrapper d-flex">
+              <div class="content-wrapper mt-2">
+                <div class="document-card">
+                  <div class="px-1 py-1">
+                    <h1 class="text-center mb-2"><b>Application Intake Form</b></h1>
+                  </div>
+
+                  <div class="my-form">
+                    
+                      <div class="row mb-3">
+                        <!-- <div class="col-md-6">
+                          <label for="documentName">Document Name </label>
+                          <input type="text" id="documentName" readonly class="form-control form-control-md mt-1"
+                            formControlName="documentName"
+                            [ngClass]="{'is-invalid': applicationIntakeForm.get('documentName')?.invalid && applicationIntakeForm.get('documentName')?.touched}">
+                          <div class="invalid-feedback"
+                            *ngIf="applicationIntakeForm.get('documentName')?.touched && applicationIntakeForm.get('documentName')?.hasError('required')">
+                            Document Name is required.
+                          </div>
+                        </div> -->
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="fileName">Upload Document</label>
+                            <!-- File Input -->
+                            <input type="file" id="document" class="form-control form-control-md mt-1 small-input"
+                              [ngClass]="{'is-invalid': applicationIntakeForm.get('fileName')?.invalid && applicationIntakeForm.get('fileName')?.touched}"
+                              (change)="onDocumentSelected($event)" />
+                            <div class="invalid-feedback"
+                              *ngIf="applicationIntakeForm.get('fileName')?.touched && applicationIntakeForm.get('fileName')?.hasError('required')">
+                              Document is required.
+                            </div>
+                          </div>
+
+                          <!-- Existing File Information -->
+                          <div *ngIf="!showEditTimeFile" style="margin-top: -4%">
+                            <div class="file-name" *ngIf="editDocument != null">
+                              <span class="cursor" (click)="downloadFile(editDocument.filePath)">
+                                {{ editDocument.fileName }}
+                              </span>
+                              <!-- <a (click)="deleteDocument(editDocument)">
+                                <i class="fa-solid fa-trash ms-2 cursor" style="color: rgb(166, 7, 7);"></i>
+                              </a> -->
+                              <br />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-3"></div>
+                        <div class="col-3"></div>
+                        <div class="col-3">
+                          
+                        </div>
+                      </div>      
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+
+          <section class="main-banner" *ngIf="selectedForm1 === 'uploadIntakeForm'&& oneFormAtTime1">
+            <form [formGroup]="IntakeForm" class="mt-1">
+            <div>
+              <button class="btn mb-2 mt-0" (click)="postActivateStatus(IntakeForm.value.id)" >Activate</button>            
+            </div>
+            <div class="wrapper d-flex">
+              <div class="content-wrapper mt-2">
+                <div class="document-card">
+                  <div class="px-4 py-3">
+                    <h1 class="text-center mb-2"><b>Intake Form</b></h1>
+                  </div>
+                  <div class="my-form">
+                      <div class="row mb-3">
+                        <!-- <div class="col-md-6">
+                          <label for="documentName">Document Name </label>
+                          <input type="text" id="documentName" class="form-control form-control-md mt-1"
+                            formControlName="documentName"
+                            [ngClass]="{'is-invalid': IntakeForm.get('documentName')?.invalid && IntakeForm.get('documentName')?.touched}">
+                          <div class="invalid-feedback"
+                            *ngIf="IntakeForm.get('documentName')?.touched && IntakeForm.get('documentName')?.hasError('required')">
+                            Document Name is required.
+                          </div>
+                        </div> -->
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="fileName">Upload Document</label>
+                            <!-- File Input -->
+                            <input type="file" id="document" class="form-control form-control-md mt-1 small-input"
+                              [ngClass]="{'is-invalid': IntakeForm.get('fileName')?.invalid && IntakeForm.get('fileName')?.touched}"
+                              (change)="onDocumentSelected($event)" />
+                            <div class="invalid-feedback"
+                              *ngIf="IntakeForm.get('fileName')?.touched && IntakeForm.get('fileName')?.hasError('required')">
+                              Document is required.
+                            </div>
+                          </div>
+
+                          <!-- Existing File Information -->
+                          <div *ngIf="!showEditTimeFile1" style="margin-top: -4%">
+                            <div class="file-name" *ngIf="editDocument1 != null">
+                              <span class="cursor" (click)="downloadFile1(editDocument1.filePath)">
+                                {{ editDocument1.fileName }}
+                              </span>
+                              <a (click)="deleteDocument1(editDocument1)">
+                                <i class="fa-solid fa-trash ms-2 cursor" style="color: rgb(166, 7, 7);"></i>
+                              </a>
+                              <br/>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-3"></div>
+                        <div class="col-3"></div>
+                        <div class="col-3"></div>
+                        <div class="col-3">
+                          <button type="submit" class="btn mt-2 m-2 custom-padding"
+                            style="background-color: #00876F!important;" [disabled]="isLoading1"
+                            (click)="PostIntakeInformation()">
+                            <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading1}"></i>
+                            <span *ngIf="!isLoading1" class="space">Save</span>
+                            <span *ngIf="isLoading1" class="space">Saving...</span>
+                          </button>
+                        </div>
+                      </div>                  
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </form>
+         </section>
+       </div>
+     </div>
+    </div>
+  </div>
+</div>

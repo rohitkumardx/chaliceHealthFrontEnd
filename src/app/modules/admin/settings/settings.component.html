@@ -1,0 +1,56 @@
+<section class="main-banner px-4 ">
+    <div class="">
+        <div class="row justify-content-center">
+       
+                <div class="content-wrapper border">
+                    <h4 class="text-center mb-4" style="font-weight: 500;">Setup Payment Percentage</h4>
+                    <p style="font-weight: 500;">Setup the platform fees deduction for consultation:</p>
+                   <div class="row">
+                    <div class="col-md-3 col-12">
+                        <label for="percentage-input">In Percentage (%)</label>
+                        <input type="number" id="percentage-input" placeholder="Enter percentage value"
+                            [(ngModel)]="value" (blur)="checkValidation()" [class.is-invalid]="showError && !value">
+                        <!-- Validation message -->
+                        <div *ngIf="showError && !value" class="text-danger mt-1">
+                            Please enter a percentage value.
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <label for="provider-percentage">ProviderFee (In Percentage)</label>
+                        <input type="number" id="provider-percentage" 
+                            [(ngModel)]="providerPercentage" 
+                            disabled>
+                        <!-- Validation message -->
+                       
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <div><b>Payment to Provider</b></div>
+                        <select class="form-select form-select-sm cursor mt-2 " style="padding:7px 7px ;" (change)="onPaymentOptionChange($event)">
+                            <!-- Default "Select" option when no selection is made -->
+                            <option  value="" disabled [selected]="!selectedPaymentValue">
+                              Select
+                            </option>
+                          
+                            <!-- Dropdown options -->
+                            <option *ngFor="let option of paymentOptions" [value]="option.value" [selected]="option.value === selectedPaymentValue">
+                              {{ option.label }}
+                            </option>
+                          </select>
+                    </div>
+                    <div class="col-md-2 col-12 pt-1">
+                        <button class="mt-4" type="button" (click)="submit()">Submit</button>
+                    </div>
+                   </div>
+                 
+                   
+                    <div class="note-container">
+                        <p class="note-content">
+                            <!-- <span class="note-highlight"><sup>*</sup> 10% of the consultation amount</span> will be charged as platform fees. 
+                             Set a percentage that works best for you and the platform.<sup>*</sup> (change)="calculatePercentage(data.totalAmount, $event)"-->
+                        </p>
+                    </div>
+                </div>
+      
+        </div>
+    </div>
+</section>

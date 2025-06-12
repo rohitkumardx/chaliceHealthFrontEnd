@@ -7,7 +7,7 @@ import { PatientInformationComponent } from './patient-information/patient-infor
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -29,6 +29,32 @@ import { PatientClinicalDashboardComponent } from './patient-clinical-dashboard/
 import { ViewsoapnotesComponent } from './viewsoapnotes/viewsoapnotes.component';
 import { MessageListComponent } from './message-list/message-list.component';
 import { AddReviewComponent } from './add-review/add-review.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AnnouncementPopupComponent } from './announcement-popup/announcement-popup.component';
+import { CancelAppointmentModelComponent } from './cancel-appointment-model/cancel-appointment-model.component';
+import { ComplaintsComponent } from './complaints/complaints.component';
+import { ComplaintModalComponent } from './complaint-modal/complaint-modal.component';
+import { SettingsComponent } from './settings/settings.component';
+import { EditSlotModelComponent } from './edit-slot-model/edit-slot-model.component';
+import { MessageComplaintComponent } from '../provider/message-complaint/message-complaint.component';
+import { GroupMessageComponent } from './group-message/group-message.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { PatientMessageComplaintComponent } from './patient-message-complaint/patient-message-complaint.component';
+import { ProviderDetailComponent } from './provider-detail/provider-detail.component';
+import { PatientFaqsComponent } from './patient-faqs/patient-faqs.component';
+import { SupportComponent } from './support/support.component';
+import { FollowUpDoctorsComponent } from './follow-up-doctors/follow-up-doctors.component';
+import { RatingComponent } from './rating/rating.component';
+import { NotificationAppointmentReminderComponent } from './notification-appointment-reminder/notification-appointment-reminder.component';
+import { NotificationMedicationReminderComponent } from './notification-medication-reminder/notification-medication-reminder.component';
+import { NotificationAlertsBlogsComponent } from './notification-alerts-blogs/notification-alerts-blogs.component';
+import { BillingPaymentsComponent } from './billing-payments/billing-payments.component';
+import { PatientNotificationComponent } from './patient-notification/patient-notification.component';
+import { MessagePopUpComponent } from './message-pop-up/message-pop-up.component';
+import { CancellationPolicyComponent } from './cancellation-policy/cancellation-policy.component';
+
 
 
 
@@ -49,7 +75,29 @@ import { AddReviewComponent } from './add-review/add-review.component';
     PatientClinicalDashboardComponent,
     ViewsoapnotesComponent,
     MessageListComponent,
-    AddReviewComponent
+    AddReviewComponent,
+    DashboardComponent,
+    AnnouncementPopupComponent,
+    CancelAppointmentModelComponent,
+    ComplaintsComponent,
+    ComplaintModalComponent,
+    SettingsComponent,
+    EditSlotModelComponent,
+    MessageComplaintComponent,
+    GroupMessageComponent,
+    PatientMessageComplaintComponent,
+    ProviderDetailComponent,
+    PatientFaqsComponent,
+    SupportComponent,
+    FollowUpDoctorsComponent,
+    RatingComponent,
+    NotificationAppointmentReminderComponent,
+    NotificationMedicationReminderComponent,
+    NotificationAlertsBlogsComponent,
+    BillingPaymentsComponent,
+    PatientNotificationComponent,
+    MessagePopUpComponent,
+    CancellationPolicyComponent
 
   ],
   providers :[DatePipe],
@@ -69,8 +117,13 @@ import { AddReviewComponent } from './add-review/add-review.component';
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    SharedModule
-
+    SharedModule,
+    MatProgressSpinnerModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+    
+    
   ]
 })
 export class PatientModule { }

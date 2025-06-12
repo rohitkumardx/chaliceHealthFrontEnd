@@ -1,12 +1,6 @@
 
   
-  .close-btn {
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-  
-  }
+ 
   
   input[type="checkbox"] {
     margin-right: 5px;
@@ -30,7 +24,6 @@
   max-width: 100%;
   width: 100%;
   background-color: #fff;
-  padding: 40px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -47,9 +40,7 @@ p {
     margin: 10px 0;
     font-weight:400;
 }
-.content-wrapper1 b{
-  font-weight:500;
-}
+
 .close-btn {
     background: none;
     border: none;

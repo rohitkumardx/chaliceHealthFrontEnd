@@ -1,0 +1,83 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <h3>Complaints</h3>
+                <div class="table-responsive">
+                    <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                        <div class="col-3 me-2">
+                            <!-- <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                                (input)="getClinicProvidersList()" class="form-control"> -->
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-primary m-0" >
+                                Add Provider
+                            </button>
+                        </div>
+                    </div>                   
+                    <table class="table">
+                        <thead>
+                            <tr>                               
+                                <th scope="col">Patient Name</th>
+                                <th scope="col">Appointment Date & Time</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Profiles</th>
+                                <th scope="col">Reason</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td> David Smith  </td>
+                                <td> 12-02-2025 </td>
+                                <td> </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>                                
+                                <td>
+                                    <span class="icon-edit" title="Edit" style="color: #00876f; font-size: medium">
+                                        <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                            ></i>
+                                    </span>
+
+                                    <span class="icon-delete" title="Delete"
+                                        style="color: #dc3545; font-size: medium">
+                                        <i class="fa-solid fa-trash cursor" ></i>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <!-- <tr >
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr> -->
+
+                            <!-- <tr *ngIf="providerList.length === 0 && !loading">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Providers Found</span>
+                                            <p class="no-data-description">It looks like there are no providers at the
+                                                moment.
+                                                Please add your providers!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                    <!-- <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                        <app-pagination [paginator]="paginator" (onPageChange)="getClinicProvidersList()" />
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

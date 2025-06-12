@@ -1,0 +1,30 @@
+<div class="content-wrapper1 p-4">
+    <div class="row">
+        <div class="col-9">
+            <div>
+                <h2 class="ms-0 mb-0">Notification Details</h2>
+            </div>
+        </div>
+        <div class="col mt-2 text-end">
+            <span>
+                <i class="fa fa-times cursor" (click)="closePopup()"></i> <!-- Close icon (X) -->
+            </span>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6 mt-1"><b>Patient Name</b>: {{data?.patientName}}</div>
+        <div class="col-sm-6 mt-1"><b>Provider Name</b>: {{data?.providerName}}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 mt-1"><b>Paid Amount</b>: {{data?.totalAmount}}</div>
+        <div class="col-sm-6 mt-1"><b>Payment Status</b>: {{data?.paymentStatus}}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6 mt-1"><b>Payment Date</b>: {{data?.paymentDate | date:'MM-dd-yyyy'}}</div>
+        <div class="col-sm-6 mt-1"><b>Refundable Amount</b>: {{data?.refundAmount}}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 mt-1"><b>Cancellation Reason</b>: {{data?.cancellationReason}}</div>
+    </div>
+</div>

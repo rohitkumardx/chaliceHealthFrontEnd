@@ -14,6 +14,7 @@
     height:40rem!important;
     background-color: #fff;
     padding: 40px;
+    padding-top: 0% !important;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
@@ -300,3 +301,40 @@
     white-space: nowrap;
   }
   
+  ::ng-deep .custom-modal .modal-dialog {
+    max-width: 50%;
+    width: auto;
+  }
+
+  @media (max-width: 768px) {
+    .filter-btn {
+      width: 100%;
+    }
+  
+    .d-flex.flex-wrap.gap-3 {
+      gap: 1rem;
+    }
+  
+    .d-grid.gap-2.d-md-flex {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+  .filter-btn {
+    min-width: 100px;
+    text-align: center;
+  }
+ 
+
+  @media (max-width: 576px) {
+    .table-responsive {
+      max-height: 345px!important;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      overflow-y: auto;
+    }
+    ::ng-deep .custom-modal .modal-dialog {
+      max-width: 100%;
+      width: auto;
+    }
+  }

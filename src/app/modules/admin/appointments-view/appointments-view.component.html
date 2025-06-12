@@ -1,0 +1,88 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <!-- <h3 class=" mb-2"></h3> -->
+                <div class="header">
+                    <h1 class="mt-2 text-center mb-0">Appointment List</h1>
+                    <div class="close-btn" (click)="modalClose()"><i class="fa-solid fa-xmark"></i></div>
+                </div>
+
+
+
+                <div class="table-responsive custom-scroll">
+                    <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                        <!-- <div class="col-3 me-2">
+                            <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code/Name"
+                                (input)="getPatientList()" class="form-control bg-white">
+                        </div> -->
+                        <div>
+                          
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">Provider Name</th>
+                                <th scope="col">Patient Code</th>
+                                <th scope="col">Appointment Type</th>
+                                <th scope="col" style="min-width: 150px;">Appointment Date</th>
+                                <th scope="col">Reason For Visit</th> 
+                                <th scope="col" style="min-width: 150px;">Address</th>
+                            </tr>
+                        </thead>
+                         <tbody>
+                            <tr *ngFor="let item of appointmentList; let i = index">
+                                <td> {{item.providerName}} </td>
+                                <td> {{item.patientUniqueId}} </td>
+                                <td>
+                                    <ng-container [ngSwitch]="item.meetingType">
+                                      <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2" style="font-size: 15px; color: #00876ec8;"></i>
+                                      <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                                      <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2" style="color: #00876ec8;"></i>
+                                    </ng-container>
+                                    {{ formatMeetingType(item.meetingType) }}
+                                  </td>
+                                <!-- <td> {{formatMeetingType(item.meetingType)}} </td> -->
+                                <td> {{item.appointmentDateTime | date:'MM-dd-yyyy' }}<br>
+                                    {{item.appointmentDateTime | date:'hh:mm a' }} </td>
+                                <td> {{item.reasonForVisit}} </td>
+                                <td> {{item.address}} </td>
+                              
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="appointmentList.length === 0 && !loading">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Appointments Found</span>
+                                            <p class="no-data-description">It looks like there are no appointments at the
+                                                moment.
+                                                Please check back later!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody> 
+                    </table>
+                    <!-- <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                        <app-pagination [paginator]="paginator" (onPageChange)="getPatientList()" />
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,251 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+      <div class="content-wrapper">
+          <div class="document-card ">
+      
+                  <!-- <span class="close-icon" (click)="cancel()">&times;</span> -->
+                  <h1><b>My Profile</b></h1>
+                  <form [formGroup]="myProfileForm" class="mt-2">
+                      <div class="row">
+
+                          <!-- First Name Field -->
+                          <div class="col-sm-4">
+                            <label for="firstName">First Name<span class="red">*</span>  </label>
+                            <input type="text" id="firstName" placeholder="John" class="form-control form-control-sm mt-1"
+                              formControlName="firstName"
+                              [ngClass]="{'is-invalid': myProfileForm.get('firstName')?.invalid && myProfileForm.get('firstName')?.touched}">
+                              <div class="invalid-feedback"
+                              *ngIf="myProfileForm.get('firstName')?.touched && myProfileForm.get('firstName')?.hasError('required')">
+                              First Name is required.
+                            </div>
+                            
+                          </div>
+    
+                          <!-- Middle Name Field -->
+                          <div class="col-sm-4">
+                            <label for="middleName">Middle Name</label>
+                            <input type="text" id="middleName" class="form-control form-control-sm mt-1"
+                              formControlName="middleName"
+                              [ngClass]="{'is-invalid': myProfileForm.get('middleName')?.invalid && myProfileForm.get('middleName')?.touched}">
+                          </div>
+    
+                          <!-- Last Name Field -->
+                          <div class="col-sm-4">
+                            <label for="lastName">Last Name <span class="red">*</span> </label>
+                            <input type="text" id="lastName" placeholder="Doe" class="form-control form-control-sm mt-1"
+                              formControlName="lastName"
+                              [ngClass]="{'is-invalid': myProfileForm.get('lastName')?.invalid && myProfileForm.get('lastName')?.touched}">
+                              <div class="invalid-feedback"
+                              *ngIf="myProfileForm.get('lastName')?.touched && myProfileForm.get('lastName')?.hasError('required')">
+                              Last Name is required.
+                            </div>
+                           
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-sm-4">
+                              <div class="form-group">
+                                <label for="fileName">Profile Picture</label>
+                                <input type="file" id="profilePicture" class="form-control form-control-sm mt-1 small-input"
+                                  formControlName="profilePicture"
+                                  [ngClass]="{'is-invalid': myProfileForm.get('profilePicture')?.invalid && myProfileForm.get('profilePicture')?.touched}"
+                                  (change)="onProfileSelected($event)">
+                                <div class="invalid-feedback"
+                                  *ngIf="myProfileForm.get('profilePicture')?.touched && myProfileForm.get('profilePicture')?.hasError('required')">
+                                  Profile Picture is required.
+                                </div>
+                              </div>
+                              <div *ngIf="!showEditTimeFile" style="margin-top : -4%;  word-wrap: break-word;">
+                                <div class="file-name" *ngIf="editProfilePicture != null">
+                                  <span class="cursor"
+                                    (click)="downloadFile(editProfilePicture.filePath)">{{editProfilePicture.fileName}}</span>
+                                  <a (click)="deleteImage(editProfilePicture)"> <i class="fa-solid fa-trash ms-2 cursor"
+                                      style="color:rgb(166, 7, 7);"></i></a><br>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                              <label>Email<span class="red">*</span> </label>
+                              <input class="form-control form-control-sm mt-1" type="text" aria-label="default input example" readonly
+                                  formControlName="email"
+                                  [ngClass]="{'is-invalid':myProfileForm.get('email')?.invalid && myProfileForm.get('email')?.touched}">
+                              <div class="invalid-feedback"
+                                  *ngIf="myProfileForm.get('email')?.touched && myProfileForm.get('email')?.hasError('required')">
+                                  Email is required.
+                              </div>
+                          </div>
+    
+                        
+                          
+    
+    
+    
+                          <!-- Phone Number Field -->
+                          <div class="col-sm-4">
+                            <label>Phone Number </label>
+                            <input class="form-control form-control-sm mt-1" type="text" placeholder="XXX-XXX-XXXX"
+                              formControlName="phoneNumber" (input)="formatPhoneNumber($event)" maxlength="14"
+                              [ngClass]="{'is-invalid': myProfileForm.get('phoneNumber')?.invalid &&  myProfileForm.get('phoneNumber')?.touched}">
+                            
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <label for="address">Address <span class="red">*</span></label>
+                            <textarea id="address" class="form-control" formControlName="address" (input)="onAddressChange($event)"
+                              [ngClass]="{'is-invalid': myProfileForm.get('address')?.invalid && myProfileForm.get('address')?.touched}"></textarea>
+                            <ul *ngIf="suggestions.length">
+            
+                              <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+                                {{ suggestion.address }}
+                              </li>
+                            </ul>
+                            <div class="invalid-feedback"
+                              *ngIf="myProfileForm.get('address')?.touched && myProfileForm.get('address')?.hasError('required')">
+                              Address is required.
+                            </div>
+                          </div>
+                        </div>
+    
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <label for="city">City<span class="red">*</span> </label>
+                            <input type="text" id="city" placeholder="" class="form-control form-control-sm mt-1"
+                              formControlName="city"
+                              [ngClass]="{'is-invalid': myProfileForm.get('city')?.invalid && myProfileForm.get('city')?.touched}">
+                              <div class="invalid-feedback"
+                              *ngIf="myProfileForm.get('city')?.touched && myProfileForm.get('city')?.hasError('required')">
+                              City is required.
+                            </div>
+                            
+                          </div>
+                          <div class="col-sm-4">
+                            <label for="stateId">State<span class="red">*</span> </label>
+                            <select id="stateId" class="form-select form-select-sm cursor mt-1" formControlName="stateId"
+                              [ngClass]="{'is-invalid': myProfileForm.get('stateId')?.invalid && myProfileForm.get('stateId')?.touched}">
+                              <option value="" disabled>Select</option>
+                              <option *ngFor="let item of states" [value]="item.id">{{ item.name }}</option>
+                            </select>
+                            <div class="invalid-feedback"
+                            *ngIf="myProfileForm.get('stateId')?.touched && myProfileForm.get('stateId')?.hasError('required')">
+                            State is required.
+                          </div>
+                           
+                          </div>
+                         
+                          <div class="col-sm-4">
+                            <label for="zipCode">ZIP/ Postal Code<span class="red">*</span> </label>
+                            <input type="number" id="zipCode" placeholder="" class="form-control form-control-sm mt-1"
+                              formControlName="zipCode"
+                              (input)="limitZipCodeLength($event)"
+                              [ngClass]="{'is-invalid': myProfileForm.get('zipCode')?.invalid && myProfileForm.get('zipCode')?.touched}">
+                            
+                            <div class="invalid-feedback" *ngIf="myProfileForm.get('zipCode')?.touched && myProfileForm.get('zipCode')?.hasError('required')">
+                              ZIP/ Postal Code is required.
+                            </div>
+                            <div class="invalid-feedback" *ngIf="myProfileForm.get('zipCode')?.touched && myProfileForm.get('zipCode')?.hasError('pattern')">
+                              ZIP/ Postal Code must be exactly 5 digits.
+                            </div>
+                          </div>
+                          
+    
+                        </div>
+                      <div class="row">
+                          <div class="col-sm-4">
+                              <label for="credentials">Credentials/Qualifications<span class="red">*</span></label>
+                              <select class="form-select form-select-sm cursor mt-1" formControlName="qualificationId"
+                                  [ngClass]="{'is-invalid': myProfileForm.get('qualificationId')?.invalid &&  myProfileForm.get('qualificationId')?.touched}">
+                                  <option value="" disabled selected>Select</option>
+                                  <option [value]="item.id" *ngFor="let item of qualifications">{{item.name}}</option>
+                              </select>
+                              <div class="invalid-feedback"
+                              *ngIf="myProfileForm.get('qualificationId')?.touched && myProfileForm.get('qualificationId')?.hasError('required')">
+                              Credentials/Qualifications is required.
+                            </div>
+                              
+                          </div> 
+                        <div class="col-sm-4">
+  <label>Specialty</label>
+  <div class="custom-dropdown position-relative">
+    <button
+      type="button"
+      class="form-select text-start form-select-sm dp-pd-l mt-1"
+      (click)="toggleDropdown()"
+      [ngClass]="{
+        'is-invalid': myProfileForm.get('specialtyIds')?.invalid &&
+                     myProfileForm.get('specialtyIds')?.touched
+      }"
+    >
+      {{ selectedSpecialityItems.length > 0 ? selectedSpecialityItems.join(', ') : 'Select' }}
+    </button>
+
+    <ul
+      class="dropdown-menu mt-0 p-2"
+      *ngIf="isDropdownOpen"
+   
+      (click)="$event.stopPropagation()"
+    >
+      <li *ngFor="let item of speciality">
+        <label class="dropdown-item">
+          <input
+            type="checkbox"
+            [value]="item.id"
+            (change)="checkboxChangeOfSpeciality($event, item.name, item.id)"
+            [checked]="checkedSpecialityIds.includes(item.id)"
+          />
+          {{ item.name }}
+        </label>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <label for="phoneNumber">Telehealth Price (in $)</label>
+                          <input type="number" id="phoneNumber" class="form-control form-control-sm mt-1"
+                              formControlName="telehealthVisitPrice"
+                              [ngClass]="{'is-invalid':myProfileForm.get('telehealthVisitPrice')?.invalid && myProfileForm.get('telehealthVisitPrice')?.touched}"
+                              [value]="myProfileForm.get('telehealthVisitPrice')?.value">
+                          
+                      </div>
+
+                      <div class="col-sm-4">
+                        <label for="phoneNumber">Home Visit Price (in $)</label>
+                        <input type="number" id="number" class="form-control form-control-sm mt-1"
+                            formControlName="inHomeVisitPrice"
+                            [ngClass]="{'is-invalid':myProfileForm.get('inHomeVisitPrice')?.invalid && myProfileForm.get('inHomeVisitPrice')?.touched}"
+                            [value]="myProfileForm.get('inHomeVisitPrice')?.value">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="phoneNumber">Office Visit Price (in $)</label>
+                        <input type="number" id="phoneNumber" class="form-control form-control-sm mt-1"
+                            formControlName="officeVisitPrice"
+                            [ngClass]="{'is-invalid':myProfileForm.get('officeVisitPrice')?.invalid && myProfileForm.get('price')?.touched}"
+                            [value]="myProfileForm.get('officeVisitPrice')?.value">
+                    </div>
+                      </div>
+                      <div class="row p-2 d-flex">
+                        <div class="col-sm-12 d-flex justify-content-end pt-2">
+                          <button type="button" class="btn custom-padding" 
+                                  style="background-color: #00876f;" 
+                                  (click)="postProviderProfile()" 
+                                  [disabled]="loading">
+                            <span *ngIf="loading">
+                              <i class="fa fa-spinner fa-spin"></i> Saving...
+                            </span>
+                            <span *ngIf="!loading">Save</span>
+                          </button>
+                        </div>
+                         
+                      </div>
+                  </form>
+          </div>
+      </div>
+  </div>
+</section>

@@ -5,14 +5,19 @@
   padding: 20px;
   transition: transform 0.3s, box-shadow 0.3s;
 }
+
+
+
 .profile-card .profile-image {
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   border: 1px solid #878787;
   object-fit: cover;
   margin-bottom: 10px;
 }
+
+
 .profile-card h5 {
   font-size: 1.3rem;
   font-weight: 500;
@@ -20,7 +25,7 @@
   margin: 10px 0 0;
 }
 .profile-card p {
-  margin-bottom: 10px;
+  margin-bottom: 4px;
   font-size: 0.95rem;
   color: #555;
 }
@@ -48,7 +53,6 @@ strong{
   font-size: 1.3rem;
   font-weight: 500;
   color: #333333;
-  margin-bottom: 20px;
   text-align: center;
 }
 
@@ -68,6 +72,11 @@ strong{
   font-weight: 500;
   color: #007bff;
 }
+.border-left-custom {
+  border-left: 1px solid #ddd; 
+  padding-left: 15px; 
+}
+
 
 hr {
   border-color: #e0e0e0;
@@ -110,7 +119,7 @@ h3 {
   display: flex;
   justify-content:space-between;
   align-items: center;
-  /* margin-bottom: 20px; */
+ 
 }
 
 .close-btn {
@@ -128,10 +137,71 @@ h3 {
   font-size: 1rem;
 }
 
+.text-muted strong {
+  color: black;
+
+}
+
 .table-striped tbody tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 
 .table-responsive {
   overflow-x: auto;
+}
+.profile-image {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%; 
+  object-fit: cover;
+}
+
+.profile-icon {
+  font-size: 90px;
+  color: #ccc; 
+}
+.scroll-container {
+ overflow-x: hidden !important;
+ overflow-y: auto !important;
+ scrollbar-width: thin;
+}
+.custom-scroll::-webkit-scrollbar {
+  width: 6px; 
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 4px; 
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+@media (max-width: 767px) {
+  .profile-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+
+  .vital-info-card, .medical-history {
+    padding: 1rem;
+  }
+
+  .appointment-container {
+    max-height: 200px;
+  }
+
+  .header h3 {
+    font-size: 1.25rem;
+  }
+
+  .contact-info {
+    font-size: 0.95rem;
+  }
 }

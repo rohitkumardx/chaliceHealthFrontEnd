@@ -1,0 +1,66 @@
+/* Style the select box */
+.custom-dropdown {
+    width: 100%;
+}
+
+
+
+.custom-dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-up {
+    top: auto;
+    bottom: 100%;
+    margin-bottom: 10px;
+}
+
+
+.dropdown-menu {
+    position: fixed;
+    top: auto;
+    bottom: 100%;
+    margin-bottom: 10px;
+    z-index: 1050;
+    max-height: 450px;
+    overflow-y: auto;
+    background-color: #f8f8f8;
+    border: 1px solid black;
+}
+
+
+
+.dropdown-menu li {
+    color: black;
+    list-style: none;
+    padding: 3px 3px;
+    cursor: pointer;
+}
+
+.dropdown-menu li label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-menu li label input {
+    margin-right: 6px;
+}
+
+.dropdown-menu li:hover {
+
+    background-color: skyblue;
+}
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  
+  }
+
+  .header {
+    display: flex;
+    justify-content:space-between;
+    margin-bottom: 10px;
+  }

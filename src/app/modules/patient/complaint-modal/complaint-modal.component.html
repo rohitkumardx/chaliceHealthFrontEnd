@@ -1,0 +1,56 @@
+<div class="container my-2 pb-3">
+    <div class="header d-flex">
+        <h2 class=" text-center mb-0">Complaint Detail</h2>
+        <div class="close-btn ms-auto fs-4" (click)="modalClose()"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+    <hr class="mt-2 mb-3">
+    <div class="row">
+        <div class="col-md-6 mt-2"><b>Patient Name</b>: {{bookingData?.patientName || '--------'}}</div>
+        <div class="col-md-6 mt-2"><b>Provider Name</b>: {{bookingData?.providerName || '--------'}}</div>
+        <div class="col-md-6 mt-2"><b>Appointment Date</b>: {{bookingData?.appointmentDate | date:'MM-dd-yyyy'}}</div>
+        <div class="col-md-6 mt-2"><b>Appointment Time</b>: {{formatTime(bookingData?.startTime) || '--------'}}</div>
+        <div class="col-md-6 mt-2"><b>Appointment Type</b>: {{ formatMeetingType(bookingData.meetingType) || '--------'
+            }} </div>
+        <div class="col-md-6 mt-2" *ngIf="bookingData.reason"><b>Reason</b>: {{ bookingData?.reason || '--------' }}
+
+        </div>
+
+        <form [formGroup]="complaintForm">
+            <div class="row mt-3">
+                <textarea id="reason" *ngIf="!this.bookingData.reason" class="form-control form-control-sm mt-1"
+                    formControlName="reason" [value]="complaintForm.get('reason')?.value"
+                    [ngClass]="{'is-invalid': complaintForm.get('reason')?.invalid && complaintForm.get('reason')?.touched}"
+                    placeholder="Enter the reason for complaint"></textarea>
+                <div class="invalid-feedback"
+                    *ngIf="complaintForm.get('reason')?.touched && complaintForm.get('reason')?.hasError('required')">
+                    Reason is required.
+                </div>
+                <div class="invalid-feedback"
+                    *ngIf="complaintForm.get('reason')?.touched && complaintForm.get('reason')?.hasError('pattern')">
+                    Reason for complaint cannot be empty or only spaces.
+                </div>
+
+            </div>
+
+            <div class="row  px-0 ">
+                <div class="col-sm-5"></div>
+                <div class="mt-3 col-sm-7 px-0">
+                    <button type="button" class="btn  custom-padding cancelButton"
+                        (click)="modalClose()">Cancel</button>
+
+                    <button type="button" class="btn me-2  custom-padding " *ngIf="!this.bookingData.reason"
+                        (click)="confirmComplaintAppointment()"><span class="spinner-border text-light small-spinner"
+                            role="status" *ngIf="loading">
+                            <span class="visually-hidden">Loading...</span>
+                        </span>Save
+                    </button>
+
+                </div>
+            </div>
+
+
+
+        </form>
+
+
+    </div>

@@ -1,0 +1,16 @@
+
+
+<div *ngIf="show" class="popup-notification">
+  <div class="popup-card">
+    <button class="close-btn" (click)="closePopup()">×</button>
+<!-- 
+    <div class="icon-wrapper">
+      <img src="../../../../assets/svg/icons/message.png" alt="message" />
+    
+    </div> -->
+
+    <h2 class="title">Notification</h2>
+      <p class="subtitle">{{ message }}</p>
+   
+  </div>
+</div>

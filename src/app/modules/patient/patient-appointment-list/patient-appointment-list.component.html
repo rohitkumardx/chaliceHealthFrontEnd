@@ -10,65 +10,240 @@
                 <span style="color: #00876F!important;">Today Appointment</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input style="width: 30%;" type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                    (input)="getTodayAppointmentsByUserId()" class="form-control">
+                </div>
                 <div class="row">
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mt-4 mb-2">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
-                        (input)="getTodayAppointmentsByUserId()" class="form-control">
-                    </div>
+
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col" (click)="sortData('providerName')">Provider Name
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('providerName')">Provider Name
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('date')">Date & Time
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" >Location
-                          
-                           
-                          </th>
-                          <th scope="col">Service</th>
-                          <th scope="col">Reason For Visit</th>
+                          <!-- <th scope="col">Location
+                          </th> -->
+                          <th style="min-width: 150px;" scope="col">Service Type</th>
+                          <th scope="col" style=" min-width: 150px;">Reason For Visit</th>
+                          <th scope="col" style=" min-width: 180px;">Intake Form</th>
+                          <th scope="col" style=" min-width: 180px;">Consent Form</th>
                           <th scope="col">Status</th>
+
                           <th scope="col">Action</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of todayAppointment; let i = index">
-                          <td>{{item.providerName}}</td>
-                          <!-- <td>{{item.date}} {{item.startTime}}</td> -->
-                          <td class="pt-3">{{item.date}}<br>
-                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
-                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
-                          <td>{{item.location ? item.location : '--------'}}</td>
-                          <td>{{item.meetingType}} ({{item.serviceDuration}}-mins)</td>
-                          <td>{{item.reasonForVisit}}</td>
-                          <td>{{item.bookingStatus}}</td>
 
+                          <td *ngIf="item.accountType == 'IndependentProvider'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewTodayProviderProfile(item.providerId, item.bookAppointmentId)">
+                            <u>{{item.providerName}}</u>
+                          </td>
+                          <td *ngIf="item?.accountType == 'PrivatePractices' || item?.accountType == 'Facility'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewTodayProviderProfile(item.providerId, item.bookAppointmentId)">
+                            <u>{{item.legalPracticeName}}</u>
+                          </td>
                           <td>
-                            <span *ngIf="item.meetingType === 'Virtual' && item.bookingStatus =='Booked'" class="icon-meeting-type"
-                              [title]="getMeetingTypeTitle(item.meetingType)" [style.color]="'#00bfff'"
-                              style="font-size: 19px; margin-right: 20px;">
-                              <i [class]="getMeetingTypeIcon(item.meetingType)" class="cursor"
-                                (click)="joinCall(item.bookAppointmentId, item.startTime, item.meetingType)">
-                              </i>
-                            </span>
+                            {{ item.date | date:'MM-dd-yyyy' }} <br>
+                            {{ item.date | date:'hh:mm a' }}
+                          </td>
+                          <td>
+                            <ng-container [ngSwitch]="item.meetingType">
+                              <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                                style="font-size: 15px; color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                                style="color: #00876ec8;"></i>
+                            </ng-container>
+                            {{ formatServiceType(item.meetingType) }}
+                          </td>
+                          <!-- <td>{{ formatServiceType(item.meetingType) }} </td> -->
+                          <td>{{item.reasonForVisit}}</td>
+                          <td class="text-start">
+                            <!-- When intake is shared and status is Pending -->
+                            <div *ngIf="item.hasShareIntake && item.intakeConsentStatus == 'Pending'"
+                              style="text-align: center;">
+                              <ul
+                                style="display: inline-block; text-align: left; border: none!important; background-color: transparent!important; list-style: none; padding-left: 0; margin: 0;">
+                                <li style="margin-bottom: 5px;">
+                                  <a (click)="downloadIntakeDocument(item.bookAppointmentId)"
+                                    title="Please download intake form"
+                                    style="display: flex; align-items: center; text-decoration: none;">
+                                    <i class="fa fa-file-download text-primary me-2" style="width: 20px;"></i>
+                                    <span>Download Intake</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a (click)="browseIntakeDocument(item.shareIntakeId)" title="Please upload intake form"
+                                    style="display: flex; align-items: center; text-decoration: none;">
+                                    <i class="fa fa-folder-open text-warning me-2" style="width: 20px;"></i>
+                                    <span>Upload Intake</span>
+                                  </a>
+                                  <input type="file" #fileInput1 style="display: none"
+                                    (change)="onFileSelected1($event, item.shareIntakeId,i)">
+                                </li>
+                              </ul>
+                            </div>
 
-                            <span class="icon-chat" title="Send Message"
-                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
-                              <i class="fas fa-paper-plane cursor" (click)="sendMessage(item.bookAppointmentId)"></i>
-                            </span>
+                            <!-- When intake is shared and status is Approved -->
+                            <div class="dropdown" *ngIf="item.hasShareIntake && item.intakeConsentStatus == 'Approved'"
+                              style="text-align: center;">
+                              <span class="icon-chat" title="Intake Form Shared" style="font-size: 14px;">
+                                {{item.intakeConsentStatus}}
+                              </span>
+                            </div>
 
-                            <span class="icon-soap-notes" *ngIf="item.hasSoapNote"
-                              title="View SOAP Notes / Prescriptions"
-                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
-                              <i class="fas fa-file-alt cursor" (click)="viewSoapNotes(item.bookAppointmentId)"></i>
-                            </span>
+                            <!-- When intake is not shared -->
+                            <div class="dropdown" *ngIf="!item.hasShareIntake" style="text-align: center;">
+                              <span class="icon-chat" title="Intake Form Shared" style="font-size: 14px;">
+                                {{item.intakeConsentStatus === 0 ? 'Pending' : item.intakeConsentStatus}}
+                              </span>
+                            </div>
+                          </td>
 
+                          <td class="text-start">
+                            <!-- When consent is shared and status is Pending -->
+                            <div *ngIf="item.hasShareConsent && item.shareConsentStatus == 'Pending'"
+                              style="text-align: center;">
+                              <ul
+                                style="display: inline-block; text-align: left; background-color: transparent!important; border: none!important; list-style: none; padding-left: 0; margin: 0;">
+                                <li style="margin-bottom: 5px;">
+                                  <a (click)="downloadConsentDocument(item.bookAppointmentId)"
+                                    title="Please download consent form"
+                                    style="display: flex; align-items: center; text-decoration: none;">
+                                    <i class="fa fa-file-download text-primary me-2" style="width: 20px;"></i>
+                                    <span>Download Consent</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a (click)="browseConsentDocument(item.shareConsentId)" title="Please upload consent form"
+                                    style="display: flex; align-items: center; text-decoration: none;">
+                                    <i class="fa fa-folder-open text-warning me-2" style="width: 20px;"></i>
+                                    <span>Upload Consent</span>
+                                  </a>
+                                  <input type="file" #fileInput style="display: none"
+                                    (change)="onFileSelected($event, item.shareConsentId,i)">
+                                </li>
+                              </ul>
+                            </div>
+
+                            <!-- When consent is shared and status is Approved -->
+                            <div class="dropdown" *ngIf="item.hasShareConsent && item.shareConsentStatus == 'Approved'"
+                              style="text-align: center;">
+                              <span class="icon-chat" title="Consent Form Shared" style="font-size: 14px;">
+                                {{item.shareConsentStatus}}
+                              </span>
+                            </div>
+
+                            <!-- When consent is not shared -->
+                            <div class="dropdown" *ngIf="!item.hasShareConsent" style="text-align: center;">
+                              <span class="icon-chat" title="Consent Form Shared" style="font-size: 14px;">
+                                {{item.shareConsentStatus === 0 ? 'Pending' : item.shareConsentStatus}}
+                              </span>
+                            </div>
+                          </td>
+                          <td>{{item.bookingStatus}}</td>
+                          <td style="justify-items: center; cursor: pointer;">
+                            <div class="d-flex align-items-center justify-content-end ">
+                              <!-- Join Call Icon -->
+                              <div *ngIf="item.meetingType === 'VirtualVisit' && item.bookingStatus == 'Booked'">
+                                <a class="btn btn-sm d-flex align-items-center"
+                                  style="background-color: transparent!important; margin-top: -3px; color: #00bfff;"
+                                  (click)="joinCall(item.bookAppointmentId, item.startTime, item.meetingType, item.providerId)"
+                                  data-bs-toggle="tooltip" title="Join Call">
+                                  <i [class]="getMeetingTypeIcon(item.meetingType)"
+                                    style="color: #00bfff; width: 20px; text-align: center;"></i>
+                                </a>
+                              </div>
+                              <!-- Send Message Icon -->
+                              <div>
+                                <a class="btn btn-sm d-flex align-items-center me-2"
+                                  style="background-color: transparent!important; margin-top: -3px; color: #00a98d;"
+                                  (click)="sendMessage(item.bookAppointmentId, item.accountType == 'PrivatePractices' || item?.accountType == 'Facility' ? item.clinicId : item.providerId)"
+                                  data-bs-toggle="tooltip" title="Send Message">
+                                  <i class="fas fa-comments"
+                                    style="color: #00a98d; width: 20px; text-align: center;"></i>
+                                </a>
+                              </div>
+
+                              <!-- Dropdown Icon -->
+                              <div class="dropdown">
+                                <i class="fas fa-ellipsis-v cursor fs-4" data-bs-toggle="dropdown"
+                                  aria-expanded="false"></i>
+
+                                <ul class="dropdown-menu dropdown-menu-end text-start cursor" style="z-index: 9;">
+                                  <!-- Complaint -->
+                                  <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="complaintModal(item.bookAppointmentId)">
+                                      <i class="fas fa-exclamation-triangle"
+                                        style="color: #ff9800; width: 20px; text-align: center;"></i>
+                                      <span>Complaint</span>
+                                    </a>
+                                  </li>
+
+                                  <!-- View SOAP Notes -->
+                                  <li *ngIf="item.hasSoapNote">
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="viewSoapNotes(item.bookAppointmentId)">
+                                      <i class="fas fa-file-alt"
+                                        style="color: #00a98d; width: 20px; text-align: center;"></i>
+                                      <span>View SOAP Notes</span>
+                                    </a>
+                                  </li>
+
+                                  <!-- Write Review -->
+                                  <li *ngIf="item.bookingStatus == 'Complete'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="giveFeedback(item.providerId, item.providerName)">
+                                      <i class="fas fa-pen-alt"
+                                        style="color: #00a98d; width: 20px; text-align: center;"></i>
+                                      <span>Write a Review</span>
+                                    </a>
+                                  </li>
+
+                                  <!-- Refunded -->
+                                  <li *ngIf="item.refundStatus === 'Refunded'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2">
+                                      <i class="fas fa-check-circle text-success"
+                                        style="width: 20px; text-align: center;"></i>
+                                      <span>Refunded</span>
+                                    </a>
+                                  </li>
+
+                                  <!-- Refund Pending -->
+                                  <li *ngIf="item.refundStatus === 'Pending'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2">
+                                      <i class="fas fa-times-circle"
+                                        style="color:orange; width: 20px; text-align: center;"></i>
+                                      <span>Refund Pending</span>
+                                    </a>
+                                  </li>
+
+                                  <!-- Cancel Appointment -->
+                                  <li *ngIf="item.refundStatus !== 'Refunded' && item.refundStatus !== 'Pending'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="showDetails(item.bookAppointmentId)"
+                                      [ngClass]="{'disabled': isTimePast(item.startTime)}"
+                                      [style.cursor]="isTimePast(item.startTime) ? 'not-allowed' : 'pointer'">
+                                      <i class="fas fa-times-circle red" style="width: 20px; text-align: center;"></i>
+                                      <span>Cancel Appointment</span>
+                                    </a>
+                                  </li>
+
+                                </ul>
+                              </div>
+
+                            </div>
                           </td>
                         </tr>
                         <tr *ngIf="loading">
@@ -78,7 +253,7 @@
                               [additionalClasses]="'mt-5'"></app-loader>
                           </td>
                         </tr>
-                        <tr *ngIf="todayAppointment.length === 0">
+                        <tr *ngIf="todayAppointment.length === 0 && !loading">
                           <td colspan="9" class="no-data-card">
                             <div class="no-data-card-container">
                               <div class="no-data-icon">
@@ -101,68 +276,232 @@
                   </div>
                 </div>
               </div>
-
-
             </mat-tab>
             <mat-tab label="Upcoming Appointment" value="Upcoming">
               <ng-template mat-tab-label>
                 <span style="color: #00876F!important;">Upcoming Appointment</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input style="width: 30%;" type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                    (input)="getUpcomingAppointmentsByUserId()" class="form-control">
+                </div>
                 <div class="row">
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mt-4 mb-2">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
-                        (input)="getUpcomingAppointmentsByUserId()" class="form-control">
-                    </div>
+
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col" (click)="sortData('providerName')">Provider Name
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('providerName')">Provider Name
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('date')">Date & Time
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" >Location
-                          
-                          </th>
-                          <th scope="col">Service</th>
+                          <!-- <th scope="col">Location
+
+                          </th> -->
+                          <th style="min-width: 170px;" scope="col">Service Type</th>
                           <th scope="col">Reason For Visit</th>
+                          <th scope="col">Intake Form</th>
+                          <th scope="col">Consent Form</th>
                           <th scope="col">Status</th>
                           <th scope="col">Action</th>
-
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of upcomingAppointment; let i = index">
-                          <td>{{item.providerName}}</td>
-                          <td class="pt-3">{{item.date}}<br>
-                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
-                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
-                          <!-- <td>
-                            {{ item.date | date: 'dd-MMM-yyyy' }}<br>
-                            {{ item.startTime }}
+                          <!-- <td style="color: hsl(203, 100%, 50%)!important; cursor: pointer;"
+                            (click)="viewUpcomingProviderProfile( item.bookAppointmentId, item.providerId)">
+                            <u>{{item.providerName}}</u>
                           </td> -->
-                          <td>{{item.location ? item.location : '--------'}}</td>
-                          <td>{{item.meetingType}} ({{item.serviceDuration}}-mins)</td>
+                          <td *ngIf="item.accountType == 'IndependentProvider'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewUpcomingProviderProfile(item.bookAppointmentId, item.providerId)">
+                            <u>{{item.providerName}}</u>
+                          </td>
+                          <td *ngIf="item.accountType == 'PrivatePractices' || item?.accountType == 'Facility'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewUpcomingProviderProfile(item.bookAppointmentId, item.providerId)">
+                            <u>{{item.legalPracticeName}}</u>
+                          </td>
+
+                          <!-- <td>{{item.providerName}}</td> -->
+                          <td class="pt-3">
+                            {{ item.date | date:'MM-dd-yyyy' }} <br>
+                            {{ item.date | date:'hh:mm a' }}
+                          </td>
+                          <td>
+                            <ng-container [ngSwitch]="item.meetingType">
+                              <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                                style="font-size: 15px; color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                                style="color: #00876ec8;"></i>
+                            </ng-container>
+                            {{ formatServiceType(item.meetingType) }}
+                          </td>
+                          <!-- <td>{{ formatServiceType(item.meetingType) }} </td> -->
                           <td>{{item.reasonForVisit}}</td>
-                          <td>{{item.bookingStatus}}</td>
 
                           <td>
-                            <span class="icon-chat" title="Send Message"
-                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
-                              <i class="fas fa-paper-plane cursor" (click)="sendMessage(item.bookAppointmentId)"></i>
-                            </span>
-                            <!-- <button type="submit" class="btn m-2 custom-padding"
-                              style="background-color: #00876F!important;"> Fill Intake Form</button>
-                            <button type="submit" class="btn m-2 custom-padding"
-                              style="background-color: #00876F!important;"> Message</button>
-                            <button type="submit" class="btn m-2 custom-padding"
-                              style="background-color: #00876F!important;"> Join</button> -->
+                            <!-- When intake is shared and status is Pending -->
+                            <div *ngIf="item.hasShareIntake && item.intakeConsentStatus == 'Pending'"
+                              style="text-align: center;">
+                              <ul
+                                style="display: inline-block; border: none!important; background-color: transparent!important; list-style: none; padding: 0; margin: 0; text-align: left;">
+                                <li style="margin-bottom: 6px;">
+                                  <a (click)="downloadIntakeDocument(item.bookAppointmentId)"
+                                    style="display: flex; align-items: center; text-decoration: none; color: inherit;"
+                                    title="Please download intake form">
+                                    <i class="fa fa-file-download text-primary me-2" style="width: 20px;"></i> Download
+                                    Intake
+                                  </a>
+                                </li>
+                                <li>
+                                  <a (click)="browseIntakeDocument(item.shareIntakeId)"
+                                    style="display: flex; align-items: center; text-decoration: none; color: inherit;"
+                                    title="Please upload intake form">
+                                    <i class="fa fa-folder-open text-warning me-2" style="width: 20px;"></i> Upload
+                                    Intake
+                                  </a>
+                                  <input type="file" #fileInput1 style="display: none"
+                                    (change)="onFileSelected1($event, item.shareIntakeId, i)">
+                                </li>
+                              </ul>
+                            </div>
+
+                            <!-- When intake is shared and status is Approved -->
+                            <div class="dropdown" *ngIf="item.hasShareIntake && item.intakeConsentStatus == 'Approved'">
+                              <span class="icon-chat" title="Intake Form Shared" style="font-size: 14px;">
+                                {{item.intakeConsentStatus}}
+                              </span>
+                            </div>
+
+                            <!-- When intake is not shared -->
+                            <div class="dropdown" *ngIf="!item.hasShareIntake">
+                              <span class="icon-chat" title="Intake Form Shared" style="font-size: 14px;">
+                                {{item.intakeConsentStatus === 0 ? 'Pending' : item.intakeConsentStatus}}
+                              </span>
+                            </div>
                           </td>
+
+
+                          <td>
+                            <!-- When consent is shared and status is Pending -->
+                            <div *ngIf="item.hasShareConsent && item.shareConsentStatus == 'Pending'"
+                              style="text-align: center;">
+                              <ul
+                                style="display: inline-block; border: none!important; background-color: transparent!important; list-style: none; padding: 0; margin: 0; text-align: left;">
+                                <li style="margin-bottom: 6px;">
+                                  <a (click)="downloadConsentDocument(item.bookAppointmentId)"
+                                    style="display: flex; align-items: center; text-decoration: none; color: inherit;"
+                                    title="Please download consent form">
+                                    <i class="fa fa-file-download text-primary me-2" style="width: 20px;"></i> Download
+                                    Consent
+                                  </a>
+                                </li>
+                                <li>
+                                  <a (click)="browseConsentDocument(item.shareConsentId)"
+                                    style="display: flex; align-items: center; text-decoration: none; color: inherit;"
+                                    title="Please upload consent form">
+                                    <i class="fa fa-folder-open text-warning me-2" style="width: 20px;"></i> Upload
+                                    Consent
+                                  </a>
+                                  <input type="file" #fileInput style="display: none"
+                                    (change)="onFileSelected($event, item.shareConsentId, i)">
+                                </li>
+                              </ul>
+                            </div>
+
+                            <!-- When consent is shared and status is Approved -->
+                            <div class="dropdown" *ngIf="item.hasShareConsent && item.shareConsentStatus == 'Approved'">
+                              <span class="icon-chat" title="Consent Form Shared" style="font-size: 14px;">
+                                {{item.shareConsentStatus}}
+                              </span>
+                            </div>
+
+                            <!-- When consent is not shared -->
+                            <div class="dropdown" *ngIf="!item.hasShareConsent">
+                              <span class="icon-chat" title="Consent Form Shared" style="font-size: 14px;">
+                                {{item.shareConsentStatus === 0 ? 'Pending' : item.shareConsentStatus}}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td>{{item.bookingStatus}}</td>
+
+
+                          <td style="justify-items: center; cursor: pointer;">
+                            <div class="d-flex align-items-center">
+
+                              <!-- Send Message Icon (outside dropdown) -->
+                              <div>
+                                <a class="btn btn-sm d-flex align-items-center me-2"
+                                  style="background-color: transparent!important; margin-top: -3px; color: #00a98d;"
+                                  (click)="sendMessage(item.bookAppointmentId, item.accountType === 'PrivatePractices' ? item.clinicId : item.providerId)"
+                                  data-bs-toggle="tooltip" title="Send Message">
+                                  <i class="fas fa-comments"
+                                    style="color: #00a98d; width: 20px; text-align: center;"></i>
+                                </a>
+                              </div>
+
+                              <!-- Dropdown for remaining items -->
+                              <div class="dropdown">
+                                <i class="fas fa-ellipsis-v cursor fs-4" data-bs-toggle="dropdown"
+                                  aria-expanded="false"></i>
+
+                                <ul class="dropdown-menu dropdown-menu-end text-start cursor"
+                                  style="z-index: 9!important;">
+
+                                  <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="rescheduleAppointment(item.bookAppointmentId, item.providerId, item.meetingType)">
+                                      <i class="fas fa-calendar-alt"
+                                        style="color: #1e8af9; width: 20px; text-align: center;"></i>
+                                      <span>Reschedule</span>
+                                    </a>
+                                  </li>
+
+                                  <li *ngIf="item.refundStatus === 'Refunded'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2">
+                                      <i class="fas fa-check-circle text-success"></i>
+                                      Refunded
+                                    </a>
+                                  </li>
+
+                                  <li *ngIf="item.refundStatus === 'Pending'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2">
+                                      <i class="fas fa-times-circle" style="color:orange;"></i>
+                                      Refund Pending
+                                    </a>
+                                  </li>
+
+                                  <li *ngIf="item.refundStatus !== 'Refunded' && item.refundStatus !== 'Pending'">
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="showDetails(item.bookAppointmentId)">
+                                      <i class="fas fa-times-circle text-danger me-2" style="font-size: 19px;"></i>
+                                      Cancel Appointment
+                                    </a>
+                                  </li>
+
+                                  <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="addToCalender(item.bookAppointmentId)">
+                                      <i class="fas fa-calendar-plus text-warning" style="font-size: 19px;"></i>
+                                      <span>Add To Calendar</span>
+                                    </a>
+                                  </li>
+
+                                </ul>
+                              </div>
+                            </div>
+                          </td>
+
+
+
                         </tr>
                         <tr *ngIf="loading">
                           <td colspan="7">
@@ -171,7 +510,7 @@
                               [additionalClasses]="'mt-5'"></app-loader>
                           </td>
                         </tr>
-                        <tr *ngIf="upcomingAppointment.length === 0">
+                        <tr *ngIf="upcomingAppointment.length === 0 && !loading">
                           <td colspan="9" class="no-data-card">
                             <div class="no-data-card-container">
                               <div class="no-data-icon">
@@ -187,9 +526,10 @@
                         </tr>
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
-                      <app-pagination [paginator]="paginator" (onPageChange)=" getUpcomingAppointmentsByUserId()" />
-                    </div>
+
+                  </div>
+                  <div class=" d-flex pagination justify-content-end mt-2 me-5" *ngIf="roles.length >0 && !loading">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getUpcomingAppointmentsByUserId()" />
                   </div>
                 </div>
               </div>
@@ -200,28 +540,29 @@
                 <span style="color: #00876F!important;">Past Appointment</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input style="width: 30%;" type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                    (input)="getPastAppointmentsByUserId()" class="form-control">
+                </div>
                 <div class="row">
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mt-4 mb-2">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search by Provider Name"
-                        (input)="getPastAppointmentsByUserId()" class="form-control">
-                    </div>
+
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col" (click)="sortData('providerName')">Provider Name
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('providerName')">Provider Name
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('date')">Date & Time
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" >Location
-                      
-                          </th>
+                          <!-- <th scope="col">Location
+
+                          </th> -->
                           <!-- <th scope="col">Location</th> -->
-                          <th scope="col">Service</th>
+                          <th style="min-width: 170px;" scope="col">Service Type</th>
                           <th scope="col">Reason For Visit</th>
                           <th scope="col">Status</th>
                           <th scope="col">Action</th>
@@ -229,25 +570,88 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of pastAppointment; let i = index">
-                          <td>{{item.providerName}}</td>
-                          <td class="pt-3">{{item.date}}<br>
-                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
-                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
-                          <!-- <td>{{item.date}} {{item.startTime}}</td> -->
-                          <td>{{item.location ? item.location : '--------'}}</td>
-                          <td>{{item.meetingType}} ({{item.serviceDuration}}-mins)</td>
+                          <!-- <td style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewPastProviderProfile(item.providerId)"> <u>{{item.providerName}}</u> </td> -->
+                          <td *ngIf="item.accountType == 'IndependentProvider'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewPastProviderProfile(item.providerId)">
+                            <u>{{item.providerName}}</u>
+                          </td>
+                          <td *ngIf="item?.accountType == 'PrivatePractices' || item?.accountType == 'Facility'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewPastProviderProfile(item.providerId)">
+                            <u>{{item.legalPracticeName}}</u>
+                          </td>
+                          <td class="pt-3">
+                            {{ item.date | date:'MM-dd-yyyy' }} <br>
+                            {{ item.date | date:'hh:mm a' }}
+                          </td>
+                          <td>
+                            <ng-container [ngSwitch]="item.meetingType">
+                              <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                                style="font-size: 15px; color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                                style="color: #00876ec8;"></i>
+                            </ng-container>
+                            {{ formatServiceType(item.meetingType) }}
+                          </td>
+
+                          <!-- <td>{{ formatServiceType(item.meetingType) }}</td> -->
                           <td>{{item.reasonForVisit}}</td>
                           <td>{{item.bookingStatus}}</td>
-
                           <td>
-                            <span class="icon-soap-notes" title="View SOAP Notes / Prescriptions" *ngIf="item.hasSoapNote"
-                              style="color: #00a98d; font-size: 19px; margin-right: 20px;">
-                              <i class="fas fa-file-alt cursor" (click)="viewSoapNotes(item.bookAppointmentId)"></i>
-                            </span>
-                            <!-- <button type="submit" class="btn m-2 " style="background-color: #00876F!important;"> View
-                              Encounter</button> -->
+                            <div class="d-flex align-items-center">
 
+
+                              <div>
+                                <a class="btn btn-sm d-flex align-items-center me-2"
+                                  style="background-color: transparent!important; color: #00a98d!important; margin-top: -3px!important;"
+                                  (click)="sendMessage(item.bookAppointmentId, item.accountType === 'PrivatePractices' ? item.clinicId : item.providerId)"
+                                  data-bs-toggle="tooltip" title="Send Message">
+                                  <i class="fas fa-comments" style="font-size: 18px;  color:#00a98d!important;"></i>
+                                </a>
+                              </div>
+
+
+                              <div class="dropdown">
+                                <span title="More Options" style="cursor: pointer; font-size: 20px;"
+                                  data-bs-toggle="dropdown" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v"></i>
+                                </span>
+                                <ul class="dropdown-menu custom-dropdown1">
+
+                                  <li *ngIf="item.hasSoapNote">
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="viewSoapNotes(item.bookAppointmentId)">
+                                      <i class="fas fa-file-alt text-primary me-2" style="font-size: 19px;"></i>
+                                      View SOAP Notes / Prescriptions
+                                    </a>
+                                  </li>
+
+                                  <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="complaintModal(item.bookAppointmentId)">
+                                      <i class="fas fa-exclamation-triangle text-warning me-2"
+                                        style="font-size: 19px;"></i>
+                                      Complaint
+                                    </a>
+                                  </li>
+
+                                  <li *ngIf="item.hasSoapNote">
+                                    <a class="dropdown-item d-flex align-items-center gap-2"
+                                      (click)="giveFeedback(item.providerId,item.providerName)">
+                                      <i class="fas fa-pencil-alt text-info me-2" style="font-size: 19px;"></i>
+                                      Write a Review
+                                    </a>
+                                  </li>
+
+                                </ul>
+                              </div>
+                            </div>
                           </td>
+
+
                         </tr>
                         <tr *ngIf="loading">
                           <td colspan="7">
@@ -256,7 +660,7 @@
                               [additionalClasses]="'mt-5'"></app-loader>
                           </td>
                         </tr>
-                        <tr *ngIf="pastAppointment.length === 0 && loading">
+                        <tr *ngIf="pastAppointment.length === 0 && !loading">
                           <td colspan="9" class="no-data-card">
                             <div class="no-data-card-container">
                               <div class="no-data-icon">
@@ -272,9 +676,10 @@
                         </tr>
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
-                      <app-pagination [paginator]="paginator" (onPageChange)=" getPastAppointmentsByUserId()" />
-                    </div>
+
+                  </div>
+                  <div class="d-flex pagination justify-content-end mt-2 me-5" *ngIf="roles.length >0 && !loading">
+                    <app-pagination [paginator]="paginator" (onPageChange)=" getPastAppointmentsByUserId()" />
                   </div>
                 </div>
               </div>
@@ -285,48 +690,82 @@
                 <span style="color: #00876F!important;">Cancelled Appointment</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+                <div class=" mt-4 mb-2" style="width:100%; display:flex; justify-content:right; ">
+                  <input style="width: 30%;" type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                    (input)="getCancelledAppointmentsByUserId()" class="form-control">
+                </div>
                 <div class="row">
                   <div class="table-responsive">
-                    <div class="col-3 offset-9 mt-4 mb-2">
-                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
-                        (input)="getCancelledAppointmentsByUserId()" class="form-control">
-                    </div>
+
                     <table class="table">
                       <thead>
                         <tr>
-                          <th scope="col" (click)="sortData('providerName')">Provider Name
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('providerName')">Provider Name
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
                           </th>
-                          <th scope="col" (click)="sortData('date')">Date & Time
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('date')">Date & Time
                             <i
                               [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
                           </th>
                           <!-- <th scope="col" (click)="sortData('ProviderName')">Date & Time</th> -->
-                          <th scope="col">Location
-                          
-                          </th>
-                          <th scope="col">Service</th>
-                          <th scope="col">Reason For Visit</th>
+                          <!-- <th scope="col">Location
+
+                          </th> -->
+                          <th style="min-width: 170px;" scope="col">Service Type</th>
+                          <th style=" min-width: 145px;" scope="col">Reason For Visit</th>
                           <th scope="col">Reason For Cancellation</th>
                           <!-- <th scope="col">Action</th> -->
                         </tr>
                       </thead>
                       <tbody>
                         <tr *ngFor="let item of cancelledAppointment; let i = index">
-                          <td>{{item.providerName}}</td>
-                          <td class="pt-3">{{item.date}}<br>
-                            {{ item.startTime.split(':')[0] % 12 || 12}}:{{ item.startTime.split(':')[1]}}
-                            {{item.startTime.split(':')[0] >= 12 ? 'PM' : 'AM' }}</td>
-                          <!-- <td>{{item.date}} {{item.startTime}}</td> -->
-                          <td>{{item.location ? item.location : '--------'}}</td>
-                          <td>{{item.meetingType}} ({{item.serviceDuration}}-mins)</td>
+                          <!-- <td style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewCancelledProviderProfile(item.providerId)"> <u>{{item.providerName}}</u> </td> -->
+
+                          <td *ngIf="item.accountType == 'IndependentProvider'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewCancelledProviderProfile(item.providerId)">
+                            <u>{{item.providerName}}</u>
+                          </td>
+                          <td *ngIf="item.accountType == 'PrivatePractices' || item?.accountType == 'Facility'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewCancelledProviderProfile(item.providerId)">
+                            <u>{{item.legalPracticeName}}</u>
+                          </td>
+                          <td class="pt-3">
+                            {{ item.date | date:'MM-dd-yyyy' }} <br>
+                            {{ item.date | date:'hh:mm a' }}
+                          </td>
+                          <td>
+                            <ng-container [ngSwitch]="item.meetingType">
+                              <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                                style="font-size: 15px; color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                              <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2"
+                                style="color: #00876ec8;"></i>
+                            </ng-container>
+                            {{ formatServiceType(item.meetingType) }}
+                          </td>
+                          <!-- <td>{{ formatServiceType(item.meetingType) }}</td> -->
                           <td>{{item.reasonForVisit}}</td>
-                          <td>{{item.reasonForCancellation}}</td>
-                          <!-- <td>
-                            <button type="submit" class="btn m-2 " style="background-color: #00876F!important;"> View
-                              Encounter</button>
-                          </td> -->
+                          <td style="width: 100%; max-width: 35%;">
+                            <ng-container *ngIf="item.reasonForCancellation; else noReason">
+                              <span *ngIf="!expanded">{{ getShortText(item.reasonForCancellation) }}</span>
+                              <span *ngIf="expanded">{{ item.reasonForCancellation }}</span>
+
+                              <a *ngIf="shouldShowToggle(item.reasonForCancellation)" href="#"
+                                (click)="toggleExpand($event)">
+                                {{ expanded ? 'See Less' : 'Show More' }}
+                              </a>
+                            </ng-container>
+
+                            <ng-template #noReason>
+                              <span>--------</span>
+                            </ng-template>
+                          </td>
+
+
                         </tr>
                         <tr *ngIf="loading">
                           <td colspan="7">
@@ -335,7 +774,7 @@
                               [additionalClasses]="'mt-5'"></app-loader>
                           </td>
                         </tr>
-                        <tr *ngIf="cancelledAppointment.length === 0">
+                        <tr *ngIf="cancelledAppointment.length === 0 && !loading">
                           <td colspan="9" class="no-data-card">
                             <div class="no-data-card-container">
                               <div class="no-data-icon">
@@ -351,9 +790,10 @@
                         </tr>
                       </tbody>
                     </table>
-                    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
-                      <app-pagination [paginator]="paginator" (onPageChange)="getCancelledAppointmentsByUserId()" />
-                    </div>
+
+                  </div>
+                  <div class="d-flex pagination justify-content-end mt-2 me-5" *ngIf="roles.length >0 && !loading">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getCancelledAppointmentsByUserId()" />
                   </div>
                 </div>
               </div>

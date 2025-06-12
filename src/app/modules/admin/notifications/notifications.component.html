@@ -1,0 +1,173 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="signup-card">
+        <h3>Notifications</h3>
+        <div class="signup-form">
+          <mat-tab-group (selectedTabChange)="onSettingsChange($event)" class="custom-tab-group">
+            <mat-tab value="appointmentCancellation">
+              <ng-template mat-tab-label>
+                <span class="tab-label ">Appointment Cancellation Requests
+                  <span *ngIf="appointmentCancellationCount > 0" class="badge badge-circle bg-danger ms-2">{{
+                    appointmentCancellationCount }}</span>
+                </span>
+              </ng-template>
+              <div class="mat-tab-content" style="overflow: hidden !important;">
+
+                <div class="table-responsive">
+                  <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+
+                  </div>
+                  <table class="table">
+                    <thead>
+
+
+                      <tr>
+                        <th style="min-width: 150px;" scope="col">Patient Name</th>
+                        <th style="min-width: 150px;" scope="col">Provider Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col" style="min-width: 150px;">Date</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of notificationList; let i = index">
+                        <td style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.patientId)">
+                          <u>{{item.patientName}}</u>
+                        </td>
+                        <!-- <td style="color: #009cff!important; cursor: pointer;"
+                          (click)="viewProviderProfile(item.providerId)"> <u>{{item.providerName}}</u> </td> -->
+                        <td *ngIf="item.accountType == 'IndependentProvider'"
+                          style="color: #009cff!important; cursor: pointer;"
+                          (click)="viewProviderProfile(item.providerId)">
+                          <u>{{item.providerName}}</u>
+                        </td>
+                        <td *ngIf="item.accountType == 'PrivatePractices' || item.accountType == 'Facility'"
+                          style="color: #009cff!important; cursor: pointer;"
+                          (click)="viewProviderProfile(item.providerId)">
+                          <u>{{item.legalPracticeName}}</u>
+                        </td>
+
+
+                        <td scope="col">{{item.description}}</td>
+                        <td scope="col">
+                          {{ item.createdDate | date:'MM-dd-yyyy' }} <br>
+                          {{ item.createdDate | date:'hh:mm a' }}
+                        </td>
+
+                        <!-- <td scope="col">{{item.createdDate | date:'MM-dd-yyyy'}}</td> -->
+                        <td><span>
+                            <a class="">
+                              <i class="fas fa-eye cursor" style="color: #198754;"
+                                (click)="showDetails(item.bookAppointmentId,item.notificationId)"></i>
+                            </a>
+                          </span></td>
+                      </tr>
+                      <tr *ngIf="loading">
+                        <td colspan="8">
+                          <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                            [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                            [additionalClasses]="'mt-5'"></app-loader>
+                        </td>
+                      </tr>
+
+                      <tr *ngIf="notificationList.length === 0 && !loading">
+                        <td colspan="9" class="no-data-card">
+                          <div class="no-data-card-container">
+                            <div class="no-data-icon">
+                              <i class="fas fa-user-slash"></i>
+                            </div>
+                            <div class="no-data-content">
+                              <span class="no-data-title">No Users Found</span>
+                              <p class="no-data-description">It looks like there are no users at the
+                                moment.
+                                Please check back later!</p>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+
+
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getNotificationList()" />
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab value="Request">
+              <ng-template mat-tab-label>
+                <span class="tab-label">
+                  Provider Request
+                  <span *ngIf="providerRequestCount > 0" class="badge badge-circle bg-danger ms-2">
+                    {{ providerRequestCount }}
+                  </span>
+                </span>
+              </ng-template>
+
+              <div class="mat-tab-content" style="overflow: hidden !important;">
+                <div class="mt-4">
+                  <div class="row ">
+                    <!-- Doctor Card -->
+                    <div class="col-12 px-2 py-3 " *ngFor="let item of providerRequestList; let i = index">
+                      <div class="doctor-card px-3 py-3 d-flex flex-column flex-md-row">
+                        <!-- Doctor Image -->
+                        <img [src]="item.profilePictureFilePath || '../../../../assets/svg/virtual-consultations.jpg'"
+                          alt=" {{ item.firstName }} {{ item.lastName }}" class="doctor-image me-md-3 mb-3 mb-md-0"
+                          style="width: 100%; max-width: 120px; height: auto; border-radius: 10px;" />
+
+                        <!-- Doctor Details -->
+                        <div class="w-100">
+                          <div class="row">
+                            <!-- Doctor Info -->
+                            <div class="col-12 col-md-4 mb-3">
+                              <h5 class="fw-bold mb-1"> {{ item.firstName }} {{ item.lastName }}</h5>
+                              <p class="mb-1"><i class="fas fa-user-md"></i> {{ item.qualificationName || '--------' }}
+                              </p>
+                              <p class="mb-1"><i class="fas fa-phone-alt"></i> {{ item.phoneNumber || '--------' }}</p>
+                              <p class="mb-0"><i class="fas fa-map-marker-alt"></i> {{ item.address || '--------' }}</p>
+                            </div>
+
+                            <!-- Specialities -->
+                            <div class="col-12 col-md-5 mb-3">
+                              <strong class="fs-6">New Specialities:</strong>
+                              <div class="mt-2">
+                                <span class="speciality-badge me-1 mb-1 d-inline-block"
+                                  *ngFor="let items of item.specialties">
+                                  {{ items.specialtyName }}
+                                </span>
+                              </div>
+                            </div>
+
+                            <!-- Status Dropdown -->
+
+                            <div class="col-12 col-md-3 d-flex align-items-start mt-2 mt-md-4">
+                              <select class="form-select form-select-sm custom-dropdown w-100"
+                                [value]="item.specialties[0].isVerified ? 'true' : 'false'"
+                                (change)="onStatusChange($event, item.userId)">
+                                <option value="false">Pending</option>
+                                <option value="true">Approved</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End Doctor Card -->
+                  </div>
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getProviderRequest()" />
+                </div>
+              </div>
+            </mat-tab>
+
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

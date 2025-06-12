@@ -2,7 +2,7 @@
     <span class="close-icon" (click)="cancel()">&times;</span>
     <h1>Medical License Information</h1>
     <form [formGroup]="medicalForm" class="mt-2">
-        <div class="row p-2">
+        <div class="row">
             <div class="col-sm-4">
                 <label for="experience">Years of Experience</label>
                 <input type="number" id="experience" class="form-control form-control-sm mt-1"
@@ -16,7 +16,8 @@
             </div>
             <div class="col-sm-4">
                 <label for="NPI">NPI<span class="red">*</span></label>
-                <input type="number" id="NPI" class="form-control form-control-sm mt-1" formControlName="NPI" maxlength="15"
+                <input type="number" id="NPI" class="form-control form-control-sm mt-1" formControlName="NPI"
+                    maxlength="15"
                     [ngClass]="{'is-invalid':medicalForm.get('NPI')?.invalid && medicalForm.get('NPI')?.touched}"
                     [value]="medicalForm.get('NPI')?.value">
                 <div class="invalid-feedback"
@@ -36,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="row p-2">
+        <div class="row">
             <div class="col-sm-4">
                 <label for="credentials">Credentials/Qualifications<span class="red">*</span></label>
                 <select class="form-select form-select-sm cursor mt-1" formControlName="qualificationId"
@@ -69,9 +70,10 @@
                         [ngClass]="{'is-invalid': medicalForm.get('specialtyId')?.invalid &&  medicalForm.get('specialtyId')?.touched}"
                         aria-expanded="false">
                         {{ selectedSpecialityItems.length > 0 ?
-                            selectedSpecialityItems.join(', ') : 'Select' }}
+                        selectedSpecialityItems.join(', ') : 'Select' }}
                     </button>
-                    <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()" (click)="$event.stopPropagation()">
+                    <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()"
+                        (click)="$event.stopPropagation()">
                         <li *ngFor="let item of speciality" (mouseenter)="hovering = true"
                             (mouseleave)="hovering = false" [class.hover-effect]="hovering">
                             <label>
@@ -84,21 +86,22 @@
                     </ul>
                     <div class="invalid-feedback"
                         *ngIf="medicalForm.get('specialtyId')?.touched && medicalForm.get('specialtyId')?.hasError('required')">
-                       Specialty is required.
+                        Specialty is required.
                     </div>
                 </div>
             </div>
             <div class="col-sm-4">
                 <label>Licensed States<span class="red">*</span></label>
                 <div class="custom-dropdown">
-                    <button type="button" id="multiSelectDropdown" class="form-select form-select-sm dp-pd-l mt-1" [disabled]="isDisabled"
-                        data-bs-toggle="dropdown"
+                    <button type="button" id="multiSelectDropdown" class="form-select form-select-sm dp-pd-l mt-1"
+                        [disabled]="isDisabled" data-bs-toggle="dropdown" 
                         [ngClass]="{'is-invalid': medicalForm.get('stateId')?.invalid &&  medicalForm.get('stateId')?.touched}"
                         aria-expanded="false">
                         {{ selectedItems.length > 0 ?
                         selectedItems.join(', ') : 'Select' }}
                     </button>
-                    <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()" (click)="$event.stopPropagation()">
+                    <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()"
+                        (click)="$event.stopPropagation()">
                         <li *ngFor="let item of states" (mouseenter)="hovering = true" (mouseleave)="hovering = false"
                             [class.hover-effect]="hovering">
                             <label>
@@ -120,11 +123,18 @@
         <div class="row px-2 py-1 d-flex">
             <h3 class="m-0" style="font-weight: 500; color: black; font-size:16px;">1 Malpractice Insurance<span
                     class="red">*</span>
-                    <div class="tooltip-container" (mouseenter)="showTooltip1()" (mouseleave)="hideTooltip1()" (click)="toggleTooltip1()">
-                        <i class="fas fa-question-circle cursor ms-1"></i>
-                        <div *ngIf="isTooltipVisible1" class="custom-tooltip">
-                            All providers are required to have and maintain medical malpractice <br> insurance in the amount of at least $1,000,000 per occurrence <br> and $3,000,000 in the aggregate (the “Amounts”) that <br> covers them for all visits conducted on the CH platform. </div>
-                    </div>  </h3>
+                <div class="tooltip-container" (mouseenter)="showTooltip1()" (mouseleave)="hideTooltip1()"
+                    (click)="toggleTooltip1()">
+                    <i class="fas fa-info-circle cursor ms-1"></i>
+                    <div *ngIf="isTooltipVisible1" class="custom-tooltip">
+                        All providers are required to have and maintain medical malpractice insurance in the amount <br>
+                        of at least <span style="font-weight: 600;"> $1,000,000 </span> per occurrence and <span
+                            style="font-weight: 600;">$3,000,000 </span>in the aggregate (the “Amounts”) that <br>
+                        covers
+                        them for all visits conducted on the <span style="font-weight: 600;">ChaliceHealth</span>
+                        platform. </div>
+                </div>
+            </h3>
             <div class="col-2" style="font-weight: 500; color: black; font-size:16px;">
                 <input type="radio" formControlName="malpracticeInsurance" [value]="true"
                     [ngClass]="{'is-invalid': medicalForm.get('malpracticeInsurance')?.invalid &&  medicalForm.get('malpracticeInsurance')?.touched}">
@@ -142,16 +152,20 @@
         </div>
 
         <div class="row px-2 py-1 d-flex ms-2" *ngIf="medicalForm.get('malpracticeInsurance')?.value === true">
-            <h3 class="m-0">1.1 Does your malpractice insurance meet the minimum liability requirements?<span
-                    class="red">*</span>
-                    <div class="tooltip-container" (mouseenter)="showTooltip2()" (mouseleave)="hideTooltip2()" (click)="toggleTooltip2()">
-                        <i class="fas fa-question-circle cursor ms-1"></i>
-                        <div *ngIf="isTooltipVisible2" class="custom-tooltip">
-                            By checking ‘Yes” you confirm that you carry professional liability <br> insurance
-                            that meets the minimum requirements outlined above. <br> You also acknowledge that
-                            you are fully liable for the services <br> you  provide through the Chalice Health
-                            platform. </div>
-                    </div></h3>
+            <h3 class="m-0" style="font-weight: 500; color: black; font-size:16px;">1.1 Does your malpractice insurance
+                meet the minimum liability requirements?<span class="red">*</span>
+                <div class="tooltip-container" (mouseenter)="showTooltip2()" (mouseleave)="hideTooltip2()"
+                    (click)="toggleTooltip2()">
+                    <i class="fas fa-info-circle cursor ms-1"></i>
+                    <div *ngIf="isTooltipVisible2" class="custom-tooltip" style=" left: -1380% !important;">
+                        By checking ‘Yes” you confirm that you carry <span style="font-weight: 600;">professional
+                            liability</span><br> insurance
+                        that meets the minimum requirements outlined above. <br> You also acknowledge that
+                        you are fully liable for the services <br> you provide through the <span
+                            style="font-weight: 600;">Chalice Health</span>
+                        platform. </div>
+                </div>
+            </h3>
             <div class="col-2">
                 <input type="radio" formControlName="malpracticeInsurance2" [value]="true"
                     [ngClass]="{'is-invalid': medicalForm.get('malpracticeInsurance2')?.invalid &&  medicalForm.get('malpracticeInsurance2')?.touched}">
@@ -169,13 +183,16 @@
         <div class="row px-2 py-1 d-flex ">
             <h3 class="m-0" style="font-weight: 500; color: black;">2. Do you have /use an Electronic mail record
                 (EMR/EHR)?<span class="red">*</span>
-                <div class="tooltip-container" (mouseenter)="showTooltip3()" (mouseleave)="hideTooltip3()" (click)="toggleTooltip3()">
-                    <i class="fas fa-question-circle cursor ms-1"></i>
+                <div class="tooltip-container" (mouseenter)="showTooltip3()" (mouseleave)="hideTooltip3()"
+                    (click)="toggleTooltip3()">
+                    <i class="fas fa-info-circle cursor ms-1"></i>
                     <div *ngIf="isTooltipVisible3" class="custom-tooltip">
-                        Please note that Chalice Health offers free downloadable
-                         online charting <br>
-                        templates for documenting and filing patient information. </div>
-                </div></h3>
+                        Please note that <span style="font-weight: 600; width: 50% !important;">Chalice Health</span>
+                        offers free downloadable <br>
+                        online charting
+                        templates for documenting and filing <br> patient information. </div>
+                </div>
+            </h3>
             <div class="col-2" style="font-weight: 500; color: black;  font-size:16px;">
                 <input type="radio" formControlName="electronicMailRecord" [value]="true">
                 Yes
@@ -192,15 +209,17 @@
         <div class="row px-2 py-1 d-flex ">
             <h3 class="m-0" style="font-weight: 500; color: black;">3. Do you have /use an Electronic prescribing
                 software?<span class="red">*</span>
-                <div class="tooltip-container" (mouseenter)="showTooltip4()" (mouseleave)="hideTooltip4()" (click)="toggleTooltip4()">
-                    <i class="fas fa-question-circle cursor ms-1"></i>
+                <div class="tooltip-container" (mouseenter)="showTooltip4()" (mouseleave)="hideTooltip4()"
+                    (click)="toggleTooltip4()">
+                    <i class="fas fa-info-circle cursor ms-1"></i>
                     <div *ngIf="isTooltipVisible4" class="custom-tooltip">
-                        Chalice Health offers a free, downloadable prescription template for prescribers. <br>
-                        However, electronic prescribing is strongly recommended for patient safety and <br> efficiency. 
-                        E-prescriptions ensure accurate medication delivery, reduce potential <br> errors, and streamline
-                        the process. Please note that having a prescribing tool <br> is essential to provide medications
-                        to your patients. </div>
-                </div></h3>
+                        <span style="font-weight: 600;"> Chalice Health </span>offers a free prescription template.
+                        Electronic <br> prescribing is recommended for <span style="font-weight: 600;">patient safety
+                            and efficiency,</span> <br>ensuring accurate delivery and reducing errors. A prescribing
+                        <br>tool is essential for prescribing medications.
+                    </div>
+                </div>
+            </h3>
             <div class="col-2" style="font-weight: 500; color: black; font-size:16px;">
                 <input type="radio" formControlName="electronicPrescribingSoftware" [value]="true">
                 Yes
@@ -217,12 +236,12 @@
         <div class="row px-2 py-1 d-flex ">
             <div class="d-flex">
                 <span>
-                    <h3>4.</h3>
+                    <h3 style="font-weight: 500; color: black; font-size:16px;">4.</h3>
                 </span>
                 <span>
                     <h3 class="m-0" style="font-weight: 500; color: black;"> Does your medical license require a
                         supervising or collaborating physician in your practicing state(s)? <span class="red">*</span>
-                       </h3>
+                    </h3>
                 </span>
             </div>
             <div class="col-2" style="font-weight: 500; color: black;  font-size:16px;">
@@ -239,8 +258,8 @@
             </div>
         </div>
         <div class="row px-2 py-1 d-flex ms-2" *ngIf="medicalForm.get('collaboratingPhysician')?.value === true">
-            <h3 class="m-0">4.1 Do you currently have a supervising/collaborating physician agreement in place?<span
-                    class="red">*</span> 
+            <h3 class="m-0" style="font-weight: 500; color: black; font-size:16px;">4.1 Do you currently have a
+                supervising/collaborating physician agreement in place?<span class="red">*</span>
             </h3>
             <div class="col-2">
                 <input type="radio" formControlName="collaboratingPhysician2" [value]="true">
@@ -285,7 +304,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-4">
+                    <!-- <div class="col-sm-4">
                         <label for="phoneNumber"> Phone number<span class="red">*</span></label>
                         <input type="text" id="phoneNumber" class="form-control form-control-sm mt-1"
                             formControlName="phoneNumber" maxlength="14" (input)="formatPhoneNumber($event)"
@@ -299,7 +318,22 @@
                             *ngIf="collaboratingPhysicianForm.get('phoneNumber')?.touched && collaboratingPhysicianForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
                             Phone number is invalid.
                         </div>
-                    </div>
+                    </div> -->
+                    <div class="col-sm-4">
+                <label for="phoneNumber"> Phone Number<span class="red">*</span></label>
+                <input type="text" id="phoneNumber" class="form-control form-control-sm mt-1"
+                    formControlName="phoneNumber" maxlength="14" (input)="formatPhoneNumber($event)"
+                    [ngClass]="{'is-invalid':collaboratingPhysicianForm.get('phoneNumber')?.invalid && collaboratingPhysicianForm.get('phoneNumber')?.touched}"
+                    [value]="collaboratingPhysicianForm.get('phoneNumber')?.value | capitalizeFirstLetter">
+                <div class="invalid-feedback"
+                    *ngIf="collaboratingPhysicianForm.get('phoneNumber')?.touched && collaboratingPhysicianForm.get('phoneNumber')?.hasError('required')">
+                    Phone Number is required.
+                </div>
+                <div class="invalid-feedback"
+                    *ngIf="collaboratingPhysicianForm.get('phoneNumber')?.touched && collaboratingPhysicianForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                    Phone number is invalid.
+                </div>
+            </div>
 
                 </div>
 
@@ -361,9 +395,10 @@
                                 [ngClass]="{'is-invalid': collaboratingPhysicianForm.get('specialtyId')?.invalid &&  collaboratingPhysicianForm.get('specialtyId')?.touched}"
                                 aria-expanded="false">
                                 {{ selectedCollaboratingSpeciality.length > 0 ?
-                                    selectedCollaboratingSpeciality.join(', ') : 'Select' }}
+                                selectedCollaboratingSpeciality.join(', ') : 'Select' }}
                             </button>
-                            <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()" (click)="$event.stopPropagation()">
+                            <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()"
+                                (click)="$event.stopPropagation()">
                                 <li *ngFor="let item of speciality1" (mouseenter)="hovering = true"
                                     (mouseleave)="hovering = false" [class.hover-effect]="hovering">
                                     <label>
@@ -385,12 +420,13 @@
                         <div class="custom-dropdown">
                             <button type="button" id="multiSelectDropdown1" [disabled]="isDisabled"
                                 class="form-select form-select-sm dp-pd-l mt-1" data-bs-toggle="dropdown"
-                                [ngClass]="{'is-invalid': collaboratingPhysicianForm.get('stateId')?.invalid &&  collaboratingPhysicianForm.get('stateId')?.touched}"
+                                [ngClass]="{'is-invalid': collaboratingPhysicianForm.get('statesId')?.invalid &&  collaboratingPhysicianForm.get('statesId')?.touched}"
                                 aria-expanded="false">
                                 {{ mySelectedCollboratingItems.length > 0 ?
                                 mySelectedCollboratingItems.join(', ') : 'Select' }}
                             </button>
-                            <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()" (click)="$event.stopPropagation()">
+                            <ul class="dropdown-menu mt-0 p-0" [style.width.px]="getDropdownWidth()"
+                                (click)="$event.stopPropagation()">
                                 <li *ngFor="let item of states1" (mouseenter)="hovering = true"
                                     (mouseleave)="hovering = false" [class.hover-effect]="hovering">
                                     <label>
@@ -402,7 +438,7 @@
                                 </li>
                             </ul>
                             <div class="invalid-feedback"
-                                *ngIf="collaboratingPhysicianForm.get('stateId')?.touched && collaboratingPhysicianForm.get('stateId')?.hasError('required')">
+                                *ngIf="collaboratingPhysicianForm.get('statesId')?.touched && collaboratingPhysicianForm.get('statesId')?.hasError('required')">
                                 Atleast one State is required.
                             </div>
                         </div>
@@ -412,52 +448,55 @@
         </div>
         <div class="row p-2 d-flex"
             [ngClass]="{'is-invalid': collaboratingPhysicianForm.get('background')?.invalid &&  collaboratingPhysicianForm.get('background')?.touched}">
-            <h3 class="mt-2 mb-0" style="color: black;">Provider professional background ( Check all that applies ) <span class="red">*</span></h3>
+            <h3 class="mt-2 mb-0" style="color: black;">Provider professional background ( Check all that applies )
+                <span class="red">*</span>
+            </h3>
             <div class="col-sm-12 p-2 pb-0">
-                <span><input type="checkbox" value="1" (change)="professionalBackground(1, $event)"   [checked]="checkedBGIds.includes(1)"  [disabled]="isDisabled"></span>
+                <span><input type="checkbox" value="1" (change)="professionalBackground(1, $event)"
+                        [checked]="checkedBGIds.includes(1)" [disabled]="isDisabled"></span>
                 <span class="px-2">I have been the subject of Medicare or Medicaid Sanctions</span>
             </div>
             <div class="col-sm-12 p-2 pb-0 d-flex">
-                <span><input type="checkbox" class="cursor" value="2" [checked]="checkedBGIds.includes(2)" [disabled]="isDisabled"
-                        (change)="professionalBackground(2, $event)"></span>
+                <span><input type="checkbox" class="cursor" value="2" [checked]="checkedBGIds.includes(2)"
+                        [disabled]="isDisabled" (change)="professionalBackground(2, $event)"></span>
                 <span class="px-2">I have been arrested</span>
             </div>
             <div class="col-sm-12 p-2 pb-0 d-flex">
-                <span><input type="checkbox" class="cursor" value="3" [checked]="checkedBGIds.includes(3)" [disabled]="isDisabled"
-                        (change)="professionalBackground(3, $event)"></span>
+                <span><input type="checkbox" class="cursor" value="3" [checked]="checkedBGIds.includes(3)"
+                        [disabled]="isDisabled" (change)="professionalBackground(3, $event)"></span>
                 <span class="px-2">
                     My license to practice in any jurisdiction has been limited,
                     suspended, revoked, denied, or subject to probationary conditions (or such action is pending)
                 </span>
             </div>
             <div class="col-sm-12 p-2 pb-0 d-flex">
-                <span><input type="checkbox" class="cursor" value="4" [checked]="checkedBGIds.includes(4)" [disabled]="isDisabled"
-                        (change)="professionalBackground(4, $event)"></span>
+                <span><input type="checkbox" class="cursor" value="4" [checked]="checkedBGIds.includes(4)"
+                        [disabled]="isDisabled" (change)="professionalBackground(4, $event)"></span>
                 <span class="px-2">I have been subject to an investigation, have had disciplinary action taken against
                     me by a local/state/national healthcare facility medical staff/governing board/medical
                     organization/professional society (or such action is pending)</span>
             </div>
             <div class="col-sm-12 p-2 pb-0 d-flex">
-                <span><input type="checkbox" class="cursor" value="5" [checked]="checkedBGIds.includes(5)" [disabled]="isDisabled"
-                        (change)="professionalBackground(5, $event)"></span>
+                <span><input type="checkbox" class="cursor" value="5" [checked]="checkedBGIds.includes(5)"
+                        [disabled]="isDisabled" (change)="professionalBackground(5, $event)"></span>
                 <span class="px-2"> I have had my privileges at a healthcare facility suspended, diminished, revoked, or
                     not renewed</span>
             </div>
             <div class="col-sm-12 p-2 pb-0 d-flex">
-                <span> <input type="checkbox" class="cursor" value="6" [checked]="checkedBGIds.includes(6)" [disabled]="isDisabled"
-                        (change)="professionalBackground(6, $event)"></span>
+                <span> <input type="checkbox" class="cursor" value="6" [checked]="checkedBGIds.includes(6)"
+                        [disabled]="isDisabled" (change)="professionalBackground(6, $event)"></span>
                 <span class="px-2"> I have had a professional liability suit, judgment or settlement filed/made against
                     me</span>
             </div>
             <div class="col-sm-12 p-2 pb-0 d-flex">
-                <span><input type="checkbox" class="cursor" value="7" [checked]="checkedBGIds.includes(7)" [disabled]="isDisabled"
-                        (change)="professionalBackground(7, $event)"></span>
+                <span><input type="checkbox" class="cursor" value="7" [checked]="checkedBGIds.includes(7)"
+                        [disabled]="isDisabled" (change)="professionalBackground(7, $event)"></span>
                 <span class="px-2"> I have been convicted of a crime, felony, or military court
                     martial</span>
             </div>
             <div class="col-sm-12 p-2 pb-0 d-flex">
-                <span> <input type="checkbox" class="cursor" value="8" [checked]="checkedBGIds.includes(8)" [disabled]="isDisabled"
-                        (change)="professionalBackground(8, $event)"></span>
+                <span> <input type="checkbox" class="cursor" value="8" [checked]="checkedBGIds.includes(8)"
+                        [disabled]="isDisabled" (change)="professionalBackground(8, $event)"></span>
                 <span class="px-2"> None of the above</span>
             </div>
             <div class="invalid mt-1"
@@ -478,18 +517,32 @@
             </div>
         </div>
         <div class="row p-2">
-            <div class="col-sm-5"></div>
-            <div class="mt-4 col-sm-7">
-                <button type="button" class="btn m-2 custom-padding cancelButton" (click)="cancel()" >
+            <div class="col-sm-2"></div>
+            <div class="mt-4 col-sm-10">
+                <button type="button" class="btn m-2 custom-padding cancelButton" (click)="cancel()"
+                    >
                     <span class="spinner-border text-light small-spinner" role="status" *ngIf="loading1">
                         <span class="visually-hidden">Loading...</span>
                     </span>Cancel</button>
-                <button type="button" class="btn m-2 custom-padding" style="background-color: #00876f;" [disabled]="isDisabled"
-                    (click)="submitData()"><span class="spinner-border text-light small-spinner" role="status"
-                        *ngIf="loading">
+                    <button type="button" class="btn m-2 custom-padding" (click)="openServicePopUp()"
+                    *ngIf="userInfo.accountType == 'Admin'"><span class="spinner-border text-light small-spinner"
+                        role="status" *ngIf="loading3">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>Next
+                </button>
+                <button type="button" class="btn m-2 custom-padding" style="background-color: #00876f;"
+                      (click)="submitData()"><span
+                        class="spinner-border text-light small-spinner" role="status" *ngIf="loading">
                         <span class="visually-hidden">Loading...</span>
                     </span>Save
                 </button>
+                <button type="button" class="btn m-2 custom-padding" (click)="openContactPopUp()"
+                    *ngIf="userInfo.accountType == 'Admin'"><span class="spinner-border text-light small-spinner"
+                        role="status" *ngIf="loading2">
+                        <span class="visually-hidden">Loading...</span>
+                    </span>Back
+                </button>
+                
             </div>
         </div>
     </form>

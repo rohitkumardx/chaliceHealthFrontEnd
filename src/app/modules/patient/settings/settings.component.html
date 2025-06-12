@@ -1,0 +1,201 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="signup-card">
+        <h3>Settings</h3>
+        <div class="signup-form">
+          <mat-tab-group (selectedTabChange)="onSettingsChange($event)" class="custom-tab-group">
+            <mat-tab value="notification">
+              <ng-template mat-tab-label>
+                <span class="tab-label ">Notification</span>
+              </ng-template>
+              <div class="mat-tab-content" style="overflow: hidden !important;">
+
+                <div class="">
+                  <div class=" p-4">
+                    <div class="modal-content px-4 py-4">
+                      <!-- Modal Body -->
+                      <form [formGroup]="notificationForm">
+                        <div class="modal-body px-4 py-2">
+                          <!-- Notification Preference -->
+                          <div class="row">
+                            <div class="form-group col-md-12">
+                              <label>How would you like to be notified?<span class="red">*</span></label>
+
+                              <div class="d-flex">
+                                <div class="form-check mt-2 me-2 cursor">
+                                  <input class="form-check-input cursor" type="radio" [value]="preference.Email"
+                                    formControlName="preference" id="email">
+                                  <label class="form-check-label" for="email">Email</label>
+                                </div>
+
+                                <div class="form-check mt-2 me-2 ms-2 cursor">
+                                  <input class="form-check-input cursor" type="radio" [value]="preference.Phone"
+                                    formControlName="preference" id="phone">
+                                  <label class="form-check-label" for="phone">Phone</label>
+                                </div>
+
+                                <div class="form-check mt-2 me-2 ms-2 cursor">
+                                  <input class="form-check-input cursor" type="radio" [value]="preference.Both"
+                                    formControlName="preference" id="both">
+                                  <label class="form-check-label" for="both">Both</label>
+                                </div>
+                              </div>
+
+
+                            </div>
+                          </div>
+
+                            <div class="row" *ngIf="['Email', 'Both'].includes(notificationForm.value.preference)">
+                            <div class="form-group col-md-4 col-lg-4 col-sm-12">
+
+                              <label for="email">Email <span class="red">*</span></label>
+                              <input type="email" id="email" class="form-control form-control-sm mt-1"
+                                formControlName="email" placeholder="Enter Email"
+                                [ngClass]="{'is-invalid': notificationForm.get('email')?.invalid && notificationForm.get('email')?.touched}">
+                              <div class="invalid-feedback"
+                                *ngIf="notificationForm.get('email')?.touched && notificationForm.get('email')?.hasError('required')">
+                                Email is required.
+                              </div>
+                              <div class="invalid-feedback d-block"
+                                *ngIf="notificationForm.get('email')?.touched && notificationForm.get('email')?.hasError('email')">
+                                Email is not valid.
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Show Phone Number Field Only If 'Phone' or 'Both' is Selected -->
+                          <div class="row" *ngIf="['Phone', 'Both'].includes(notificationForm.value.preference)">
+                            <div class="form-group  col-md-4 col-lg-4 col-sm-12">
+                              <label for="phoneNumber">Phone Number <span class="red">*</span></label>
+                              <input class="form-control form-control-sm mt-1" type="text" id="phoneNumber"
+                                formControlName="phoneNumber" placeholder="XXX-XXX-XXXX"
+                                (input)="formatPhoneNumber($event)" maxlength="14"
+                                [ngClass]="{'is-invalid': notificationForm.get('phoneNumber')?.invalid && notificationForm.get('phoneNumber')?.touched}">
+                              <div class="invalid-feedback"
+                                *ngIf="notificationForm.get('phoneNumber')?.touched && notificationForm.get('phoneNumber')?.hasError('required')">
+                                Phone Number is required.
+                              </div>
+                              <div class="invalid-feedback"
+                                *ngIf="notificationForm.get('phoneNumber')?.touched && notificationForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                                Phone number is invalid.
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <!-- Modal Footer -->
+                        <div class="modal-footer border-0">
+                          <button type="button" class="btn btn-save" [disabled]="loading" (click)="postNotification()">
+                            <span *ngIf="!loading">Save Changes</span>
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status"
+                              aria-hidden="true"></span>
+                            <span *ngIf="loading"> Saving...</span>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab value="Payment">
+              <ng-template mat-tab-label>
+                <span class="tab-label ">Billing & Payment</span>
+              </ng-template>
+              <div class="mat-tab-content" style="overflow: hidden !important;">
+                <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                  <div class="col-md-3 col-12">
+                    <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                      (input)="getPatientSettingByUserId()" class="form-control">
+                  </div>
+ 
+                </div>
+                <div class="table-responsive">
+                  
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueCode')">Patient
+                          Unique Code
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueCode', 'fa-sort-up': sortColumn === 'patientUniqueCode' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueCode' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('providerName')">Provider Name
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th scope="col">Appointment Date</th>
+                        <th scope="col">Service Type</th>
+                        <th scope="col">Consulation Fees</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of settingData; let i = index">
+                        <td style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.patientId)">
+                          <u>{{ item?.patientUniqueCode }}</u>
+                        </td>
+                        <td class="pt-3" style="color: #009cff!important; cursor: pointer;" (click)="viewProviderProfile(item.providerId)">
+                           <u>{{ item.providerName }}</u> </td>
+                      
+                        <td>
+                          <ng-container *ngIf="item.appointmentDate; else noDate">
+                            {{ item.appointmentDate | date:'MM-dd-yyyy' }} <br>
+                            {{ item.appointmentDate | date:'hh:mm a' }}
+                          </ng-container>
+                          <ng-template #noDate>--------</ng-template>
+                        </td>
+                        <td> {{ formatMeetingType(item.meetingType) || '--------' }} </td>
+                        <td *ngFor="let state of item.licensedState">
+
+                          <Span><i class="icon-total"></i> {{ state.totalAmount| currency:'USD' }}</Span>
+                        </td>
+                        <td> {{item.bookingStatus || '--------'}} </td>
+                      
+                      </tr>
+
+                      <tr *ngIf="loading">
+                        <td colspan="8">
+                          <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                            [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                            [additionalClasses]="'mt-5'"></app-loader>
+                        </td>
+                      </tr>
+
+                      <tr *ngIf="settingData.length === 0 && !loading">
+                        <td colspan="9" class="no-data-card">
+                          <div class="no-data-card-container">
+                            <div class="no-data-icon">
+                              <i class="fas fa-user-slash"></i>
+                            </div>
+                            <div class="no-data-content">
+                              <span class="no-data-title">No Payment History Found</span>
+                              <p class="no-data-description">It looks like there are no payment history at the
+                                moment.
+                                Please add your Payment!</p>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                 
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getPatientSettingByUserId()" />
+                </div>
+
+
+              </div>
+            </mat-tab>
+
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

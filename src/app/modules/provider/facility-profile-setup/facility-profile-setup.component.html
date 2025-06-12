@@ -1,0 +1,249 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="document-card">
+        <div class="px-4 pb-3">
+          <h1 class="text-center mb-2"><b>Profile Setup</b></h1>
+        </div>
+
+        <div class="my-form">
+          <form [formGroup]="facilityProfileForm" class="mt-1">
+            <div class="row">
+              <div class="col-md-4">
+                <label for="">First Name <span class="red">*</span> </label>
+                <input style="color: #464646" placeholder="John" type="text" id="FirstName"
+                  class="form-control form-control-sm" formControlName="firstName"
+                  [ngClass]="{'is-invalid':facilityProfileForm.get('firstName')?.invalid && facilityProfileForm.get('firstName')?.touched}"
+                  [value]="facilityProfileForm.get('firstName')?.value ">
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('firstName')?.touched && facilityProfileForm.get('firstName')?.hasError('required')">
+                  First Name is required.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="">Last Name <span class="red">*</span></label>
+                <input type="text" id="lastName" placeholder="Doe" class="form-control form-control-sm"
+                  formControlName="lastName"
+                  [ngClass]="{'is-invalid':facilityProfileForm.get('lastName')?.invalid && facilityProfileForm.get('lastName')?.touched}"
+                  [value]="facilityProfileForm.get('lastName')?.value ">
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('lastName')?.touched && facilityProfileForm.get('lastName')?.hasError('required')">
+                  Last Name is required.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="webSiteURL">Website Url <span class="red">*</span></label>
+                <input type="text" id="webSiteURL" placeholder="https://www.techinnovations.com"
+                  class="form-control form-control-sm" formControlName="webSiteURL"
+                  [ngClass]="{'is-invalid': facilityProfileForm.get('webSiteURL')?.invalid && facilityProfileForm.get('webSiteURL')?.touched}" />
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('webSiteURL')?.touched && facilityProfileForm.get('webSiteURL')?.hasError('required')">
+                  Website URL is required.
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-4">
+                <label>Phone Number <span class="red">*</span></label>
+                <input class="form-control form-control-sm mt-1" type="text" placeholder="XXX-XXX-XXXX"
+                  formControlName="phoneNumber" (input)="formatPhoneNumber($event)" maxlength="14"
+                  [ngClass]="{'is-invalid': facilityProfileForm.get('phoneNumber')?.invalid &&  facilityProfileForm.get('phoneNumber')?.touched}">
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('phoneNumber')?.touched && facilityProfileForm.get('phoneNumber')?.hasError('required')">
+                  Phone Number is required.
+                </div>
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('phoneNumber')?.touched && facilityProfileForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                  Phone number is invalid.
+                </div>
+              </div>
+
+
+
+              <div class="col-md-4">
+                <label for="email">Email </label>
+                <input type="tel" id="email" mailto:placeholder="john.doe@techinnovations.com"
+                  class="form-control form-control-sm mt-1" formControlName="email" readonly
+                  [ngClass]="{'is-invalid':facilityProfileForm.get('email')?.invalid && facilityProfileForm.get('email')?.touched}">
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('email')?.touched && facilityProfileForm.get('email')?.hasError('required')">
+                  Email is required.
+                </div>
+                <div class="fv-plugins-message-container invalid-feedback d-block"
+                  *ngIf="facilityProfileForm.get('email')?.touched && facilityProfileForm.get('email')?.hasError('email')">
+                  <div>Email is not valid</div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="fileName">Profile Picture</label>
+                  <input type="file" id="profilePicture" class="form-control form-control-sm mt-1 small-input"
+                    formControlName="profilePictureName"
+                    [ngClass]="{'is-invalid': facilityProfileForm.get('profilePictureName')?.invalid && facilityProfileForm.get('profilePictureName')?.touched}"
+                    (change)="onProfileSelected($event)">
+                  <div class="invalid-feedback"
+                    *ngIf="facilityProfileForm.get('profilePictureName')?.touched && facilityProfileForm.get('profilePictureName')?.hasError('required')">
+                    Profile Picture is required.
+                  </div>
+                </div>
+                <div *ngIf="!showEditTimeFile" style="margin-top : -4%">
+                  <div class="file-name" *ngIf="editProfilePicture != null">
+                    <span class="cursor"
+                      (click)="downloadFile(editProfilePicture.filePath)">{{editProfilePicture.fileName}}</span>
+                    <a (click)="deleteImage(editProfilePicture)"> <i class="fa-solid fa-trash ms-2 cursor"
+                        style="color:rgb(166, 7, 7);"></i></a><br>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+                <label for="dateOfBirth">Date of Birth <span class="red">*</span></label>
+                <input type="date" id="dateOfBirth" formControlName="dateOfBirth" placeholder=""
+                  class="form-control form-control-sm mt-1" [appMinAge]="18"
+                  [ngClass]="{'is-invalid': facilityProfileForm.get('dateOfBirth')?.invalid && facilityProfileForm.get('dateOfBirth')?.touched}" />
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('dateOfBirth')?.touched && facilityProfileForm.get('dateOfBirth')?.hasError('required')">
+                  Date Of Birth is required.
+                </div>
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('dateOfBirth')?.touched && facilityProfileForm.get('dateOfBirth')?.hasError('pattern')">
+                  Date of Birth cannot be empty or only spaces.
+                </div>
+                <div class="text-danger"
+                  *ngIf="facilityProfileForm.get('dateOfBirth')?.touched && facilityProfileForm.get('dateOfBirth')?.hasError('minAge')">
+                  You must be at least 18 years old.
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label for="ssn">SSN <span class="red">*</span></label>
+                <input type="text" id="ssn" placeholder="XXXXXXXXX" class="form-control form-control-sm mt-1"
+                  formControlName="ssn" (input)="limitSSNLength($event)"
+                  [ngClass]="{'is-invalid': facilityProfileForm.get('ssn')?.invalid && facilityProfileForm.get('ssn')?.touched}">
+
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('ssn')?.touched && facilityProfileForm.get('ssn')?.hasError('required')">
+                  SSN is required.
+                </div>
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('ssn')?.touched && facilityProfileForm.get('ssn')?.hasError('pattern')">
+                  SSN must be exactly 9 digits.
+                </div>
+              </div>
+
+
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <label for="address">Address <span class="red">*</span></label>
+                <textarea id="address" class="form-control" formControlName="address" (input)="onAddressChange($event)"
+                  [ngClass]="{'is-invalid': facilityProfileForm.get('address')?.invalid && facilityProfileForm.get('address')?.touched}"></textarea>
+                <ul *ngIf="suggestions.length">
+
+                  <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+                    {{ suggestion.address }}
+                  </li>
+                </ul>
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('address')?.touched && facilityProfileForm.get('address')?.hasError('required')">
+                  Address is required.
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label for="city">City <span class="red">*</span> </label>
+                <input type="text" id="city" placeholder="Los Angeles" class="form-control form-control-sm "
+                  style="padding: 6.5px 7px!important;;" formControlName="city"
+                  [ngClass]="{'is-invalid':facilityProfileForm.get('city')?.invalid && facilityProfileForm.get('city')?.touched}">
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('city')?.touched && facilityProfileForm.get('city')?.hasError('required')">
+                  City is required.
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-4">
+                <label>State<span class="red">*</span></label>
+                <select id="StateId" class="form-select form-select-md cursor" formControlName="StateId" [ngClass]="{
+                'is-invalid': facilityProfileForm.get('StateId')?.invalid && facilityProfileForm.get('StateId')?.touched
+                  }">
+                  <option value="" disabled selected>Select State</option>
+                  <option *ngFor="let state of states" [value]="state.id">
+                    {{ state.name }}
+                  </option>
+                </select>
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('StateId')?.touched && facilityProfileForm.get('StateId')?.hasError('required')">
+                  State is required.
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label for="postalCode"> Postal Code <span class="red">*</span> </label>
+                <input type="number" id="postalCode" placeholder="" class="form-control form-control-sm mt-1"
+                  formControlName="postalCode" (input)="limitZipCodeLength($event)"
+                  [ngClass]="{'is-invalid': facilityProfileForm.get('postalCode')?.invalid && facilityProfileForm.get('postalCode')?.touched}">
+
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('postalCode')?.touched && facilityProfileForm.get('postalCode')?.hasError('required')">
+                  Postal Code is required.
+                </div>
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('postalCode')?.touched && facilityProfileForm.get('postalCode')?.hasError('pattern')">
+                  Postal Code must be exactly 5 digits.
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label for="country"> Country<span class="red">*</span> </label>
+                <input type="text" id="country" placeholder="Los Angeles" class="form-control form-control-sm mt-1"
+                  formControlName="country"
+                  [ngClass]="{'is-invalid':facilityProfileForm.get('country')?.invalid && facilityProfileForm.get('country')?.touched}">
+                <div class="invalid-feedback"
+                  *ngIf="facilityProfileForm.get('country')?.touched && facilityProfileForm.get('country')?.hasError('required')">
+                  Country is required.
+                </div>
+              </div>
+
+
+
+            </div>
+
+
+            <div class="row mt-2">
+              <div class="form-group col-md-12">
+                <label for="note"> Note</label>
+                <textarea type="text" id="note" class=" form-control" formControlName="note"
+                  [ngClass]="{'is-invalid':facilityProfileForm.get('note')?.invalid && facilityProfileForm.get('note')?.touched}"
+                  [value]="facilityProfileForm.get('note')?.value">
+                                  </textarea>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-3"></div>
+              <div class="col-3"></div>
+              <div class="col-3"></div>
+              <div class="col-3">
+                <button type="submit" class="btn mt-2 m-2 custom-padding" [disabled]="isLoading"
+                  style="background-color: #00876F!important;" (click)="PostClinicInformation()">
+                  <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
+                  <span *ngIf="!isLoading" class="space">Save </span>
+                  <span *ngIf="isLoading" class="space">Save...</span>
+                </button>
+
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

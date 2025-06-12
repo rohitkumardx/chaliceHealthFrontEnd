@@ -1,0 +1,147 @@
+.main-banner {
+  background-color: #f9f9f9;
+  padding: 30px;
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.content-wrapper {
+  max-width: 100%;
+  width: 100%;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-size: 14px;
+  color: #555;
+}
+
+input[type="file"],
+textarea {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  transition: border 0.3s;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #00876F;
+  outline: none;
+}
+
+.invalid-feedback {
+  font-size: 12px;
+  display: block;
+  margin-top: 5px;
+}
+
+.is-invalid {
+  border: 1px solid #DC3545 !important;
+}
+
+button {
+  background: #00876F !important;
+  color: white !important;
+  font-weight: 500 !important;
+  width: 15rem;
+}
+
+button:hover {
+  background-color: #00876F;
+}
+
+button:disabled {
+  background-color: #ccc;
+}
+
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+table thead th {
+  background-color: #d3d3d3;
+  color: #000;
+  text-align: center;
+  padding: 12px;
+  border-bottom: 3px solid #bbb;
+  font-weight: bold;
+}
+
+table tbody tr {
+  border-top: 1px solid #bbb;
+  border-bottom: 1px solid #bbb;
+}
+
+table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #fff;
+}
+
+table td {
+  padding: 12px;
+}
+
+.fa-pen-to-square {
+  color: #00876f;
+  cursor: pointer;
+}
+
+.fa-trash {
+  color: rgb(166, 7, 7);
+  cursor: pointer;
+}
+
+
+@media (max-width: 768px) {
+  .form-group.col-3,
+  .form-group.col-4,
+  .form-group.col-6,
+  .form-group.col-12 {
+      width: 100%;
+  }
+
+  .row {
+      display: flex;
+      flex-wrap: wrap;
+  }
+
+  .col-1,
+  .col-3,
+  .col-4,
+  .col-6,
+  .col-12 {
+      flex: 0 0 100%;
+      max-width: 100%;
+      padding: 0 15px;
+  }
+
+  button {
+      width: 100%;
+  }
+}
+
+.card1{
+  min-height: 86vh;
+
+  flex-direction: column;
+  justify-content: space-between;
+}

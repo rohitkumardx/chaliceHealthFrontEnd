@@ -1,0 +1,36 @@
+.thankyou-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .thankyou {
+    text-align: center;
+    padding: 10px;
+    padding-top: 30px;
+  }
+  
+
+h2 {
+    margin-bottom: 1px;
+    font-weight: 500;
+}
+
+h5 {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-weight: 400;
+    font-size: small;
+}
+.cancelButton{
+    background-color: rgb(199, 10, 10);
+    color: white; 
+  }
+  .cancelButton:hover {
+  background-color: rgb(170, 3, 3);
+  }
+
+  .custom-padding {
+    padding-left: 30px;
+    padding-right: 30px;
+}

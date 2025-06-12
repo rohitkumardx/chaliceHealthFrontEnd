@@ -1,21 +1,30 @@
 <div class="container-fluid px-4 p-2" style="   background-color: #ffffff !important;">
-  <div class="row g-4">
-    <div class="col-6">
-      <div class=" rounded h-100 p-2">
+
+  <div class="row g-4" *ngIf="userInfo.credentialStatus !='CompletedAndApproved'">
+    <div class="px-5 pt-5 okk" style="display: flex;  align-items: center; justify-content: space-between;">
+      <h2 style="margin: 0; font-size: 25px;">Set up your Chalice Health Account</h2>
+
+      <i class="fa fa-arrow-circle-left" (click)="goBack()" *ngIf="userInfo.accountType != 'IndependentProvider'"
+        style="color: #00876ee4; font-size: 30px; cursor: pointer; transition: transform 0.3s ease;"></i>
+    </div>
+    <div class="col-md-7 col-lg-7 col-sm-12 col-12">
+      <div class=" rounded p-2">
         <div class="card ">
-          <div class="rounded border border-danger">
-            <div class=" px-5 py-4 border border-danger">
+          <div class="rounded">
+            <div class=" px-5 hok py-4" style="padding-bottom: 0% !important;">
               <div class="row  w-100">
                 <!-- Left Section -->
-                <div class="col-lg-12 left-section mt-2 border border-danger" style="padding: 0px 0px !important;">
-                  <h2>Set up your Chalice Health account</h2>
+                <div class="col-lg-12 left-section mt-2" style="padding: 0px 0px !important;">
+
+
+
                   <ul class="steps">
                     <li [class.active]="currentStep == 1" [class.completed]="currentStep > 1">
                       <div class="step-content">
                         <h3><span class="step-number">1</span> Your Profile</h3>
                         <div class="">
                           <!-- <p>Add your practice name and location so patients can find you via ChaliceHealth search. <i -->
-                          <p class="border border-danger">Update your profile details and complete your info. <i
+                          <p class="">Update your profile details and complete your info. <i
                               class="fa-solid fa-pen-to-square ms-2" *ngIf="currentStep > 1"
                               style="cursor:pointer;color:#00876f;font-size: large;" (click)="openProfilePopUp()"></i>
                           </p>
@@ -36,7 +45,7 @@
                           </p>
                         </div>
                         <button class="btn btn-primary" *ngIf="currentStep == 2" (click)="nextStep()">
-                        Add  Contact Details</button>
+                          Add Contact Details</button>
                       </div>
                     </li>
 
@@ -67,7 +76,7 @@
                     <li [class.active]="currentStep == 5" [class.completed]="currentStep > 5">
                       <div class="step-content">
                         <h3><span class="step-number" [class.active-number]="currentStep == 5">5</span> Documents</h3>
-                        <p>Update documents for verification purpose . <i class="fa-solid fa-pen-to-square ms-2"
+                        <p>Update documents for verification purpose. <i class="fa-solid fa-pen-to-square ms-2"
                             *ngIf="currentStep > 5" style="cursor:pointer;color:#00876f;font-size: large;"
                             (click)="openDocumentPopUp()"></i></p>
                         <button class="btn btn-primary" *ngIf="currentStep == 5" (click)="nextStep()">Add
@@ -79,7 +88,9 @@
                       <div class="step-content">
                         <h3><span class="step-number" [class.active-number]="currentStep == 6">6</span> Wait for Review
                         </h3>
-                        <p>Our credentialing team is currently reviewing your account to verify your credentials and licenses. This process typically takes 7 to 14 days. Once completed, your account will be approved and activated.</p>
+                        <p>Our credentialing team is currently reviewing your account to verify your credentials and
+                          licenses. This process typically takes 7 to 14 days. Once completed, your account will be
+                          approved and activated.</p>
                       </div>
                     </li>
                   </ul>
@@ -92,14 +103,200 @@
       </div>
     </div>
 
-    <div class="profile col-6">
+    <div class="profile  col-md-5 col-lg-5 col-sm-12 col-12 position-relative">
+
       <img src="../../../../assets/svg/homepage/profile.jpg" alt="Logo" *ngIf="currentStep == 1">
       <img src="../../../../assets/svg/homepage/contact.png" alt="Logo" *ngIf="currentStep == 2">
       <img src="../../../../assets/svg/homepage/medical.png" alt="Logo" *ngIf="currentStep == 3">
-      <img src="../../../../assets/svg/homepage/service-and-price.png" alt="Logo" *ngIf="currentStep == 4">
-      <img src="../../../../assets/svg/homepage/Document.png" alt="Logo" *ngIf="currentStep == 5">
-      <img src="../../../../assets/svg/homepage/Document.png" alt="Logo" *ngIf="currentStep == 6">
+      <img src="../../../../assets/svg/newr.jpg" alt="Logo" *ngIf="currentStep == 4">
+      <img src="../../../../assets/svg/docr.jpg" alt="Logo" *ngIf="currentStep == 5">
+      <img src="../../../../assets/svg/docr.jpg" alt="Logo" *ngIf="currentStep == 6">
 
     </div>
+  </div>
+
+
+
+  <div class="row g-4" *ngIf="userInfo.credentialStatus =='CompletedAndApproved'">
+    <div class=" rounded p-2">
+      <div class="card ">
+        <div class="rounded">
+          <h1 class="px-4">Welcome {{userInfo.firstName}} {{userInfo.lastName}}
+            <!-- <img src="../../../../assets/svg/stethoscope_3952975.png" width="30px" height="30px" alt="" srcset="">
+            <img src="../../../../assets/svg/stethoscope_8999753.png" width="30px" height="30px" alt="" srcset="">
+            <img src="../../../../assets/svg/medicine_14932889.png" width="30px" height="30px" alt="" srcset=""> -->
+            <!-- <img src="../../../../assets/svg/Background/imgae.png" width="125px" height="90px" alt="" srcset=""> -->
+          </h1>
+          <div class="update-box border border-2 rounded p-3 mb-3" *ngFor="let item of expiredDocument">
+            <div class="update-content d-flex justify-content-between align-items-center">
+              <div class="text-section">
+                <h5 class="mb-1 text-primary">📢 New Notification!</h5>
+                <p class="mb-0 text-muted">Your document under the category <strong>
+                    {{formatCategoryName(item.categoryName)}} </strong> expired on {{item.expiryDate
+                  |date:'MM-dd-yyyy'}}, from <strong>Chalice Health</strong>. Click the button to update the document.
+                </p>
+              </div>
+              <button class="view-button btn btn-outline-success btn-sm" (click)="openDocumentPopUp()">
+                Update Document
+              </button>
+            </div>
+          </div>
+          <div class="update-box border border-2 rounded p-3 mb-3" *ngFor="let item of announcementData">
+            <div class="update-content d-flex justify-content-between align-items-center">
+              <div class="text-section">
+                <h5 class="mb-1 text-primary">📢 New Announcement!</h5>
+                <p class="mb-0 text-muted">You have a new update from <strong>Chalice Health</strong>.
+                  Click the button to view the details.</p>
+              </div>
+              <button class="view-button btn btn-outline-success btn-sm" (click)="viewAnnouncement(item)">
+                View Announcement
+              </button>
+            </div>
+          </div>
+          <div class="container pb-5 pt-2">
+            <div class="row g-4">
+              <!-- About Chalice Health -->
+              <div class="col-md-6">
+                <div class="card1 p-4 h-100 d-flex flex-column">
+                  <h3 class="text-center mb-3">About Chalice Health</h3>
+                  <ul>
+                    <li>Clear, upfront fixed pricing</li>
+                    <li>Instant online scheduling</li>
+                    <li>Virtual, in-person, and home care</li>
+                    <li>Streamlined digital platform</li>
+                    <li>Quick access to various specialists</li>
+                    <li>Easy online refills</li>
+                    <li>100% transparent pricing</li>
+                  </ul>
+                </div>
+              </div>
+              <!-- Chalice Health Expectations -->
+              <div class="col-md-6">
+                <div class="card1 p-4 h-100 d-flex flex-column">
+                  <h3 class="text-center mb-3">Chalice Health Expectations</h3>
+                  <ul>
+                    <li>Respond to all Chalice Health team outreach within 24 hours.</li>
+                    <li>Complete Rx, notes, lab orders, referrals within 24 hours.</li>
+                    <li>Complete all scheduled visits within appropriate time frame.</li>
+                    <li>Contact patients at least twice if no video visit.</li>
+                    <li>Utilize Chalice Health clinical tools.</li>
+                    <li>Verify patient identity with government-issued ID.</li>
+                    <li>No-shows reviewed by the Provider Review Committee.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+<div class="row align-items-center mt-1">
+                    <!-- Buttons Section (Always on top in mobile, left on desktop) -->
+                    <div class="col-12 col-md-9 mb-2 mb-md-0">
+                        <div class="d-flex flex-wrap gap-2">
+                            <h1 class="ms-2 ">Upcoming Appointment</h1>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar Section -->
+                    <div class="col-12 col-md-3">
+                        <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code/Name/DOB"
+                            (input)="getUpcomingAppointmentsByUserId()" class="form-control" />
+                    </div>
+
+                </div>
+
+          <!-- <h3 class="ms-3 text-black bold fs-4">Upcoming Appointment</h3>
+
+          <div class="row mt-2 mb-2 justify-content-end">
+            <div class="col-12 col-md-4">
+              <input type="text" class="form-control" [(ngModel)]="searchTerm"
+                placeholder="Search By Patient Code/Name/DOB" (input)="getUpcomingAppointmentsByUserId()" />
+            </div>
+          </div> -->
+          <div class="table-responsive p-2">
+
+            <table class="table ">
+              <thead>
+                <tr>
+                  <th scope="col" (click)="sortData('patientUniqueId')">Patient Code
+                    <i
+                      [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueId', 'fa-sort-up': sortColumn === 'patientUniqueId' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueId' && sortOrder === 'desc'}"></i>
+                  </th>
+                  <th style="min-width: 150px;" scope="col">Patient Name</th>
+                  <th scope="col" style=" min-width: 150px;" (click)="sortData('date')">Date & Time
+                    <i
+                      [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'date', 'fa-sort-up': sortColumn === 'date' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'date' && sortOrder === 'desc'}"></i>
+                  </th>
+
+                  <th style="min-width: 150px;" scope="col" (click)="sortData('meetingType')">Service Type
+                    <i
+                      [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'meetingType', 'fa-sort-up': sortColumn === 'meetingType' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'meetingType' && sortOrder === 'desc'}"></i>
+                  </th>
+                  <th scope="col" style=" min-width: 150px;">DOB</th>
+                  <th scope="col">Location</th>
+                  <th scope="col">Reason For Visit</th>
+                  <th scope="col">Status</th>
+                  <!-- <th scope="col">Action</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of upcomingAppointment; let i = index">
+                  <td (click)="showPatientDashboard(item.bookAppointmentId)"
+                    style="color: #009cff!important; cursor: pointer;"><u>{{item.patientUniqueId}}</u></td>
+                  <td (click)="showPatientDashboard(item.bookAppointmentId)"
+                    style="color: #009cff!important; cursor: pointer;"><u>{{ item.patientName }}</u></td>
+                  <td>{{item.date | date:'MM-dd-yyyy'}}<br>
+                    {{item.date | date:'hh:mm a'}}
+                  </td>
+                  <td>
+                    <ng-container [ngSwitch]="item.meetingType">
+                      <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                        style="font-size: 15px; color: #00876ec8;"></i>
+                      <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                      <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2" style="color: #00876ec8;"></i>
+                    </ng-container>
+                    {{ formatServiceType(item.meetingType) }}
+                  </td>
+                  <!-- <td>{{formatServiceType(item.meetingType)}}
+                   </td> -->
+                  <td>{{ item.dob | date:'MM-dd-yyyy' }}</td>
+                  <td>{{item.location ? item.location : '--------'}}</td>
+                  <td>{{item.reasonForVisit}}</td>
+                  <td>{{item.bookingStatus}}</td>
+
+                </tr>
+                <tr *ngIf="loading">
+                  <td colspan="7">
+                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                      [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                      [additionalClasses]="'mt-5'"></app-loader>
+                  </td>
+                </tr>
+                <tr *ngIf="upcomingAppointment.length === 0 && !loading">
+                  <td colspan="9" class="no-data-card">
+                    <div class="no-data-card-container">
+                      <div class="no-data-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                      </div>
+                      <div class="no-data-content">
+                        <span class="no-data-title">No Appointments Found</span>
+                        <p class="no-data-description">It looks like there are no appointments at the moment.
+                          Please check back later!</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+          <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="roles.length >0 && !loading">
+            <app-pagination [paginator]="paginator" (onPageChange)=" getUpcomingAppointmentsByUserId()" />
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

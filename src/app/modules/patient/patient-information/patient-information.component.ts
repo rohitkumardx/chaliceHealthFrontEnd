@@ -4,11 +4,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { MatTabGroup } from '@angular/material/tabs';
 import { Router } from '@angular/router';
-import { race } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { race, Observable, finalize } from 'rxjs';
 import { AuthService } from 'src/app/Services/auth.service';
 import { GlobalModalService } from 'src/app/Services/global-modal.service';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { PatientService } from 'src/app/Services/patient.service';
+import { ProviderService } from 'src/app/Services/provider.service';
+import { DeletePopupComponent } from 'src/app/shared/components/delete-popup/delete-popup.component';
 import { getErrorMessage } from 'src/app/utils/httpResponse';
 import { environment } from 'src/environments/environment';
 
@@ -33,7 +36,9 @@ export function phonePatternValidator(): ValidatorFn {
   styleUrls: ['./patient-information.component.css']
 })
 export class PatientInformationComponent implements OnInit {
-  isLoading = false;
+  isLoading: boolean = false;
+  isLoading1: boolean = false;
+  isLoading2: boolean = false;
   generalForm!: FormGroup;
   familyMemberForm!: FormGroup;
   emergencyContactForm!: FormGroup;
@@ -55,8 +60,7 @@ export class PatientInformationComponent implements OnInit {
   @ViewChild('tabGroup', { static: false }) tabGroup!: MatTabGroup;
   suggestions: any[] = [];
 
-  private HERE_API_URL = 'https://autocomplete.search.hereapi.com/v1/autocomplete';
-  private API_KEY = 't58P7DlKUdXX1Wlcn1C9bRO7U9t1tC-Y3M2Q1T2m3Ac';
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -66,65 +70,65 @@ export class PatientInformationComponent implements OnInit {
     private globalModalService: GlobalModalService,
     private patientService: PatientService,
     private http: HttpClient,
+    private modalService: NgbModal,
+    private providerService: ProviderService
   ) { }
 
   ngOnInit() {
     this.generalForm = this.fb.group({
       id: ['0'],
-      firstName: ['', Validators.required],
-      middleName: [''],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.pattern(/\S+/)]],
+      middleName: [],
+      lastName: ['', [Validators.required, Validators.pattern(/\S+/)]],
       patientUniqueId: [{ value: '' }, Validators.required],
       phoneNumber: ['', [Validators.required, phonePatternValidator()]],
       email: [{ value: '' }, [Validators.required, Validators.email]],
-      raceId: [''],
+      raceId: ['', Validators.required],
       secondaryRaceId: [''],
-      gender: ['', Validators.required],
+      gender: ['', [Validators.required, Validators.pattern(/\S+/)]],
       stateId: ['', Validators.required],
-      city: ['', Validators.required],
-      ethnicityId: [''],
+      city: ['', [Validators.required, Validators.pattern(/\S+/)]],
+      ethnicityId: ['', Validators.required],
       dateOfBirth: ['', Validators.required],
-      profilePictureName: [''],
-      address: ['', Validators.required],
-      zipCode: ['', Validators.required]
+      address: ['', [Validators.required, Validators.pattern(/\S+/)]],
+      zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
       // userId: ['']
     })
 
     this.familyMemberForm = this.fb.group({
       id: ['0'],
-      firstName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.pattern(/\S+/)]],
       middleName: [''],
-      lastName: ['', Validators.required],
+      lastName: ['', [Validators.required, Validators.pattern(/\S+/)]],
       uniqueId: ['', Validators.required],
       phoneNumber: ['', [Validators.required, phonePatternValidator()]],
       email: ['', [Validators.required, Validators.email]],
       race: [''],
       gender: ['', Validators.required],
       stateId: ['', Validators.required],
-      city: ['', Validators.required],
-      dob: ['', Validators.required],
-      address: ['', Validators.required],
+      city: ['', [Validators.required, Validators.pattern(/\S+/)]],
+      // dob: ['', Validators.required],
+      dob: ['', [Validators.required, this.pastDateValidator]],
+      address: ['', [Validators.required, Validators.pattern(/\S+/)]],
       languageId: [''],
-      zipCode: ['', Validators.required],
+      zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
       relationshipType: ['', Validators.required],
       // userId: [''],
     });
 
     this.emergencyContactForm = this.fb.group({
       id: ['0'],
-      firstName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.pattern(/\S+/)]],
       middleName: [''],
-      lastName: ['', Validators.required],
+      lastName: ['', [Validators.required, Validators.pattern(/\S+/)]],
       uniqueId: ['', Validators.required],
       phoneNumber: ['', [Validators.required, phonePatternValidator()]],
       email: ['', [Validators.required, Validators.email]],
       relationshipType: ['', Validators.required],
-      address: ['', Validators.required],
+      address: ['', [Validators.required, Validators.pattern(/\S+/)]],
       stateId: ['', Validators.required],
-      city: ['', Validators.required],
-      zipCode: ['', Validators.required]
-
-
+      city: ['', [Validators.required, Validators.pattern(/\S+/)]],
+      zipCode: ['', [Validators.required, Validators.pattern('^[0-9]{5}$')]],
       // userId: ['']
 
     })
@@ -139,6 +143,42 @@ export class PatientInformationComponent implements OnInit {
     this.getFamilyUniqueCode();
     const userInfo = this.authService.getUserInfo()
     this.userId = userInfo.userId
+  }
+
+    selectedTabIndex = 0;
+
+  goToEmergencyContact() {
+    this.selectedTabIndex = 2; // 1 is the index of the Emergency Contact tab
+  }
+
+goBack() {
+  if (this.selectedTabIndex > 0) {
+    this.selectedTabIndex -= 1;
+  }
+}
+
+  limitGeneralZipCodeLength(event: any) {
+    let value = event.target.value;
+    if (value.length > 5) {
+      event.target.value = value.slice(0, 5);
+      this.generalForm.get('zipCode')?.setValue(value.slice(0, 5));
+    }
+  }
+
+  limitFamilyZipCodeLength(event: any) {
+    let value = event.target.value;
+    if (value.length > 5) {
+      event.target.value = value.slice(0, 5);
+      this.familyMemberForm.get('zipCode')?.setValue(value.slice(0, 5));
+    }
+  }
+
+  limitEmergencyZipCodeLength(event: any) {
+    let value = event.target.value;
+    if (value.length > 5) {
+      event.target.value = value.slice(0, 5);
+      this.emergencyContactForm.get('zipCode')?.setValue(value.slice(0, 5));
+    }
   }
 
   getEthnicityDropdownList() {
@@ -157,61 +197,126 @@ export class PatientInformationComponent implements OnInit {
     })
   }
   onAddressChange(event: any): void {
-    debugger
     const query = event.target.value;
-
     if (query.length > 2) {
-      this.http.get(`${this.HERE_API_URL}?q=${query}&apiKey=${this.API_KEY}`)
-        .subscribe((response: any) => {
-          this.suggestions = response.items;
-        });
+      this.providerService.getAddressSearch(query).subscribe((response: any) => {
+
+        this.suggestions = response
+      });
+
     } else {
       this.suggestions = [];
     }
   }
+
   selectSuggestion(suggestion: any): void {
-    // Set the selected address in the form
-    this.generalForm.patchValue({ address: suggestion });
-    this.suggestions = [];  // Clear suggestions once an address is selected
+    this.generalForm.get('address')?.setValue(suggestion.address);
+    this.suggestions = [];
+    this.selectedIndex = -1;
+
+    const postalCode = suggestion.postalCode?.includes('-')
+      ? suggestion.postalCode.split('-')[0]
+      : suggestion.postalCode;
+    const country = suggestion.country;
+
+    this.states.forEach((temp) => {
+      if (temp.name === suggestion.state) {
+        this.generalForm.patchValue({ stateId: temp.id });
+      }
+    });
+
+    this.generalForm.patchValue({
+      address: suggestion.address,
+      city: suggestion.city,
+      zipCode: postalCode,
+      country: country // Use the extracted country
+    });
+
+    this.suggestions = []; // Clear suggestions after selection
   }
 
   address1Suggestions = []
   onAddressChangeInFamilyMember(event: any): void {
-    debugger
     const query = event.target.value;
-
     if (query.length > 2) {
-      this.http.get(`${this.HERE_API_URL}?q=${query}&apiKey=${this.API_KEY}`)
-        .subscribe((response: any) => {
-          this.address1Suggestions = response.items;
-        });
+      this.providerService.getAddressSearch(query).subscribe((response: any) => {
+
+        this.address1Suggestions = response
+      });
+
     } else {
-      this.address1Suggestions = [];
+      this.suggestions = [];
     }
   }
   selectSuggestionFamilyMember(suggestion: any): void {
-    // Set the selected address in the form
-    this.familyMemberForm.patchValue({ address: suggestion });
+    this.familyMemberForm.get('address')?.setValue(suggestion.address);
+    this.address1Suggestions = [];
+    this.selectedIndex = -1;
+    const postalCode = suggestion.postalCode?.includes('-')
+      ? suggestion.postalCode.split('-')[0]
+      : suggestion.postalCode;
+    const country = suggestion.country;
+    this.states.map((temp) => {
+      if (temp.name == suggestion.state) {
+        const StateId = temp.id
+        this.familyMemberForm.patchValue({
+          stateId: StateId
+        }
+        )
+      }
+    })
+    this.familyMemberForm.patchValue({
+      address: suggestion.address,
+      city: suggestion.city,
+      zipCode: postalCode,
+
+      country: country  // Use the extracted country
+
+    });
+
     this.address1Suggestions = [];  // Clear suggestions once an address is selected
+
   }
   selectSuggestionEmergencyContact(suggestion: any): void {
-    // Set the selected address in the form
-    this.emergencyContactForm.patchValue({ address: suggestion });
+    this.address2Suggestions = [];
+    const postalCode = suggestion.postalCode?.includes('-')
+      ? suggestion.postalCode.split('-')[0]
+      : suggestion.postalCode;
+    const country = suggestion.country;
+    this.states.map((temp) => {
+      if (temp.name == suggestion.state) {
+        const StateId = temp.id
+        this.emergencyContactForm.patchValue({
+          stateId: StateId
+        }
+        )
+      }
+    })
+    this.emergencyContactForm.patchValue({
+      address: suggestion.address,
+      city: suggestion.city,
+      zipCode: postalCode,
+
+      country: country  // Use the extracted country
+
+    });
+
     this.address2Suggestions = [];  // Clear suggestions once an address is selected
+
   }
 
   address2Suggestions = []
   onAddressChangeInEmergencyContact(event: any): void {
-    debugger
-    const query = event.target.value;
 
+    const query = event.target.value;
     if (query.length > 2) {
-      this.http.get(`${this.HERE_API_URL}?q=${query}&apiKey=${this.API_KEY}`)
-        .subscribe((response: any) => {
-          this.address2Suggestions = response.items;
-        });
+      this.providerService.getAddressSearch(query).subscribe((response: any) => {
+
+        this.address2Suggestions = response
+      });
+
     } else {
-      this.address2Suggestions = [];
+      this.suggestions = [];
     }
   }
 
@@ -239,7 +344,7 @@ export class PatientInformationComponent implements OnInit {
     );
   }
   getEmergencyContactUniqueId(): void {
-    debugger
+
     this.patientService.getEmergencyContactUniqueId().subscribe(
       (response: any) => {
         console.log("mydata: ", response)
@@ -252,15 +357,49 @@ export class PatientInformationComponent implements OnInit {
     );
   }
   getState() {
-
     this.patientService.getState().subscribe((data: any) => {
       this.states = data.items;
       console.log("states :", this.state)
     });
   }
 
-  getLanguage() {
+  getStateId(city: string, countryCode: any, type: number) {
+    this.patientService.getStateByCityAndCountry(city, countryCode).subscribe((response: any) => {
+      // Extract the state from the response
+      const findState = this.patientService.getStateFromResponse(response.items);
+      ;
+      const state = this.states.find(state => state.name === findState);
+      if (state) {
+        // Check the type and patch the corresponding form
+        if (type === 1) {
+          // Patch generalForm if type is 1
+          this.generalForm.patchValue({
+            stateId: state.id,
+          });
+        } else if (type === 2) {
+          // Patch familyMemberForm if type is 2
+          this.familyMemberForm.patchValue({
+            stateId: state.id,
+          });
+        } else if (type === 3) {
+          // Patch emergencyContactForm if type is 3
+          this.emergencyContactForm.patchValue({
+            stateId: state.id,
+          });
+        } else {
+          console.log('Unknown type:', type);
+        }
+      } else {
+        console.log('State not found');
+        return null; // Return null if no state is found
+      }
+    });
+  }
 
+
+
+
+  getLanguage() {
     this.patientService.getLanguage().subscribe((data: any) => {
       this.languages = data.items;
       console.log("languages :", this.language)
@@ -275,7 +414,7 @@ export class PatientInformationComponent implements OnInit {
 
   profilePicture = []
   onProfileSelected(event: any) {
-    debugger
+
     this.profilePicture = []
     const file = event.target.files[0];
     if (file) {
@@ -290,7 +429,7 @@ export class PatientInformationComponent implements OnInit {
   deleteImage(file) {
     this.patientService.deletePatientProfle(file.userId).subscribe((data: any) => {
       this.editProfilePicture = null
-      this.notificationService.showSuccess("Image deleted");
+      this.notificationService.showSuccess("Profile Picture Deleted Successfully");
     })
 
   }
@@ -302,10 +441,16 @@ export class PatientInformationComponent implements OnInit {
   }
 
 
+
   PostGeneralInformation() {
+    this.isLoading2 = true;
     if (this.generalForm.valid) {
       // Collect form data
       const generalForm = this.generalForm.value;
+      if (!generalForm.middleName || generalForm.middleName.toLowerCase() === 'null') {
+        generalForm.middleName = '';
+      }
+      ;
       if (generalForm.phoneNumber) {
         generalForm.phoneNumber = generalForm.phoneNumber.replace(/\D/g, '');
       }
@@ -323,6 +468,10 @@ export class PatientInformationComponent implements OnInit {
         formData.append('profilePictureName', this.profilePicture[i]);
       }
 
+      // if (this.generalForm.value.middleName === '' || this.generalForm.value.middleName === 'null') {
+      //   this.generalForm.value.middleName = null;
+      // }
+
       this.patientService.postPatientGeneralInformation(formData).subscribe(
         (response: any) => {
           console.log('Post successful', response);
@@ -333,6 +482,7 @@ export class PatientInformationComponent implements OnInit {
           } else {
             this.notificationService.showSuccess("Patient General Information updated successfully.");
           }
+          this.isLoading2 = false;
           this.generalForm.reset();
           this.getPatientInformationById();
 
@@ -342,16 +492,25 @@ export class PatientInformationComponent implements OnInit {
         (error: any) => {
           console.error('Post failed', error);
           this.notificationService.showDanger(getErrorMessage(error));
+          this.isLoading2 = false;
         }
       );
     } else {
       this.notificationService.showDanger('Form is invalid. Please fill all required fields correctly.');
-      this.generalForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
+      this.generalForm.markAllAsTouched();
+      this.isLoading2 = false;// Mark all fields as touched to show validation errors
     }
   }
 
+
+
+
+
+
+
   PostEmergencyContact() {
-    debugger;
+    ;
+    this.isLoading1 = true;
     if (this.emergencyContactForm.valid) {
       // Collect form data
       const emergencyContactForm = this.emergencyContactForm.value;
@@ -370,7 +529,9 @@ export class PatientInformationComponent implements OnInit {
           } else {
             this.notificationService.showSuccess("Emergency Contact Updated Successfully");
           }
-          this.emergencyContactForm.reset();
+          this.isLoading1 = false;
+
+          // this.emergencyContactForm.reset();
           this.getEmergencyContactById;
           // this.getEmergencyContactUniqueId()
           // Redirect to the next tab (if any) or perform further actions
@@ -379,12 +540,26 @@ export class PatientInformationComponent implements OnInit {
         (error: any) => {
           console.error('Post failed', error);
           this.notificationService.showDanger(getErrorMessage(error));
+          this.isLoading1 = false;
         }
       );
     } else {
       this.notificationService.showDanger('Form is invalid. Please fill all required fields correctly.');
       this.emergencyContactForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
+      this.isLoading1 = false;
     }
+  }
+
+  pastDateValidator(control: AbstractControl) {
+    if (control.value) {
+      const selectedDate = new Date(control.value);
+      const currentDate = new Date();
+
+      if (selectedDate > currentDate) {
+        return { futureDate: true }; // Return an error object if date is in the future
+      }
+    }
+    return null; // No error if the date is valid
   }
 
   formatMobileNumber(event: Event): void {
@@ -396,7 +571,8 @@ export class PatientInformationComponent implements OnInit {
   }
 
   postFamilyMember() {
-    debugger;
+    this.isLoading = true;
+    ;
     if (this.familyMemberForm.valid) {
       // Collect form data
       const familyMemberForm = { ...this.familyMemberForm.value }; // Create a shallow copy of the form data
@@ -405,13 +581,15 @@ export class PatientInformationComponent implements OnInit {
       if (typeof familyMemberForm.zipCode === 'number') {
         familyMemberForm.zipCode = familyMemberForm.zipCode.toString();
       }
+      familyMemberForm.languageId = familyMemberForm.languageId
+        ? parseInt(familyMemberForm.languageId, 10) || null
+        : null;
       familyMemberForm.userId = this.userId;
 
-      debugger;
+      ;
       this.patientService.postFamilyMember(familyMemberForm).subscribe(
         (response: any) => {
           console.log('Family member Post successful', response);
-
 
           // Call getFamilyMemberList after successful post
           this.getFamilyMemberList();
@@ -423,16 +601,19 @@ export class PatientInformationComponent implements OnInit {
           } else {
             this.notificationService.showSuccess("Patient Family Member Information Updated Successfully");
           }
+          this.isLoading = false;
           this.familyMemberForm.reset();
         },
         (error: any) => {
           console.error('Post failed', error);
           this.notificationService.showDanger(getErrorMessage(error));
+          this.isLoading = false;
         }
       );
     } else {
       this.notificationService.showDanger('Form is invalid. Please fill all required fields correctly.');
-      this.familyMemberForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
+      this.familyMemberForm.markAllAsTouched();
+      this.isLoading = false;
     }
   }
 
@@ -445,7 +626,7 @@ export class PatientInformationComponent implements OnInit {
   }
 
   getEmergencyContactById() {
-    debugger;
+    ;
     const userInfo = this.authService.getUserInfo()
     this.patientService.getEmergencyContactById(userInfo.userId).subscribe((data: any) => {
       if (data) { // Check if data is not null or undefined
@@ -453,7 +634,6 @@ export class PatientInformationComponent implements OnInit {
         this.emergencyContactForm.patchValue(data); // Patch the data to the form
       } else {
         console.log("No emergency contact found");
-        // No need to patch the form as data is null/undefined
       }
     }, (error) => {
       this.getEmergencyContactUniqueId()
@@ -467,9 +647,9 @@ export class PatientInformationComponent implements OnInit {
     userInfo.phoneNumber = formattedPhone;
     console.log('userinfo', userInfo)
     this.generalForm.patchValue(userInfo)
-    this.patientService.getPatientInformationById(userInfo.userId).subscribe((data: any) => {
+    this.patientService.getPatientInformationById(userInfo?.userId).subscribe((data: any) => {
       if (data) {
-        debugger
+
         const dateOfBirth = data.dateOfBirth;
         const formattedDate = this.datePipe.transform(dateOfBirth, 'yyyy-MM-dd');
 
@@ -502,27 +682,176 @@ export class PatientInformationComponent implements OnInit {
 
 
   getFamilyMemberList() {
-    debugger;
+    ;
     const userInfo = this.authService.getUserInfo()
     this.patientService.getFamilyMember(userInfo.userId).subscribe((data: any) => {
       this.familyMemberData = data.patientFamilyMember;
       console.log("family data:", this.familyMemberData)
     })
   }
+
+
   editItem(index: number) {
-    debugger
-    const editData = this.familyMemberData[index]
-    this.familyMemberForm.patchValue(editData)
+    ;
+    const editData = { ...this.familyMemberData[index] };
+
+    if (editData.dob) {
+      editData.dob = new Date(editData.dob).toISOString().split('T')[0]; // Convert to YYYY-MM-DD format
+    }
+
+    this.familyMemberForm.patchValue(editData);
+    // ✅ Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
   }
 
-  deleteItem(id) {
-    this.patientService.deleteFamilyMember(id).subscribe(data => {
+
+
+  deleteItem(id: any) {
+    const modalRef = this.modalService.open(DeletePopupComponent, {
+      backdrop: 'static',
+      size: 'md',
+      centered: true
+    });
+    modalRef.componentInstance.deletePropertyId = id
+    modalRef.componentInstance.deleteProperty = 'Family Member'
+    modalRef.componentInstance.dialogClosed.subscribe(() => {
       this.getFamilyMemberList();
-      this.notificationService.showSuccess("Deleted Successfully");
     });
   }
 
+  selectedIndex = -1;
+
+  onKeyDown(event: KeyboardEvent) {
+    if (this.address1Suggestions.length === 0) return;
+
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.address1Suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.address1Suggestions.length) % this.address1Suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectSuggestionFamilyMember(this.address1Suggestions[this.selectedIndex]);
+      event.preventDefault();
+    }
+
+    // 🟢 Auto-scroll active item into view
+    setTimeout(() => {
+      const activeElement = document.querySelector('.address1-suggestion-list .active');
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
 
 
+  onKeyDown1(event: KeyboardEvent) {
+    if (this.suggestions.length === 0) return;
+
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.suggestions.length) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectSuggestionAddress(this.suggestions[this.selectedIndex]);
+      event.preventDefault();
+    }
+
+    // 🟢 Auto-scroll active item into view
+    setTimeout(() => {
+      const activeElement = document.querySelector('.suggestion-list .active');
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
+
+
+  selectSuggestionAddress(suggestion: any): void {
+    this.generalForm.get('address')?.setValue(suggestion.address);
+    this.suggestions = [];
+    this.selectedIndex = -1;
+    const postalCode = suggestion.postalCode?.includes('-')
+      ? suggestion.postalCode.split('-')[0]
+      : suggestion.postalCode;
+    const country = suggestion.country;
+    this.states.map((temp) => {
+      if (temp.name == suggestion.state) {
+        const StateId = temp.id
+        this.generalForm.patchValue({
+          stateId: StateId
+        }
+        )
+      }
+    })
+    this.generalForm.patchValue({
+      address: suggestion.address,
+      city: suggestion.city,
+      zipCode: postalCode,
+
+      country: country  // Use the extracted country
+
+    });
+
+    this.suggestions = [];  // Clear suggestions once an address is selected
+
+  }
+
+
+  selectSuggestionAddress3(suggestion: any): void {
+    this.emergencyContactForm.get('address')?.setValue(suggestion.address);
+    this.address2Suggestions = [];
+    this.selectedIndex = -1;
+    const postalCode = suggestion.postalCode?.includes('-')
+      ? suggestion.postalCode.split('-')[0]
+      : suggestion.postalCode;
+    const country = suggestion.country;
+    this.states.map((temp) => {
+      if (temp.name == suggestion.state) {
+        const StateId = temp.id
+        this.emergencyContactForm.patchValue({
+          stateId: StateId
+        }
+        )
+      }
+    })
+    this.emergencyContactForm.patchValue({
+      address: suggestion.address,
+      city: suggestion.city,
+      zipCode: postalCode,
+
+      country: country
+
+    });
+
+    this.address2Suggestions = [];
+
+  }
+  onKeyDown3(event: KeyboardEvent) {
+    if (this.address2Suggestions.length === 0) return;
+
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.address2Suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.address2Suggestions.length) % this.address2Suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectSuggestionEmergencyContact(this.address2Suggestions[this.selectedIndex]);
+      event.preventDefault();
+    }
+
+    // 🟢 Auto-scroll active item into view
+    setTimeout(() => {
+      const activeElement = document.querySelector('.address2-suggestion-list .active');
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
 
 }
+

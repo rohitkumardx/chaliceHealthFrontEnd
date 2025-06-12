@@ -1,0 +1,244 @@
+<app-header></app-header>
+
+
+<div class="container contact-container main">
+
+  <div class="row">
+      <h1 class="bold text-center mb-4">Contact Us</h1>
+      <!-- Contact Info Section -->
+      <div class="col-md-5 contact-info ">
+          <h2 class="contact-title bold mt-1">Get in Touch</h2>
+          <p>Have questions or need assistance? Our customer support team is here to help. Contact us via phone, email, or through our online contact form, and we’ll be happy to assist you.</p>
+
+          <div class="contact-details">
+            <div class="mb-3 d-flex align-items-start">
+              <i class="fas fa-clock me-2 mt-1"></i>
+              <div>
+                <strong style="color: #017e56; font-size: 20px;">Hours</strong><br>
+                <span style="font-size: 19px!important;">Mon – Fri, 8 am – 5 pm CT</span>
+              </div>
+            </div>
+            <div class="mb-3 d-flex align-items-start">
+              <i class="fas fa-phone me-2 mt-1"></i>
+              <div>
+                <strong style="color: #017e56; font-size: 20px; ">Phone</strong><br>
+                <span style="font-size: 19px!important;">1 (402) 810 – 7840</span>
+              </div>
+            </div>
+            <div class="d-flex align-items-start">
+              <i class="fas fa-envelope me-2 mt-1"></i>
+              <div>
+                <strong style="color: #017e56; font-size: 20px; ">Email</strong><br>
+                <span style="font-size: 19px!important;">support&#64;chalicehealth.com</span>
+              </div>
+            </div>
+          </div>
+ 
+      </div>
+
+      <div class="col-md-7 ps-5 pt-4">
+        <form [formGroup]="ContactUsForm" class="contact-form">       
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="mt-3"
+                  for="firstName">First Name <span class="red">*</span></label>
+                  <input type="text" id="firstName" class="form-control"
+                    formControlName="firstName"
+                    [ngClass]="{'is-invalid': ContactUsForm.get('firstName')?.invalid && ContactUsForm.get('firstName')?.touched}">
+                  <div class="invalid-feedback"
+                    *ngIf="ContactUsForm.get('firstName')?.touched && ContactUsForm.get('firstName')?.hasError('required')">
+                    First Name is required.
+                  </div>
+                  <div class="invalid-feedback"
+                  *ngIf="ContactUsForm.get('firstName')?.touched && ContactUsForm.get('firstName')?.hasError('pattern')">
+                  First Name cannot be empty or only spaces.
+                 </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="mt-3"
+                  for="lastName">Last Name <span class="red">*</span></label>
+                  <input type="text" id="lastName"  class="form-control"
+                    formControlName="lastName"
+                    [ngClass]="{'is-invalid': ContactUsForm.get('lastName')?.invalid && ContactUsForm.get('lastName')?.touched}">
+                  <div class="invalid-feedback"
+                    *ngIf="ContactUsForm.get('lastName')?.touched && ContactUsForm.get('lastName')?.hasError('required')">
+                    Last Name is required.
+                  </div>
+                  <div class="invalid-feedback"
+                  *ngIf="ContactUsForm.get('lastName')?.touched && ContactUsForm.get('lastName')?.hasError('pattern')">
+                  Last Name cannot be empty or only spaces.
+                 </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="mt-3"
+                  >Phone Number <span class="red">*</span> </label>
+                  <input class="form-control" type="text"
+                    formControlName="phoneNumber" (input)="formatPhoneNumber($event)" maxlength="14"
+                    [ngClass]="{'is-invalid': ContactUsForm.get('phoneNumber')?.invalid &&  ContactUsForm.get('phoneNumber')?.touched}">
+                    <div class="invalid-feedback"
+                    *ngIf="ContactUsForm.get('phoneNumber')?.touched && ContactUsForm.get('phoneNumber')?.hasError('required')">
+                    Phone Number is required.
+                  </div>
+                  <div class="invalid-feedback"
+                          *ngIf="ContactUsForm.get('phoneNumber')?.touched && ContactUsForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                          Phone number is invalid.
+                        </div>
+                </div>
+                
+                  
+                  <div class="col-md-6">
+                    <label class="mt-3"
+                    for="email">Email <span class="red">*</span></label>
+                    <input type="text" id="email" class="form-control" formControlName="email"
+                      
+                      [ngClass]="{'is-invalid': ContactUsForm.get('email')?.invalid && ContactUsForm.get('email')?.touched}">
+                    <div class="invalid-feedback"
+                      *ngIf="ContactUsForm.get('email')?.touched && ContactUsForm.get('email')?.hasError('required')">
+                      Email is required.
+                    </div>
+                    <div class="fv-plugins-message-container invalid-feedback d-block"
+                    *ngIf="ContactUsForm.get('email')?.touched && ContactUsForm.get('email')?.hasError('email')">
+                    Email is not valid.
+                  </div>
+                    
+                  </div>
+                 
+              </div>
+
+              <div class="mt-3">
+                <label for="subject">Subject  </label>
+                <input type="text" id="subject"  class="form-control"
+                  formControlName="subject"
+                  [ngClass]="{'is-invalid': ContactUsForm.get('subject')?.invalid && ContactUsForm.get('subject')?.touched}">
+                <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('subject')?.touched && ContactUsForm.get('subject')?.hasError('pattern')">
+                Subject cannot be empty or only spaces.
+               </div>
+              </div>
+
+              <div class="mt-3">
+                  <label>Your Message <span class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="4"  formControlName="message"
+                  [ngClass]="{'is-invalid': ContactUsForm.get('message')?.invalid && ContactUsForm.get('message')?.touched}"></textarea>
+                  <div class="invalid-feedback"
+                  *ngIf="ContactUsForm.get('message')?.touched && ContactUsForm.get('message')?.hasError('required')">
+                  Message is required.
+                </div>
+                <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('message')?.touched && ContactUsForm.get('message')?.hasError('pattern')">
+                Message cannot be empty or only spaces.
+               </div>
+              </div>
+
+              <div class="mt-4">
+                <button type="submit" class="btn submit-btn px-4 " (click)="postContactUs()">
+                  <i class="fas" [ngClass]="{'fa-spinner fa-spin': loading}"></i>
+                  <span *ngIf="!loading" class="space">Save</span>
+                  <span *ngIf="loading" class="space">Save</span>
+
+                </button>
+                  <!-- <button type="submit" class="" (click)="postContactUs()">Submit Form</button> -->
+              </div>
+            </form>
+      </div>
+   
+  </div>
+</div>
+ <!-- content -->
+
+ <footer class="mainfooter bg-white">
+  <hr>
+  <div class="subfooter">
+    <div class="footer ">
+      <div class="footer-container">
+        <div class="logo-section pe-5">
+          <a href="/home-page">
+            <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo">
+          </a>
+          <p style="color: #333333; padding-top: 20px; font-size: 16px; font-family: Arial,  sans-serif;">Quick and
+            Affordable Healthcare </p>
+        </div>
+        <div class="footer-column mt-3 mt-md-0">
+          <h3>Services</h3>
+          <ul>
+            <li *ngFor="let item of serviceData" (click)="redirectToServiceListing(item)"><span> <i class="fas fa-chevron-right"></i></span> {{item.categoryName}}</li>
+           
+          </ul>
+        </div>
+        <div class="footer-column">
+                <h3>Popular</h3>
+                <ul>
+                    <li (click)="navigateToBlogContent()">
+                      <span><i class="fas fa-chevron-right"></i></span> 
+                       Blogs</li>
+                    <!-- <li><span><i class="fas fa-chevron-right"></i></span> Partnerships</li>
+                    <li><span><i class="fas fa-chevron-right"></i></span> RX Saving Card</li> -->
+                    <li  (click)=" FAQS()"><span><i class="fas fa-chevron-right"></i></span> FAQs</li>
+                    <li (click)="contact()"><span><i class="fas fa-chevron-right"></i></span> Contact Us</li>
+                 
+                </ul>
+            </div>
+        
+        <div class="footer-column mt-3 mt-md-0">
+          <h3>Social</h3>
+          <ul>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.facebook.com/ChalicehealthX/" target="_blank" rel="noopener noreferrer"> <i class="fab fa-facebook ms-2"></i> Facebook</a></li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.linkedin.com/company/chalicehealth/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin ms-2"></i> LinkedIn</a> </li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.instagram.com/chalicehealth/" target="_blank" rel="noopener noreferrer"> <i class="fab fa-instagram ms-2"></i> Instagram</a></li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.youtube.com/@ChaliceHealth" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube ms-2 "></i> YouTube</a> </li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href=" https://www.tiktok.com/@chalicehealth" target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok ms-2"></i> TikTok</a></li>
+          </ul>
+        </div>
+        <!-- next -->
+        <div class="footer-column mt-3 mt-md-0">
+          
+          <div class="">
+            <h3>Join Our Community</h3>
+            <p>Be the first  to know we offer deals.</p>
+            <form [formGroup]="communityForm">
+              <div class="subscribe-form position-relative">
+    
+                <input type="text" id="email" class="form-control" formControlName="email" placeholder="Enter Email"
+                  [ngClass]="{'is-invalid': communityForm.get('email')?.invalid && communityForm.get('email')?.touched}">
+               
+                <div class="invalid-feedback position-absolute mb-3" style="top: 37px;"
+                *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('required')">
+                Email is required.
+              </div>
+              <!-- <div class="fv-plugins-message-container invalid-feedback position-absolute" style="top:37px;"
+                *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('email')">
+                <div>Email is not valid</div>
+              </div> -->
+              <div class="fv-plugins-message-container invalid-feedback d-block position-absolute" style="top:37px;"
+               *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('invalidEmail')">
+                 Please enter a valid email address.
+              </div>
+              
+                <button type="submit" (click)="postJoinOurCommunity()"><i class="fas fa-envelope"></i>
+                </button>
+              </div>
+             
+            </form>
+            
+            <div class="d-flex justify-content-between mt-3 ">
+              <img src="../../../../assets/svg/homepage/unnamed.png" width="120px" height="100px" alt="">
+              <img src="../../../../assets/svg/homepage/HIPAA-logo.png" width="150px" height="80px" alt="" class="mt-2 ms-2">
+            </div>
+        </div>
+        </div>
+      </div>
+      <hr class="mt-0">
+      <!-- Bottom section -->
+      <div class="footer-bottom d-flex flex-column flex-md-row mb-2 justify-content-center mx-auto" style="width: 85%;">
+        <p class="text-nowrap mb-2 mt-mb-0  ">&copy; 2024 Chalice Health. All Rights Reserved.</p>
+        <span class="w-md-75 w-100 d-flex justify-content-md-end justify-content-center cursor">
+          <a (click)="redirectTotermofservice()">Term of Service</a>
+          <a (click)="redirectToprivacypolicy()">Privacy Policy</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>

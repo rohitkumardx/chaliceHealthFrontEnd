@@ -1,0 +1,225 @@
+<app-header></app-header>
+<div>
+
+  <div class="container how-it-works" [@fadeIn]>
+    <h1 class="text-center mb-5 bold fs-3" style="color: #00876f;">How It Works</h1>
+
+    <div class="row">
+      <!-- Step 1 & Image -->
+      <div class="col-lg-6 d-flex align-items-center">
+        <div>
+          <div class="d-flex align-items-start mb-4">
+            <div class="step-number">1</div>
+            <div>
+              <h5 class="step-text">Sign Up</h5>
+              <p class="step-desc">Create your free Chalice Health account in just minutes. Get started quickly and
+                easily—no hassle, no hidden fees.</p>
+            </div>
+          </div>
+
+          <div class="d-flex align-items-start mb-4">
+            <div class="step-number">2</div>
+            <div>
+              <h5 class="step-text">Browse Providers</h5>
+              <p class="step-desc">Find the right healthcare professional for you. Search by specialty, location, and
+                availability to match your unique needs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 image text-center">
+        <img src="../../../../assets/svg/123675.jpg" class="img-fluid step-img rounded shadow-sm" alt="Step 1"
+          style="width: 500px; height:270px;" />
+      </div>
+
+
+      <div class="row flex-lg-row-reverse">
+        <!-- Step 3 & Image -->
+        <div class="col-lg-6 d-flex align-items-center">
+          <div>
+            <div class="d-flex align-items-start mb-4 mt-4">
+              <div class="step-number">3</div>
+              <div>
+                <h5 class="step-text">Schedule Appointments</h5>
+                <p class="step-desc">Book an in-person, in-home, or virtual visit with ease. Our seamless scheduling
+                  process makes healthcare more convenient than ever.</p>
+              </div>
+            </div>
+
+            <div class="d-flex align-items-start mb-4">
+              <div class="step-number">4</div>
+              <div>
+                <h5 class="step-text">Make Payment</h5>
+                <p class="step-desc"> Enjoy upfront pricing with no surprises. Pay securely through our platform with
+                  flexible payment options to fit your budget.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img src="../../../../assets/svg/virtual-consultations.png" width="500px" height="270px"
+            class="img-fluid step-img rounded shadow-sm" alt="Step 2">
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Step 5 & Image -->
+        <div class="col-lg-6 d-flex align-items-center">
+          <div>
+            <div class="d-flex align-items-start mb-4 mt-3">
+              <div class="step-number">5</div>
+              <div>
+                <h5 class="step-text">Receive Care</h5>
+                <p class="step-desc">Get the quality care you need—whether it’s a medical consultation, therapy session,
+                  or another service. Your health, your way.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 text-center">
+          <img src="../../../../assets/svg/287.png" width="500px" height="250px!important"
+            class="img-fluid step-img rounded shadow-sm" alt="Step 3">
+        </div>
+      </div>
+    </div>
+
+    <!-- matter end -->
+    <!-- second -->
+    <div class="container improve-health">
+      <h2 class="section-title text-center" style="color: #00876f;">Enhance Your Healthcare Experience</h2>
+
+      <div class="row">
+        <!-- Card 1 -->
+        <div class="col-md-6">
+          <div class="health-card">
+            <div class="icon">
+              <i class="fas fa-clipboard-list fs-2"></i>
+            </div>
+            <h4 style="color: #00876f;">Provide Feedback</h4>
+            <p>After your appointment share feedback to improve your experience.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="col-md-6 cursor" (click)="redirectToSignUpPage()">
+          <div class="health-card">
+            <div class="icon">
+              <!-- Stay Connected Icon -->
+              <i class="fas fa-link fs-2"></i>
+
+            </div>
+            <h4 style="color: #00876f;">Stay Connected</h4>
+            <p>Track your healthcare journey, get appointment reminders, and stay updated with important notifications.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center description">
+        At Chalice Health, we’re committed to making healthcare accessible, convenient, and tailored to your needs.
+      </p>
+    </div>
+
+    <!-- second -->
+    <footer class="mainfooter bg-white">
+      <hr>
+      <div class="subfooter">
+        <div class="footer ">
+          <div class="footer-container">
+            <div class="logo-section ">
+              <a href="/home-page">
+                <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo">
+              </a>
+              <p style="color: #333333; padding-top: 20px; font-size: 16px; font-family: Arial,  sans-serif;">Quick and
+                Affordable Healthcare </p>
+            </div>
+            <div class="footer-column mt-3 mt-md-0">
+              <h3>Services</h3>
+              <ul>
+                <li *ngFor="let item of serviceData" (click)="redirectToServiceListing(item)"><span> <i
+                      class="fas fa-chevron-right"></i></span> {{item.categoryName}}</li>
+
+              </ul>
+            </div>
+            <div class="footer-column">
+              <h3>Popular</h3>
+              <ul>
+                <li (click)="navigateToBlogContent()">
+                  <span><i class="fas fa-chevron-right"></i></span>
+                  Blogs
+                </li>
+                <!-- <li><span><i class="fas fa-chevron-right"></i></span> Partnerships</li>
+                          <li><span><i class="fas fa-chevron-right"></i></span> RX Saving Card</li> -->
+                <li (click)=" FAQS()"><span><i class="fas fa-chevron-right"></i></span> FAQs</li>
+                <li (click)="contact()"><span><i class="fas fa-chevron-right"></i></span> Contact Us</li>
+
+              </ul>
+            </div>
+
+            <div class="footer-column mt-3 mt-md-0">
+              <h3>Social</h3>
+              <ul>
+                <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.facebook.com/ChalicehealthX/"
+                    target="_blank" rel="noopener noreferrer"> <i class="fab fa-facebook ms-2"></i> Facebook</a></li>
+                <li><span><i class="fas fa-chevron-right"></i></span> <a
+                    href="https://www.linkedin.com/company/chalicehealth/" target="_blank" rel="noopener noreferrer"><i
+                      class="fab fa-linkedin ms-2"></i> LinkedIn</a> </li>
+                <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.instagram.com/chalicehealth/"
+                    target="_blank" rel="noopener noreferrer"> <i class="fab fa-instagram ms-2"></i> Instagram</a></li>
+                <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.youtube.com/@ChaliceHealth"
+                    target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube ms-2 "></i> YouTube</a> </li>
+                <li><span><i class="fas fa-chevron-right"></i></span> <a href=" https://www.tiktok.com/@chalicehealth"
+                    target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok ms-2"></i> TikTok</a></li>
+              </ul>
+            </div>
+            <!-- next -->
+            <div class="footer-column mt-3 mt-md-0">
+
+              <div class="">
+                <h3>Join Our Community</h3>
+                <p>Be the first to know we offer deals.</p>
+                <form [formGroup]="communityForm">
+                  <div class="subscribe-form position-relative">
+
+                    <input type="text" id="email" class="form-control" formControlName="email" placeholder="Enter Email"
+                      [ngClass]="{'is-invalid': communityForm.get('email')?.invalid && communityForm.get('email')?.touched}">
+
+                    <div class="invalid-feedback position-absolute mb-3" style="top: 37px;"
+                      *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('required')">
+                      Email is required.
+                    </div>
+                
+                    <div class="fv-plugins-message-container invalid-feedback d-block position-absolute"
+                      style="top:37px;"
+                      *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('invalidEmail')">
+                      Please enter a valid email address.
+                    </div>
+
+                    <button type="submit" (click)="postJoinOurCommunity()"><i class="fas fa-envelope"></i>
+                    </button>
+                  </div>
+
+                </form>
+
+                <div class="d-flex justify-content-between mt-3 ">
+                  <img src="../../../../assets/svg/homepage/unnamed.png" width="120px" height="100px" alt="">
+                  <img src="../../../../assets/svg/homepage/HIPAA-logo.png" width="150px" height="80px" alt=""
+                    class="mt-2 ms-2">
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="mt-0">
+          <!-- Bottom section -->
+          <div class="footer-bottom d-flex flex-column flex-md-row mb-2 justify-content-center mx-auto"
+            style="width: 85%;">
+            <p class="text-nowrap mb-2 mt-mb-0  ">&copy; 2024 Chalice Health. All Rights Reserved.</p>
+            <span class="w-md-75 w-100 d-flex justify-content-md-end justify-content-center cursor">
+              <a (click)="redirectTotermofservice()">Term of Service</a>
+              <a (click)="redirectToprivacypolicy()">Privacy Policy</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>

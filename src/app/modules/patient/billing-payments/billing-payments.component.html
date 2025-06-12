@@ -1,0 +1,117 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+      <div class="content-wrapper">
+        <div class="signup-card mt-2">
+          <h3>Billing & Payments</h3>
+          <div class="signup-form">
+            <div class="mat-tab-content" style="overflow: hidden !important;">
+                <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+                  <div class="col-md-3 col-12">
+                    <input type="text" [(ngModel)]="searchTerm" placeholder="Search By Provider Name"
+                      (input)="getPatientSettingByUserId()" class="form-control">
+                  </div>
+ 
+                </div>
+                <div class="table-responsive">
+                  
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueCode')">Patient
+                          Unique Code
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueCode', 'fa-sort-up': sortColumn === 'patientUniqueCode' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueCode' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('providerName')">Provider Name
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th scope="col" style=" min-width: 150px;">Appointment Date</th>
+                        <th scope="col">Service Type</th>
+                        <th scope="col">Consulation Fees</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of settingData; let i = index">
+                        <td style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.patientId)">
+                          <u>{{ item?.patientUniqueCode }}</u>
+                        </td>
+                        <!-- <td class="pt-3" style="color: #009cff!important; cursor: pointer;" (click)="viewProviderProfile(item.providerId)">
+                           <u>{{ item.providerName }}</u> </td> -->
+                           <td class="pt-3" *ngIf="item.accountType == 'IndependentProvider'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewProviderProfile(item.providerId)">
+                            <u>{{item.providerName}}</u>
+                          </td>
+                          <td class="pt-3" *ngIf="item?.accountType == 'PrivatePractices' || item?.accountType == 'Facility'"
+                            style="color: #009cff!important; cursor: pointer;"
+                            (click)="viewProviderProfile(item.providerId)">
+                            <u>{{item.legalPracticeName}}</u>
+                          </td>
+                      
+                        <td>
+                          <ng-container *ngIf="item.appointmentDate; else noDate">
+                            {{ item.appointmentDate | date:'MM-dd-yyyy' }} <br>
+                            {{ item.appointmentDate | date:'hh:mm a' }}
+                          </ng-container>
+                          <ng-template #noDate>--------</ng-template>
+                        </td>
+                        <td>
+                          <ng-container [ngSwitch]="item.meetingType">
+                            <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2" style="font-size: 15px; color: #00876ec8;"></i>
+                            <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                            <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2" style="color: #00876ec8;"></i>
+                          </ng-container>
+                          {{ formatMeetingType(item.meetingType) }}
+                        </td>
+                        <!-- <td> {{ formatMeetingType(item.meetingType) || '--------' }} </td> -->
+                        <td *ngFor="let state of item.licensedState">
+
+                          <Span><i class="icon-total"></i> {{ state.totalAmount| currency:'USD' }}</Span>
+                        </td>
+                        <td> {{item.bookingStatus || '--------'}} </td>
+                      
+                      </tr>
+
+                      <tr *ngIf="loading">
+                        <td colspan="8">
+                          <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                            [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                            [additionalClasses]="'mt-5'"></app-loader>
+                        </td>
+                      </tr>
+
+                      <tr *ngIf="settingData.length === 0 && !loading">
+                        <td colspan="9" class="no-data-card">
+                          <div class="no-data-card-container">
+                            <div class="no-data-icon">
+                              <i class="fas fa-user-slash"></i>
+                            </div>
+                            <div class="no-data-content">
+                              <span class="no-data-title">No Payment History Found</span>
+                              <p class="no-data-description">It looks like there are no payment history at the
+                                moment.
+                                Please add your Payment!</p>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                 
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getPatientSettingByUserId()" />
+                </div>
+
+
+              </div>
+
+
+            </div>
+            </div>
+            </div>
+            </div>
+            </section>

@@ -1,0 +1,105 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <h3>Notifications Alerts & Blogs</h3>
+                <div class="signup-form">
+                    <div (selectedTabChange)="onSettingsChange($event)" class="custom-tab-group">
+                        <div value="appointmentCancellation">
+
+                            <ng-template mat-tab-label>
+                                <span class="tab-label ">Appointment Cancellation Requests
+                                    <span *ngIf="appointmentCancellationCount > 0"
+                                        class="badge badge-circle bg-danger ms-2">{{ appointmentCancellationCount
+                                        }}</span>
+                                </span>
+                            </ng-template>
+
+
+                            <div class="mat-tab-content" style="overflow: hidden !important;">
+
+                                <div class="table-responsive">
+                                    <div class="d-flex justify-content-end align-items-center mt-2 mb-2">
+
+                                    </div>
+                                    <table class="table">
+                                        <thead>
+
+
+                                            <tr>
+                                                <th scope="col">Patient Name</th>
+                                                <th scope="col">Provider Name</th>
+                                                <th scope="col">Description</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of notificationList; let i = index">
+                                                <td style="color: #009cff!important; cursor: pointer;"
+                                                    (click)="viewProfile(item.patientId)"> <u>{{item.patientName}}</u>
+                                                </td>
+                                                <td style="color: #009cff!important; cursor: pointer;"
+                                                    (click)="viewProviderProfile(item.providerId)">
+                                                    <u>{{item.providerName}}</u>
+                                                </td>
+
+                                                <!-- <td scope="col">{{item.patientName}}</td>
+                                                <td scope="col">{{item.providerName}}</td> -->
+                                                <td scope="col">{{item.description}}</td>
+                                                <td scope="col">
+                                                    {{ item.createdDate | date:'MM-dd-yyyy' }} <br>
+                                                    {{ item.createdDate | date:'hh:mm a' }}
+                                                </td>
+
+                                                <!-- <td scope="col">{{item.createdDate | date:'MM-dd-yyyy'}}</td> -->
+                                                <td><span>
+                                                        <a class="">
+                                                            <i class="fas fa-eye cursor" style="color: #198754;"
+                                                                (click)="showDetails(item.bookAppointmentId,item.notificationId)"></i>
+                                                        </a>
+                                                    </span></td>
+                                            </tr>
+                                            <tr *ngIf="loading">
+                                                <td colspan="8">
+                                                    <app-loader [loadingText]="'Loading...'"
+                                                        [spinnerWidth]="'2rem !important'"
+                                                        [spinnerHeight]="'2rem !important'"
+                                                        [spinnerColor]="'#1e8af9 !important'" class="heading"
+                                                        [additionalClasses]="'mt-5'"></app-loader>
+                                                </td>
+                                            </tr>
+
+                                            <tr *ngIf="notificationList.length === 0 && !loading">
+                                                <td colspan="9" class="no-data-card">
+                                                    <div class="no-data-card-container">
+                                                        <div class="no-data-icon">
+                                                            <i class="fas fa-user-slash"></i>
+                                                        </div>
+                                                        <div class="no-data-content">
+                                                            <span class="no-data-title">No Users Found</span>
+                                                            <p class="no-data-description">It looks like there are no
+                                                                users at the
+                                                                moment.
+                                                                Please check back later!</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                                        <app-pagination [paginator]="paginator"
+                                            (onPageChange)="getNotificationList()" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,50 @@
+<div class="content-wrapper1">
+    <!-- <div class="row d-flex align-items-center mb-3">
+        <div class="col-10">
+            <h2 class="ms-0">Reported Appointments</h2>
+        </div>
+        <div class="col-md-2 text-end">
+            <i
+                class="fas fa-times close-button cursor"
+                style=" font-size: 30px;"
+                (click)="closeModal()"
+            ></i>
+        </div>
+    </div> -->
+    <div class="row d-flex align-items-center mb-3">
+        <div class="col-10 m-0 p-0">
+          <h5 class="mb-0 fs-3 fw-3 " style="line-height: 30px;" >Reported Appointments</h5>
+        </div>
+        <div class="col-2 m-0 p-0 text-end">
+          <i class="fa fa-times cursor fa-lg fs-3 " (click)="closeModal()"></i>
+        </div>
+      </div>
+    <div class="row">
+        <div
+            class="col-md-12"
+            *ngFor="let item of reportData; let i = index"
+            style="margin-bottom: 20px;"
+        >
+            <div class="card custom-card">
+                <div class="card-body">
+                    <p>
+                        <span class="field-label">Reported By:</span>
+                        <span class="field-value">{{item.patientName || '--------' }}</span>
+                    </p>
+                    <p>
+                        <span class="field-label">Reason For Visit:</span>
+                        <span class="field-value">{{ item.reasonForVisit || '--------' }}</span>
+                    </p>
+                    <p>
+                        <span class="field-label">Cancel Appointment Date: </span>
+                        <span class="field-value"> {{ item.patientCancellationDate | date: 'MM-dd-yyyy' }}</span>
+                    </p>
+                    <p>
+                        <span class="field-label">Patient Cancellation Reason: </span>
+                        <span class="field-value"> {{ item.patientCancellationReasons || '--------' }}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

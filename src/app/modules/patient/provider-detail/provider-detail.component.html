@@ -1,0 +1,387 @@
+<div class=" mt-3 mb-3" style="padding: 0px 50px;">
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-3">
+            <div class="profile-container row p-4 text-start bg-white shadow ">
+                <hr>
+                <div class="col-12 ">
+                    <div class="row w-100">
+                        <div class=" col-12 w-100 text-center mt-1">
+                            <ng-container *ngIf="providerData?.profilePicturePath; else defaultAvatar">
+                                <img [src]="providerData.profilePicturePath" class="doctor-img rounded-circle mb-1"
+                                    alt="Provider Avatar">
+                            </ng-container>
+                            <ng-template #defaultAvatar>
+                                <img *ngIf="!providerData.profilePicturePath" class="doctor-img rounded-circle mb-1"
+                                    alt="Doctor Profile Default"
+                                    src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png">
+                                <!-- src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png">-->
+                            </ng-template>
+                            <h3 *ngIf="providerData?.accountType == 'IndependentProvider'" class="text-success mb-0 mt-0" style="font-size: 1.5625rem; font-weight: 800;">
+                                {{providerData?.firstName}} {{providerData?.lastName}}, <br>
+                                {{providerData?.qualificationName}}</h3>
+
+                                <h3 *ngIf="providerData?.accountType == 'PrivatePractices' || providerData?.accountType == 'Facility'" class="text-success mb-0 mt-0" style="font-size: 1.5625rem; font-weight: 800;">
+                                  {{providerData?.legalPracticeName}}, <br>
+                                  {{providerData?.qualificationName}}</h3>
+
+                            <p class="text-muted mb-2 mt-2"><i class="fa-solid fa-location-dot text-success"></i>
+                              {{getStateAndCountry(providerData)|| '--------' }}
+                            </p>
+                        </div>
+                        <div class=" col-md-12 col-lg-12 text-center">
+                            <p class="mb-1"><strong>Languages:</strong>
+                                <span *ngIf="providerData.language?.length > 0; else noLanguages">
+                                    <span *ngFor="let item of providerData.language; let isLast = last">
+                                        {{ item?.languageNames }}<span *ngIf="!isLast">, </span>
+                                    </span>
+                                </span>
+                                <ng-template #noLanguages><span class="text-muted">Not Available</span></ng-template>
+                            </p>
+
+                            <p class="mb-1"><i class="bi bi-award text-warning"></i> <strong>Experience:</strong>
+                                {{ providerData?.experience ? providerData.experience + ' years' : '' }}
+                            </p>
+
+
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-12 text-center pt-1">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <i class="fas fa-camera text-secondary mb-1" style="font-size: 15px; width: 20px; text-align: center;"></i>
+                                <p class="ms-2 mb-1">Telehealth Visit</p>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <i class="fa fa-building text-secondary" style="width: 20px; text-align: center;"></i>
+                                <p class="ms-2 mb-1">Office Visit</p>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <i class="fa fa-home text-secondary" style="width: 20px; text-align: center;"></i>
+                                <p class="ms-2 mb-1">Home Visit</p>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+
+                </div>
+
+                <hr class="mb-2">
+                <div class="d-block">
+                <h4 class=" text-dark mb-0 mt-0"><strong>About Me:</strong></h4>
+                    <p class="text-muted ">
+                        {{providerData?.providerBio}}
+
+                    </p>
+                </div>
+
+            </div>
+           
+        </div>
+
+        <div class="col-md-8 col-12 px-4 ook">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="listing-item p-3">
+                        <div class="text-end">
+                            <h2 class="btn rounded-circle btn-3d" (click)="goBack()">
+                                <i class="fas fa-arrow-left fs-6"></i>
+                            </h2>
+                        </div>
+                        <!-- Speciality Section -->
+                        <div class="row">
+                            <div class="col-md-12 col-12">
+                                <div class="speciality mb-3 text-start">
+                                    <h1 class="mb-2 text-start " style="font-weight: 600;">Specialty</h1>
+                                    <p class="doctor-specialty mb-2">
+                                        <span *ngIf="providerData?.specialist?.length > 0; else noSpecialties" class="ps-0">
+                                            <span class="badge me-3 text-center"
+                                                *ngFor="let item of providerData?.specialist; let i = index"
+                                                [ngClass]="getBadgeClass(i)">
+                                                {{ item?.specialistNames }}<span
+                                                    *ngIf="i !== providerData.specialist.length - 1"> </span>
+                                            </span>
+                                        </span>
+                                        <ng-template #noSpecialties><span class="text-muted">Not
+                                                Available</span></ng-template>
+                                    </p>
+                                </div>
+
+                            </div>
+                            
+                        </div>
+                        <div class="pe-2">
+                            <div class="row">
+                              <h1 class="mb-1 text-start" style="font-weight: 600;">Service Options</h1>
+                          
+                              <!-- Telehealth -->
+                              <div class="col-md-4 mt-2 cursor" style="word-break: break-word;">
+                                <p class="bg-light d-flex justify-content-between rounded-2 px-3 py-1 service-option"
+                                   *ngIf="providerData?.telehealthVisitPrice"
+                                   [ngClass]="{'active-service': selectedService === 'telehealth'}"
+                                   (click)="selectService('telehealth')">
+                                  <span><i class="fas fa-camera text-secondary me-2"></i> Telehealth </span>
+                                  <span class="text-success">{{ providerData?.telehealthVisitPrice | currency: 'USD' }}</span>
+                                </p>
+                          
+                                <!-- Mobile slots for Telehealth -->
+                                <div *ngIf="isMobile && selectedService === 'telehealth'" class="mt-2">
+                                  <div class="row slots px-0">
+                                 
+                                    <ng-container *ngIf="providerData?.availabilities?.length">
+                                      <ng-container *ngIf="getTodayOrNextSlots(providerData.availabilities) as slots">
+                                        <div class="col-12" *ngFor="let slot of slots.slice(0, 5)">
+                                          <button class="time-btn w-100 my-1"
+                                                 
+                                                  (click)="redirectToBookAppointment(providerData.id, slot.id, slot.date, slot.startTime, selectedService)">
+                                            {{ slot.startTime }}
+                                          </button>
+                                        </div>
+                                        <div class="col-12 text-center mt-2">
+                                          <button class="more-times-btn"
+                                               
+                                                  (click)="redirectToDoctorProfile(providerData.id)">
+                                            More times
+                                          </button>
+                                        </div>
+                                      </ng-container>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </div>
+                          
+                              <!-- Office Visit -->
+                              <div class="col-md-4 mt-2 cursor" style="word-break: break-word;">
+                                <p class="bg-light d-flex justify-content-between rounded-2 px-3 py-1 service-option"
+                                   *ngIf="providerData?.officeVisitPrice"
+                                   [ngClass]="{'active-service': selectedService === 'Office Visit'}"
+                                   (click)="selectService('Office Visit')">
+                                  <span><i class="fas fa-hospital text-secondary me-2"></i> Office Visit </span>
+                                  <span class="text-success">{{ providerData?.officeVisitPrice | currency: 'USD' }}</span>
+                                </p>
+                          
+                                <!-- Mobile slots for Office Visit -->
+                                <div *ngIf="isMobile && selectedService === 'Office Visit'" class="mt-2">
+                                  <div class="row slots px-0">
+                                    <ng-container *ngIf="providerData?.availabilities?.length">
+                                      <ng-container *ngIf="getTodayOrNextSlots(providerData.availabilities) as slots">
+                                        <div class="col-12" *ngFor="let slot of slots.slice(0, 5)">
+                                          <button class="time-btn w-100 my-1"
+                                                 
+                                                  (click)="redirectToBookAppointment(providerData.id, slot.id, slot.date, slot.startTime, selectedService)">
+                                            {{ slot.startTime }}
+                                          </button>
+                                        </div>
+                                        <div class="col-12 text-center mt-2">
+                                          <button class="more-times-btn"
+                                               
+                                                  (click)="redirectToDoctorProfile(providerData.id)">
+                                            More times
+                                          </button>
+                                        </div>
+                                      </ng-container>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </div>
+                          
+                              <!-- Home Visit -->
+                              <div class="col-md-4 mt-2 cursor" style="word-break: break-word;">
+                                <p class="bg-light d-flex justify-content-between rounded-2 px-3 py-1 service-option"
+                                   *ngIf="providerData?.inHomeVisitPrice"
+                                   [ngClass]="{'active-service': selectedService === 'Home Visit'}"
+                                   (click)="selectService('Home Visit')">
+                                  <span><i class="fas fa-home text-secondary me-2"></i> Home Visit </span>
+                                  <span class="text-success">{{ providerData?.inHomeVisitPrice | currency: 'USD' }}</span>
+                                </p>
+                          
+                                <!-- Mobile slots for Home Visit -->
+                                <div *ngIf="isMobile && selectedService === 'Home Visit'" class="mt-2">
+                                  <div class="row slots px-0">
+                                    <ng-container *ngIf="providerData?.availabilities?.length">
+                                      <ng-container *ngIf="getTodayOrNextSlots(providerData.availabilities) as slots">
+                                        <div class="col-12" *ngFor="let slot of slots.slice(0, 5)">
+                                          <button class="time-btn w-100 my-1"
+                                                 
+                                                  (click)="redirectToBookAppointment(providerData.id, slot.id, slot.date, slot.startTime, selectedService)">
+                                            {{ slot.startTime }}
+                                          </button>
+                                        </div>
+                                        <div class="col-12 text-center mt-2">
+                                          <button class="more-times-btn"
+                                               
+                                                  (click)="redirectToDoctorProfile(providerData.id)">
+                                            More times
+                                          </button>
+                                        </div>
+                                      </ng-container>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <!-- Desktop Slot Section -->
+                          <div class="visit-details" *ngIf="selectedService && !isMobile">
+                            <div class="row">
+                              <div class="col-md-7 text-start">
+                                <div class="appointment-date me-2">{{ providerData.date | date:'EEE, MMM d' }}</div>
+
+                                <!-- <div>
+                                  <h2 *ngIf="isToday(providerData.date)">Today</h2>
+                                  <h2 *ngIf="isTomorrow(providerData.date)">Tomorrow</h2>
+                                  <h2 *ngIf="isNextWeek(providerData.date)">Next Week</h2>
+                                  <h2 *ngIf="!isToday(providerData.date) && !isTomorrow(providerData.date) && !isNextWeek(providerData.date)">Upcoming</h2>
+                                </div> -->
+                              </div>  
+                              <div class="col-md-5 text-end">
+                                <!-- <div class="appointment-date me-2">{{ providerData.date | date:'EEE, MMM d' }}</div> -->
+                              </div>
+                            </div>
+
+
+                           
+                          
+                            <!-- <div class="appointment-times row">
+                              <div class="row slots px-0">
+                                <ng-container *ngIf="providerData?.availabilities?.length">
+                                  <div class="col-12 col-sm-6 col-lg-4"
+                                       *ngFor="let availability of providerData.availabilities.slice(0, 5)">
+                                    <button class="time-btn"
+                                            (click)="redirectToBookAppointment(providerData.id, availability.id, availability.date, availability.startTime, selectedService)">
+                                      {{ availability?.startTime }}
+                                    </button>
+                                  </div>
+                                  <div class="col-4 mt-2">
+                                    <button class="more-times-btn" (click)="redirectToDoctorProfile(providerData.id)">
+                                      More times
+                                    </button>
+                                  </div>
+                                </ng-container>
+                              </div>
+                            </div> -->
+                            <div class="appointment-times row">
+                              <div class="row slots px-0">
+                                <ng-container *ngIf="providerData?.availabilities?.length">
+                                  <ng-container *ngIf="getTodayOrNextSlots(providerData.availabilities) as slots">
+                                    <div class="col-4 mt-2" *ngFor="let slot of slots.slice(0, 5)">
+                                      <button class="time-btn cursor"
+                                             
+                                              (click)="redirectToBookAppointment(providerData.id, slot.id, slot.date, slot.startTime, selectedService)">
+                                        {{ slot.startTime }}
+                                      </button>
+                                    </div>
+                                    <div class="col-4 mt-2">
+                                      <button class="more-times-btn"
+                                           
+                                              (click)="redirectToDoctorProfile(providerData.id)">
+                                        More times
+                                      </button>
+                                    </div>
+                                  </ng-container>
+                                </ng-container>
+               
+                              </div>
+                            </div>
+                          
+                            
+                          </div>
+                          
+                        
+                       
+                    </div>
+                </div>
+            </div>
+            <div style="padding: 0px 12px!important;" >
+                <div class="profile-container mt-1 row px-2 py-3 rounded-3 text-start bg-white shadow ">
+                    <h1 class="mb-1 mt-0 text-success " style="font-weight: 600;">Service Details</h1>
+    
+                    <hr>
+                    <div class="row d-flex">
+                        <div class="col-md-6 col-12 ">
+                            <p class="mb-2">
+                                <i class="bi bi-briefcase text-info"></i>
+                                <strong>Practice Name:</strong> {{ providerData?.legalPracticeName || 'Not available' }}
+                            </p>
+            
+                            <p class="mb-2">
+                                <i class="bi bi-person-circle text-success"></i>
+                                <strong>Gender:</strong> {{ providerData?.gender || 'Not specified' }}
+                            </p>
+                        </div>
+                        <div class="col-md-6 col-12 ">
+                            <p class="mb-2">
+                                <i class="bi bi-person-circle text-success"></i>
+                                <strong>Licensed States:</strong> {{ providerData?.licenseStateName || 'N/A' }}
+                            </p>
+            
+                            <p class="mb-2">
+                                <i class="bi bi-play-circle text-danger"></i>
+                                <strong>Video: </strong>
+                                <a *ngIf="providerData?.videoIntroName" [href]="providerData?.videoIntroName" target="_blank"
+                                    class="text-decoration-none text-primary">
+                                    {{providerData?.videoIntroName}}
+                                </a>
+                                <span *ngIf="!providerData?.videoIntroName">No video available</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+    
+                    
+    
+                    <hr>
+                </div>
+            </div>
+            <div class=" mt-3 py-2 rounded-3" *ngIf="providerData?.averageRating > 0" style="background-color: white !important; " >
+                <div class="row ">
+                    <!-- <div class="col-6 d-flex">
+                        <h1 class="mb-0 ms-3 text-success" style="font-weight:800;">Review and Rating : </h1><span
+                            class="fw-bold text-secondary mt-2 fs-5 "> &nbsp; {{providerData?.averageRating}} / 5</span>
+                    </div> -->
+                    <!-- <div class="col-12 ">
+                        <h1 class="mb-0 ms-3 text-success" style="font-weight:800;">Review and Rating:</h1>
+                        <span class="fw-bold text-secondary mt-2 ms-1 fs-5">
+                          &nbsp; {{ providerData?.averageRating.toFixed(1) }} / 5
+                        </span>
+                      </div> -->
+                      <div class="col-12 d-md-flex"> 
+                        <h1 class="mb-0 ms-3 text-success" style="font-weight:800;">Review and Rating:</h1>
+                        <span class="fw-bold text-secondary mt-2 ms-1 fs-5">
+                          &nbsp; {{ providerData?.averageRating.toFixed(1) }} / 5
+                        </span>
+                      </div>
+                      
+                    <div class="rating-container mb-2 ms-3">
+                        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                            <ng-container [ngSwitch]="getStarType(star, providerData.averageRating)">
+                              <mat-icon *ngSwitchCase="'full'" class="text-warning">star</mat-icon>
+                              <mat-icon *ngSwitchCase="'half'" class="text-warning">star_half</mat-icon>
+                              <mat-icon *ngSwitchCase="'empty'" class="text-secondary">star</mat-icon>
+                            </ng-container>
+                          </ng-container>
+
+                    </div>
+                </div>
+            <div class="px-3">
+                <div class="main card custom-scroll p-3">
+                    <div *ngFor="let review of providerData?.reviews; let i = index"
+                        class="px-3 py-2 mb-2 shadow-sm rounded review-card " style="background-color: #f8f9fa;">
+                        <div class="d-flex align-items-center mb-2">
+                            <div>
+                                <h4 class="mb-1">{{ review?.patientName }}</h4>
+                                <div class="text-warning">
+                                    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                                        <mat-icon
+                                            [ngClass]="{'filled': star <= review.rating, 'unfilled': star > review.rating}">star</mat-icon>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-muted">{{ review?.review }}</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>

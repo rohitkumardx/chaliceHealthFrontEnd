@@ -1,0 +1,443 @@
+<app-header></app-header>
+<div>
+
+
+  <!-- next -->
+
+
+  <div class="container mt-5">
+    <div class="search-container">
+      <h1 class="mb-1 mt-0 " style="color: #00876f; font-weight: 600; font-size: 27px;">Search Services</h1>
+      <p style="font-size: 16px;">Find board-certified physicians, experienced specialists, and compassionate healthcare
+        professionals, all in one place. Search by specialty, location, and insurance coverage to find the provider
+        who’s right for you.</p>
+      <div class=" mb-2" style="color: #c5c5c5;">
+        SHOWING 1-1 OF 1 RESULTS
+      </div>
+
+  
+        <div class="input-group container mb-3 mt-3
+        shadow-sm bg-white align-items-center position-relative custom-search-container"
+          style="width: 100%; max-width: 100%;">
+          <div class="mobile d-flex" style="width: 60%;">
+            <span class="input-group-text bg-white border-0" id="search-icon"
+              style="border-left:4px solid #00876f!important;border-radius: 0px !important;">
+              <i class="fas fa-search text-muted"></i>
+            </span>
+
+            <!-- Search input -->
+            <input type="text" class="form-control form-control1 border-0 py-3 no-outline"
+              placeholder="Search doctors" [(ngModel)]="searchTerm"
+             aria-label="Search" aria-describedby="search-icon"
+              style="flex: 2; min-width: 0; z-index:1;" />
+
+       
+
+          </div>
+
+
+          <!-- Location input -->
+          <div style="position: relative; flex: 1; min-width: 0;">
+            <input type="text" class="form-control  no-outline location" style=" width: 100%;" placeholder="Location"
+              aria-label="Location" [(ngModel)]="location" (keydown)="handleKeydown1($event)"
+              (input)="onAddressChange($event)">
+
+            <!-- Address suggestions -->
+            <ul *ngIf="suggestions.length"
+              class="list-group position-absolute  mt-1 bg-white shadow-sm suggestions-list-location"
+              style="z-index: 999; width: 100%!important;">
+              <li *ngFor="let suggestion of suggestions; let i = index"
+                class="list-group-item text-dark suggestion-item"
+                [ngClass]="{ 'selected-suggestion': selectedIndex1 === i }" (click)="selectSuggestion(suggestion)">
+                {{ suggestion.address }}
+              </li>
+            </ul>
+          </div>
+
+          <!-- Search button -->
+          <div class="arrow">
+            <button class="btn m-0 d-flex rounded-circle me-1 mt-3 mb-3 search-button" style="padding: 10px;"
+              type="button" (click)="getimmunizationList()">
+              <span class="d-inline d-md-none me-1">Search</span>
+              <i class="fas fa-arrow-right py-0"></i>
+            </button>
+          </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- sectin2 -->
+    <div class="maincon">
+      <div class="cont-fluid">
+        <div class="row">
+          <!-- Sidebar for Filters -->
+          <div class="col-md-3">
+            <div class="filter-sidebar">
+              <div class="">
+                <h6 class="text-success fw-bold mb-2 fs-6">Conditions or Symptoms</h6>
+                <div class="row mb-2 ms-1 mt-3">
+                  <input type="text" class=" styled-input " placeholder="Enter text" [(ngModel)]="searchTerm1"
+                    (input)="onSpecialityChange($event)">
+                  <ul *ngIf="suggestionsSpeciality.length"
+                    class="list-group position-absolute   mt-5 bg-white shadow-sm"
+                    style="z-index: 10; border-radius: 5px; max-height: 200px; overflow-y: auto; width: 15%;">
+                    <li *ngFor="let suggestion of suggestionsSpeciality; let i = index"
+                      class="list-group-item text-dark" [ngClass]="{ 'selected-suggestion': selectedIndex === i }"
+                      style="cursor: pointer;" (click)="selectSpeciality(suggestion, i)">
+                      {{ suggestion.name }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <h6 class="text-success fw-bold mb-2 fs-6 mt-2">Service Method</h6>
+                <div class="row">
+                  <div class="col ps-3">
+                    <div class="form-check col mb-1">
+                      <input class="form-check-input" type="checkbox" id="inPerson"
+                        [checked]="selectedVisit.includes('in office')" (change)="toggleVisit('in office')" />
+                      <label class="form-check-label" for="inPerson">Office-Visit</label>
+                    </div>
+                    <div class="form-check col">
+                      <input class="form-check-input" type="checkbox" id="inHome"
+                        [checked]="selectedVisit.includes('in home')" (change)="toggleVisit('in home')" />
+                      <label class="form-check-label" for="inHome">Home-Visit</label>
+                    </div>
+                  </div>
+
+                  <div class="col">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" id="telehealth"
+                        [checked]="selectedVisit.includes('telehealth')" (change)="toggleVisit('telehealth')" />
+                      <label class="form-check-label" for="telehealth">Telehealth</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Gender Filter -->
+              <div class="mt-4">
+                <h6 class="text-success fw-bold mb-2 fs-6">Select Gender</h6>
+                <div class="gender d-flex flex-wrap">
+                  <button class="btn btn-outline-success rounded-pill px-3 me-2"
+                    style="width: 7rem; font-size: 14px!important;" [ngClass]="{'active': selectedGender === 'Male'}"
+                    (click)="selectGender('Male')">Male</button>
+
+                  <button class="btn btn-outline-success rounded-pill px-3 me-2"
+                    style="width: 7rem; font-size: 14px!important;" [ngClass]="{'active': selectedGender === 'Female'}"
+                    (click)="selectGender('Female')">Female</button>
+
+                  <button class="btn btn-outline-success rounded-pill px-3"
+                    style="width: 7rem; font-size: 14px!important;" [ngClass]="{'active': selectedGender === 'Other'}"
+                    (click)="selectGender('Other')">Other</button>
+                </div>
+              </div>
+
+
+
+
+              <!-- Languages Filter -->
+              <div class="pt-2">
+                <h6 class="text-success fw-bold mb-2 mt-2 fs-6">Languages</h6>
+                <div class="row">
+                  <div class="col-6 ps-3">
+                    <div class="form-check mb-2"
+                      *ngFor="let lang of languages | slice:(languages.length / 2):languages.length">
+                      <input class="form-check-input" type="checkbox" [id]="lang.name"
+                        [checked]="selectedLanguages.includes(lang.name)" (change)="toggleLanguage(lang.name)" />
+                      <label class="form-check-label" [for]="lang.name">{{ lang.name }}</label>
+                    </div>
+                  </div>
+                  <div class="col-6 ps-3">
+                    <div class="form-check mb-2" *ngFor="let lang of languages | slice:0:(languages.length / 2)">
+                      <input class="form-check-input" type="checkbox" [id]="lang.name"
+                        [checked]="selectedLanguages.includes(lang.name)" (change)="toggleLanguage(lang.name)" />
+                      <label class="form-check-label" [for]="lang.name">{{ lang.name }}</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+              <!-- Search Filter Button -->
+              <button class="btn btn-block mt-4" (click)="getimmunizationList()" style="width: 100%!important;">
+                Search Filters
+              </button>
+
+              <button class="btn btn-block mt-2" (click)="clearFilters()" style="width: 100%!important;">
+                Clear Filters
+              </button>
+
+            </div>
+          </div>
+
+
+
+
+
+          <div class="col-md-9">
+            <div class="row maindoc  d-flex" *ngIf="!loading">
+              <ng-container *ngFor="let item of findADoctor; let i = index">
+                <div class="col-md-6  doctor-card ms-2" *ngIf="item.availabilities.length > 0;">
+                  <div class="doctor-info ">
+
+                    <img *ngIf="item?.profilePicturePath" [src]="item.profilePicturePath"
+                    [ngClass]="{ 'doctor-image': true, 'cursor': userInfo?.accountType == 'Patient' || !userInfo }"
+                        (click)="redirectToProviderDetail(item.userId)">
+                    <img *ngIf="!item?.profilePicturePath" alt="Doctor Profile Default"
+                      src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png" 
+                      [ngClass]="{ 'doctor-image': true, 'cursor': userInfo?.accountType == 'Patient' || !userInfo }"
+                        (click)="redirectToProviderDetail(item.userId)">
+
+
+
+                    <div class="details">
+                      <h3 *ngIf="item?.accountType == 'IndependentProvider'" style="color: #009cff!important;"
+                        [ngClass]="{ 'doctor-name': true, 'cursor': userInfo?.accountType == 'Patient' || !userInfo }"
+                        (click)="redirectToProviderDetail(item.userId)">
+                        <u> {{ item.firstName }} {{ item.lastName }}, {{ item.qualificationName }}</u>
+                      </h3>
+                      <h3 *ngIf="item?.accountType == 'PrivatePractices' || item?.accountType == 'Facility'" style="color: #009cff!important;"
+                        [ngClass]="{ 'doctor-name': true, 'cursor': userInfo?.accountType == 'Patient' || !userInfo }"
+                        (click)="redirectToProviderDetail(item.userId)">
+                        <u> {{ item.legalPracticeName }}, {{ item.qualificationName }}</u>
+                      </h3>
+                      <p class=" mb-1">
+                        <i class="fa-solid fa-location-dot  me-2"></i>
+                        {{ getStateAndCountry(item) }}
+
+                      </p>
+                      <!-- <p class="doctor-name"> <i class="fa fa-map-marker-alt"></i> <span> {{ getStateAndCountry(item) }}</span></p> -->
+
+
+                      <p class="visit-type mb-0 mt-1">
+                        <i class="fas fa-camera me-2" style="font-size: 15px;"></i>
+                        <span *ngIf="item.telehealthVisitPrice !== ''">Telehealth</span>
+                        <span
+                          *ngIf="item.telehealthVisitPrice !== '' && (item.officeVisitPrice !== '' || item.inHomeVisitPrice !== '')">,
+                        </span>
+                        <span *ngIf="item.officeVisitPrice !== ''"> <i class="fa fa-building me-2"></i>Office
+                          Visit</span>
+                        <span *ngIf="item.officeVisitPrice !== '' && item.inHomeVisitPrice !== ''">, </span> <br>
+                        <span *ngIf="item.inHomeVisitPrice !== ''"><i class="fa fa-home me-2"></i>Home Visit</span>
+                      </p>
+
+
+                      <div class="urgent-care mt-1" style="font-weight: 400!important; font-size: 15px;">
+                        <i class="fas fa-stethoscope"></i>
+                        <span class="ms-2">{{ getSpecialistNames(item.specialist) }} </span>
+
+                      </div>
+
+                      <button class="btn btn-outline-success bg-none rounded-pill px-3 available-btn d-none">
+                        Available today
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Visit Details -->
+                  <div class="visit-details">
+                    <div class="appointment-date">
+
+
+
+                      <div class="row">
+                        <div class="col-sm-3">
+                          <div class="appointment-date"> {{ item.availabilities[0].date | date:'EEE, MMM d' }}</div>
+
+                          <!-- <div>
+                            <h2 *ngIf="isToday(item.availabilities[0].date)" class="m-0"> Today</h2>
+                            <h2 *ngIf="isTomorrow(item.availabilities[0].date)" class="m-0"> Tomorrow</h2>
+                            <h2 *ngIf="isNextWeek(item.availabilities[0].date)" class="m-0"> Next Week</h2>
+                            <h2 class="m-0"
+                              *ngIf="!isToday(item.availabilities[0].date) && !isTomorrow(item.date) && !isNextWeek(item.availabilities[0].date)">
+                              Upcoming</h2>
+                          </div> -->
+                        </div>
+                        <div class="col-sm-10">
+                          <!-- <div class="appointment-date"> {{ item.availabilities[0].date | date:'EEE, MMM d' }}</div> -->
+                        </div>
+                      </div>
+
+
+
+                    </div>
+
+
+                    <div class="row   flex-wrap g-2 px-3">
+                      <ng-container *ngIf="item?.availabilities?.length">
+                        <ng-container *ngIf="getTodayOrNextSlots(item.availabilities) as slots">
+                          <div class="col-6 col-md-4" *ngFor="let slot of slots.slice(0, 5)">
+                            <button class="time-btn w-100"
+                              [ngClass]="{ 'cursor': userInfo?.accountType === 'Patient' || !userInfo }"
+                              [disabled]="!role && userInfo !== null"
+                              (click)="redirectToBookAppointment(item.userId, slot.id, slot.date, slot.startTime)">
+                              {{ slot.startTime }}
+                            </button>
+                          </div>
+                          <div class="col-12 col-md d-flex mt-2">
+                            <button class="more-times-btn w-100 flex-grow-1" [disabled]="!role && userInfo !== null"
+                              (click)="redirectToDoctorProfile(item.userId, item?.clinicId)">
+                              More times
+                            </button>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+
+                    </div>
+
+                  </div>
+
+
+
+                </div>
+
+              </ng-container>
+
+
+            </div>
+
+
+
+            <div class="provider-card1" *ngIf="findADoctor?.length == 0">
+            <div class="provider-header">
+              <h2 class="text-center">Nothing Found</h2>
+            </div>
+            <br>
+            <div class="text-center">
+              <span>Sorry, but nothing matched your search terms. Please try again with some different keywords.</span>
+            </div>
+          </div> 
+
+          
+
+              <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="findADoctor.length > 0 && !loading">
+                            <app-pagination [paginator]="paginator"
+                              (onPageChange)="getimmunizationList()"></app-pagination>
+                          </div>
+
+
+
+       </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- section2 -->
+  </div>
+
+
+  <!-- next -->
+  <footer class="mainfooter bg-white">
+    <hr>
+    <div class="subfooter">
+      <div class="footer ">
+        <div class="footer-container">
+          <div class="logo-section pe-5">
+            <a href="/home-page">
+              <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo">
+            </a>
+            <p style="color: #333333; padding-top: 20px; font-size: 16px; font-family: Arial,  sans-serif;">Quick and
+              Affordable Healthcare </p>
+          </div>
+          <div class="footer-column mt-3 mt-md-0">
+            <h3>Services</h3>
+            <ul>
+              <li *ngFor="let item of serviceData" (click)="redirectToServiceListing(item)"><span> <i
+                    class="fas fa-chevron-right"></i></span> {{item.categoryName}}</li>
+
+            </ul>
+          </div>
+          <div class="footer-column">
+            <h3>Popular</h3>
+            <ul>
+              <li (click)="navigateToBlogContent()"><span><i class="fas fa-chevron-right"></i></span> Blogs</li>
+
+              <li (click)=" FAQS()"><span><i class="fas fa-chevron-right"></i></span> FAQs</li>
+              <li (click)="contact()"><span><i class="fas fa-chevron-right"></i></span> Contact Us</li>
+
+            </ul>
+          </div>
+
+          <div class="footer-column mt-3 mt-md-0">
+            <h3>Social</h3>
+            <ul>
+              <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.facebook.com/ChalicehealthX/"
+                  target="_blank" rel="noopener noreferrer"> <i class="fab fa-facebook ms-2"></i> Facebook</a></li>
+              <li><span><i class="fas fa-chevron-right"></i></span> <a
+                  href="https://www.linkedin.com/company/chalicehealth/" target="_blank" rel="noopener noreferrer"><i
+                    class="fab fa-linkedin ms-2"></i> LinkedIn</a> </li>
+              <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.instagram.com/chalicehealth/"
+                  target="_blank" rel="noopener noreferrer"> <i class="fab fa-instagram ms-2"></i> Instagram</a></li>
+              <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.youtube.com/@ChaliceHealth"
+                  target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube ms-2 "></i> YouTube</a> </li>
+              <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.tiktok.com/@chalicehealth"
+                  target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok ms-2"></i> TikTok</a></li>
+            </ul>
+          </div>
+          <!-- next -->
+          <div class="footer-column mt-3 mt-md-0">
+
+            <div class="">
+              <h3>Join Our Community</h3>
+              <p>Be the first to know we offer deals.</p>
+              <form [formGroup]="communityForm">
+                <div class="subscribe-form position-relative">
+
+                  <input type="text" id="email" class="form-control" formControlName="email" placeholder="Enter Email"
+                    [ngClass]="{'is-invalid': communityForm.get('email')?.invalid && communityForm.get('email')?.touched}">
+
+                  <div class="invalid-feedback position-absolute mb-3" style="top: 37px;"
+                    *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('required')">
+                    Email is required.
+                  </div>
+
+                  <div class="fv-plugins-message-container invalid-feedback d-block position-absolute" style="top:37px;"
+                    *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('invalidEmail')">
+                    Please enter a valid email address.
+                  </div>
+
+                  <button type="submit" (click)="postJoinOurCommunity()"><i class="fas fa-envelope"></i>
+                  </button>
+                </div>
+
+              </form>
+
+              <div class="d-flex justify-content-between mt-3 ">
+                <img src="../../../../assets/svg/homepage/unnamed.png" width="120px" height="100px" alt="">
+                <img src="../../../../assets/svg/homepage/HIPAA-logo.png" width="150px" height="80px" alt=""
+                  class="mt-2 ms-2">
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="mt-0">
+        <!-- Bottom section -->
+        <div class="footer-bottom d-flex flex-column flex-md-row mb-2 justify-content-center mx-auto"
+          style="width: 85%;">
+          <p class="text-nowrap mb-2 mt-mb-0  ">&copy; 2024 Chalice Health. All Rights Reserved.</p>
+          <span class="w-md-75 w-100 d-flex justify-content-md-end justify-content-center cursor">
+            <a (click)="redirectTotermofservice()">Term of Service</a>
+            <a (click)="redirectToprivacypolicy()">Privacy Policy</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+
+
+
+
+
+

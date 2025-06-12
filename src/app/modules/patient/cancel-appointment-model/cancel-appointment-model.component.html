@@ -1,0 +1,71 @@
+<div class="content-wrapper1 p-4">
+    <div class="row">
+        <div class="col-10 col-md-10 col-lg-10">
+            <div>
+                <h2 class="ms-0 mb-0">Appointment Cancellation Details</h2>
+            </div>
+        </div>
+        <div class="col-2 col-md-2 col-lg-2 text-end">
+            <div class="close-btn cursor text-end" (click)="closePopup()">
+                <i class="fa fa-times cursor fa-lg fs-3 cursor mt-2 "></i>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6 mt-2"><b>Paid Amount</b>: {{data?.totalAmount | currency:'USD'}} </div>
+        <div class="col-sm-6 mt-2"><b>Payment Status</b>: {{data.paymentStatus === 'succeeded' ? 'Completed':data.paymentStatus }}</div>
+    </div>
+    <div class="row mt-0">
+        <div class="col-sm-6 mt-2"><b>Payment Date</b>: {{data?.paymentDate | date:'MM-dd-yyyy'}}</div>
+        <div class="col-sm-6 mt-2"><b>Refund Status</b>: {{ data?.refundStatus === 'Empty' ? 'Not Applied' :
+            data?.refundStatus
+            }}</div>
+    </div>
+    <div class="row mt-0">
+        <div class=" mt-2">
+            <b>Appointment Date & Time</b>: {{ data?.appointmentDateTime | date:'MM-dd-yyyy hh:mm a' }}
+        </div>
+    </div>
+ 
+    <div class="row mt-2" *ngIf="data.refundStatus">
+    </div>
+    <form [formGroup]="appointmentCancellationForm">
+        <div class="row mt-2">
+            <textarea id="reason" class="form-control form-control-sm mt-1" formControlName="reason"
+                [value]="appointmentCancellationForm.get('reason')?.value"
+                [ngClass]="{'is-invalid': appointmentCancellationForm.get('reason')?.invalid && appointmentCancellationForm.get('reason')?.touched}"
+                placeholder="Enter the reason for cancellation"></textarea>
+            <div class="invalid-feedback"
+                *ngIf="appointmentCancellationForm.get('reason')?.touched && appointmentCancellationForm.get('reason')?.hasError('required')">
+                Reason is required.
+            </div>
+            <div class="text-danger" 
+            *ngIf="appointmentCancellationForm.get('reason')?.hasError('whitespace') && 
+                   (appointmentCancellationForm.get('reason')?.touched || appointmentCancellationForm.get('reason')?.dirty)">
+           Reason cannot be just spaces.
+       </div>
+            <!-- <div class="text-danger" *ngIf="appointmentCancellationForm.get('reason')?.hasError('whitespace')">
+                Reason cannot be just spaces.
+            </div> -->
+        </div>
+        <div class="row mt-4">
+            <div class="col-lg-6 col-md-6 col-sm-12"></div>
+            <div class="col-sm-12 col-md-3 col-lg-3">
+                <button  class="btn btn-success" (click)="confirmCancelAppointment()"
+                    [disabled]="appointmentCancellationForm.invalid"
+                    style="justify-content: center; align-items: center; padding: 5px 10px;">
+                    <span class="visually-hidden"></span>
+                    <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': loading }" *ngIf="loading"></i>
+                    <span *ngIf="!loading">Confirm</span>
+                    <span *ngIf="loading" class="space">Confirm</span>
+                </button>
+            </div>
+            <div class="col-sm-12 col-md-3 col-lg-3"><button class="btn btn-danger cancel"
+                    (click)="closePopup()">
+                    Cancel
+                </button></div>
+        </div>
+    </form>
+</div>
+ 

@@ -1,4 +1,238 @@
+<div class="sidebar d-flex flex-column vh-100 " style="display: flex; background-color:#84c0b0!important;">
 
-<router-outlet>
-    
-</router-outlet>
+
+  <nav class="navbar  navbar-light flex-grow-1 ps-2" style="overflow-y: auto; scrollbar-width: none;">
+    <a href="/home-page" class="navbar-brand mx-4 mb-3">
+      <!-- <h3 class="text-primary"> <img src="../../../assets/svg/Background/logo.png" class="w-100"></h3> -->
+      <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Logo" width="150px" height="60px">
+    </a>
+
+    <div class="navbar-nav w-100 px-1">
+      <div class="nav-item dropdown" *ngIf="Dashboard==true">
+        <a routerLink="/admin/dashboard" routerLinkActive="active" class="nav-link cursor"
+          (click)="onSidebarItemClick()">
+          <i class="fa fa-tachometer-alt me-2"></i>Dashboard
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="CancelRequests==true">
+        <a routerLink="/admin/refundList" routerLinkActive="active" class="nav-link cursor"
+          (click)="onSidebarItemClick()">
+          <i class="fa fa-ban"></i>Cancel Requests
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="Notifications == true">
+        <a routerLink="/admin/notifications" routerLinkActive="active" class="nav-link cursor"
+          (click)="onSidebarItemClick()">
+          <i class="fa fa-bell me-2"></i>Notifications
+          <span *ngIf="combinedResponse > 0" class="badge badge-circle bg-danger ms-2">{{ combinedResponse }}</span>
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="LoginLogs == true">
+        <a routerLink="/admin/login-logs" routerLinkActive="active" class="nav-link cursor"
+          (click)="onSidebarItemClick()">
+          <i class="fa fa-history me-2"></i>Login Logs
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="Blog == true">
+        <a routerLink="/admin/add-blog" routerLinkActive="active" class="nav-link cursor"
+          (click)="onSidebarItemClick()">
+          <i class="fa fa-blog me-2"></i>Blog
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="PatientManagement==true">
+        <a routerLink="/admin/patient-list" routerLinkActive="active" class="nav-link cursor "
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-user-injured me-2"></i>Patient Management
+        </a>
+      </div>
+
+      <div class="nav-item dropdown" (click)="redirectToList()" *ngIf="ProviderManagement==true">
+        <a routerLink="/admin/providers-list" routerLinkActive="active" class="nav-link cursor"
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-user-md me-2"></i>Provider Management
+          <span *ngIf="newMessages > 0" class="badge badge-circle bg-danger ms-2">{{ newMessages }}</span>
+        </a>
+      </div>
+
+
+      <!-- <div class="nav-item dropdown">
+                <a routerLink="/provider/message-list" routerLinkActive="active" class="nav-link cursor"
+                  [ngClass]="{'active': openSubmenus.dashboard}">
+                  <i class="fas fa-comments cursor me-2"></i>Messages
+                  <span *ngIf="newMessages > 0" class="badge badge-circle bg-danger ms-2">{{ newMessages }}</span>
+                </a>
+            </div> -->
+
+
+      <!-- <div class="nav-item dropdown" *ngIf="FacilityManagement==true">
+                <a routerLink="/admin/facility-list" routerLinkActive="active" class="nav-link cursor" (click)="onSidebarItemClick()">
+                    <i class="fas fa-hospital me-2"></i>Facility Management
+                </a>
+            </div> -->
+
+      <div class="nav-item dropdown" *ngIf="FacilityManagement==true">
+        <a [routerLink]="'/admin/facility-list'" class="nav-link cursor"
+          [ngClass]="{ active: isFacilityManagementActive() }" (click)="onSidebarItemClick()">
+          <i class="fas fa-hospital me-2"></i>Facility Management
+        </a>
+      </div>
+
+
+      <div class="nav-item dropdown" *ngIf="UserManagement==true">
+        <a routerLink="/admin/userList" routerLinkActive="active" class="nav-link cursor"
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-user-cog me-2"></i>User Management
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="RoleManagement==true">
+        <a routerLink="/admin/role" routerLinkActive="active" class="nav-link cursor" (click)="onSidebarItemClick()">
+          <i class="fas fa-user-shield me-2"></i>Role Management
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="ServiceManagement==true">
+        <a routerLink="/admin/service" routerLinkActive="active" class="nav-link cursor" (click)="onSidebarItemClick()">
+          <i class="fas fa-hand-holding-heart me-2"></i>Service Management
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="TransactionHistory==true">
+        <a routerLink="/admin/transaction-history" routerLinkActive="active" class="nav-link cursor "
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-receipt me-2"></i>Transaction History
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="Documents==true">
+        <a routerLink="/admin/documents" routerLinkActive="active" class="nav-link cursor "
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-file-alt me-2"></i>Documents
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="Announcements==true">
+        <a routerLink="/admin/announcement" routerLinkActive="active" class="nav-link cursor "
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-bullhorn me-2"></i>Announcement
+        </a>
+      </div>
+
+      <div class="nav-item dropdown" *ngIf="ReportedMessage ==true">
+        <a routerLink="/admin/reported-messages" routerLinkActive="active" class="nav-link cursor "
+          (click)="onSidebarItemClick()">
+          <i class="fa fa-flag"></i>Reported Messages
+          <span *ngIf="reportedMessages > 0" class="badge badge-circle bg-danger ms-2">{{ reportedMessages }}</span>
+        </a>
+      </div>
+
+      <div class="nav-item dropdown" *ngIf="ComplaintsList==true">
+        <a routerLink="/admin/complaintList" routerLinkActive="active" class="nav-link cursor "
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-exclamation-triangle me-2"></i>Complaint List
+          <span *ngIf="complaintMessages > 0" class="badge badge-circle bg-danger ms-2">{{ complaintMessages }}</span>
+
+        </a>
+      </div>
+      <div class="nav-item dropdown" *ngIf="Conditions==true">
+        <a routerLink="/admin/condition-symptoms" routerLinkActive="active" class="nav-link cursor"
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-notes-medical me-2"></i>Conditions & Symptoms
+        </a>
+      </div>
+
+
+      <div class="nav-item dropdown" *ngIf="Settings==true">
+        <a routerLink="/admin/settings" routerLinkActive="active" class="nav-link cursor "
+          (click)="onSidebarItemClick()">
+          <i class="fas fa-cog me-2"></i>Settings
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Logout button positioned at the bottom -->
+  <div class=" navbar-light mt-auto px-3 " style="background-color:#00876f;">
+    <a (click)="logout()" class="nav-link text-black cursor py-3 "
+      style="color: white!important; font-size: 21px!important;">
+      <i class="fa fa-sign-out-alt" style="color: #FE8501;"></i>&nbsp; Logout
+    </a>
+  </div>
+</div>
+
+
+
+<div class="content">
+
+  <!-- Navbar Start -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top px-3 py-2 d-flex align-items-center shadow-bottom"
+    style="background-color:white;">
+
+    <div class="container-fluid d-flex flex-nowrap align-items-center justify-content-between" style="min-width: 0;">
+
+      <!-- Sidebar Toggle -->
+      <a class="sidebar-toggler flex-shrink-0 bg-light cursor me-2" (click)="onClickSidebarToggler()">
+        <i class="fa fa-bars" style="color:#00876f;"></i>
+      </a>
+
+      <!-- Brand Logo -->
+      <div class="d-flex align-items-center">
+        <div class="text-start me-2">
+          <a href="/home-page">
+            <h1 class="mb-0 minlogo" style="font-size: 23px;">
+              <span class="me-1" style="color: #00876f;">Chalice</span> <span style="color: #fb8501;">Health</span>
+            </h1>
+          </a>
+          <div class="d-block d-md-none text-orange fw-bold"
+            style="font-size: 16px; font-family: 'Montserrat'; color: #fb8501;" *ngIf="userInfo">
+            <!-- Show only on mobile -->
+            Admin Portal
+          </div>
+        </div>
+
+        <div class="d-none d-md-block text-orange ms-2 fw-bold"
+          style="font-size: 16px; font-family: 'Montserrat'; color: #fb8501;" *ngIf="userInfo">
+          <!-- Show only on desktop -->
+          Admin Portal
+        </div>
+      </div>
+      <!-- <a href="/home-page" class="navbar-brand flex-shrink-1 text-truncate mb-0">
+          <h1 class="pt-1 ps-2 minlogo mb-0" style="font-size: 21px; white-space: nowrap;">Chalice <span style="color: #fb8501;">Health</span></h1>
+        </a>
+       
+       
+        <h2 class="d-none d-lg-block pt-2 ps-3 fw-bold mt-3 flex-shrink-1"
+            style="font-size: 18px; font-family: 'Montserrat'; color: #fb8501; white-space: nowrap;">
+            Admin Portal
+        </h2> -->
+
+      <!-- Navbar Toggler Button -->
+      <button class="navbar-toggler flex-shrink-0 ms-2" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar Content -->
+      <div class="collapse navbar-collapse " id="navbarNav">
+        <ul class="navbar-nav ms-auto text-center">
+          <!-- User Section -->
+          <li class="nav-item">
+            <a class="nav-link text-black p-0">
+              <!-- flex-column on small screens, flex-row on large screens -->
+              <div class="d-flex flex-lg-row flex-column align-items-lg-center align-items-center">
+                <i class="fa fa-user me-lg-2" style="color: #00876f; font-weight: 500;"></i>
+                <span style="color: #00876f; font-weight: 500; text-align: center;">
+                  {{userInfo.firstName}} {{userInfo.lastName}}
+                </span>
+              </div>
+            </a>
+          </li>
+        </ul>
+
+      </div>
+
+
+
+    </div>
+  </nav>
+
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
+</div>

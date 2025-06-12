@@ -2,7 +2,7 @@
   <div class="wrapper d-flex">
     <div class="content-wrapper">
       <div class="row somemain">
-        <div class="bg-white rounded plan generate-content-table">
+        <div class="bg-white rounded plan generate-content-table mt-2">
           <div class="fixed-header">
             <!-- <h1 class="text-dark mb-0 heading fw-medium">Calendar</h1> -->
             <div class="d-flex generate justify-content-between">
@@ -18,7 +18,7 @@
               </form>
             </div>
             <div class="filters d-flex justify-content-between mt-2 align-items-center">
-              <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center ">
                 <nav aria-label="Page navigation example" *ngIf="!showWeek" class="head">
                   <ul class="pagination mb-0">
                     <li class="page-item"><a class="page-link cursor" (click)="showCurrentMonth()">Today</a>
@@ -49,13 +49,23 @@
                   <h4 class="m-0" *ngIf="!showWeek"><b>{{visibleMonths[0]}} {{selectedYear}}</b> </h4>
                   <h4 class="m-0" *ngIf="showWeek"><b>{{weekMonth}}</b> </h4>
                 </div>
+
               </div>
-              <div class="d-flex gap-3">
-                <div class="d-grid gap-2 d-md-block">
+              <div class="d-flex align-items-center" *ngIf="userInfo.accountType != 'IndependentProvider'">
+                <h4 class="me-1 mt-4" style="width: 14rem;">Select Provider </h4>
+                <select id="frequency" class="form-select form-select-sm cursor mt-1" (change)="onProviderSelect($event)">
+                  <option>Select Provider</option>
+                  <option *ngFor="let item of facilityProviderList" [value]="item.userId" >
+                    {{item.providerName}}</option>
+                </select>
+              </div>
+
+              <div class="d-flex flex-wrap gap-2 align-items-start">
+                <div class="d-grid gap-2 d-md-flex">
                   <button class="btn btn-outline-dark filter-btn" (click)="showWeekData()" type="button">Week</button>
-                  <!-- <button class="btn btn-outline-primary ms-3 filter-btn" (click)="showMonthData()"
-                    type="button">Months</button> -->
+                  <button class="btn btn-outline-primary filter-btn" (click)="showMonthData()" type="button">Month</button>
                 </div>
+              
                 <div class="filter" *ngIf="showWeek">
                   <div class="btn btn-outline-light text-dark filter-btn" (click)="showDatePicker(datePicker)">
                     <i class="bi bi-filter"></i> Filter
@@ -63,36 +73,38 @@
                   <input type="month" #datePicker (change)="onDateChanged($event)" style="display:none;">
                 </div>
               </div>
+ 
+
+              
             </div>
           </div>
-          <div class="plan-worksheet mt-4" *ngIf="!showWeek">
-            <div class="table-responsive">
+          <div class="plan-worksheet mt-3" *ngIf="!showWeek">
+            <div class="table-responsive" style="z-index: -1;">
               <table class="table table-bordered align-middle">
                 <thead class="text-center">
                   <tr>
                     <th></th>
-                    <ng-container *ngFor="let week of weeksInMonth">
-                      <th scope="col" class="text-light-custom" [attr.colspan]="week.daysInWeek"
+                  <ng-container *ngFor="let month of visibleMonths">
+
+                      <!-- <th scope="col" class="text-light-custom" [attr.colspan]="week.daysInWeek"
                         style="border: 1px solid #dee2e6; color: #ACB4C9; font-size: 11px; font-weight: 400;padding: 4px 0;">
                         Week {{ week.weekNumber }}
-                      </th>
+                      </th> -->
                     </ng-container>
                   </tr>
-                  <tr>
-                    <th scope="col">
+                  <tr >
+                    <th scope="col" style="background-color: white;">
                       <label for="flexCheckDefault">
                         Time
                       </label>
                     </th>
-                    <ng-container *ngFor="let month of visibleMonths table-responsive">
+                   <ng-container *ngFor="let month of visibleMonths table-responsive">
                       <ng-container *ngFor="let day of getDaysInMonth(month, selectedYear)">
                         <th scope="col" class="text-light-custom day-wrap" [ngStyle]="{
                                         'border': '1px solid #dee2e6',
                                         'background-color': (formatDate(day.date) === currentDate) ? '#e2f0fe' : 'white'
                                       }">
-                          <span [ngStyle]="{
-                                        'color': (formatDate(day.date) === currentDate) ? '#1e8af9' : (day.date.getDay() === 0 ? 'red' : 'black')
-                                      }" class="month day-wrap" style="font-size:12px; font-weight: 500;">
+                          <span class="month day-wrap" style="font-size:12px; font-weight: 500;">
                             {{ day.day }}<br>
                             {{ day.date | date:'d' }}
                           </span>
@@ -102,8 +114,8 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <ng-container *ngFor="let plan of monthlyData, else noData">
-                    <tr style="height: 11vh !important;border-bottom: none !important;">
+                  <ng-container *ngFor="let plan of monthlyData">
+                    <tr style="height: 8vh !important;border-bottom: none !important;">
                       <td class=" employee-text" scope="col">
                         {{plan.range}}
                       </td>
@@ -116,22 +128,14 @@
                             <ng-container *ngFor="let slotRange of plan.slots">
                               <ng-container *ngFor="let item of slotRange.slots">
                                 <ng-container *ngIf="slotRange.date === (day.date | date: 'yyyy-MM-dd')">
-                                  <span class="day-wrap dropdown" style="line-height:2.3;"
-                                    (click)="openDialog(item,slotRange.date,slotRange.frequency,slotRange.weekDay)">
-                                    <!-- <span class="weekday dropbtn" [ngStyle]="{
-         
-          'background': item.status === 'Booked' ? '#f4fde6' : 'linear-gradient(to bottom right, #f0f0f0, #e0e0e0)'
-        }">
+                                  <span class="day-wrap dropdown" style="font-size: 11px !important"
+                                    (click)="item.status !== 'Booked' ? openDialog(item, slotRange.date, slotRange.frequency, slotRange.weekDay) : openBookedDetails(item.startTime,slotRange.date)">
+                                    <span class="weekday dropbtn" style="height: 4vh !important;" [ngStyle]="{
+                                'background': item.status === 'Booked' ? '#f4fde6' : 'linear-gradient(to bottom right, #f0f0f0, #e0e0e0)'
+                                 }">
                                       {{ item.status === 'Booked' ? 'Booked ' : (item.startTime ?
-                                      (item.startTime.split(':')[0] % 12 || 12) + ':' +
-                                      item.startTime.split(':')[1] + ' ' + (item.startTime.split(':')[0] >= 12 ? 'PM' :
-                                      'AM') : '--') }}
-                                    </span> -->
-
-                                    <span class="weekday dropbtn" [ngStyle]="{
-                                    'background': item.startTime ? '#f4fde6' : (item.status === 'Booked' ? '#f4fde6' : 'linear-gradient(to bottom right, #f0f0f0, #e0e0e0)'),
-                                    'height': '40px'  ,'width' : '2rem'}">
-                                      {{ item.startTime ? '' : (item.status === 'Booked' ? 'Booked ' : '--') }}
+                                      (item.startTime.split(':')[0] % 12 || 12) + ':' + item.startTime.split(':')[1] :
+                                      '--') }}
                                     </span>
                                   </span>
                                 </ng-container>
@@ -142,19 +146,14 @@
                       </ng-container>
                     </tr>
                   </ng-container>
-                  <ng-template #noData>
-                    <tr>
-                      <td colspan="31" class="text-center">There is no data for this week.</td>
-                    </tr>
-                    <tr>
-                      <td colspan="31" class="text-center">
-                        <!-- <app-loader *ngIf="initialLoading" [loadingText]="'Loading...'"
-                          [spinnerWidth]="'2rem !important'" [spinnerHeight]="'2rem !important'"
-                          [spinnerColor]="'#1e8af9 !important'" class="heading"
-                          [additionalClasses]="'mt-5'"></app-loader> -->
-                      </td>
-                    </tr>
-                  </ng-template>
+                  <tr *ngIf="initialLoading">
+                    <td colspan="31" class="text-center">
+                      <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                        [additionalClasses]="'mt-5'"></app-loader>
+                    </td>
+                  </tr>
+
                 </tbody>
               </table>
             </div>
@@ -180,7 +179,7 @@
                                         }">
                             <span [ngStyle]="{
                                               'color': (formatDate(day.date) === currentDate) ? '#1e8af9' : 'black'
-                                            }" style="font-size:14px; font-weight: 500;" class="weekday day-wrap">
+                                            }" style="font-size:13px; font-weight: 500;" class="weekday day-wrap">
                               {{ day.day.substring(0, 3).toUpperCase() }}<br>
                               {{ day.date | date: 'd MMM'}}
                             </span>
@@ -192,57 +191,62 @@
                   </ng-container>
                 </thead>
                 <tbody>
-                  <ng-container *ngFor="let plan of planData,else noData">
-                    <tr style="height: 11vh !important;border-bottom: none !important;">
+                  <ng-container *ngFor="let plan of planData">
+                    <tr style="height: 9vh !important;border-bottom: none !important;">
                       <td class="cursor employee-text" scope="col">
                         {{plan.range}}
                       </td>
                       <ng-container *ngFor="let day of getWeekDays(customDate)">
-                        <td scope="col" class="text-light-custom cursor" (click)="createAvailability(day.date,day.day)"
-                          [ngStyle]="{'border': '1px solid #dee2e6', 'background-color': 'white'}">                        
-                            <ng-container *ngFor="let slotRange of plan.slots">
-                              <ng-container *ngIf="slotRange.date >= currentDate">
-                              <ng-container *ngFor="let item of slotRange.slots">
-                                <ng-container *ngIf="slotRange.date === (day.date | date: 'yyyy-MM-dd')">
-                                  <span class="day-wrap dropdown" style="line-height:2.3;"
-                                    (click)="item.status !== 'Booked' ? openDialog(item, slotRange.date, slotRange.frequency, slotRange.weekDay) : openBookedDetails(item.startTime,slotRange.date)">
-                                    <span class="weekday dropbtn" [ngStyle]="{
+                        <td scope="col" class="text-light-custom cursor"
+                          (click)="createAvailability(day.date,day.day,plan.range)"
+                          [ngStyle]="{'border': '1px solid #dee2e6', 'background-color': 'white'}">
+                          <ng-container *ngFor="let slotRange of plan.slots">
+                            <!-- <ng-container *ngIf="slotRange.date >= currentDate"> -->
+                            <ng-container *ngFor="let item of slotRange.slots">
+                              <ng-container *ngIf="slotRange.date === (day.date | date: 'yyyy-MM-dd')">
+                                <span class="day-wrap dropdown" style="font-size: 11px !important;"
+                                  (click)="item.status !== 'Booked' ? openDialog(item, slotRange.date, slotRange.frequency, slotRange.weekDay) : openBookedDetails(item.startTime,slotRange.date)">
+                                  <span class="weekday dropbtn" [ngStyle]="{
                                   'background': item.status === 'Booked' ? '#f4fde6' : 'linear-gradient(to bottom right, #f0f0f0, #e0e0e0)'
                                    }">
-                                      {{ item.status === 'Booked' ? 'Booked ' : (item.startTime ?
-                                      (item.startTime.split(':')[0] % 12 || 12) + ':' +
-                                      item.startTime.split(':')[1] + ' ' + (item.startTime.split(':')[0] >= 12 ? 'PM' :
-                                      'AM') : '--') }}
-                                    </span>
-
+                                    {{ item.status === 'Booked' ? 'Booked ' : (item.startTime ?
+                                    (item.startTime.split(':')[0] % 12 || 12) + ':' +
+                                    item.startTime.split(':')[1] + ' ' + (item.startTime.split(':')[0] >= 12 ? 'PM' :
+                                    'AM') : '--') }}
                                   </span>
-                                  <div *ngIf="isTooltipVisible" class="custom-tooltip" [ngStyle]="tooltipStyles">
-                                    <!-- Add the details here -->
-                                    <p>Date: </p>
-                                    <p>Frequency: </p>
-                                    <p>Weekday: </p>
-                                    <!-- Add other details you want to show -->
-                                  </div>
-                                </ng-container>
+
+                                </span>
+                                <div *ngIf="isTooltipVisible" class="custom-tooltip" [ngStyle]="tooltipStyles">
+                                  <!-- Add the details here -->
+                                  <p>Date: </p>
+                                  <p>Frequency: </p>
+                                  <p>Weekday: </p>
+                                  <!-- Add other details you want to show -->
+                                </div>
                               </ng-container>
                             </ng-container>
+                            <!-- </ng-container> -->
                           </ng-container>
                         </td>
                       </ng-container>
                     </tr>
                   </ng-container>
-                  <ng-template #noData>
-                    <tr>
-                      <td colspan="31" class="text-center">There is no data for this week.</td>
-                    </tr>
-                    <tr>
+
+                  <!-- <tr>
                       <td class="text-center">
-                        <app-loader *ngIf="initialLoading" [loadingText]="'Loading...'"
+                        <app-loader  [loadingText]="'Loading...'"
                           [spinnerWidth]="'5rem !important'" [spinnerHeight]="'5rem !important'"
                           [spinnerColor]="'red !important'" [additionalClasses]="'mt-5'"></app-loader>
                       </td>
-                    </tr>
-                  </ng-template>
+                    </tr> -->
+                  <tr *ngIf="initialLoading">
+                    <td colspan="7">
+                      <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                        [additionalClasses]="'mt-5'"></app-loader>
+                    </td>
+                  </tr>
+
                 </tbody>
               </table>
             </div>
@@ -252,3 +256,11 @@
     </div>
   </div>
 </section>
+
+
+
+
+
+
+
+

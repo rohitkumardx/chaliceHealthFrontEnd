@@ -1,0 +1,58 @@
+<section class="main-banner">
+    <div class="wrapper d-flex">
+        <div class="content-wrapper">
+            <div class="signup-card">
+                <h3 class="mb-4">Appointment Reminders</h3>
+                <div class="signup-form">
+                    <div class="mat-tab-content">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Message</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Loading Spinner -->
+                                    <tr *ngIf="loading">
+                                        <td colspan="3" class="text-center py-4">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Data Rows -->
+                                    <tr *ngFor="let notification of notificationList">
+                                        <td>{{ notification.title }}</td>
+                                        <td>{{ notification.message }}</td>
+                                        <td>
+                                            <i class="fas fa-eye cursor text-success"
+                                               (click)="showDetails(notification.bookAppointmentId)">
+                                            </i>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Empty State -->
+                                    <tr *ngIf="notificationList.length === 0 && !loading">
+                                        <td colspan="3" class="text-center py-4">
+                                            <div class="no-data-card">
+                                                <i class="fas fa-bell-slash fs-1 text-muted mb-3"></i>
+                                                <h5 class="text-muted mb-2">No Reminders Found</h5>
+                                                <p class="text-muted small">
+                                                    You don't have any appointment reminders yet.
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

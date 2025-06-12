@@ -1,0 +1,166 @@
+
+.profile-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .profile-card .profile-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 1px solid #878787;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  .profile-card h5 {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #333;
+    margin: 10px 0 0;
+  }
+  .profile-card p {
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+    color: #555;
+  }
+  .profile-card .contact-info {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  strong{
+    font-weight: 500;
+  }
+  .profile-card .contact-info i {
+    font-size: 0.9rem;
+    vertical-align: middle;
+  }
+  .vital-info-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .vital-title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #333333;
+    /* margin-bottom: 20px; */
+    text-align: center;
+  }
+  
+  .vital-item {
+    margin-bottom: 12px;
+  }
+  
+  .vital-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666666;
+    margin-bottom: 5px;
+  }
+  .vital-value {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #007bff;
+  }
+  .border-left-custom {
+    border-left: 1px solid #ddd; 
+    padding-left: 15px; 
+  }
+  
+  hr {
+    border-color: #e0e0e0;
+    margin: 20px 0;
+  }
+  
+  
+  .medical-history {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .section-title {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #333333;
+    padding-bottom: 5px;
+  }
+  
+  .table {
+    margin-top: 20px;
+  }
+  
+  .table-header {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 500;
+  }
+  h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+  }
+  .table-hover tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  .header {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    /* margin-bottom: 20px; */
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+  
+  }
+  
+  .table td, 
+  .table th {
+    padding: 15px;
+    vertical-align: middle;
+    font-size: 1rem;
+  }
+  
+  .text-muted strong {
+    color: black;
+  
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
+  
+  .table-responsive {
+    overflow-x: auto;
+  }
+  .profile-image {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%; /* Makes it circular */
+    object-fit: cover;
+  }
+  
+  .profile-icon {
+    font-size: 90px;
+    color: #ccc; /* Default color for the icon */
+  }
+  .scroll-container {
+   overflow-x: hidden !important;
+   overflow-y: auto !important;
+   scrollbar-width: thin;
+  }
+
+  .btn-save{
+    padding-right :  30px!important;
+    padding-left: 30px!important;
+  }

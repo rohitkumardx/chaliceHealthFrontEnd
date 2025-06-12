@@ -1,0 +1,209 @@
+<section class="main-banner">
+  <div class="wrapper d-flex">
+    <div class="content-wrapper">
+      <div class="signup-card">
+        <h3>Patient List</h3>
+        <div class=" mt-2 mb-2" style="display: flex; justify-content: right;">
+          <input style="width: 30%;" type="text" [(ngModel)]="searchTerm" placeholder="Search By Patient Code/Name"
+            (input)="getPatientList()" class="form-control">
+
+        </div>
+        <div class="table-responsive">
+
+          <table class="table" *ngIf="this.userInfo.accountType == 'IndependentProvider'">
+            <thead>
+              <tr>
+                <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueId')">Patient Code
+                  <i
+                    [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueId', 'fa-sort-up': sortColumn === 'patientUniqueId' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueId' && sortOrder === 'desc'}"></i>
+                </th>
+                <th style=" min-width: 150px;" scope="col" (click)="sortData('patientName')">Patient Name
+                  <i
+                    [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientName', 'fa-sort-up': sortColumn === 'patientName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientName' && sortOrder === 'desc'}"></i>
+                </th>
+                <th scope="col" style=" min-width: 150px;">DOB</th>
+                <th scope="col" style=" min-width: 150px;">Phone Number</th>
+                <th scope="col">Location</th>
+                <th scope="col">Reason for Visit</th>
+                <!-- <th scope="col">Date</th> -->
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody class="">
+              <tr *ngFor="let item of patientListData; let i = index">
+                <td style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.
+                                  patientId
+                                  )">
+                  <u class="cursor">{{ item?.patientUniqueId }}</u>
+                </td>
+                <td class="pt-3"> {{ item.patientName }} </td>
+                <td class="pt-3"> {{ formatDateWithAge(item.dateOfBirth) | date:'MM-dd-yyyy' }} </td>
+                <td class="pt-3"> {{ item.phoneNumber | phoneFormat }} </td>
+                <td class="pt-3">
+                  {{ item.city }}{{ item.city && item.stateName ? ', ' : '' }}{{ item.stateName }}
+                </td>
+                <td class="pt-3"> {{ item.reasonForVisit }} </td>
+                <td class="pt-3">
+                  <div class="d-flex justify-content-end align-items-center gap-3">
+
+                    <!-- Send Message icon with badge (outside dropdown) -->
+                    <span title="Send Message" data-bs-toggle="tooltip"
+                      (click)="viewChat(item.patientId, item.bookAppointmentId)"
+                      style="cursor: pointer; position: relative;">
+                      <i class="fas fa-comments me-2" style="color: #00a98d; font-size: 20px;"></i>
+                      <span *ngIf="item.unreadMessageCount > 0" class="badge bg-danger"
+                        style="position: absolute; top: -8px; right: -10px; font-size: 10px;">
+                        {{ item.unreadMessageCount }}
+                      </span>
+                    </span>
+
+                    <!-- Dropdown for other options -->
+                    <div class="dropdown">
+                      <span title="More Options" style="cursor: pointer; font-size: 20px;" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </span>
+                      <ul class="dropdown-menu custom-dropdown1">
+                        <li>
+                          <a class="dropdown-item" [href]="'mailto:' + item.email" title="Send Email">
+                            <i class="fa fa-envelope text-primary me-2"></i> Send Email
+                          </a>
+                        </li>
+                        <!-- Add more dropdown items if needed -->
+                      </ul>
+                    </div>
+
+                  </div>
+                </td>
+
+
+              </tr>
+
+              <tr *ngIf="loading">
+                <td colspan="7">
+                  <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                    [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                    [additionalClasses]="'mt-5'"></app-loader>
+                </td>
+              </tr>
+
+              <tr *ngIf="patientListData.length === 0 && !loading">
+                <td colspan="9" class="no-data-card">
+                  <div class="no-data-card-container">
+                    <div class="no-data-icon">
+                      <i class="fas fa-user-slash"></i>
+                    </div>
+                    <div class="no-data-content">
+                      <span class="no-data-title">No Patients Found</span>
+                      <p class="no-data-description">It looks like there are no patients at the
+                        moment.
+                        Please check back later!</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table" *ngIf="this.userInfo.accountType == 'PrivatePractices' || this.userInfo.accountType == 'Facility'">
+            <thead>
+              <tr>
+                <th style=" min-width: 150px;" scope="col" (click)="sortData('patientUniqueCode')">Patient Code
+                  <i
+                    [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientUniqueCode', 'fa-sort-up': sortColumn === 'patientUniqueCode' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientUniqueCode' && sortOrder === 'desc'}"></i>
+                </th>
+                <th style=" min-width: 150px;" scope="col" (click)="sortData('providerName')">Provider Name
+                  <i
+                    [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'providerName', 'fa-sort-up': sortColumn === 'providerName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'providerName' && sortOrder === 'desc'}"></i>
+                </th>
+                <th scope="col">Meeting Type</th>
+                <th scope="col" style=" min-width: 150px;">Appointment Date</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody class="">
+              <tr *ngFor="let item of patientListData; let i = index">
+                <td style="color: #009cff!important; cursor: pointer;" (click)="viewProfile(item.userId)">
+                  <u class="cursor">{{ item?.patientUniqueCode }}</u>
+                </td>
+                <td *ngIf="item.accountType == 'IndependentProvider'" style="color: #009cff!important; cursor: pointer;"
+                  (click)="viewProviderProfile(item.providerId)">
+                  <u>{{item.providerName}}</u>
+                </td>
+                <td *ngIf="item?.accountType == 'PrivatePractices' || item?.accountType == 'Facility'" style="color: #009cff!important; cursor: pointer;"
+                  (click)="viewProviderProfile(item.providerId)">
+                  <u>{{item.legalPracticeName}}</u>
+                </td>
+                <!-- <td class="pt-3" style="color: #009cff!important; cursor: pointer;" (click)="viewProviderProfile(item.providerId)"> <u>{{ item.providerName }}</u> </td> -->
+                <td>
+                  <ng-container [ngSwitch]="item.meetingType">
+                    <i *ngSwitchCase="'VirtualVisit'" class="fas fa-camera me-2"
+                      style="font-size: 15px; color: #00876ec8;"></i>
+                    <i *ngSwitchCase="'IHomeCareVisit'" class="fa fa-home me-2" style="color: #00876ec8;"></i>
+                    <i *ngSwitchCase="'InPersonVisit'" class="fa fa-building me-2" style="color: #00876ec8;"></i>
+                  </ng-container>
+                  {{ formatMeetingType(item.meetingType) }}
+                </td>
+                <!-- <td class="pt-3"> {{ formatMeetingType(item.meetingType) }} </td> -->
+                <td class="pt-3"> {{ item.appointmentDateTime| date:'MM-dd-yyyy'}} </td>
+
+                <td class="pt-3 text-center align-middle">
+                  <div class="d-inline-flex align-items-center gap-3 position-relative justify-content-center">
+
+                    <!-- Send Message Icon with Tooltip and Badge -->
+                    <span title="Send Message" data-bs-toggle="tooltip" style="cursor: pointer; position: relative;"
+                      (click)="viewFacilityChat(item.userId, item.id, item.clinicId)">
+                      <i class="fas fa-comments" style="color: #00a98d; font-size: 19px;"></i>
+
+                      <span *ngIf="item.unreadMessageCount > 0"
+                        class="badge bg-danger position-absolute top-0 start-100 translate-middle"
+                        style="font-size: 10px;">
+                        {{ item.unreadMessageCount }}
+                      </span>
+                    </span>
+
+                    <!-- Send Email Icon with Tooltip -->
+                    <a [href]="'mailto:' + item.email" title="Send Email" data-bs-toggle="tooltip"
+                      style="cursor: pointer;">
+                      <i class="fa fa-envelope text-primary" style="font-size: 19px;"></i>
+                    </a>
+
+                  </div>
+                </td>
+
+              </tr>
+
+              <tr *ngIf="loading">
+                <td colspan="7">
+                  <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                    [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+                    [additionalClasses]="'mt-5'"></app-loader>
+                </td>
+              </tr>
+
+              <tr *ngIf="patientListData.length === 0 && !loading">
+                <td colspan="9" class="no-data-card">
+                  <div class="no-data-card-container">
+                    <div class="no-data-icon">
+                      <i class="fas fa-user-slash"></i>
+                    </div>
+                    <div class="no-data-content">
+                      <span class="no-data-title">No Patients Found</span>
+                      <p class="no-data-description">It looks like there are no patients at the
+                        moment.
+                        Please check back later!</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+
+        </div>
+        <div class="me-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+          <app-pagination [paginator]="paginator" (onPageChange)="getPatientList()" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

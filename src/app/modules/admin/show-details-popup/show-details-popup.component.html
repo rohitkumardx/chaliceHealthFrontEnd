@@ -1,0 +1,24 @@
+<div class="content-wrapper1 px-4 py-2" >
+    <div class="header d-flex">
+        <h2 class=" text-center mb-0">Transaction Details</h2>
+        <div class="close-btn ms-auto fs-4 mt-1" (click)="closePopup()"><i class="fa-solid fa-xmark"></i></div>
+    </div>
+    <hr class="mt-2 mb-3">
+    <div class="row">
+        <div class="col-md-7">
+            <p><b> Patient Code </b> : {{ transactionDetails.patientUniqueCode }} </p>
+            <p><b> Provider Name </b> : {{ transactionDetails.providerName }} </p>
+            <p><b> Consultation Type </b> : {{ formatConsultationType(transactionDetails.consultationType) }} </p>
+            <p><b> Appointment Date </b> : {{ transactionDetails.appointmentDateTime | date: 'MM-dd-yyyy' }} </p>
+            <p><b> Appointment Status </b> : {{ transactionDetails.appointmentStatus }} </p>
+            <p><b> Appointment Duration </b> : {{ transactionDetails.serviceDuration }}min </p>
+            <p><b> Provider Fees </b> : {{ transactionDetails.providerFess| currency:'USD' }} </p>
+            <p><b> Gateway Fees </b> : {{ transactionDetails.gateWayProcessingFess| currency:'USD' }} </p>
+            <p><b> Platform Fees </b> : {{ transactionDetails.platFormServicesFess| currency:'USD' }} </p>
+        </div>
+
+        <div class="col-md-5 d-flex align-items-center justify-content-center">
+            <img src="../../../../assets/svg/icons/cost-icon.svg" alt="image" width="130px" height="130px">
+        </div>
+    </div>
+</div>

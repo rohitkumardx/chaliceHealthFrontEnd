@@ -1,0 +1,116 @@
+<div class="content-wrapper1 p-4">
+ 
+    <div class="row d-flex align-items-center">
+        <div class="col-10 m-0 p-0">
+          <h5 class="mb-0 fs-3 fw-3 " style="line-height: 30px;" >Notification Details</h5>
+        </div>
+        <div class="col-2 m-0 p-0 text-end">
+          <i class="fa fa-times cursor fa-lg fs-3 cursor " (click)="closePopup()"></i>
+        </div>
+      </div>
+   
+    <hr>
+    <div class="row">
+        <div class="col-sm-6 mt-1"><b>Patient Name</b>: {{data?.patientName}}</div>
+        <div class="col-sm-6 mt-1"><b>Provider Name</b>: {{data?.providerName}}</div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-6 mt-1"><b>Payment Date/Applied Date</b>: {{data?.paymentDate | date:'MM-dd-yyyy'}}</div>
+       
+            <div class="col-sm-6 mt-1">
+                <b>Appointment Date & Time</b>: {{ data?.appointmentDateTime | date:'MM-dd-yyyy hh:mm a' }}
+              </div>
+    </div>
+    <!-- <div class="row mt-2">
+        <div class="col-sm-6" *ngIf="!                                                                                                                                                                                                                                                                      data?.isTimeBelow3Hrs"><b>Refundable Amount</b>: {{data?.refundAmount | currency:'USD'}}</div>
+        <div class="col-sm-6"><b>Payment Gateway Fee</b>: {{data?.noRefundableAmount | currency:'USD'}}</div>
+    </div> -->
+    <div class="row"> 
+        <div class="col-sm-6 mt-1"><b>Payment Status</b>: {{data?.refundStatus}}</div>
+        <div class="col-sm-6 mt-1"><b>Cancellation Reason</b>: {{data?.cancellationReason}}</div>
+    </div>
+    <div *ngIf="data?.isTimeBelow3Hrs && data?.refundStatus !== 'Refunded'" class="row mt-2">
+        <div class="col-sm-6 d-flex">
+            <div><b>Refund (In Percentage)</b>: </div>
+            <select class="form-select form-select-sm cursor  ms-3" style="width:30%;"
+                (change)="calculatePercentage(data.totalAmount,data.noRefundableAmount, $event)">
+                <option *ngFor="let option of percentangeOptions" [value]="option">
+                    {{option}}
+                </option>
+            </select>
+        </div>
+        <!-- <div class="col-sm-6" *ngIf="result"><b>Refundable Amount</b>: {{result | currency:'USD'}}</div> -->
+    </div>
+    <hr *ngIf="data?.isTimeBelow3Hrs && data?.refundStatus !== 'Refunded'">
+    <!-- <div class="row mt-2">
+        <div class="col-sm-6"><b>Paid Amount</b>: {{data?.totalAmount | currency:'USD'}}</div>
+        <div class="col-sm-6"><b>Payment Gateway Fee</b>: {{data?.noRefundableAmount | currency:'USD'}}</div>
+    </div> -->
+    <div class="table-responsive">
+        <table class="table mt-2">
+        <thead>
+            <tr>
+                <th>Paid/Total Amt.</th>
+                <th>Gateway Charges</th>
+                <th>Platform Fee.</th>
+                <th>Provider Fee.</th>
+                <th>Refundable Amt.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{data?.totalAmount | currency:'USD'}}</td>
+                <td> {{data?.noRefundableAmount | currency:'USD'}}</td>
+                <td>{{PlatformCharges != null ? (PlatformCharges | currency:'USD') : 'NA'}}</td>
+                <td>{{providerCharges != null ? (providerCharges | currency:'USD') : 'NA'}}</td>
+                <td>{{result | currency:'USD'}}</td>
+            </tr>
+        </tbody>      
+    </table>
+    </div>
+    
+    <form [formGroup]="refundForm">
+        <div class="row mt-2">
+            <textarea id="reason" class="form-control form-control-sm mt-1" formControlName="reason"
+                [value]="refundForm.get('reason')?.value" placeholder="Enter the reason for Rejection"
+                ></textarea>
+                <div class="text-danger" 
+     *ngIf="refundForm.get('reason')?.hasError('whitespace') && 
+            (refundForm.get('reason')?.dirty)">
+    Reason cannot be just spaces.
+</div>
+
+<!-- <div class="text-danger" 
+     *ngIf="refundForm.get('reason')?.hasError('whitespace') && 
+            (refundForm.get('reason')?.touched || refundForm.get('reason')?.dirty)">
+    Reason cannot be just spaces.
+</div> -->
+
+            <!-- <div class="text-danger" *ngIf="refundForm.get('reason')?.hasError('whitespace')">
+                Reason cannot be just spaces.
+            </div> -->
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-3"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-3">
+                <button class="btn btn-success ms-2" (click)="acceptOrRejectRefund(true)"
+                    >
+                    <span class="visually-hidden"></span>
+                    <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': loading }" *ngIf="loading"></i>
+                    <span *ngIf="!loading">Accept</span>
+                    <span *ngIf="loading" class="space">Accept</span>
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-danger cancel ms-2" (click)="acceptOrRejectRefund(false)"
+                    [disabled]="refundForm.invalid">
+                    <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': loading1 }"></i>
+                    <span *ngIf="!loading1" class="space">Reject</span>
+                    <span *ngIf="loading1" class="space"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

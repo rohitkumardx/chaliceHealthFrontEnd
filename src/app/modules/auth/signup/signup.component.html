@@ -1,6 +1,6 @@
 <div class="login-container" style=" background: linear-gradient(135deg, #83c0b1, #96c0a8, #cbbe91, #e6bf84);">
     <div class="row w-100">
-        <div class="col-6 p-0">
+        <div class="col-12 col-md-6 col-lg-6 p-0">
             <div class="login-card">
                 <div class="pt-3">
                     <a href="/home-page">
@@ -9,7 +9,7 @@
                 </div>
                 <h2 class="pt-5">Create your account</h2>
                 <form [formGroup]="signupForm">
-                    <div class="row p-2">
+                    <div class="row">
                         <div class="col-sm-6 text-start">
                             <label for="firstName"> First Name <span class="red">*</span></label>
                             <input type="text" id="firstName" class="form-control form-control-sm mt-1"
@@ -20,9 +20,14 @@
                                 *ngIf="signupForm.get('firstName')?.touched && signupForm.get('firstName')?.hasError('required')">
                                 First Name is required.
                             </div>
+                            <div class="invalid-feedback"
+                           *ngIf="signupForm.get('firstName')?.touched && signupForm.get('firstName')?.hasError('pattern')">
+                            First Name cannot be empty or only spaces.
+                       </div>
+                            
                         </div>
                         <div class="col-sm-6 text-start">
-                            <label for="lastName" class="pb-1">Last name</label>
+                            <label for="lastName" class="pb-1">Last name<span class="red">*</span></label>
                             <input type="text" id="lastName" class="form-control form-control-sm"
                                 formControlName="lastName"
                                 [ngClass]="{'is-invalid': signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched}">
@@ -30,9 +35,13 @@
                                 *ngIf="signupForm.get('lastName')?.touched && signupForm.get('lastName')?.hasError('required')">
                                 Last Name is required.
                             </div>
+                            <div class="invalid-feedback"
+                           *ngIf="signupForm.get('lastName')?.touched && signupForm.get('lastName')?.hasError('pattern')">
+                            Last Name cannot be empty or only spaces.
+                       </div>
                         </div>
                     </div>
-                    <div class="row p-2">
+                    <div class="row">
                         <div class="col-sm-6 text-start" *ngIf="!patient">
                             <label>Account Type<span class="red">*</span></label>
                             <select class="form-select form-select-sm cursor mt-1" formControlName="accountType"
@@ -40,11 +49,11 @@
                                 <option value="" disabled selected>Select</option>
                                 <option value=2>Independent Provider</option>
                                 <option value=3>Private Practice</option>
-                                <option value=4>Healthcare Facility</option>
+                                <option value=4>Facility</option>
                             </select>
                             <div class="invalid-feedback"
                                 *ngIf="signupForm.get('accountType')?.touched && signupForm.get('accountType')?.hasError('required')">
-                                Gender is required.
+                                Account Type is required.
                             </div>
                         </div>
                         <div class="col-sm-6 text-start">
@@ -63,9 +72,9 @@
                         </div>
                     </div>
 
-                    <div class="row p-2">
+                    <div class="row">
                         <div class="col-sm-6 text-start">
-                            <label for="email" class="pb-1">Email</label>
+                            <label for="email" class="pb-1">Email<span class="red">*</span></label>
                             <input type="text" id="email" class="form-control" formControlName="email"
                                 placeholder="Enter Email"
                                 [ngClass]="{'is-invalid': signupForm.get('email')?.invalid && signupForm.get('email')?.touched}">
@@ -77,9 +86,14 @@
                                 *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.hasError('email')">
                                 Email is not valid.
                             </div>
+                            <div class="fv-plugins-message-container invalid-feedback d-block"
+                          *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.hasError('invalidEmail')">
+                             Please enter a valid email address.
+                            </div>
                         </div>
+                      
                         <div class="col-sm-6 text-start">
-                            <label for="password" class="pb-1">Password</label>
+                            <label for="password" class="pb-1">Password<span class="red">*</span></label>
                             <div class="password-input-container position-relative">
                                 <input type="{{ hidePassword ? 'password' : 'text' }}" id="password"
                                     class="form-control form-control-eye" formControlName="password"
@@ -103,7 +117,7 @@
                         
                         
                     </div>
-                    <div class="row p-2">
+                    <div class="row">
                         <div class="col-sm-6 text-start">
                             <label>How did you hear about us?</label>
                             <select class="form-select form-select-sm cursor mt-1"
@@ -136,7 +150,7 @@
                 </form>
             </div>
         </div>
-        <div class="col-6 d-flex justify-content-center">
+        <div class=" image col-12 col-md-6 col-lg-6 d-flex justify-content-center">
             <img src="../../../../assets/svg/homepage/g1.png" width="600px" alt="">
         </div>
     </div>

@@ -5,7 +5,21 @@ import { AddAvailabilityComponent } from '../add-availability/add-availability.c
 import { ProviderService } from 'src/app/Services/provider.service';
 import { WeekDay } from '@angular/common';
 import { NotificationService } from 'src/app/Services/notification.service';
-
+import { AuthService } from 'src/app/Services/auth.service';
+function getCentralAmericaDate(date?: string | Date): Date {
+  const timeZone = 'America/Guatemala';
+  const baseDate = date ? new Date(date) : new Date();
+  const centralDate = new Date(baseDate.toLocaleString('en-US', { timeZone }));
+ 
+  const utcDate = baseDate.getUTCDate();
+  const centralDay = centralDate.getDate();
+ 
+  if (centralDay < utcDate) {
+    centralDate.setDate(centralDate.getDate() + 1);
+  }
+ 
+  return centralDate;
+}
 @Component({
   selector: 'app-calendar-view',
   templateUrl: './calendar-view.component.html',
@@ -25,21 +39,42 @@ export class CalendarViewComponent implements OnInit {
   selectedMonth: any;
   planData: any
   monthlyData: any
-
-
+  userInfo: any
 
   constructor(private modalService: NgbModal,
     private providerService: ProviderService,
+    private authService: AuthService,
     private notificationService: NotificationService,
   ) { }
 
-  ngOnInit(): void {
-    this.getCurrentDate()
-    this.showCurrentMonth()
-     this.showWeekData()
-
+  ngOnInit() {
+    this.userInfo = this.authService.getUserInfo()
+    if (this.userInfo.accountType != 'IndependentProvider') {
+      this.getFacilityProvidersList()
+    }
+    this.userId = this.userInfo.userId
+    this.getCurrentDate();
+    this.showCurrentMonth();
+    this.showWeekData();
+  //  this.getMonthlyPlanData();
   }
+  onProviderSelect(event: Event): void {
+    const selectedUserId = (event.target as HTMLSelectElement).value;
+    
+    if (selectedUserId) {
+      this.userId = selectedUserId
+      if(this.showWeek == true){
+        this.getWeekPlanData()
+      }
+      else  {
+        this.getMonthlyPlanData()
+      }
+   
+    }
+  }
+
   getCurrentDate(): string {
+    
     const today = new Date();
     const year = today.getFullYear();
     const month = ('0' + (today.getMonth() + 1)).slice(-2);
@@ -83,39 +118,41 @@ export class CalendarViewComponent implements OnInit {
   hideTooltip() {
     this.isTooltipVisible = false;
   }
-  createAvailability(date: any, day: any) {
+  createAvailability(date: any, day: any, startTime: any) {
     const currentDate = new Date();
     const selectedDate = new Date(date);
-  
-    // Reset time to midnight for both dates
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+    const days = String(selectedDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${days}`;
     const currentDateAtMidnight = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).getTime();
     const selectedDateAtMidnight = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()).getTime();
-    
-    const formattedDate = selectedDate.toISOString().split('T')[0];
+
+    //const formattedDate = selectedDate.toISOString().split('T')[0];
     const obj = {
       day: day,
-      date: formattedDate
+      date: formattedDate,
+      startTime: startTime
     };
-    debugger
-    // Check if the selected date is strictly in the past
     if (selectedDateAtMidnight < currentDateAtMidnight) {
       this.notificationService.showDanger('You cannot create availability for a past date.');
       return;
     }
-  
+
     const modalRef = this.modalService.open(AddAvailabilityComponent, {
-      backdrop: 'static',
-      size: 'lg',
-      centered: true
+
+      size: 'md',
+      centered: true,
+      windowClass: 'custom-modal'
     });
-    
     modalRef.componentInstance.createNew = obj;
+    modalRef.componentInstance.providerId = this.userId;
     modalRef.componentInstance.dialogClosed.subscribe(() => {
       this.getWeekPlanData();
     });
   }
-  
-  
+
+
 
 
 
@@ -139,7 +176,7 @@ export class CalendarViewComponent implements OnInit {
 
   getWeeks(month, year): { weekNumber: number; startDate: Date; endDate: Date; daysInWeek: number }[] {
     // const day = date.getDate();
-    debugger;
+    
     var weekStartDate = new Date(year, month, 1);
     var numberOfDaysInMonth = new Date(year, month + 1, 0).getDate();//TODO: validate
     var weeks = [];
@@ -182,6 +219,7 @@ export class CalendarViewComponent implements OnInit {
     return daysInWeek;
   }
 
+
   getDaysInMonth(month: string, year: number): { date: Date; day: string; week: number }[] {
     const daysInMonth = new Date(year, this.months.indexOf(month) + 1, 0).getDate();
     const daysArray = [];
@@ -220,7 +258,8 @@ export class CalendarViewComponent implements OnInit {
         const date = new Date(this.daysArray[0].date);
         const dateStr = date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
         this.weeksInMonth = this.getWeeks(prevIndex, this.selectedYear);
-        // this.getPlanData(dateStr)
+        this.customDate = dateStr
+        this.getMonthlyPlanData()
       } else {
         this.selectedYear -= 1;
         this.visibleMonths = [this.months[this.months.length - 1]];
@@ -228,7 +267,8 @@ export class CalendarViewComponent implements OnInit {
         this.daysArray = this.getDaysInMonth(this.visibleMonths[0], this.selectedYear);
         const date = new Date(this.daysArray[0].date);
         const dateStr = date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
-        // this.getPlanData(dateStr)
+        this.customDate = dateStr
+        this.getMonthlyPlanData()
       }
     }
   }
@@ -257,7 +297,7 @@ export class CalendarViewComponent implements OnInit {
     const date = new Date(this.selectedYear, this.months.indexOf(this.visibleMonths[0]), 1);
     const dateStr = date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
     this.customDate = dateStr
-     this.getMonthlyPlanData();
+    this.getMonthlyPlanData();
   }
   showWeekData() {
     this.showWeek = true
@@ -268,7 +308,7 @@ export class CalendarViewComponent implements OnInit {
     this.getWeekPlanData()
   }
 
-    showDatePicker(datePicker: HTMLInputElement): void {
+  showDatePicker(datePicker: HTMLInputElement): void {
     datePicker.style.display = 'inline-block';
     datePicker.style.opacity = '0';
     datePicker.style.width = '0';
@@ -293,13 +333,15 @@ export class CalendarViewComponent implements OnInit {
   }
 
   userId: any
-  initialLoading : boolean = false
+  initialLoading: boolean = false
   getMonthlyPlanData() {
+    
     this.monthlyData = null
     this.initialLoading = true
-    this.providerService.getMonthlyData(this.customDate).subscribe((response: any) => {
+    this.providerService.getMonthlyData(this.customDate, this.userId).subscribe((response: any) => {
       const plan = response;
-      this.userId = response.useId
+      this.userId = response.userId
+   
       const timeRanges = this.generateTimeRanges();
       const allDates: Set<string> = new Set(plan.availabilities.map((availability: any) => availability.date));
 
@@ -353,17 +395,18 @@ export class CalendarViewComponent implements OnInit {
       });
       this.initialLoading = false
       this.monthlyData = sortedGroupedByTimeRange;
+      
       console.log('monthlyData ', this.monthlyData)
     })
 
   }
   getWeekPlanData() {
+    
     this.initialLoading = true
     this.planData = null
-    this.providerService.getWeekData(this.customDate).subscribe((response: any) => {
+    this.providerService.getWeekData(this.customDate,this.userId).subscribe((response: any) => {
       const plan = response;
-      this.initialLoading = false
-      this.userId = response.useId
+      this.userId = response.userId
       const timeRanges = this.generateTimeRanges();
       const allDates: Set<string> = new Set(plan.availabilities.map((availability: any) => availability.date));
 
@@ -371,6 +414,7 @@ export class CalendarViewComponent implements OnInit {
         const date = new Date(item.date);
         const dateStr = date.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
         allDates.add(dateStr);
+        this.getMonthlyPlanData();
       });
 
       const groupedByTimeRange: any = {};
@@ -415,12 +459,13 @@ export class CalendarViewComponent implements OnInit {
           });
         }
       });
+    
+      this.initialLoading = false
       this.planData = sortedGroupedByTimeRange;
       console.log('pland data', this.planData)
     })
 
   }
-
 
   generateTimeRanges() {
     const timeRanges: any[] = [];
@@ -429,11 +474,18 @@ export class CalendarViewComponent implements OnInit {
       const nextHour = (i + 1) % 24;
       const label = this.formatHour(hour);
       const start = this.formatTime(hour);
-      const end = this.formatTime(nextHour);
+      let end = this.formatTime(nextHour);
+
+      // Adjust end time for the 12 PM range to be 11:59 PM
+      if (hour === 23) {
+        end = '23:59:00'; // 11:59 PM in 24-hour format
+      }
+
       timeRanges.push({ label: label, start: start, end: end });
     }
     return timeRanges;
   }
+
 
   formatHour(hour: number): string {
     const ampm = hour >= 12 ? 'PM' : 'AM';
@@ -449,12 +501,15 @@ export class CalendarViewComponent implements OnInit {
     // this.getWeekPlanData()
   }
   showMonthData() {
+    
     this.showWeek = false
     // this.getPlanData(this.scheduleForm.get('date')!.value)
     this.onDateChange()
   }
+  
   onDateChange() {
     const selectedDate: Date | null = this.currentDate
+    
     if (selectedDate) {
       const date = new Date(selectedDate);
       this.selectedYear = new Date(selectedDate).getFullYear();
@@ -466,6 +521,7 @@ export class CalendarViewComponent implements OnInit {
     this.updateVisibleMonths();
   }
   updateVisibleMonths() {
+    
     if (this.selectedMonth === undefined) {
       this.visibleMonths = ['November', 'December'];
     } else {
@@ -485,7 +541,7 @@ export class CalendarViewComponent implements OnInit {
     date.setDate(date.getDate() - 7);
     this.customDate = date.toISOString().split('T')[0];
     this.getWeekDays(this.customDate)
-     this.getWeekPlanData()
+    this.getWeekPlanData()
   }
   showNextWeek() {
     let date = new Date(this.customDate);
@@ -494,18 +550,18 @@ export class CalendarViewComponent implements OnInit {
     this.getWeekDays(this.customDate)
     this.getWeekPlanData()
   }
-  getWeekDays(inputDate) {
-    const currentDate = inputDate ? new Date(inputDate) : new Date();
+getWeekDays(inputDate) {
+const currentDate = getCentralAmericaDate(inputDate);
     const currentDayIndex = currentDate.getDay();
     const startOfWeek = new Date(currentDate);
-
+ 
     const daysToMonday = (currentDayIndex + 6) % 7;
     startOfWeek.setDate(currentDate.getDate() - daysToMonday);
-
+ 
     this.weekMonth = new Date(startOfWeek).toLocaleString('default', { month: 'long', year: 'numeric' });
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
-
+ 
     const weekDays = [];
     for (let day = new Date(startOfWeek); day <= endOfWeek; day.setDate(day.getDate() + 1)) {
       weekDays.push({
@@ -515,45 +571,17 @@ export class CalendarViewComponent implements OnInit {
     }
     this.daysArray = weekDays;
     return weekDays;
+ 
   }
-  // openDialog(data: any, date: any, frequency: any, weekDay: any) {
-  //   const currentDate = new Date();
-  //   const selectedDate = new Date(date);
-  
-  //   const currentDateAtMidnight = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).getTime();
-  //   const selectedDateAtMidnight = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate()).getTime();
-    
-  //   const formattedDate = selectedDate.toISOString().split('T')[0];
-  
-  //   if (selectedDateAtMidnight < currentDateAtMidnight) {
-  //     this.notificationService.showDanger('You cannot create availability for a past date.');
-  //     return;
-  //   }
-
-  //   const obj = {
-  //     date: date,
-  //     data: data,
-  //     frequency: frequency,
-  //     weekDay: weekDay
-  //   }
-  //   const modalRef = this.modalService.open(AddAvailabilityComponent, {
-  //     backdrop: 'static',
-  //     size: 'lg',
-  //     centered: true
-  //   });
-  //   modalRef.componentInstance.data = obj
-  //   modalRef.componentInstance.dialogClosed.subscribe(() => {
-  //     this.getWeekPlanData()
-  //   });
-  // }
   openDialog(data: any, date: any, frequency: any, weekDay: any) {
-    const currentDate = new Date(); // Get the current date
-    const selectedDate = new Date(date); // Convert the provided date to a Date object
+    
+  
+    const currentDate = new Date();
+    const selectedDate = new Date(date);
 
-    // Check if the selected date is in the past
-    if (selectedDate < currentDate ) {
+    if (selectedDate < currentDate) {
       this.notificationService.showDanger('You can not create the availability for the past date.');
-      return; // Exit the function if the date is in the past
+      return;
     }
     const obj = {
       date: date,
@@ -566,12 +594,21 @@ export class CalendarViewComponent implements OnInit {
       size: 'lg',
       centered: true
     });
+   
     modalRef.componentInstance.data = obj
+    modalRef.componentInstance.providerId = this.userId;
     modalRef.componentInstance.dialogClosed.subscribe(() => {
       this.getWeekPlanData()
     });
   }
-  openBookedDetails(startTime : any,date : any){
+
+  facilityProviderList = []
+  getFacilityProvidersList() {
+    this.providerService.getFacilityProvidersDropdownList(this.userInfo.userId).subscribe((response: any) => {
+      this.facilityProviderList = response
+    })
+  }
+  openBookedDetails(startTime: any, date: any) {
     const obj = {
       date: date,
       startTime: startTime,
@@ -582,6 +619,7 @@ export class CalendarViewComponent implements OnInit {
       centered: true
     });
     modalRef.componentInstance.bookedDetails = obj
+    modalRef.componentInstance.providerId = this.userId;
   }
 
 }

@@ -1,0 +1,154 @@
+<div class=" px-4 py-4" style="    background-color: #f1f1f2b1 !important;">
+  <div class="  contact-container bg-white  main">
+
+    <div class="row shadow-sm">
+      <h1 class="bold text-center  mb-4">Contact Us</h1>
+      <!-- Contact Info Section -->
+      <div class="col-md-5 contact-info pt-4">
+        <h2 class="contact-title bold mt-1">Get in Touch</h2>
+        <p>Have questions or need assistance? Our customer support team is here to help. Contact us via phone, email, or
+          through our online contact form, and we’ll be happy to assist you.</p>
+
+        <div class="contact-details">
+          <div class="mb-3 d-flex align-items-start">
+            <i class="fas fa-clock me-2 mt-1"></i>
+            <div>
+              <strong style="color: #017e56; font-size: 20px;">Hours</strong><br>
+              <span style="font-size: 19px!important;">Mon – Fri, 8 am – 5 pm CT</span>
+            </div>
+          </div>
+          <div class="mb-3 d-flex align-items-start">
+            <i class="fas fa-phone me-2 mt-1"></i>
+            <div>
+              <strong style="color: #017e56; font-size: 20px; ">Phone</strong><br>
+              <span style="font-size: 19px!important;">1 (402) 810 – 7840</span>
+            </div>
+          </div>
+          <!-- <div class="d-flex align-items-start">
+                <i class="fas fa-envelope me-2 mt-1"></i>
+                <div>
+                  <strong style="color: #017e56; font-size: 20px; ">Email</strong><br>
+                  <span style="font-size: 19px!important;">healthcare&#64;chalicehealth.com</span>
+                </div>
+              </div> -->
+          <div class="d-flex align-items-start">
+            <i class="fas fa-envelope me-2 mt-1"></i>
+            <div>
+              <div class="d-flex align-items-center">
+                <strong style="color: #017e56; font-size: 20px;">Email</strong>
+              </div>
+              <div>
+                <span class="d-block text-break" style="font-size: 19px;">support&#64;chalicehealth.com</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+
+      <div class="col-md-7 ps-5 pt-4 pb-3">
+        <form [formGroup]="ContactUsForm" class="contact-form">
+          <div class="row">
+            <div class="col-md-6">
+              <label for="firstName">First Name <span class="red">*</span></label>
+              <input type="text" id="firstName" class="form-control" formControlName="firstName"
+                [ngClass]="{'is-invalid': ContactUsForm.get('firstName')?.invalid && ContactUsForm.get('firstName')?.touched}">
+              <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('firstName')?.touched && ContactUsForm.get('firstName')?.hasError('required')">
+                First Name is required.
+              </div>
+              <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('firstName')?.touched && ContactUsForm.get('firstName')?.hasError('pattern')">
+                First Name cannot be empty or only spaces.
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label for="lastName">Last Name <span class="red">*</span></label>
+              <input type="text" id="lastName" class="form-control" formControlName="lastName"
+                [ngClass]="{'is-invalid': ContactUsForm.get('lastName')?.invalid && ContactUsForm.get('lastName')?.touched}">
+              <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('lastName')?.touched && ContactUsForm.get('lastName')?.hasError('required')">
+                Last Name is required.
+              </div>
+              <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('lastName')?.touched && ContactUsForm.get('lastName')?.hasError('pattern')">
+                Last Name cannot be empty or only spaces.
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <label>Phone Number <span class="red">*</span> </label>
+              <input class="form-control" type="text" formControlName="phoneNumber" (input)="formatPhoneNumber($event)"
+                maxlength="14"
+                [ngClass]="{'is-invalid': ContactUsForm.get('phoneNumber')?.invalid &&  ContactUsForm.get('phoneNumber')?.touched}">
+              <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('phoneNumber')?.touched && ContactUsForm.get('phoneNumber')?.hasError('required')">
+                Phone Number is required.
+              </div>
+              <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('phoneNumber')?.touched && ContactUsForm.get('phoneNumber')?.hasError('invalidPhonePattern')">
+                Phone number is invalid.
+              </div>
+            </div>
+
+
+            <div class="col-md-6">
+              <label for="email">Email <span class="red">*</span></label>
+              <input type="text" id="email" class="form-control" formControlName="email"
+                [ngClass]="{'is-invalid': ContactUsForm.get('email')?.invalid && ContactUsForm.get('email')?.touched}">
+              <div class="invalid-feedback"
+                *ngIf="ContactUsForm.get('email')?.touched && ContactUsForm.get('email')?.hasError('required')">
+                Email is required.
+              </div>
+              <div class="fv-plugins-message-container invalid-feedback d-block"
+                *ngIf="ContactUsForm.get('email')?.touched && ContactUsForm.get('email')?.hasError('email')">
+                Email is not valid.
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="mt-1">
+            <label for="subject">Subject </label>
+            <input type="text" id="subject" class="form-control" formControlName="subject"
+              [ngClass]="{'is-invalid': ContactUsForm.get('subject')?.invalid && ContactUsForm.get('subject')?.touched}">
+            <div class="invalid-feedback"
+              *ngIf="ContactUsForm.get('subject')?.touched && ContactUsForm.get('subject')?.hasError('pattern')">
+              Subject cannot be empty or only spaces.
+            </div>
+          </div>
+
+          <div class="mt-1">
+            <label>Your Message <span class="text-danger">*</span></label>
+            <textarea class="form-control" rows="4" formControlName="message"
+              [ngClass]="{'is-invalid': ContactUsForm.get('message')?.invalid && ContactUsForm.get('message')?.touched}"></textarea>
+            <div class="invalid-feedback"
+              *ngIf="ContactUsForm.get('message')?.touched && ContactUsForm.get('message')?.hasError('required')">
+              Message is required.
+            </div>
+            <div class="invalid-feedback"
+              *ngIf="ContactUsForm.get('message')?.touched && ContactUsForm.get('message')?.hasError('pattern')">
+              Message cannot be empty or only spaces.
+            </div>
+          </div>
+
+          <div class="mt-4">
+            <button type="submit" class="btn submit-btn px-5 py-2 " (click)="postContactUs()">
+              <i class="fas" [ngClass]="{'fa-spinner fa-spin': loading}"></i>
+              <span *ngIf="!loading" class="space">Save</span>
+              <span *ngIf="loading" class="space">Save</span>
+
+            </button>
+            <!-- <button type="submit" class="" (click)="postContactUs()">Submit Form</button> -->
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>

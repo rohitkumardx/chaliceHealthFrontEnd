@@ -1,0 +1,228 @@
+<div class="container-fluid px-4 mt-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class=" rounded h-100 p-2">
+                <form [formGroup]="blogAdd">
+                    <div class="card">
+                        <div class="rounded p-4">
+
+                            <!-- Header -->
+                            <div class=" mb-3">
+                                <h1 class="m-0 text-center">{{ userId ? 'Edit Blog' : 'Add Blog' }}</h1>
+                            </div>
+
+                            <!-- Row-0: Clinic Name, Middle Name, Last Name -->
+                            <div class="row p-2">
+                                <!-- News Type -->
+                                <div class="col-12 col-sm-4">
+                                    <label for="heading"> Heading</label>
+                                    <input type="text" id="heading" class="form-control form-control-md mt-1"
+                                        formControlName="heading"
+                                        [ngClass]="{'is-invalid': blogAdd.get('heading')?.invalid && blogAdd.get('heading')?.touched}"
+                                        [value]="blogAdd.get('heading')?.value | capitalizeFirstLetter">
+
+                                </div>
+
+
+                                <!-- Title -->
+                                <div class="col-12 col-sm-4">
+                                    <label for="title"> Title <span class="red">*</span></label>
+                                    <input type="text" id="title" class="form-control form-control-md mt-1"
+                                        formControlName="title"
+                                        [ngClass]="{'is-invalid': blogAdd.get('title')?.invalid && blogAdd.get('title')?.touched}"
+                                        [value]="blogAdd.get('title')?.value | capitalizeFirstLetter">
+                                    <div class="invalid-feedback"
+                                        *ngIf="blogAdd.get('title')?.touched && blogAdd.get('title')?.hasError('required')">
+                                        Title is required.
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="blogAdd.get('title')?.touched && blogAdd.get('title')?.hasError('pattern')">
+                                        Title cannot be empty or only spaces.
+                                    </div>
+                                </div>
+
+
+                                <!-- Document -->
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="postFile">Upload Document</label>
+                                        <!-- File Input -->
+                                        <input type="file" id="postFileInput"
+                                            class="form-control form-control-md mt-1 small-input"
+                                            formControlName="postFile"
+                                            [ngClass]="{'is-invalid': blogAdd.get('postFile')?.invalid && blogAdd.get('postFile')?.touched}"
+                                            (change)="onDocumentSelected($event)" />
+                                        <div class="invalid-feedback"
+                                            *ngIf="blogAdd.get('postFile')?.touched && blogAdd.get('postFile')?.hasError('required')">
+                                            Document is required.
+                                        </div>
+                                    </div>
+
+                                    <!-- Existing File Information -->
+                                    <div *ngIf="!showEditTimeFile" style="margin-top: 1%">
+                                        <div class="file-name" *ngIf="editDocument != null">
+                                            <span class="cursor" (click)="downloadFile(editDocument.filePath)">
+                                                {{ editDocument.postFile }}
+                                            </span>
+                                            <a (click)="onDeleteOldFile()">
+                                                <i class="fa-solid fa-trash ms-2 cursor"
+                                                    style="color: rgb(166, 7, 7);"></i>
+                                            </a>
+                                            <br />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="row p-2">
+
+                                <!-- Content -->
+                                <div class="col-12 col-sm-12">
+                                    <label for="content"> Content <span class="red">*</span></label>
+                                    <textarea id="content" class="form-control form-control-sm"
+                                        formControlName="content"
+                                        [ngClass]="{'is-invalid': blogAdd.get('content')?.invalid && blogAdd.get('content')?.touched}"
+                                        rows="3">
+                                </textarea>
+
+                                    <div class="invalid-feedback"
+                                        *ngIf="blogAdd.get('content')?.touched && blogAdd.get('content')?.hasError('required')">
+                                        Content is required.
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="blogAdd.get('content')?.touched && blogAdd.get('content')?.hasError('pattern')">
+                                        Content cannot be empty or only spaces.
+                                    </div>
+                                    <!-- Min Length Validation (100 characters) -->
+                                    <div class="invalid-feedback"
+                                        *ngIf="blogAdd.get('content')?.touched && blogAdd.get('content')?.hasError('minlength')">
+                                        Content must be at least 100 characters long.
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Button -->
+                            <div class="text-end mt-3">
+                                <div class=" d-flex justify-content-end pt-2">
+                                    <button type="button" class="btn custom-padding" style="background-color: #00876f;"
+                                        (click)="submitBlogAdd()"> <span class="spinner-border text-light small-spinner"
+                                            role="status" *ngIf="loading">
+                                            <span class="visually-hidden">Loading...</span></span>
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </form>
+                <div class="row mt-3">
+                    <div class="col-sm-9 ">
+                        <h1 class="">Blog List</h1>
+                    </div>
+
+                    <div class="col-sm-3 ">
+
+                        <input type="text" [(ngModel)]="searchTerm" (input)="getBlogList()" placeholder="Search Blog"
+                            class="form-control">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <div class="d-flex justify-content-end align-items-center mt-1 mb-2">
+
+
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="min-width: 150px;" (click)="sortData('heading')">Blog Heading
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'heading', 'fa-sort-up': sortColumn === 'heading' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'heading' && sortOrder === 'desc'}"></i>
+                                </th>
+                                <th scope="col" style="min-width: 150px;" (click)="sortData('title')">Blog Title
+                                    <i
+                                        [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'title', 'fa-sort-up': sortColumn === 'title' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'title' && sortOrder === 'desc'}"></i>
+                                </th>
+
+                                <th scope="col" style="min-width: 150px;">Blog Content</th>
+                                <th scope="col">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of blogList; let i = index">
+                                <td> {{item.heading ? item.heading : '-----' }} </td>
+                                <td>{{ item.title ? item.title : '-----'}}</td>
+                                <td>
+                                    <ng-container *ngIf="item.content; else noContent">
+                                        <span *ngIf="!isContentLong(item)">{{ item.content }}</span>
+
+                                        <div *ngIf="isContentLong(item)">
+                                            <span *ngIf="!item.showFullContent">
+                                                {{ getFirstNWords(item.content, 30) }}...
+                                                <a href="javascript:void(0)" (click)="toggleContent(item)">Show more</a>
+                                            </span>
+                                            <span *ngIf="item.showFullContent">
+                                                {{ item.content }}
+                                                <a href="javascript:void(0)" (click)="toggleContent(item)">See less</a>
+                                            </span>
+                                        </div>
+                                    </ng-container>
+
+                                    <ng-template #noContent>-----</ng-template>
+                                </td>
+                                <td>
+
+                                    <span class="icon-edit" title="Edit" style="color: #00876f; font-size: medium">
+                                        <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                            (click)="getBlogById(item.id)"></i>
+                                    </span>
+
+                                    <span class="icon-delete" title="Delete" style="color: #dc3545; font-size: medium">
+                                        <i class="fa-solid fa-trash cursor" (click)="deleteBlog(item.id)"></i>
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                            <tr *ngIf="loading">
+                                <td colspan="8">
+                                    <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+                                        [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'"
+                                        class="heading" [additionalClasses]="'mt-5'"></app-loader>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="blogList == null">
+                                <td colspan="9" class="no-data-card">
+                                    <div class="no-data-card-container">
+                                        <div class="no-data-icon">
+                                            <i class="fas fa-user-slash"></i>
+                                        </div>
+                                        <div class="no-data-content">
+                                            <span class="no-data-title">No Blog Found</span>
+                                            <p class="no-data-description">It looks like there are no blog at
+                                                the
+                                                moment.
+                                                Please check back later!</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="roles.length >0">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getBlogList()" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

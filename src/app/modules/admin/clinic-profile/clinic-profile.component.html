@@ -1,0 +1,102 @@
+<div class="mt-3 mb-3" style="padding: 0px 50px;">
+  <div class="">
+    <div class="header">
+      <h3 class="mt-2 text-center text-success " style="font-size: 1.5625rem; font-weight: 800;" >Private Practice Profile</h3>
+      <div class="close-btn cursor" (click)="closeModal()"><i class="fa-solid fa-xmark fs-4"></i></div>
+    
+  </div>
+  <hr class="mt-1">
+  </div>
+  <div class="row justify-content-center mt-2">
+    <div class="col-md-4">
+      <div class="profile-container row p-4 text-start bg-white shadow">
+        <hr>
+        <div class="col-12 text-center">
+         
+          <img *ngIf="clinicData?.profilePicturePath" [src]="clinicData.profilePicturePath" class="profile-photo img-fluid rounded-circle"
+          style="width: 120px; height: 120px; object-fit: cover;">
+          <img *ngIf="!clinicData?.profilePicturePath" class="profile-photo img-fluid rounded-circle"
+          style="width: 120px; height: 120px; object-fit: cover;" alt="Doctor Profile Default"
+            src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png"
+            class="doctor-image">
+          <!-- <img src="../../../../assets/svg/a.png" alt="Doctor Image" class="doctor-img rounded-circle mb-1"> -->
+          <h3 class="text-success mt-2 mb-0" style="font-size: 1.5625rem; font-weight: 800;"> {{ clinicData?.firstName }}
+            {{ clinicData?.lastName }}</h3>
+          <h4 class="text-warning mt-1" style="font-size: 17px;">{{ formatAccountType(clinicData?.accountType|| '-------') }}</h4>
+          <!-- <p class="mb-1"><i class="bi bi-calendar-check text-success"></i> <strong>Email:</strong>  {{ clinicData?.email|| '-------' }}</p>
+          <p class="mb-1"><i class="bi bi-award text-warning"></i> <strong>Phone No:</strong> {{ clinicData?.phoneNumber|| '-------' }}</p> -->
+          <p class="mb-1"><i class="fa-solid fa-location-dot text-secondary"></i> {{ clinicData?.address|| '-------' }}</p>
+          <p class="mb-1"><strong>State:</strong>{{ clinicData?.stateName|| '-------' }}</p>
+          <p class="mb-3"><strong>City:</strong>{{ clinicData?.city|| '-------' }}</p>
+        </div>
+        <hr>
+        <div>
+          <p class="text-dark note">
+            {{ clinicData?.note|| '-------' }}
+          </p>
+        </div>
+      </div>
+    </div>
+   <div class="col-md-8 col-12 px-4">
+  <h1 class="mt-2 text-success mb-2" style="font-size: 1.5625rem; font-weight: 600;">
+    Providers Under Private Practice
+  </h1>
+
+  <!-- Scroll container applied only on this div -->
+  <div 
+    [ngStyle]="clinicData?.usersWithSameClinic?.length > 4 ? 
+      {'max-height': '500px', 'overflow-y': 'auto', 'padding-right': '10px'} : {}"
+  >
+    <div class="row" style="margin: 0;">
+      <!-- Show providers if data exists -->
+      <div class="col-md-6 mb-3" *ngFor="let item of clinicData?.usersWithSameClinic">
+        <div class="card doctor-card p-3 text-center h-100 d-flex flex-column">
+          <img *ngIf="item?.profilePicturePath" [src]="item.profilePicturePath" class="doctor-img"
+            style="width: 80px; height: 80px; object-fit: cover;">
+          <img *ngIf="!item?.profilePicturePath" class="doctor-img"
+            style="width: 80px; height: 80px; object-fit: cover;" alt="Doctor Profile Default"
+            src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png"
+          >
+          <h5 class="doctor-name" style="color: #009cff!important; cursor: pointer;" (click)="viewProviderProfile(item.providerId)">
+            <u> {{item?.legalPracticeName}}</u>
+          </h5>
+          <h5 class="doctor-name1" style="color: #009cff!important;">
+            {{item?.qualificationName}}
+          </h5>
+
+          <p class="doctor-info"><strong>Experience:</strong> {{ item?.experience ? item.experience + ' years' : 'N/A' }}</p>
+          <p class="doctor-info"><strong>Address:</strong> {{ item?.address || '-------' }}</p>
+          <div class="rating">
+            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+              <ng-container [ngSwitch]="getStarType(star, item.averageRating)">
+                <mat-icon *ngSwitchCase="'full'" class="text-warning">star</mat-icon>
+                <mat-icon *ngSwitchCase="'half'" class="text-warning">star_half</mat-icon>
+                <mat-icon *ngSwitchCase="'empty'" class="text-secondary">star</mat-icon>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show message if there are no providers -->
+        <div class="provider-card1" *ngIf="!clinicData?.usersWithSameClinic?.length">
+            <div class="provider-header">
+              <h2 class="text-center">No Providers Found</h2>
+            </div>
+            <br>
+            <div class="text-center">
+              <span>No providers have been registered for this clinic yet. Please check back later."</span>
+            </div>
+          </div>
+      <!-- <div class="col-12 text-center mt-3" *ngIf="!clinicData?.usersWithSameClinic?.length">
+        <p class="text-muted">No providers registered under this clinic.</p>
+      </div> -->
+    </div>
+  </div>
+</div>
+
+    
+
+  
+  </div>
+</div>

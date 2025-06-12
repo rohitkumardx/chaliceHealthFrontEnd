@@ -4,61 +4,52 @@
       <div class="signup-card">
         <h3>Health Records</h3>
         <div class="signup-form">
-          <mat-tab-group #tabGroup>
+          <mat-tab-group #tabGroup (selectedTabChange)="onTabChange($event)">
+
+
+            <div [style.maxHeight]="isExpanded ? 'none' : '300px'" style="overflow: hidden;">
+              
+            </div>
+            <button *ngIf="!isExpanded" (click)="toggleExpand()">See More</button>
+            <button *ngIf="isExpanded" (click)="toggleExpand()">See Less</button>
+
             <mat-tab label="Allergy">
               <ng-template mat-tab-label>
-                <!-- <i class="fas fa-info-circle" style="color: #00876F!important;"></i>  -->
                 <span style="color: #00876F!important;">Allergy</span>
               </ng-template>
-              <div class="mat-tab-content px-1" style="overflow: hidden!important;">
+              <div class="mat-tab-content px-1">
                 <br>
-                <form [formGroup]="allergyForm">
-                  <div class="companyInfo">
+
+                <div class="companyInfo">
+                  <form [formGroup]="allergyForm">
                     <div class="row companyContent mt-2">
                       <div class="form-group col-4">
-                        <label for="allergyType">Allergy Type <span class="red">*</span> </label>
+                        <label for="allergyType">Allergy Type </label>
                         <input type="text" id="allergyType" class="form-control form-control-sm mt-1"
-                          formControlName="allergyType"
-                          [ngClass]="{'is-invalid': allergyForm.get('allergyType')?.invalid && allergyForm.get('allergyType')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="allergyForm.get('allergyType')?.touched && allergyForm.get('allergyType')?.hasError('required')">
-                          Allergy Type is required.
-                        </div>
+                          formControlName="allergyType">
+
                       </div>
 
                       <div class="form-group col-4">
-                        <label for="allergen">Allergen <span class="red">*</span></label>
+                        <label for="allergen">Allergen</label>
                         <input type="text" id="allergen" class="form-control form-control-sm mt-1"
-                          formControlName="allergen"
-                          [ngClass]="{'is-invalid': allergyForm.get('allergen')?.invalid && allergyForm.get('allergen')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="allergyForm.get('allergen')?.touched && allergyForm.get('allergen')?.hasError('required')">
-                          Allergen is required.
-                        </div>
+                          formControlName="allergen">
+
                       </div>
 
                       <div class="form-group col-4">
-                        <label for="reaction">Reaction <span class="red">*</span></label>
+                        <label for="reaction">Reaction</label>
                         <input type="text" id="reaction" class="form-control form-control-sm mt-1"
-                          formControlName="reaction"
-                          [ngClass]="{'is-invalid': allergyForm.get('reaction')?.invalid && allergyForm.get('reaction')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="allergyForm.get('reaction')?.touched && allergyForm.get('reaction')?.hasError('required')">
-                          Reaction is required.
-                        </div>
+                          formControlName="reaction">
+
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="form-group col-12">
                         <label for="note">Notes </label>
-                        <textarea id="note" class="form-control form-control-sm mt-1" formControlName="note"
-                          [ngClass]="{'is-invalid': allergyForm.get('note')?.invalid && allergyForm.get('note')?.touched}"></textarea>
-                        <div class="invalid-feedback"
-                          *ngIf="allergyForm.get('note')?.touched && allergyForm.get('note')?.hasError('required')">
-                          Notes is required.
+                        <textarea id="note" class="form-control form-control-sm mt-1" formControlName="note"></textarea>
 
-                        </div>
                       </div>
                     </div>
 
@@ -75,332 +66,339 @@
                         </button>
                       </div>
                     </div>
-                    <div class="table-responsive mt-5">
-                      <table class="table table-hover " *ngIf="allergyData.length > 0">
-                        <thead>
-                          <tr>
-                            <th scope="col">Allergy Type</th>
-                            <th scope="col">Allergen</th>
-                            <th scope="col">Reaction</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of allergyData; let i = index">
-                            <td>{{ item.allergyType }}</td>
-                            <td>{{ item.allergen }}</td>
-                            <td>{{ item.reaction }}</td>
-                            <td style="display: flex; justify-content: center; align-items: center; height: 2.8rem;">
-                              <label class="switch" style="margin-top: -2%;">
-                                <input class="switch-input" type="checkbox" [checked]="item.isActive"
-                                  (change)="toggleStatus(item.id,item.isActive)">
-                                <span class="switch-label"></span>
-                                <span class="switch-handle"></span>
-                              </label>
-                            </td>
-                            <td>
-                              <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editAllergyData(i)"
-                                style="color:#00876f;font-size: medium;"></i>
-                              <i class="fa-solid fa-trash cursor" (click)="deleteAllergyData(item.id)"
-                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                  </form>
+                  <div class="row align-items-center mt-1">
+                    <!-- Buttons Section (Always on top in mobile, left on desktop) -->
+                    <div class="col-12 col-md-9 mb-2 mb-md-0">
+                      <div class="d-flex flex-wrap gap-2">
+                        <h1 class="ms-2">Allergy List</h1>
+                      </div>
                     </div>
+
+                    <!-- Search Bar Section -->
+                    <div class="col-12 col-md-3">
+                      <input type="text" [(ngModel)]="searchTerm" placeholder="Search Allergy"
+                        (input)="getAllergyDataList()" class="form-control" />
+                    </div>
+
                   </div>
-                </form>
+
+                  <div class="table-responsive mt-3">
+                    <table class="table table-hover ">
+                      <thead>
+                        <tr>
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('allergyType')">Allergy
+                            Type
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'allergyType', 'fa-sort-up': sortColumn === 'allergyType' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'allergyType' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('allergen')">Allergen
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'allergen', 'fa-sort-up': sortColumn === 'allergen' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'allergen' && sortOrder === 'desc'}"></i>
+                          </th>
+                          <th style=" min-width: 150px;" scope="col" (click)="sortData('reaction')">Reaction
+                            <i
+                              [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'reaction', 'fa-sort-up': sortColumn === 'reaction' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'reaction' && sortOrder === 'desc'}"></i>
+                          </th>
+
+                          <!-- <th scope="col">Reaction</th> -->
+                          <th scope="col">Status</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody *ngIf="allergyData?.length > 0">
+                        <tr *ngFor="let item of allergyData; let i = index">
+                          <td>{{ item.allergyType || '-----' }}</td>
+                          <td>{{ item.allergen || '-----' }}</td>
+                          <td>{{ item.reaction || '-----' }}</td>
+                          <td style="justify-items: center;">
+                            <label class="switch">
+                              <input class="switch-input" type="checkbox" [checked]="item.isActive"
+                                (change)="toggleStatus(item.id, item.isActive)">
+                              <span class="switch-label"></span>
+                              <span class="switch-handle"></span>
+                            </label>
+                          </td>
+                          <td>
+                            <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editAllergyData(i)"
+                              style="color:#00876f; font-size: medium;"></i>
+                            <i class="fa-solid fa-trash cursor" (click)="deleteAllergyData(item.id)"
+                              style="color:rgb(166, 7, 7); font-size: medium;"></i>
+                          </td>
+                        </tr>
+                      </tbody>
+
+                      <!-- Show message when no search results found -->
+                      <!-- <tr style="width:100%!important; max-width: 100%!important;" *ngIf="filteredItems?.length === 0 && searchTerm">
+                       <td colspan="5">
+                         <div class="provider-card1" style="width:100%!important; max-width: 100%!important;" >
+                          <div class="provider-header">
+                            <h2 class="text-center">Nothing Found</h2>
+                          </div>
+                          <br>
+                          <div class="text-center">
+                            <span>Sorry, but nothing matched your search terms. Please try again with some different
+                              keywords.</span>
+                          </div>
+                        </div>
+                       </td>
+                      </tr> -->
+
+                      <!-- Show message when no data -->
+                      <tr *ngIf="!allergyData || allergyData?.length == null">
+                        <td colspan="9" class="no-data-card">
+                          <div
+                            class="no-data-card-container border rounded-xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300 bg-white text-center">
+                            <div class="no-data-icon text-yellow-500 text-4xl animate-bounce mb-2">
+                              <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="no-data-content">
+                              <span class="no-data-title text-xl font-semibold block mb-1">No Allergy Found</span>
+                              <p class="no-data-description text-gray-600">
+                                It looks like there are no allergies at the moment.<br>
+                                Please check back later!
+                              </p>
+
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+
+
+
+                    </table>
+
+                  </div>
+                  <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="allergyData || allergyData?.length != null">
+                    <app-pagination [paginator]="paginator" (onPageChange)="getAllergyDataList()" />
+                  </div>
+                </div>
+
               </div>
             </mat-tab>
             <mat-tab label="Vitals">
               <ng-template mat-tab-label>
-                <!-- <i class="fas fa-info-circle" style="color: #00876F!important;"></i>  -->
                 <span style="color: #00876F!important;">Vitals</span>
               </ng-template>
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
-                <br>
+                <br />
                 <form [formGroup]="vitalForm">
                   <div class="companyInfo">
                     <div class="row companyContent mt-2">
-
-
                       <div class="form-group col-4">
-                        <label for="height">Height <span class="red">*</span></label>
-                        <input type="text" id="height" placeholder="Height (cm)"
-                          class="form-control form-control-sm mt-1" formControlName="height"
-                          [ngClass]="{'is-invalid': vitalForm.get('height')?.invalid && vitalForm.get('height')?.touched}">
-
-                        <!-- Validation message for required field -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('height')?.touched && vitalForm.get('height')?.hasError('required')">
-                          Height is required.
-                        </div>
-
-                        <!-- Validation message for invalid number -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('height')?.touched && vitalForm.get('height')?.hasError('pattern')">
-                          Height must be a valid number.
-                        </div>
+                        <label for="height">Height</label>
+                        <input type="number" step="any" id="height" placeholder="Height (in)"
+                          class="form-control form-control-sm mt-1" formControlName="height" />
                       </div>
 
-
-
                       <div class="form-group col-4">
-                        <label for="weight">Weight <span class="red">*</span></label>
-                        <input type="text" id="weight" placeholder="Weight (kg)"
-                          class="form-control form-control-sm mt-1" formControlName="weight"
-                          [ngClass]="{'is-invalid': vitalForm.get('weight')?.invalid && vitalForm.get('weight')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('weight')?.touched && vitalForm.get('weight')?.hasError('required')">
-                          Weight is required.
-                        </div>
-                        <!-- Validation message for invalid number -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('weight')?.touched && vitalForm.get('weight')?.hasError('pattern')">
-                          Weight must be a valid number.
-                        </div>
+                        <label for="weight">Weight</label>
+                        <input type="number" step="any" id="weight" placeholder="Weight (lbs)"
+                          class="form-control form-control-sm mt-1" formControlName="weight" />
                       </div>
 
-
                       <div class="form-group col-4">
-                        <label for="heartRate">Heart Rate <span class="red">*</span></label>
-                        <input type="text" id="heartRate" placeholder="Heart Rate (bpm)"
-                          class="form-control form-control-sm mt-1" formControlName="heartRate"
-                          [ngClass]="{'is-invalid': vitalForm.get('heartRate')?.invalid && vitalForm.get('heartRate')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('heartRate')?.touched && vitalForm.get('heartRate')?.hasError('required')">
-                          Heart Rate is required.
-                        </div>
-                        <!-- Validation message for invalid number -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('heartRate')?.touched && vitalForm.get('heartRate')?.hasError('pattern')">
-                          Heart Rate must be a valid number.
-                        </div>
+                        <label for="heartRate">Heart Rate</label>
+                        <input type="number" id="heartRate" placeholder="Heart Rate (bpm)"
+                          class="form-control form-control-sm mt-1" formControlName="heartRate" />
                       </div>
                     </div>
-                    <div class="row  mt-2">
 
-
-                      <div class="form-group col-4">
-                        <label for="bloodPressure">Blood Pressure <span class="red">*</span> </label>
-                        <input type="text" id="bloodPressure" placeholder="Systolic BP (mmHg)"
-                          class="form-control form-control-sm mt-1" formControlName="bloodPressure"
-                          [ngClass]="{'is-invalid': vitalForm.get('bloodPressure')?.invalid && vitalForm.get('bloodPressure')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('bloodPressure')?.touched && vitalForm.get('bloodPressure')?.hasError('required')">
-                          Blood Pressure is required.
-                        </div>
-                        <!-- Validation message for invalid number -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('bloodPressure')?.touched && vitalForm.get('bloodPressure')?.hasError('pattern')">
-                          Blood Pressure must be a valid number.
-                        </div>
-                      </div>
-
-
-                      <div class="form-group col-4">
-                        <label for="bloodPressureDiastolic">Blood Pressure Diastolic <span class="red">*</span></label>
-                        <input type="text" id="bloodPressureDiastolic" placeholder="Diastolic BP (mmHg)"
-                          class="form-control form-control-sm mt-1" formControlName="bloodPressureDiastolic"
-                          [ngClass]="{'is-invalid': vitalForm.get('bloodPressureDiastolic')?.invalid && vitalForm.get('bloodPressureDiastolic')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('bloodPressureDiastolic')?.touched && vitalForm.get('bloodPressureDiastolic')?.hasError('required')">
-                          Blood Pressure Diastolic is required.
-                        </div>
-                        <!-- Validation message for invalid number -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('bloodPressureDiastolic')?.touched && vitalForm.get('bloodPressureDiastolic')?.hasError('pattern')">
-                          Blood Pressure Diastolic must be a valid number.
-                        </div>
-                      </div>
-
-
-                      <div class="form-group col-4">
-                        <label for="pulseOximeter">Pulse Oximeter <span class="red">*</span></label>
-                        <input type="text" id="pulseOximeter" placeholder="Pulse Oximeter (%)"
-                          class="form-control form-control-sm mt-1" formControlName="pulseOximeter"
-                          [ngClass]="{'is-invalid': vitalForm.get('pulseOximeter')?.invalid && vitalForm.get('pulseOximeter')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('pulseOximeter')?.touched && vitalForm.get('pulseOximeter')?.hasError('required')">
-                          Pulse Oximeter is required.
-                        </div>
-                        <!-- Validation message for invalid number -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('pulseOximeter')?.touched && vitalForm.get('pulseOximeter')?.hasError('pattern')">
-                          Pulse Oximeter must be a valid number.
-                        </div>
-                      </div>
-                    </div>
                     <div class="row mt-2">
-
-
                       <div class="form-group col-4">
-                        <label for="respiration">Respiration<span class="red">*</span> </label>
-                        <input type="text" id="respiration" placeholder="Respiration (breaths per min)"
-                          class="form-control form-control-sm mt-1" formControlName="respiration"
-                          [ngClass]="{'is-invalid': vitalForm.get('respiration')?.invalid && vitalForm.get('respiration')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('respiration')?.touched && vitalForm.get('respiration')?.hasError('required')">
-                          Respiration is required.
-                        </div>
-                        <!-- Validation message for invalid number -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('respiration')?.touched && vitalForm.get('respiration')?.hasError('pattern')">
-                          Respiration must be a valid number.
-                        </div>
+                        <label for="bloodPressure">Blood Pressure</label>
+                        <input type="number" id="bloodPressure" placeholder="Systolic BP (mmHg)"
+                          class="form-control form-control-sm mt-1" formControlName="bloodPressure" />
                       </div>
 
-
-
                       <div class="form-group col-4">
-                        <label for="temperature">Temperature <span class="red">*</span></label>
-                        <input type="text" id="temperature" placeholder="Temperature (°C)"
-                          class="form-control form-control-sm mt-1" formControlName="temperature"
-                          [ngClass]="{'is-invalid': vitalForm.get('temperature')?.invalid && vitalForm.get('temperature')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('temperature')?.touched && vitalForm.get('temperature')?.hasError('required')">
-                          Temperature is required.
-                        </div>
-                        <!-- Validation message for invalid number -->
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('temperature')?.touched && vitalForm.get('temperature')?.hasError('pattern')">
-                          Temperature must be a valid number.
-                        </div>
+                        <label for="bloodPressureDiastolic">Blood Pressure Diastolic</label>
+                        <input type="number" id="bloodPressureDiastolic" placeholder="Diastolic BP (mmHg)"
+                          class="form-control form-control-sm mt-1" formControlName="bloodPressureDiastolic" />
                       </div>
 
+                      <div class="form-group col-4">
+                        <label for="pulseOximeter">Pulse Oximeter</label>
+                        <input type="number" step="any" id="pulseOximeter" placeholder="Pulse Oximeter (%)"
+                          class="form-control form-control-sm mt-1" formControlName="pulseOximeter" />
+                      </div>
+                    </div>
+
+                    <div class="row mt-2">
+                      <div class="form-group col-4">
+                        <label for="respiration">Respiration</label>
+                        <input type="number" id="respiration" placeholder="Respiration (breaths per min)"
+                          class="form-control form-control-sm mt-1" formControlName="respiration" />
+                      </div>
+
+                      <div class="form-group col-4">
+                        <label for="temperature">Temperature</label>
+                        <input type="number" step="any" id="temperature" placeholder="Temperature (°F)"
+                          class="form-control form-control-sm mt-1" formControlName="temperature" />
+                      </div>
 
                       <div class="col-sm-4">
-                        <label for="vitalDate">Vital Date<span class="red">*</span></label>
+                        <label for="vitalDate">Vital Date</label>
                         <input type="date" id="vitalDate" class="form-control form-control-sm mt-1"
-                          formControlName="vitalDate"
-                          [ngClass]="{'is-invalid':vitalForm.get('vitalDate')?.invalid && vitalForm.get('vitalDate')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="vitalForm.get('vitalDate')?.touched && vitalForm.get('vitalDate')?.hasError('required')">
-                          Vital Date is required.
-                        </div>
+                          formControlName="vitalDate" />
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-9"></div>
                       <div class="col-3">
-                        <button type="submit" class="btn m-2 custom-padding" (click)=" postVitalData()">
-                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
+                        <button type="submit" class="btn m-2 custom-padding" (click)="postVitalData()">
+                          <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': isLoading }"></i>
                           <span *ngIf="!isLoading" class="space">Save</span>
                           <span *ngIf="isLoading" class="space">Saving...</span>
                         </button>
                       </div>
                     </div>
-                    <div class="table-responsive mt-5">
-                      <table class="table table-hover " *ngIf="vitalData.length > 0">
-                        <thead>
-                          <tr>
-                            <th scope="col">Height</th>
-                            <th scope="col">Weight</th>
-                            <th scope="col">Blood Pressure</th>
-                            <th scope="col">Vital Date</th>
-                            <th scope="col">Temperature</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of vitalData; let i = index">
-                            <td>{{ item.height }} cm</td>
-                            <td>{{ item.weight }} kg</td>
-                            <td>{{ item.bloodPressure }} mmHg</td>
-                            <td> {{ item.vitalDate }} </td>
-                            <td>{{ item.temperature }} °C</td>
-                            <td style="display: flex; justify-content: center; align-items: center; height: 2.8rem;">
-                              <label class="switch" style="margin-top: -2%;">
-                                <input class="switch-input" type="checkbox" [checked]="!item.isActive"
-                                  (change)="toggleVitalStatus(item.id,item.isActive)">
-                                <span class="switch-label"></span>
-                                <span class="switch-handle"></span>
-                              </label>
-                            </td>
-                            <td>
-                              <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editVitalData(i)"
-                                style="color:#00876f;font-size: medium;"></i>
-                              <i class="fa-solid fa-trash cursor" (click)="deleteVitalData(item.id)"
-                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                 </form>
+
+                <div class="row align-items-center mt-1">
+                  <!-- Buttons Section -->
+                  <div class="col-12 col-md-9 mb-2 mb-md-0">
+                    <div class="d-flex flex-wrap gap-2">
+                      <h1 class="ms-2">Vital List</h1>
+                    </div>
+                  </div>
+
+                  <!-- Search Bar Section -->
+                  <div class="col-12 col-md-3">
+                    <!-- <input type="text" [(ngModel)]="searchTerm" placeholder="Search Vitals" (input)="getVitalDataList()"
+                      class="form-control" /> -->
+                  </div>
+                </div>
+
+                <div class="table-responsive mt-3">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('height')">
+                          Height
+                          <i
+                            [ngClass]="{ 'fa': true, 'fa-sort': sortColumn !== 'height', 'fa-sort-up': sortColumn === 'height' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'height' && sortOrder === 'desc' }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('weight')">
+                          Weight
+                          <i
+                            [ngClass]="{ 'fa': true, 'fa-sort': sortColumn !== 'weight', 'fa-sort-up': sortColumn === 'weight' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'weight' && sortOrder === 'desc' }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('bloodPressure')">
+                          Blood Pressure
+                          <i
+                            [ngClass]="{ 'fa': true, 'fa-sort': sortColumn !== 'bloodPressure', 'fa-sort-up': sortColumn === 'bloodPressure' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'bloodPressure' && sortOrder === 'desc' }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('vitalDate')">
+                          Vital Date
+                          <i
+                            [ngClass]="{ 'fa': true, 'fa-sort': sortColumn !== 'vitalDate', 'fa-sort-up': sortColumn === 'vitalDate' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'vitalDate' && sortOrder === 'desc' }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('temperature')">
+                          Temperature
+                          <i
+                            [ngClass]="{ 'fa': true, 'fa-sort': sortColumn !== 'temperature', 'fa-sort-up': sortColumn === 'temperature' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'temperature' && sortOrder === 'desc' }"></i>
+                        </th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of vitalData; let i = index">
+                        <td>{{ item.height ? item.height + ' in' : '-----' }}</td>
+
+                        <td>{{ item.weight ? item.weight + ' lbs' : '-----' }}</td>
+                        <td>{{ item.bloodPressure ? item.bloodPressure + ' mmHg' : '-----' }}</td>
+
+                        <td>{{ item.vitalDate ? (item.vitalDate | date: 'MM-dd-yyyy') : '-----' }}</td>
+                        <td>{{ item.temperature ? item.temperature + ' °F' : '-----' }}</td>
+
+                        <td style="justify-items: center;">
+                          <label class="switch">
+                            <input class="switch-input" type="checkbox" [checked]="item.isActive"
+                              (change)="toggleVitalStatus(item.id, !item.isActive)" />
+                            <span class="switch-label"></span>
+                            <span class="switch-handle"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editVitalData(i)"
+                            style="color:#00876f;font-size: medium;"></i>
+                          <i class="fa-solid fa-trash cursor" (click)="deleteVitalData(item.id)"
+                            style="color:rgb(166, 7, 7); font-size: medium;"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+
+                    <tr *ngIf="!vitalData || vitalData?.length == null">
+                      <td colspan="9" class="no-data-card">
+                        <div
+                          class="no-data-card-container border rounded-xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300 bg-white text-center">
+                          <div class="no-data-icon text-yellow-500 text-4xl animate-bounce mb-2">
+                            <i class="fas fa-exclamation-triangle"></i>
+                          </div>
+                          <div class="no-data-content">
+                            <span class="no-data-title text-xl font-semibold block mb-1">No Vitals Found</span>
+                            <p class="no-data-description text-gray-600">
+                              It looks like there are no vitals at the moment.<br>
+                              Please check back later!
+                            </p>
+
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="vitalData || vitalData?.length != null">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getVitalDataList()"></app-pagination>
+                </div>
               </div>
             </mat-tab>
 
             <mat-tab label="Social History">
               <ng-template mat-tab-label>
-                <!-- <i class="fas fa-info-circle" style="color: #00876F!important;"></i>  -->
                 <span style="color: #00876F!important;">Social History</span>
               </ng-template>
+
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
-                <br>
+                <br />
                 <form [formGroup]="socialForm">
                   <div class="companyInfo">
                     <div class="row companyContent mt-2">
-
                       <div class="form-group col-4">
-                        <label for="alcohol">Alcohol <span class="red">*</span> </label>
+                        <label for="alcohol">Alcohol</label>
                         <input type="text" id="alcohol" class="form-control form-control-sm mt-1"
-                          formControlName="alcohol"
-                          [ngClass]="{'is-invalid': socialForm.get('alcohol')?.invalid && socialForm.get('alcohol')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="socialForm.get('alcohol')?.touched && socialForm.get('alcohol')?.hasError('required')">
-                          Alcohol is required.
-                        </div>
+                          formControlName="alcohol" />
                       </div>
 
                       <div class="form-group col-4">
-                        <label for="tobacco">Tobacco <span class="red">*</span></label>
+                        <label for="tobacco">Tobacco</label>
                         <input type="text" id="tobacco" class="form-control form-control-sm mt-1"
-                          formControlName="tobacco"
-                          [ngClass]="{'is-invalid': socialForm.get('tobacco')?.invalid && socialForm.get('tobacco')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="socialForm.get('tobacco')?.touched && socialForm.get('tobacco')?.hasError('required')">
-                          Tobacco is required.
-                        </div>
+                          formControlName="tobacco" />
                       </div>
 
-
                       <div class="form-group col-4">
-                        <label for="drugs">Drugs <span class="red">*</span></label>
-                        <input type="text" id="drugs" class="form-control form-control-sm mt-1" formControlName="drugs"
-                          [ngClass]="{'is-invalid': socialForm.get('drugs')?.invalid && socialForm.get('drugs')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="socialForm.get('drugs')?.touched && socialForm.get('drugs')?.hasError('required')">
-                          Drugs is required.
-                        </div>
+                        <label for="drugs">Drugs</label>
+                        <input type="text" id="drugs" class="form-control form-control-sm mt-1"
+                          formControlName="drugs" />
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="form-group col-4">
-                        <label for="occupation">Occupation <span class="red">*</span></label>
+                        <label for="occupation">Occupation</label>
                         <input type="text" id="occupation" class="form-control form-control-sm mt-1"
-                          formControlName="occupation"
-                          [ngClass]="{'is-invalid': socialForm.get('occupation')?.invalid && socialForm.get('occupation')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="socialForm.get('occupation')?.touched && socialForm.get('occupation')?.hasError('required')">
-                          Occupation is required.
-                        </div>
+                          formControlName="occupation" />
                       </div>
 
                       <div class="form-group col-4">
-                        <label for="travel">Travel <span class="red">*</span></label>
+                        <label for="travel">Travel</label>
                         <input type="text" id="travel" class="form-control form-control-sm mt-1"
-                          formControlName="travel"
-                          [ngClass]="{'is-invalid': socialForm.get('travel')?.invalid && socialForm.get('travel')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="socialForm.get('travel')?.touched && socialForm.get('travel')?.hasError('required')">
-                          Travel is required.
-                        </div>
+                          formControlName="travel" />
                       </div>
                     </div>
 
@@ -411,203 +409,331 @@
                       <div class="col-3">
                         <button type="submit" class="btn m-2 custom-padding" (click)="postSocialData()"
                           style="background-color: #00876F!important;">
-                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
+                          <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': isLoading }"></i>
                           <span *ngIf="!isLoading" class="space">Save</span>
                           <span *ngIf="isLoading" class="space">Save</span>
                         </button>
                       </div>
                     </div>
-                    <div class="table-responsive mt-5">
-                      <table class="table table-hover " *ngIf="socialData.length > 0">
-                        <thead>
-                          <tr>
-                            <th scope="col">Alcohol</th>
-                            <th scope="col">Tobacco</th>
-                            <th scope="col">Drugs</th>
-                            <th scope="col">Travel</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of socialData; let i = index">
-                            <td>{{ item.alcohol }}</td>
-                            <td>{{ item.tobacco }}</td>
-                            <td>{{ item.drugs }}</td>
-                            <td>{{ item.travel }}</td>
-                            <td style="display: flex; justify-content: center; align-items: center; height: 2.8rem;">
-                              <label class="switch" style="margin-top: -2%;">
-                                <input class="switch-input" type="checkbox" [checked]="!item.isActive"
-                                  (change)="toggleSocialStatus(item.id,item.isActive)">
-                                <span class="switch-label"></span>
-                                <span class="switch-handle"></span>
-                              </label>
-                            </td>
-
-                            <td>
-                              <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editSocialData(i)"
-                                style="color:#00876f;font-size: medium;"></i>
-                              <i class="fa-solid fa-trash cursor" (click)="deleteSocialData(item.id)"
-                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                 </form>
+
+                <div class="row align-items-center mt-1">
+                  <div class="col-12 col-md-9 mb-2 mb-md-0">
+                    <div class="d-flex flex-wrap gap-2">
+                      <h1 class="ms-2">Social History List</h1>
+                    </div>
+                  </div>
+
+                  <div class="col-12 col-md-3">
+                    <input type="text" [(ngModel)]="searchTerm2" placeholder="Search By Alcohol"
+                      (input)="getSocialDataList()" class="form-control" />
+                  </div>
+                </div>
+
+                <div class="table-responsive mt-3">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('alcohol')">
+                          Alcohol
+                          <i [ngClass]="{
+                  fa: true,
+                  'fa-sort': sortColumn !== 'alcohol',
+                  'fa-sort-up': sortColumn === 'alcohol' && sortOrder === 'asc',
+                  'fa-sort-down': sortColumn === 'alcohol' && sortOrder === 'desc'
+                }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('tobacco')">
+                          Tobacco
+                          <i [ngClass]="{
+                  fa: true,
+                  'fa-sort': sortColumn !== 'tobacco',
+                  'fa-sort-up': sortColumn === 'tobacco' && sortOrder === 'asc',
+                  'fa-sort-down': sortColumn === 'tobacco' && sortOrder === 'desc'
+                }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('drugs')">
+                          Drugs
+                          <i [ngClass]="{
+                  fa: true,
+                  'fa-sort': sortColumn !== 'drugs',
+                  'fa-sort-up': sortColumn === 'drugs' && sortOrder === 'asc',
+                  'fa-sort-down': sortColumn === 'drugs' && sortOrder === 'desc'
+                }"></i>
+                        </th>
+                        <th style="min-width: 150px;" scope="col" (click)="sortData('travel')">
+                          Travel
+                          <i [ngClass]="{
+                  fa: true,
+                  'fa-sort': sortColumn !== 'travel',
+                  'fa-sort-up': sortColumn === 'travel' && sortOrder === 'asc',
+                  'fa-sort-down': sortColumn === 'travel' && sortOrder === 'desc'
+                }"></i>
+                        </th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of socialData; let i = index">
+                        <td>{{ item.alcohol || '-----' }}</td>
+                        <td>{{ item.tobacco || '-----' }}</td>
+                        <td>{{ item.drugs || '-----' }}</td>
+                        <td>{{ item.travel || '-----' }}</td>
+                        <td>
+                          <label class="switch" disabled>
+                            <input class="switch-input" type="checkbox" [checked]="item.isActive"
+                              (change)="toggleSocialStatus(item.id, item.isActive)" />
+                            <span class="switch-label"></span>
+                            <span class="switch-handle"></span>
+                          </label>
+                        </td>
+                        <td>
+                          <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editSocialData(i)"
+                            style="color: #00876f; font-size: medium;"></i>
+                          <i class="fa-solid fa-trash cursor" (click)="deleteSocialData(item.id)"
+                            style="color: rgb(166, 7, 7); font-size: medium;"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tr *ngIf="!socialData || socialData?.length == null">
+                      <td colspan="9" class="no-data-card">
+                        <div
+                          class="no-data-card-container border rounded-xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300 bg-white text-center">
+                          <div class="no-data-icon text-yellow-500 text-4xl animate-bounce mb-2">
+                            <i class="fas fa-exclamation-triangle"></i>
+                          </div>
+                          <div class="no-data-content">
+                            <span class="no-data-title text-xl font-semibold block mb-1">No Social History Found</span>
+                            <p class="no-data-description text-gray-600">
+                              It looks like there are no social history at the moment.<br>
+                              Please check back later!
+                            </p>
+
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <div class="mx-2 d-flex justify-content-end mt-2" *ngIf="socialData || socialData?.length != null">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getSocialDataList()"></app-pagination>
+                </div>
               </div>
             </mat-tab>
+
             <mat-tab label="Medical History">
               <ng-template mat-tab-label>
-                <!-- <i class="fas fa-info-circle" style="color: #00876F!important;"></i>  -->
                 <span style="color: #00876F!important;">Medical History</span>
               </ng-template>
+
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
-                <br>
-                <form [formGroup]="medicalForm">
+                <br />
+                <form [formGroup]="medicalForm" (ngSubmit)="postMedicalData()">
                   <div class="companyInfo">
                     <div class="row companyContent mt-2">
-
-                      <div class="form-group col-4">
-                        <label for="conditionName">Condition Name <span class="red">*</span> </label>
+                      <!-- Condition Name -->
+                      <div class="form-group col-md-4 mb-0">
+                        <label class="mt-3" for="conditionName">Condition Name</label>
                         <input type="text" id="conditionName" class="form-control form-control-sm mt-1"
-                          formControlName="conditionName"
-                          [ngClass]="{'is-invalid': medicalForm.get('conditionName')?.invalid && medicalForm.get('conditionName')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="medicalForm.get('conditionName')?.touched && medicalForm.get('conditionName')?.hasError('required')">
-                          Condition Name is required.
-                        </div>
+                          formControlName="conditionName" />
                       </div>
 
-                      <div class="col-sm-4">
-                        <label for="dateOfDiagnosis"> Date Of Diagnosis<span class="red">*</span></label>
+                      <!-- Date of Diagnosis -->
+                      <div class="form-group col-md-4 mb-0">
+                        <label class="mt-3" for="dateOfDiagnosis">Date Of Diagnosis</label>
                         <input type="date" id="dateOfDiagnosis" class="form-control form-control-sm mt-1"
-                          formControlName="dateOfDiagnosis"
-                          [ngClass]="{'is-invalid':medicalForm.get('dateOfDiagnosis')?.invalid && medicalForm.get('dateOfDiagnosis')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="medicalForm.get('dateOfDiagnosis')?.touched && medicalForm.get('dateOfDiagnosis')?.hasError('required')">
-                          Date Of Diagnosis is required.
-                        </div>
+                          formControlName="dateOfDiagnosis" />
                       </div>
 
-
-                      <div class="col-sm-4">
-                        <label for="currentStatus">Current Status<span class="red">*</span></label>
-                        <select class="form-select form-select-sm cursor mt-1" formControlName="currentStatus"
-                          [ngClass]="{'is-invalid': medicalForm.get('currentStatus')?.invalid &&  medicalForm.get('currentStatus')?.touched}">
-                          <option value="" disabled selected>Select</option>
-                          <option value=1>Pending</option>
-                          <option value=2>Rejected</option>
-                          <option value=3>Approved</option>
-                          <option value=4>Ongoing</option>
-                          <!-- <option *ngFor="let item of obj" [value]="item.id">{{item.value}}</option> -->
+                      <!-- Current Status -->
+                      <div class="form-group col-md-4 mb-0">
+                        <label class="mt-3" for="currentStatus">Current Status <span class="red">*</span></label>
+                        <select id="currentStatus" class="form-select form-select-sm cursor mt-1"
+                          formControlName="currentStatus" [ngClass]="{
+                'is-invalid':
+                  medicalForm.get('currentStatus')?.invalid &&
+                  medicalForm.get('currentStatus')?.touched
+              }">
+                          <option value="" disabled>Select</option>
+                          <option value="1">Pending</option>
+                          <option value="2">Rejected</option>
+                          <option value="3">Approved</option>
+                          <option value="4">Ongoing</option>
                         </select>
-                        <div class="invalid-feedback"
-                          *ngIf="medicalForm.get('currentStatus')?.touched && medicalForm.get('currentStatus')?.hasError('required')">
-                          Current State is required.
+                        <div class="invalid-feedback" *ngIf="
+                medicalForm.get('currentStatus')?.touched &&
+                medicalForm.get('currentStatus')?.hasError('required')
+              ">
+                          Current Status is required.
                         </div>
                       </div>
                     </div>
 
+                    <!-- Treatment Details -->
                     <div class="row">
                       <div class="form-group col-12">
-                        <label for="treatmentDetails">Treatment Details <span class="red">*</span></label>
+                        <label class="mt-3" for="treatmentDetails">Treatment Details</label>
                         <textarea id="treatmentDetails" class="form-control form-control-sm mt-1"
-                          formControlName="treatmentDetails"
-                          [ngClass]="{'is-invalid': medicalForm.get('treatmentDetails')?.invalid && medicalForm.get('treatmentDetails')?.touched}"></textarea>
-                        <div class="invalid-feedback"
-                          *ngIf="medicalForm.get('treatmentDetails')?.touched && medicalForm.get('treatmentDetails')?.hasError('required')">
-                          Treatment Details is required.
-                        </div>
+                          formControlName="treatmentDetails"></textarea>
                       </div>
                     </div>
 
-                    <div class="row">
-                      <div class="col-3"></div>
-                      <div class="col-3"></div>
-                      <div class="col-3"></div>
-                      <div class="col-3">
-                        <button type="submit" class="btn m-2 custom-padding" (click)="postMedicalData()"
+                    <!-- Submit Button -->
+                    <div class="row mt-3">
+                      <div class="col-md-9"></div>
+                      <div class="col-md-3 text-end">
+                        <button type="submit" class="btn m-2 custom-padding" [disabled]="isLoading"
                           style="background-color: #00876F!important;">
-                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
-                          <span *ngIf="!isLoading" class="space">Save</span>
-                          <span *ngIf="isLoading" class="space">Save</span>
+                          <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': isLoading }"></i>
+                          <span class="space">{{ isLoading ? 'Saving...' : 'Save' }}</span>
                         </button>
                       </div>
                     </div>
-                    <div class="table-responsive mt-5">
-                      <table class="table table-hover " *ngIf="medicalHistoryData.length > 0">
-                        <thead>
-                          <tr>
-                            <th scope="col">Condition Name</th>
-                            <th scope="col">Diagnosis Date</th>
-                            <th scope="col">Current Status</th>
-                            <th scope="col">Treatment Details</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of medicalHistoryData; let i = index">
-                            <td>{{ item.conditionName }}</td>
-                            <td>{{ item.dateOfDiagnosis }}</td>
-                            <td>{{ item.currentStatus }}</td>
-                            <td>{{item.treatmentDetails}}</td>
-                            <td>
-                              <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editMedicalHistoryData(i)"
-                                style="color:#00876f;font-size: medium;"></i>
-                              <i class="fa-solid fa-trash cursor" (click)="deleteMedicalHistoryData(item.id)"
-                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                 </form>
-              </div>
 
+                <!-- Search & Title -->
+                <div class="row align-items-center mt-1">
+                  <div class="col-12 col-md-9 mb-2 mb-md-0">
+                    <div class="d-flex flex-wrap gap-2">
+                      <h1 class="ms-2">Medical History List</h1>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-3">
+                    <input type="text" [(ngModel)]="searchTerm4" placeholder="Search By Condition Name"
+                      (input)="getMedicalDataList()" class="form-control" />
+                  </div>
+                </div>
+
+                <!-- Medical History Table -->
+                <div class="table-responsive mt-2">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th style="min-width: 150px;" (click)="sortData('conditionName')">
+                          Condition Name
+                          <i [ngClass]="{
+                          fa: true,
+                         'fa-sort': sortColumn !== 'conditionName',
+                         'fa-sort-up': sortColumn === 'conditionName' && sortOrder === 'asc',
+                         'fa-sort-down': sortColumn === 'conditionName' && sortOrder === 'desc'
+                          }"></i>
+                        </th>
+                        <th style="min-width: 150px;" (click)="sortData('dateOfDiagnosis')">
+                          Diagnosis Date
+                          <i [ngClass]="{
+                          fa: true,
+                         'fa-sort': sortColumn !== 'dateOfDiagnosis',
+                         'fa-sort-up': sortColumn === 'dateOfDiagnosis' && sortOrder === 'asc',
+                         'fa-sort-down': sortColumn === 'dateOfDiagnosis' && sortOrder === 'desc'
+                         }"></i>
+                        </th>
+                        <th style="min-width: 150px;" (click)="sortData('currentStatus')">
+                          Current Status
+                          <i [ngClass]="{
+                          fa: true,
+                          'fa-sort': sortColumn !== 'currentStatus',
+                          'fa-sort-up': sortColumn === 'currentStatus' && sortOrder === 'asc',
+                          'fa-sort-down': sortColumn === 'currentStatus' && sortOrder === 'desc'
+                          }"></i>
+                        </th>
+                        <th style="min-width: 150px;" (click)="sortData('treatmentDetails')">
+                          Treatment Details
+                          <i [ngClass]="{
+                          fa: true,
+                         'fa-sort': sortColumn !== 'treatmentDetails',
+                         'fa-sort-up': sortColumn === 'treatmentDetails' && sortOrder === 'asc',
+                         'fa-sort-down': sortColumn === 'treatmentDetails' && sortOrder === 'desc'
+                         }"></i>
+                        </th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of medicalHistoryData; let i = index">
+                        <td>{{ item.conditionName || '-----' }}</td>
+                        <td>{{ item.dateOfDiagnosis ? (item.dateOfDiagnosis | date: 'MM-dd-yyyy') : '-----' }}</td>
+                        <td>{{ item.currentStatus || '-----' }}</td>
+                        <td style="max-width: 35%;">
+                          <ng-container *ngIf="item.treatmentDetails && item.treatmentDetails.trim(); else noData">
+                            <span *ngIf="!expanded">{{ getShortText(item.treatmentDetails) }}</span>
+                            <span *ngIf="expanded">{{ item.treatmentDetails }}</span>
+                            <a *ngIf="shouldShowToggle(item.treatmentDetails)" href="#" (click)="toggleExpand1($event)">
+                              {{ expanded ? 'See Less' : 'See More' }}
+                            </a>
+                          </ng-container>
+                          <ng-template #noData>-----</ng-template>
+                        </td>
+
+                        <td>
+                          <i class="fa-solid fa-pen-to-square me-3 cursor" style="color: #00876f; font-size: medium;"
+                            (click)="editMedicalHistoryData(i)"></i>
+                          <i class="fa-solid fa-trash cursor" style="color: rgb(166, 7, 7); font-size: medium;"
+                            (click)="deleteMedicalHistoryData(item.id)"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tr *ngIf="!medicalHistoryData || medicalHistoryData?.length == null">
+                      <td colspan="9" class="no-data-card">
+                        <div
+                          class="no-data-card-container border rounded-xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300 bg-white text-center">
+                          <div class="no-data-icon text-yellow-500 text-4xl animate-bounce mb-2">
+                            <i class="fas fa-exclamation-triangle"></i>
+                          </div>
+                          <div class="no-data-content">
+                            <span class="no-data-title text-xl font-semibold block mb-1">No Medical History Found</span>
+                            <p class="no-data-description text-gray-600">
+                              It looks like there are no medical history at the moment.<br>
+                              Please check back later!
+                            </p>
+
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mx-2 d-flex justify-content-end mt-2"
+                  *ngIf="medicalHistoryData || medicalHistoryData?.length != null">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getMedicalDataList()"></app-pagination>
+                </div>
+              </div>
             </mat-tab>
+
             <mat-tab label="Screening and preventive care">
               <ng-template mat-tab-label>
-                <!-- <i class="fas fa-info-circle" style="color: #00876F!important;"></i>  -->
                 <span style="color: #00876F!important;">Screening and Preventive Care</span>
               </ng-template>
+
               <div class="mat-tab-content px-1" style="overflow: hidden!important;">
-                <br>
+                <br />
                 <form [formGroup]="screeningForm">
                   <div class="companyInfo">
-                    <div class="row companyContent mt-2">
+                    <div class="row g-3 companyContent mt-2">
 
-                      <div class="form-group col-4">
-                        <label for="screeningTest">Screening Test Name <span class="red">*</span> </label>
-                        <input type="text" id="screeningTest" class="form-control form-control-sm mt-1"
-                          formControlName="screeningTest"
-                          [ngClass]="{'is-invalid': screeningForm.get('screeningTest')?.invalid && screeningForm.get('screeningTest')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="screeningForm.get('screeningTest')?.touched && screeningForm.get('screeningTest')?.hasError('required')">
-                          screening Test Name is required.
-                        </div>
+                      <div class="col-md-4">
+                        <label for="screeningTest" class="form-label">Screening Test Name</label>
+                        <input type="text" id="screeningTest" class="form-control form-control-sm"
+                          formControlName="screeningTest" />
                       </div>
 
-                      <div class="col-sm-4">
-                        <label for="datePerformed"> Date Performed <span class="red">*</span></label>
-                        <input type="date" id="datePerformed" class="form-control form-control-sm mt-1"
-                          formControlName="datePerformed"
-                          [ngClass]="{'is-invalid':screeningForm.get('datePerformed')?.invalid && screeningForm.get('datePerformed')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="screeningForm.get('datePerformed')?.touched && screeningForm.get('datePerformed')?.hasError('required')">
-                          Date Performed is required.
-                        </div>
+                      <div class="col-md-4">
+                        <label for="datePerformed" class="form-label">Date Performed</label>
+                        <input type="date" id="datePerformed" class="form-control form-control-sm"
+                          formControlName="datePerformed" />
                       </div>
 
-
-                      <div class="col-sm-4">
-                        <label for="result">Result<span class="red">*</span></label>
-                        <select class="form-select form-select-sm cursor mt-1" formControlName="result"
-                          [ngClass]="{'is-invalid': screeningForm.get('result')?.invalid &&  screeningForm.get('result')?.touched}">
+                      <div class="col-md-4">
+                        <label for="result" class="form-label">Result <span class="text-danger">*</span></label>
+                        <select class="form-select form-select-sm" formControlName="result"
+                          [ngClass]="{'is-invalid': screeningForm.get('result')?.invalid && screeningForm.get('result')?.touched}">
                           <option value="" disabled selected>Select</option>
-                          <option *ngFor="let item of obj" [value]="item.id">{{item.value}}</option>
+                          <option *ngFor="let item of obj" [value]="item.id">{{ item.value }}</option>
                         </select>
                         <div class="invalid-feedback"
                           *ngIf="screeningForm.get('result')?.touched && screeningForm.get('result')?.hasError('required')">
@@ -615,37 +741,19 @@
                         </div>
                       </div>
 
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <label for="nextDueDate"> Next Due Date<span class="red">*</span></label>
-                        <input type="date" id="nextDueDate" class="form-control form-control-sm mt-1"
-                          formControlName="nextDueDate"
-                          [ngClass]="{'is-invalid':screeningForm.get('nextDueDate')?.invalid && screeningForm.get('nextDueDate')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="screeningForm.get('nextDueDate')?.touched && screeningForm.get('nextDueDate')?.hasError('required')">
-                          Next Due Date is required.
-                        </div>
+                      <div class="col-md-4 mt-3">
+                        <label for="nextDueDate" class="form-label">Next Due Date</label>
+                        <input type="date" id="nextDueDate" class="form-control form-control-sm"
+                          formControlName="nextDueDate" />
                       </div>
-                    </div>
 
-                    <div class="row mt-3">
-                      <div class="form-group col-12">
-                        <label for="notes">Notes </label>
-                        <textarea id="notes" class="form-control form-control-sm mt-1" formControlName="notes"
-                          [ngClass]="{'is-invalid': screeningForm.get('notes')?.invalid && screeningForm.get('notes')?.touched}"></textarea>
-                        <div class="invalid-feedback"
-                          *ngIf="screeningForm.get('notes')?.touched && screeningForm.get('notes')?.hasError('required')">
-                          Notes is required.
-                        </div>
+                      <div class="col-12 mt-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea id="notes" class="form-control form-control-sm" formControlName="notes"
+                          rows="3"></textarea>
                       </div>
-                    </div>
 
-                    <div class="row">
-                      <div class="col-3"></div>
-                      <div class="col-3"></div>
-                      <div class="col-3"></div>
-                      <div class="col-3">
+                      <div class="col-md-12 text-end mt-3">
                         <button type="submit" class="btn m-2 custom-padding" (click)=" postScreeningData()"
                           style="background-color: #00876F!important;">
                           <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
@@ -654,37 +762,94 @@
                         </button>
                       </div>
                     </div>
-                    <div class="table-responsive mt-5">
-                      <table class="table table-hover " *ngIf="screeningData.length > 0">
-                        <thead>
-                          <tr>
-                            <th scope="col">Screening Test</th>
-                            <th scope="col"> Date Performed</th>
-                            <th scope="col">Result</th>
-                            <th scope="col">Next Due Date</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of screeningData; let i = index">
-                            <td>{{ item.screeningTest }}</td>
-                            <td>{{ item.datePerformed }}</td>
-                            <td>{{ item.patientResult }}</td>
-                            <td>{{ item.nextDueDate }}</td>
-                            <td>
-                              <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editScreeningData(i)"
-                                style="color:#00876f;font-size: medium;"></i>
-                              <i class="fa-solid fa-trash cursor" (click)="deleteScreeningData(item.id)"
-                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                 </form>
-              </div>
 
+                <!-- Title and Search -->
+                <div class="row align-items-center mt-2">
+                  <div class="col-md-9">
+                    <h1 class="ms-2">Screening and Preventive Care List</h1>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="text" [(ngModel)]="searchTerm5" (input)="getScreeningDataList()"
+                      placeholder="Search By Screening Test" class="form-control" />
+                  </div>
+                </div>
+
+                <!-- Data Table -->
+                <div class="table-responsive mt-2">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('screeningTest')">
+                          Screening Test
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'screeningTest', 'fa-sort-up': sortColumn === 'screeningTest' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'screeningTest' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('datePerformed')">Date
+                          Performed
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'datePerformed', 'fa-sort-up': sortColumn === 'datePerformed' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'datePerformed' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('patientResult')">
+                          Result
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'patientResult', 'fa-sort-up': sortColumn === 'patientResult' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'patientResult' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('nextDueDate')">Next
+                          Due Date
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'nextDueDate', 'fa-sort-up': sortColumn === 'nextDueDate' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'nextDueDate' && sortOrder === 'desc'}"></i>
+                        </th>
+
+
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of screeningData; let i = index">
+                        <td>{{ item.screeningTest || '-----' }}</td>
+                        <td>{{ item.datePerformed ? (item.datePerformed | date: 'MM-dd-yyyy') : '-----' }}</td>
+                        <td>{{ item.patientResult || '-----' }}</td>
+                        <td>{{ item.nextDueDate ? (item.nextDueDate | date: 'MM-dd-yyyy') : '-----' }}</td>
+
+
+                        <td>
+                          <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editScreeningData(i)"
+                            style="color:#00876f;"></i>
+                          <i class="fa-solid fa-trash cursor" (click)="deleteScreeningData(item.id)"
+                            style="color:#a60707;"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tr *ngIf="!screeningData || screeningData?.length == null">
+                      <td colspan="9" class="no-data-card">
+                        <div
+                          class="no-data-card-container border rounded-xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300 bg-white text-center">
+                          <div class="no-data-icon text-yellow-500 text-4xl animate-bounce mb-2">
+                            <i class="fas fa-exclamation-triangle"></i>
+                          </div>
+                          <div class="no-data-content">
+                            <span class="no-data-title text-xl font-semibold block mb-1">No Screening and Preventive
+                              Care Found</span>
+                            <p class="no-data-description text-gray-600">
+                              It looks like there are no screening and preventive care at the moment.<br>
+                              Please check back later!
+                            </p>
+
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mx-2 d-flex justify-content-end mt-2"
+                  *ngIf="screeningData || screeningData?.length != null">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getScreeningDataList()"></app-pagination>
+                </div>
+              </div>
             </mat-tab>
             <mat-tab label="Immunisations">
               <ng-template mat-tab-label>
@@ -697,74 +862,46 @@
                   <div class="companyInfo">
                     <div class="row companyContent mt-2">
 
-                      <div class="form-group col-4">
-                        <label for="vaccineName">Vaccine Name <span class="red">*</span> </label>
+                      <div class="form-group col-4 mb-0">
+                        <label class="mt-3" for="vaccineName">Vaccine Name </label>
                         <input type="text" id="vaccineName" class="form-control form-control-sm mt-1"
-                          formControlName="vaccineName"
-                          [ngClass]="{'is-invalid': immunisationForm.get('vaccineName')?.invalid && immunisationForm.get('vaccineName')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="immunisationForm.get('vaccineName')?.touched && immunisationForm.get('vaccineName')?.hasError('required')">
-                          Vaccine Name is required.
-                        </div>
+                          formControlName="vaccineName">
+
                       </div>
 
-                      <div class="form-group col-4">
-                        <label for="vaccineCode">Vaccine Code <span class="red">*</span> </label>
+                      <div class="form-group col-4 mb-0">
+                        <label class="mt-3" for="vaccineCode">Vaccine Code </label>
                         <input type="text" id="vaccineCode" class="form-control form-control-sm mt-1"
-                          formControlName="vaccineCode"
-                          [ngClass]="{'is-invalid': immunisationForm.get('vaccineCode')?.invalid && immunisationForm.get('vaccineCode')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="immunisationForm.get('vaccineCode')?.touched && immunisationForm.get('vaccineCode')?.hasError('required')">
-                          Vaccine Code is required.
-                        </div>
+                          formControlName="vaccineCode">
+
                       </div>
 
-                      <div class="form-group col-4">
-                        <label for="dose"> Dose <span class="red">*</span> </label>
-                        <input type="text" id="dose" class="form-control form-control-sm mt-1" formControlName="dose"
-                          [ngClass]="{'is-invalid': immunisationForm.get('dose')?.invalid && immunisationForm.get('dose')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="immunisationForm.get('dose')?.touched && immunisationForm.get('dose')?.hasError('required')">
-                          Dose is required.
-                        </div>
+                      <div class="form-group col-4 mb-0">
+                        <label class="mt-3" for="dose"> Dose </label>
+                        <input type="text" id="dose" class="form-control form-control-sm mt-1" formControlName="dose">
+
                       </div>
                     </div>
                     <div class="row">
-                      <div class="form-group col-4">
-                        <label for="lotNumber"> Lot Number <span class="red">*</span> </label>
-                        <input type="text" id="lotNumber" class="form-control form-control-sm mt-1"
-                          formControlName="lotNumber"
-                          [ngClass]="{'is-invalid': immunisationForm.get('lotNumber')?.invalid && immunisationForm.get('lotNumber')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="immunisationForm.get('lotNumber')?.touched && immunisationForm.get('lotNumber')?.hasError('required')">
-                          Lot Number is required.
-                        </div>
-                        <div class="invalid-feedback"
-                          *ngIf="immunisationForm.get('lotNumber')?.touched && immunisationForm.get('lotNumber')?.hasError('pattern')">
-                          Lot Number must be a valid number.
-                        </div>
+                      <div class="form-group col-4 mb-0">
+                        <label class="mt-3" for="lotNumber"> Lot Number </label>
+                        <input type="number" id="lotNumber" class="form-control form-control-sm mt-1"
+                          formControlName="lotNumber">
+
                       </div>
 
-                      <div class="col-sm-4">
-                        <label for="startDate"> Start Date <span class="red">*</span></label>
+                      <div class="col-sm-4 mb-0">
+                        <label class="mt-3" for="startDate"> Start Date </label>
                         <input type="date" id="startDate" class="form-control form-control-sm mt-1"
-                          formControlName="startDate"
-                          [ngClass]="{'is-invalid':immunisationForm.get('startDate')?.invalid && immunisationForm.get('startDate')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="immunisationForm.get('startDate')?.touched && immunisationForm.get('startDate')?.hasError('required')">
-                          Start Date is required.
-                        </div>
+                          formControlName="startDate">
+
                       </div>
 
-                      <div class="col-sm-4">
-                        <label for="endDate"> End Date <span class="red">*</span></label>
+                      <div class="col-sm-4 mb-0">
+                        <label class="mt-3" for="endDate"> End Date </label>
                         <input type="date" id="endDate" class="form-control form-control-sm mt-1"
-                          formControlName="endDate"
-                          [ngClass]="{'is-invalid':immunisationForm.get('endDate')?.invalid && immunisationForm.get('endDate')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="immunisationForm.get('endDate')?.touched && immunisationForm.get('endDate')?.hasError('required')">
-                          End Date is required.
-                        </div>
+                          formControlName="endDate">
+
                       </div>
                     </div>
                     <div class="row">
@@ -780,44 +917,103 @@
                         </button>
                       </div>
                     </div>
-                    <div class="table-responsive mt-5">
-                      <table class="table table-hover " *ngIf="immunisationData.length > 0">
-                        <thead>
-                          <tr>
-                            <th scope="col">Vaccine Name</th>
-                            <th scope="col"> Vaccine Code</th>
-                            <th scope="col">Dose</th>
-                            <th scope="col">Expiration Date</th>
-                            <th scope='col'> Status</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of immunisationData; let i = index">
-                            <td>{{ item.vaccineName }}</td>
-                            <td>{{ item.vaccineCode }}</td>
-                            <td>{{ item.dose }}</td>
-                            <td>{{ item.endDate }}</td>
-                            <td style="display: flex; justify-content: center; align-items: center; height: 2.8rem;">
-                              <label class="switch" style="margin-top: -2%;">
-                                <input class="switch-input" type="checkbox" [checked]="!item.isActive"
-                                  (change)="toggleimmunizationStatus(item.id,item.isActive)">
-                                <span class="switch-label"></span>
-                                <span class="switch-handle"></span>
-                              </label>
-                            </td>
-                            <td>
-                              <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editImmunisationData(i)"
-                                style="color:#00876f;font-size: medium;"></i>
-                              <i class="fa-solid fa-trash cursor" (click)="deleteImmunisationData(item.id)"
-                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                 </form>
+
+                <!-- Title and Search -->
+                <div class="row align-items-center mt-2">
+                  <div class="col-md-9">
+                    <h1 class="ms-2">Immunizations List</h1>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="text" [(ngModel)]="searchTerm1" (input)="getImmunisationDataList()"
+                      placeholder="Search By Vaccine Name" class="form-control" />
+                  </div>
+                </div>
+                <div class="table-responsive mt-3">
+                  <table class="table table-hover ">
+                    <thead>
+                      <tr>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('vaccineName')">
+                          Vaccine Name
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'vaccineName', 'fa-sort-up': sortColumn === 'vaccineName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'vaccineName' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('vaccineCode')">
+                          Vaccine Code
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'vaccineCode', 'fa-sort-up': sortColumn === 'vaccineCode' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'vaccineCode' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('dose')">Dose
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'dose', 'fa-sort-up': sortColumn === 'dose' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'dose' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('lotNumber')">Lot
+                          Number
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'lotNumber', 'fa-sort-up': sortColumn === 'lotNumber' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'lotNumber' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('endDate')">
+                          Expiration Date
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'endDate', 'fa-sort-up': sortColumn === 'endDate' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'endDate' && sortOrder === 'desc'}"></i>
+                        </th>
+
+                        <th scope='col'> Status</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of immunisationData; let i = index">
+                        <td>{{ item.vaccineName || '-----' }}</td>
+                        <td>{{ item.vaccineCode || '-----' }}</td>
+                        <td>{{ item.dose || '-----' }}</td>
+                        <td>{{item.lotNumber || '-----'}}</td>
+                        <td>{{ item.endDate ? (item.endDate | date: 'MM-dd-yyyy') : '-----' }}</td>
+
+
+                        <td style=" justify-items: center;">
+                          <label class="switch" disabled>
+                            <input class="switch-input" type="checkbox" [checked]="item.isActive"
+                              (change)="toggleimmunizationStatus(item.id,item.isActive)">
+                            <span class="switch-label"></span>
+                            <span class="switch-handle"></span>
+                          </label>
+                        </td>
+
+                        <td>
+                          <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editImmunisationData(i)"
+                            style="color:#00876f;font-size: medium;"></i>
+                          <i class="fa-solid fa-trash cursor" (click)="deleteImmunisationData(item.id)"
+                            style="color:rgb(166, 7, 7); font-size: medium;"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tr *ngIf="!immunisationData || immunisationData?.length == null">
+                      <td colspan="9" class="no-data-card">
+                        <div
+                          class="no-data-card-container border rounded-xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300 bg-white text-center">
+                          <div class="no-data-icon text-yellow-500 text-4xl animate-bounce mb-2">
+                            <i class="fas fa-exclamation-triangle"></i>
+                          </div>
+                          <div class="no-data-content">
+                            <span class="no-data-title text-xl font-semibold block mb-1">No Immunizations Found</span>
+                            <p class="no-data-description text-gray-600">
+                              It looks like there are no immunizations at the moment.<br>
+                              Please check back later!
+                            </p>
+
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2"
+                  *ngIf="immunisationData || immunisationData?.length != null">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getImmunisationDataList()" />
+                </div>
+
               </div>
             </mat-tab>
             <mat-tab label="Chronic Condition">
@@ -831,35 +1027,23 @@
                   <div class="companyInfo">
                     <div class="row companyContent mt-2">
 
-                      <div class="form-group col-4">
-                        <label for="conditionName">Condition Name <span class="red">*</span> </label>
+                      <div class="form-group col-4 mb-0">
+                        <label class="mt-3" for="conditionName">Condition Name </label>
                         <input type="text" id="conditionName" class="form-control form-control-sm mt-1"
-                          formControlName="conditionName"
-                          [ngClass]="{'is-invalid': chronicForm.get('conditionName')?.invalid && chronicForm.get('conditionName')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="chronicForm.get('conditionName')?.touched && chronicForm.get('conditionName')?.hasError('required')">
-                          Condition Name is required.
-                        </div>
+                          formControlName="conditionName">
+
                       </div>
-                      <div class="col-sm-4">
-                        <label for="dateOfDiagnosis"> Date of Diagnosis <span class="red">*</span></label>
+                      <div class="col-sm-4 mb-0">
+                        <label class="mt-3" for="dateOfDiagnosis"> Date of Diagnosis</label>
                         <input type="date" id="dateOfDiagnosis" class="form-control form-control-sm mt-1"
-                          formControlName="dateOfDiagnosis"
-                          [ngClass]="{'is-invalid':chronicForm.get('dateOfDiagnosis')?.invalid && chronicForm.get('dateOfDiagnosis')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="chronicForm.get('dateOfDiagnosis')?.touched && chronicForm.get('dateOfDiagnosis')?.hasError('required')">
-                          Date of Diagnosis is required.
-                        </div>
+                          formControlName="dateOfDiagnosis">
+
                       </div>
                       <div class="form-group col-4">
-                        <label for="severity"> Severity <span class="red">*</span> </label>
+                        <label class="mt-3" for="severity"> Severity </label>
                         <input type="text" id="severity" class="form-control form-control-sm mt-1"
-                          formControlName="severity"
-                          [ngClass]="{'is-invalid': chronicForm.get('severity')?.invalid && chronicForm.get('severity')?.touched}">
-                        <div class="invalid-feedback"
-                          *ngIf="chronicForm.get('severity')?.touched && chronicForm.get('severity')?.hasError('required')">
-                          Severity is required.
-                        </div>
+                          formControlName="severity">
+
                       </div>
                     </div>
                     <div class="row">
@@ -882,12 +1066,9 @@
                     <div class="row">
                       <div class="form-group col-12">
                         <label for="notes">Notes </label>
-                        <textarea id="notes" class="form-control form-control-sm mt-1" formControlName="notes"
-                          [ngClass]="{'is-invalid': chronicForm.get('notes')?.invalid && chronicForm.get('notes')?.touched}"></textarea>
-                        <div class="invalid-feedback"
-                          *ngIf="chronicForm.get('notes')?.touched && chronicForm.get('notes')?.hasError('required')">
-                          Notes is required.
-                        </div>
+                        <textarea id="notes" class="form-control form-control-sm mt-1"
+                          formControlName="notes"></textarea>
+
                       </div>
                     </div>
                     <div class="row">
@@ -903,35 +1084,86 @@
                         </button>
                       </div>
                     </div>
-                    <div class="table-responsive mt-5">
-                      <table class="table table-hover " *ngIf="chronicCondition.length > 0">
-                        <thead>
-                          <tr>
-                            <th scope="col">Condition Name</th>
-                            <th scope="col"> Diagosis Date</th>
-                            <th scope="col">Severity</th>
-                            <th scope="col">Ongoing Treatment</th>
-                            <th scope="col">Action</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let item of chronicCondition; let i = index">
-                            <td>{{ item.conditionName }}</td>
-                            <td>{{ item.dateOfDiagnosis }}</td>
-                            <td>{{ item.severity }}</td>
-                            <td>{{ item.onGoingTreatment }}</td>
-                            <td>
-                              <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editChronicConditionData(i)"
-                                style="color:#00876f;font-size: medium;"></i>
-                              <i class="fa-solid fa-trash cursor" (click)="deleteChronicConditionData(item.id)"
-                                style="color:rgb(166, 7, 7); font-size: medium;"></i>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
                   </div>
                 </form>
+
+                <!-- Title and Search -->
+                <div class="row align-items-center mt-2">
+                  <div class="col-md-9">
+                    <h1 class="ms-2">Chronic Condition List</h1>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="text" [(ngModel)]="searchTerm6" (input)="getChronicConditionList()"
+                      placeholder="Search By Condition Name" class="form-control" />
+                  </div>
+                </div>
+                <div class="table-responsive mt-3">
+                  <table class="table table-hover ">
+                    <thead>
+                      <tr>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('conditionName')">
+                          Condition Name
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'conditionName', 'fa-sort-up': sortColumn === 'conditionName' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'conditionName' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('dateOfDiagnosis')">
+                          Diagosis Date
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'dateOfDiagnosis', 'fa-sort-up': sortColumn === 'dateOfDiagnosis' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'dateOfDiagnosis' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('severity')">Severity
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'severity', 'fa-sort-up': sortColumn === 'severity' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'severity' && sortOrder === 'desc'}"></i>
+                        </th>
+                        <th style=" min-width: 150px;" scope="col" (click)="sortData('onGoingTreatment')">
+                          Ongoing Treatment
+                          <i
+                            [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'onGoingTreatment', 'fa-sort-up': sortColumn === 'onGoingTreatment' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'onGoingTreatment' && sortOrder === 'desc'}"></i>
+                        </th>
+
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of chronicCondition; let i = index">
+                        <td>{{ item.conditionName || '-----' }}</td>
+                        <td>{{ item.dateOfDiagnosis ? (item.dateOfDiagnosis | date: 'MM-dd-yyyy') : '-----' }}</td>
+                        <td>{{ item.severity || '-----' }}</td>
+                        <td>{{ item.onGoingTreatment || '-----' }}</td>
+                        <td>
+                          <i class="fa-solid fa-pen-to-square me-3 cursor" (click)="editChronicConditionData(i)"
+                            style="color:#00876f;font-size: medium;"></i>
+                          <i class="fa-solid fa-trash cursor" (click)="deleteChronicConditionData(item.id)"
+                            style="color:rgb(166, 7, 7); font-size: medium;"></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                    <tr *ngIf="!chronicCondition || chronicCondition?.length == null">
+                      <td colspan="9" class="no-data-card">
+                        <div
+                          class="no-data-card-container border rounded-xl shadow-md p-6 hover:shadow-xl transition-shadow duration-300 bg-white text-center">
+                          <div class="no-data-icon text-yellow-500 text-4xl animate-bounce mb-2">
+                            <i class="fas fa-exclamation-triangle"></i>
+                          </div>
+                          <div class="no-data-content">
+                            <span class="no-data-title text-xl font-semibold block mb-1">No Chronic Condition
+                              Found</span>
+                            <p class="no-data-description text-gray-600">
+                              It looks like there are no chronic condition at the moment.<br>
+                              Please check back later!
+                            </p>
+
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="mx-2 d-flex justify-content-end mt-2"
+                  *ngIf="chronicCondition || chronicCondition?.length != null">
+                  <app-pagination [paginator]="paginator" (onPageChange)="getChronicConditionList()" />
+                </div>
+
               </div>
 
             </mat-tab>

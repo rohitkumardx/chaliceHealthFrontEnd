@@ -1,0 +1,409 @@
+<app-header></app-header>
+
+<div class="pb-4" style="background-color: #FFF1E5;">
+  <ng-container *ngIf="selectedCategory1 == false">
+    <div class="Listing">
+      <h1 style="color: #00876f; font-size: 40px; font-weight: 700;">Services</h1>
+    </div>
+    <div class="Listing1">
+      <h2>Screenings for common health conditions like diabetes or hypertension.</h2>
+    </div>
+  </ng-container>
+  <!-- Show "Services" when selectedCategory is 0 -->
+
+  <!-- Show other content when selectedCategory is NOT 0 -->
+  <ng-container *ngIf="selectedCategory1 == true">
+    <div class="Listing">
+      <span style="background-color: #E4F3F0; border-radius: 5px; padding: 5px 10px; color: #00876f;">
+        {{ service.providerCount }} LISTING
+      </span>
+    </div>
+
+    <div class="Listing">
+      <h1 style="color: #00876f; font-size: 40px; font-weight: 700;">{{ service.categoryName }}</h1>
+    </div>
+
+    <div class="Listing1">
+      <h2>{{ service.description }}</h2>
+    </div>
+  </ng-container>
+
+</div>
+
+<div class="input-group container mb-3 mt-3
+shadow-sm bg-white align-items-center position-relative custom-search-container" style="width: 100%; max-width: 80%;">
+  <div class="mobile d-flex" style="width: 60%;">
+    <span class="input-group-text bg-white border-0" id="search-icon"
+      style="border-left:4px solid #00876f!important;border-radius: 0px !important;">
+      <i class="fas fa-search text-muted"></i>
+    </span>
+
+    <!-- Search input -->
+    <input type="text" class="form-control border-0 py-3 no-outline" placeholder="Search By Provider Name"
+      aria-label="Search" aria-describedby="search-icon" [(ngModel)]="searchTerm" (input)="onSpecialityChange1($event)"
+      (keydown)="handleKeydown($event)">
+
+  </div>
+
+
+  <!-- Location input -->
+  <div style="position: relative; flex: 1; min-width: 0;">
+    <input type="text" class="form-control no-outline location1" style="width: 100%;" placeholder="Location"
+      aria-label="Location" [(ngModel)]="location" (keydown)="handleKeydown1($event)"
+      (input)="onAddressChange($event)" />
+
+    <!-- Address suggestions -->
+    <ul *ngIf="suggestions.length" class="list-group-l position-absolute mt-1 bg-white shadow-sm suggestions-list"
+      style="z-index: 999; width: 100%;">
+      <li *ngFor="let suggestion of suggestions; let i = index" class="list-group-item text-dark suggestion-item"
+        [ngClass]="{ 'selected-suggestion': selectedIndex1 === i }" (click)="selectSuggestion(suggestion, i)">
+        {{ suggestion.address }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Search button -->
+  <div class="arrow">
+    <button class="btn m-0 d-flex rounded-circle me-1 mt-3 mb-3 search-button py-2" type="button"
+      (click)="getimmunizationList()">
+      <span class="d-inline d-md-none me-1">Search</span>
+      <i class="fas fa-arrow-right py-0"></i>
+    </button>
+  </div>
+</div>
+
+<div class="Search">
+  <div class="cont-fluid">
+    <div class="row">
+      <!-- Sidebar for Filters -->
+      <div class="col-md-4">
+        <div class="filter-sidebar">
+          <div>
+
+
+            <div>
+              <div class="col-12">
+                <h6 class="text-success fw-bold mb-2 fs-6 mt-2">Services</h6>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="category" id="allCategories" [value]="0"
+                    [(ngModel)]="selectedCategory">
+
+
+                  <label class="form-check-label" for="allCategories">
+                    All Categories
+                  </label>
+                </div>
+              </div>
+              <div style="margin-left: 2%;" class="row">
+                <div class="col-md-6">
+                  <div class="form-check" *ngFor="let category of leftCategories">
+                    <input class="form-check-input" type="radio" name="category" [id]="'category-' + category"
+                      [value]="category" [(ngModel)]="selectedCategory">
+                    <label class="form-check-label" [for]="'category-' + category">
+                      {{ categoryLabels[category] }}
+                    </label>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-check" *ngFor="let category of rightCategories">
+                    <input class="form-check-input" type="radio" name="category" [id]="'category-' + category"
+                      [value]="category" [(ngModel)]="selectedCategory">
+                    <label class="form-check-label" [for]="'category-' + category">
+                      {{ categoryLabels[category] }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="pt-2">
+            <h6 class="text-success fw-bold mb-2 fs-6">Conditions or Symptoms</h6>
+            <div class="row mb-2 ms-1 mt-3">
+              <input type="text" class=" styled-input " placeholder="Search By Conditions or Symptoms"
+                [(ngModel)]="searchTerm1" (input)="onSpecialityChange($event)" (keydown)="handleKeydown($event)">
+              <ul *ngIf="suggestionsSpeciality.length" class="list-group position-absolute   mt-5 bg-white shadow-sm"
+                style="z-index: 10; border-radius: 5px; max-height: 200px; overflow-y: auto;">
+                <li *ngFor="let suggestion of suggestionsSpeciality; let i = index" class="list-group-item text-dark"
+                  [ngClass]="{ 'selected-suggestion': selectedIndex1 === i }" style="cursor: pointer;"
+                  (click)="selectSpeciality(suggestion, i)">
+                  {{ suggestion.name }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="pt-2">
+            <h6 class="text-success fw-bold mb-2 fs-6 mt-2">Service Method</h6>
+
+            <div class="availability">
+
+              <div class="d-flex flex-nowrap">
+                <button class="btn btn-outline-success rounded-pill px-3 me-2"
+                  style="font-weight: 400!important; font-size: 14px!important; "
+                  [ngClass]="{'active': selectedVisit === 'telehealth'}" (click)="toggleVisit('telehealth')">
+                  <i class="fas fa-camera me-2" style="font-size: 15px;"></i>
+                  Telehealth</button>
+                <button class="btn btn-outline-success rounded-pill px-3 me-2"
+                  style="font-weight: 400!important; font-size: 14px!important;"
+                  [ngClass]="{'active': selectedVisit === 'in office' }" (click)="toggleVisit('in office')">
+                  <i class="fa fa-building me-2"></i>
+                  Office Visit</button>
+              </div>
+              <div class="d-flex flex-nowrap">
+                <button class="btn btn-outline-success rounded-pill px-3 me-2"
+                  style="font-weight: 400!important; font-size: 14px!important;"
+                  [ngClass]="{'active': selectedVisit === 'in home'}" (click)="toggleVisit('in home')">
+                  <i class="fa fa-home me-2"></i>Home Visit</button>
+
+              </div>
+            </div>
+          </div>
+
+
+
+
+          <!-- Gender Filter -->
+          <div class="mt-4">
+            <h6 class="text-success fw-bold mb-2 fs-6 mt-2">Select Gender</h6>
+            <div class="gender d-flex flex-wrap">
+              <button class="btn btn-outline-success rounded-pill px-3 me-2"
+                style="width: 6rem; font-size: 14px!important;" [ngClass]="{'active': selectedGender === 'male'}"
+                (click)="toggleGender('male')">Male</button>
+              <button class="btn btn-outline-success rounded-pill px-3 me-2"
+                style="width: 6rem; font-size: 14px!important;" [ngClass]="{'active': selectedGender === 'female'}"
+                (click)="toggleGender('female')">Female</button>
+              <button class="btn btn-outline-success rounded-pill px-3" style="width: 6rem; font-size: 14px!important;"
+                [ngClass]="{'active': selectedGender === 'other'}" (click)="toggleGender('other')">Other</button>
+            </div>
+          </div>
+
+
+
+
+
+          <!-- Languages Filter -->
+
+          <!-- Languages Selection -->
+          <div class="lang">
+            <h6 class="text-success fw-bold mb-2 fs-6 mt-2">Languages</h6>
+            <div class="row chek fs-6">
+              <div class="col-md-6" *ngFor="let item of languages">
+                <input type="checkbox" class="me-2" value="item.id" [value]="item.id"
+                  (change)="onCheckboxChange($event, item.id)"><span>{{item.name}}</span><br>
+              </div>
+            </div>
+          </div>
+
+
+
+
+          <!-- Search Filter Button -->
+          <button class="btn btn-block mt-4" (click)="getimmunizationList()" style="width: 100%!important;">
+            Search Filters
+          </button>
+
+          <button class="btn btn-block mt-2" (click)="clearFilters()" style="width: 100%!important;">
+            Clear Filters
+          </button>
+
+        </div>
+      </div>
+
+
+
+
+
+      <div class="col-md-8">
+        <div class="row hello-card " *ngIf="!loading">
+          <!-- Show 'Nothing Found' only when doctorServiceData is empty -->
+          <div class="provider-card1" *ngIf="doctorServiceData?.length === null">
+            <div class="provider-header">
+              <h2>Nothing Found</h2>
+            </div>
+            <br>
+            <div>
+              <span>Sorry, but nothing matched your search terms. Please try again with some different keywords.</span>
+            </div>
+          </div>
+
+          <!-- Iterate and display doctor profiles -->
+          <div class="provider-card" *ngFor="let item of doctorServiceData">
+            <!-- Doctor Image -->
+            <img *ngIf="item?.profilePicturePath" [src]="item.profilePicturePath" class="provider-img cursor" (click)="redirectToProviderDetail(item.userId)">
+            <img *ngIf="!item?.profilePicturePath" alt="Doctor Profile Default"
+              src="../../../../assets/svg/DoctorAvatar/MaleAvatar.png" class="provider-img cursor" (click)="redirectToProviderDetail(item.userId)">
+
+            <!-- Main Info -->
+            <div class="provider-info">
+              <div class="provider-header">
+                <h2 *ngFor="let speciality of item.specialist">
+                  {{ getSpecialistNames(speciality.specialistNames) }}
+                </h2>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4" *ngIf="item?.telehealthVisitPrice">
+                  <p class="bg-light d-flex justify-content-between rounded-2 px-3 py-1">
+                    <span><i class="fas fa-camera me-2"></i> Telehealth </span>
+                    <span class="text-success">{{ item?.telehealthVisitPrice | currency:'USD' }}</span>
+                  </p>
+                </div>
+                <div class="col-md-4" *ngIf="item?.officeVisitPrice">
+                  <p class="bg-light d-flex justify-content-between rounded-2 px-3 py-1">
+                    <span><i class="fas fa-hospital text-secondary me-2"></i> Office Visit</span>
+                    <span class="text-success">{{ item?.officeVisitPrice | currency:'USD' }}</span>
+                  </p>
+                </div>
+                <div class="col-md-4" *ngIf="item?.inHomeVisitPrice">
+                  <p class="bg-light d-flex justify-content-between rounded-2 px-3 py-1">
+                    <span><i class="fas fa-home text-secondary me-2"></i> Home Visit</span>
+                    <span class="text-success">{{ item?.inHomeVisitPrice | currency:'USD' }}</span>
+                  </p>
+                </div>
+              </div>
+
+              <p [ngClass]="{ 'doctor-name': true, 'cursor': userInfo?.accountType == 'Patient' }"
+                (click)="redirectToProviderDetail(item.userId)" class="cursor">
+                <u style="color: #009cff!important;" class="cursor"> {{ item.firstName }} {{ item.lastName }}, {{
+                  item.qualificationName }}</u>
+                <span class="service" *ngIf="item.serviceName"> &nbsp;•&nbsp;{{ item.serviceName }}</span>
+              </p>
+
+
+              <h5 class="doctor-name" *ngIf="item.clinicName">Facility Name: <span>{{ item.clinicName }}</span></h5>
+
+              <!-- Rating -->
+              <div class="rating">
+                <div class="rating-bar">
+                  <div class="rating-fill" [style.width.%]="getRatingPercentage(item.averageRating)"></div>
+                </div>
+                <span class="star">⭐</span>
+                <span class="rating-score">{{ item.averageRating }}</span>
+              </div>
+
+              <!-- Location & Availability -->
+              <div class="details">
+                <div class="location">
+
+                  <i class="fa-solid fa-location-dot me-2"></i>
+                  <span>{{ getStateAndCountry(item) }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    <div class="mx-2 d-flex justify-content-end mt-4" *ngIf="doctorServiceData?.length != null">
+                            <app-pagination [paginator]="paginator"
+                              (onPageChange)="getimmunizationList()"></app-pagination>
+                          </div>
+        <!-- Loading Spinner -->
+        <div *ngIf="loading">
+          <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
+            [spinnerHeight]="'2rem !important'" [spinnerColor]="'#1e8af9 !important'" class="heading"
+            [additionalClasses]="'mt-5'"></app-loader>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<footer class="mainfooter bg-white">
+  <hr>
+  <div class="subfooter">
+    <div class="footer ">
+      <div class="footer-container">
+        <div class="logo-section pe-5">
+          <a href="/home-page">
+            <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" alt="Chalice Health Logo">
+          </a>
+          <p style="color: #333333; padding-top: 20px; font-size: 16px; font-family: Arial,  sans-serif;">Quick and
+            Affordable Healthcare </p>
+        </div>
+        <div class="footer-column mt-3 mt-md-0">
+          <h3>Services</h3>
+          <ul>
+            <li *ngFor="let item of serviceData" (click)="redirectToServiceListing(item)"><span> <i
+                  class="fas fa-chevron-right"></i></span> {{item.categoryName}}</li>
+
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Popular</h3>
+          <ul>
+            <li (click)="navigateToBlogContent()">
+              <span><i class="fas fa-chevron-right"></i></span>
+              Blogs
+            </li>
+            <!-- <li><span><i class="fas fa-chevron-right"></i></span> Partnerships</li>
+            <li><span><i class="fas fa-chevron-right"></i></span> RX Saving Card</li> -->
+            <li (click)=" FAQS()"><span><i class="fas fa-chevron-right"></i></span> FAQs</li>
+            <li (click)="contact()"><span><i class="fas fa-chevron-right"></i></span> Contact Us</li>
+
+          </ul>
+        </div>
+
+        <div class="footer-column mt-3 mt-md-0">
+          <h3>Social</h3>
+          <ul>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.facebook.com/ChalicehealthX/"
+                target="_blank" rel="noopener noreferrer"> <i class="fab fa-facebook ms-2"></i> Facebook</a></li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a
+                href="https://www.linkedin.com/company/chalicehealth/" target="_blank" rel="noopener noreferrer"><i
+                  class="fab fa-linkedin ms-2"></i> LinkedIn</a>
+            </li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.instagram.com/chalicehealth/"
+                target="_blank" rel="noopener noreferrer"> <i class="fab fa-instagram ms-2"></i> Instagram</a></li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href="https://www.youtube.com/@ChaliceHealth"
+                target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube ms-2 "></i> YouTube</a> </li>
+            <li><span><i class="fas fa-chevron-right"></i></span> <a href=" https://www.tiktok.com/@chalicehealth"
+                target="_blank" rel="noopener noreferrer"><i class="fab fa-tiktok ms-2"></i> TikTok</a></li>
+          </ul>
+        </div>
+        <!-- next -->
+        <div class="footer-column mt-3 mt-md-0">
+
+          <div class="">
+            <h3>Join Our Community</h3>
+            <p>Be the first to know we offer deals.</p>
+            <form [formGroup]="communityForm">
+              <div class="subscribe-form position-relative">
+
+                <input type="text" id="email" class="form-control" formControlName="email" placeholder="Enter Email"
+                  [ngClass]="{'is-invalid': communityForm.get('email')?.invalid && communityForm.get('email')?.touched}">
+
+                <div class="invalid-feedback position-absolute mb-3" style="top: 37px;"
+                  *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('required')">
+                  Email is required.
+                </div>
+
+                <div class="fv-plugins-message-container invalid-feedback d-block position-absolute" style="top:37px;"
+                  *ngIf="communityForm.get('email')?.touched && communityForm.get('email')?.hasError('invalidEmail')">
+                  Please enter a valid email address.
+                </div>
+
+                <button type="submit" (click)="postJoinOurCommunity()"><i class="fas fa-envelope"></i>
+                </button>
+              </div>
+
+            </form>
+
+            <div class="d-flex justify-content-between mt-3 ">
+              <img src="../../../../assets/svg/homepage/unnamed.png" width="120px" height="100px" alt="">
+              <img src="../../../../assets/svg/homepage/HIPAA-logo.png" width="150px" height="80px" alt=""
+                class="mt-2 ms-2">
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="mt-0">
+      <!-- Bottom section -->
+      <div class="footer-bottom d-flex flex-column flex-md-row mb-2 justify-content-center mx-auto" style="width: 85%;">
+        <p class="text-nowrap mb-2 mt-mb-0  ">&copy; 2024 Chalice Health. All Rights Reserved.</p>
+        <span class="w-md-75 w-100 d-flex justify-content-md-end justify-content-center cursor">
+          <a (click)="redirectTotermofservice()">Term of Service</a>
+          <a (click)="redirectToprivacypolicy()">Privacy Policy</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</footer>

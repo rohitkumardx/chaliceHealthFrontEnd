@@ -1,13 +1,17 @@
 <div class="login-container " style=" background: linear-gradient(135deg, #83c0b1, #96c0a8, #cbbe91, #e6bf84);">
   <div class="row d-flex align-items-center justify-content-between w-100 ">
-    <div class="col-6  p-0 ">
+    <div class="col-12 col-md-6 col-lg-6 p-0 ">
       <div class="login-card " style="margin:auto;">
         <div class="pt-3"><a href="/home-page">
-          <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" width="200px" alt="Chalice Health Logo">
-      </a>
-      </div>
+            <img src="../../../../assets/svg/homepage/Chalice_Health_Logo.png" width="200px" alt="Chalice Health Logo">
+          </a>
+        </div>
+        <div *ngIf="errorMessage" class="notification danger mt-4">
+          {{ errorMessage }}
+        </div>
+        
         <form [formGroup]="loginForm">
-          <div class="form-group" style="padding-top: 70px;">
+          <div class="form-group" style="padding-top: 50px;">
             <label for="email" class="pb-1 ">Email</label>
 
             <input type="text" id="email" class="form-control" formControlName="email" placeholder="Enter Email"
@@ -20,13 +24,16 @@
               *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('email')">
               <div>Email is not valid</div>
             </div>
+            <div class="fv-plugins-message-container invalid-feedback d-block"
+             *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('invalidEmail')">
+               Please enter a valid email address.
+            </div>
           </div>
           <div class="form-group">
             <label for="password" class="pb-1">Password</label>
             <div class="password-input-container">
               <input type="{{ hidePassword ? 'password' : 'text' }}" id="password" class="form-control form-control-eye"
-                formControlName="password" placeholder="Enter Password"
-              />
+                formControlName="password" placeholder="Enter Password" (keyup.enter)="login()" />
               <!-- <div class="invalid-feedback"
                 *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
                 Password is required.
@@ -42,7 +49,8 @@
             </div>
             <a (click)="navigateToForgotPassword()" class="forgot-password-link ">Forgot Password?</a>
           </div>
-          <button type="button" class="btn btn-primary login-button mt-2" (click)="login()"  [disabled]="loginForm.invalid">
+          <button type="button" class="btn login-button mt-2"  (click)="login()"
+            [disabled]="loginForm.invalid">
             <i class="fas" [ngClass]="{ 'fa-spinner fa-spin': loading }"></i>
             <span *ngIf="!loading" class="space">Login</span>
             <span *ngIf="loading" class="space">Loading...</span>
@@ -54,7 +62,7 @@
 
       </div>
     </div>
-    <div class="image col-6  ">
+    <div class="image col-12 col-md-6 col-lg-6  ">
       <img src="../../../../assets/svg/homepage/g1.png" width="600px" alt="" srcset="">
     </div>
   </div>

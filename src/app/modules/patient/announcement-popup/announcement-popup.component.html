@@ -1,0 +1,26 @@
+<div class=" content-wrapper1">
+    <!-- <div class="col-2 text-end"> -->
+    <div class="close-btn cursor text-end" (click)="closePopup()"><i class="fa-solid fa-xmark"></i></div>
+    <!-- </div> -->
+    <div class="row d-flex ">
+        <div class="col-10 ">
+            <h3 class="ms-0"> Announcement Details</h3>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-7">
+            <p><b>Announcement Title :</b> {{ announcementData.title }} </p>
+            <p><b>Announcement Body : </b>{{ announcementData.body }} </p>
+
+            <p><b>Announcement Date : </b>{{ announcementData.createdDate | date: 'MM-dd-yyyy' }} </p>
+            <p style="color: blue;" class="cursor" (click)="download()"><b>Announcement Attachment : </b>{{ announcementData.attachmentsFileName }} </p>
+
+
+        </div>
+
+        <div class="col-5 d-flex align-items-center justify-content-center">
+            <img src="../../../../assets/svg/icons/speaker-icon.svg" alt="image" width="130px" height="130px">
+        </div>
+    </div>
+</div>

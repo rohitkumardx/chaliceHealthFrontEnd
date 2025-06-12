@@ -7,25 +7,11 @@ import { JwtInterceptor } from './Core/Interceptors/jwt.interceptor';
 import { AuthGuard } from './Core/Auth/auth.guard';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-  import { SharedModule } from './shared/shared.module';
+import { SharedModule } from './shared/shared.module';
 import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-
-import{ MatDialogModule} from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import{MatInputModule} from '@angular/material/input';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatSelectModule} from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
-
 import {MatTableModule} from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
 import { ProviderComponent } from './modules/provider/provider.component';
 import { VideoCallProcessComponent } from './modules/video-call-process/video-call-process.component';
-
 
 
 
@@ -47,7 +33,8 @@ import { VideoCallProcessComponent } from './modules/video-call-process/video-ca
     HttpClientModule,
     SharedModule,
     MatIconModule,
-    MatTableModule
+    MatTableModule,
+    
   ],
   providers: [
     AuthGuard,
@@ -55,4 +42,6 @@ import { VideoCallProcessComponent } from './modules/video-call-process/video-ca
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+
+}
