@@ -39,10 +39,13 @@ export class AuthService {
       "Role": userInfo.Role
     });
   }
+isLoggedIn(): boolean {
+  return !!localStorage.getItem('userToken'); // or whatever you use to track authentication
+}
 
   logOut() {
     // sessionStorage.clear();
-    localStorage.clear();
+        localStorage.removeItem('userInfo'); 
     localStorage.removeItem('userToken'); // Remove token
     localStorage.removeItem('userData');  // Remove any stored data
     this.router.navigate(['/login']); // Redirect to login page

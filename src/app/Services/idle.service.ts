@@ -7,13 +7,13 @@ import { Subject, fromEvent, merge, timer, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class IdleService implements OnDestroy {
-  private idleTimeout = 1200000; // 5 minutes
+  private idleTimeout = 2 * 60 * 1000; // 5 minutes
   private resetIdle$ = new Subject<void>();
   private activitySubscription?: Subscription;
-  private warningTime = 60000; // 1-minute warning
-  private maxIdleDuration = 20 * 60 * 1000; // 5 minute in ms
-
-
+  private warningTime = 1 * 60 * 1000; // 1-minute warning
+  private maxIdleDuration = 2 * 60 * 1000; // 5 minute in ms
+ 
+ 
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -24,7 +24,7 @@ export class IdleService implements OnDestroy {
     this.startWatching();
     window.addEventListener('beforeunload', this.onBeforeUnload.bind(this));
   }
-
+ 
   private checkPreviousSession() {
     const lastActive = localStorage.getItem('lastActiveAt');
     if (lastActive) {
@@ -35,14 +35,14 @@ export class IdleService implements OnDestroy {
       }
     }
   }
-
+ 
   private startWatching() {
     const activityEvents = merge(
       fromEvent(document, 'mousemove'),
       fromEvent(document, 'keydown'),
       fromEvent(document, 'click')
     );
-
+ 
     this.activitySubscription = activityEvents.pipe(
       tap(() => {
         this.resetIdle$.next();
@@ -59,29 +59,40 @@ export class IdleService implements OnDestroy {
       )
     ).subscribe();
   }
-
+ 
   private handleLogout() {
     if (this.modalService.hasOpenModals()) {
       this.modalService.dismissAll();
     }
     this.logoutUser();
   }
-
-  private logoutUser(silent: boolean = false) {
-    localStorage.removeItem('lastActiveAt');
-    if (!silent) {
-      this.notificationService.showDanger('You have been logged out due to inactivity.');
-    }
-    this.authService.logOut();
-    this.router.navigate(['/login']);
+ 
+private logoutUser(silent: boolean = false) {
+  // Store the current page first
+  localStorage.setItem('returnUrl', this.router.url);
+  
+  // Also store the role of the currently authenticated user
+  const userInfo = this.authService.getUserInfo();
+  if (userInfo && userInfo.accountType) {
+    localStorage.setItem('returnRole', userInfo.accountType);
   }
+  
+  localStorage.removeItem('lastActiveAt');
+  if (!silent) {
+    this.notificationService.showDanger('You have been logged out due to inactivity.')
+  }
+  this.authService.logOut();
+  this.router.navigate(['/login']); 
+}
 
   private onBeforeUnload(event: BeforeUnloadEvent) {
     localStorage.setItem('lastActiveAt', Date.now().toString());
   }
-
+ 
   ngOnDestroy() {
     this.activitySubscription?.unsubscribe();
     window.removeEventListener('beforeunload', this.onBeforeUnload.bind(this));
   }
 }
+ 
+ 
