@@ -54,6 +54,7 @@ import { BillingPaymentsComponent } from './billing-payments/billing-payments.co
 import { PatientNotificationComponent } from './patient-notification/patient-notification.component';
 import { MessagePopUpComponent } from './message-pop-up/message-pop-up.component';
 import { CancellationPolicyComponent } from './cancellation-policy/cancellation-policy.component';
+import { ViewCancellationComponent } from './view-cancellation/view-cancellation.component';
 
 
 
@@ -97,7 +98,8 @@ import { CancellationPolicyComponent } from './cancellation-policy/cancellation-
     BillingPaymentsComponent,
     PatientNotificationComponent,
     MessagePopUpComponent,
-    CancellationPolicyComponent
+    CancellationPolicyComponent,
+    ViewCancellationComponent
 
   ],
   providers :[DatePipe],

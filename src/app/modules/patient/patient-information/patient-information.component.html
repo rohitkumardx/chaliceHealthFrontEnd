@@ -537,16 +537,16 @@
 
                     <!-- Save and Next Button -->
                     <div class="row">
-                     
-                      <div class="col-4"></div>
-                       <div class="col-2"></div>
-                       <div class="col-2">
+                     <div class="col-1">
                          <button type="submit" class="btn m-2 custom-padding" (click)="goBack()">
                           Back
                         </button>
                       </div>
+                      <div class="col-4"></div>
+                       <div class="col-5"></div>
+                       
                       
-                      <div class="col-2">
+                      <div class="col-1">
                         <button type="submit" class="btn m-2 custom-padding" (click)="postFamilyMember()">
                           <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
                           <span *ngIf="!isLoading" class="space">Save</span>
@@ -554,9 +554,9 @@
                           <!-- <span *ngIf="isLoading" class="space">Save and Next...</span> -->
                         </button>
                       </div>
-                      <div class="col-2">
+                      <div class="col-1">
                          <button type="submit" class="btn m-2 custom-padding" (click)="goToEmergencyContact()">
-                          Next
+                          Skip
                         </button>
                       </div>
                     </div>
@@ -776,20 +776,25 @@
 
                     <!-- Save and Next Button -->
                     <div class="row">
-                      <div class="col-4"></div>
-                      <div class="col-3"></div>
-                      <div class="col-3"></div>
+                     
                        <div class="col-1">
                          <button type="submit" class="btn m-2 custom-padding" (click)="goBack()">
                           Back
                         </button>
                       </div>
+                      <div class="col-9"></div>
+                      
                       <div class="col-1">
                         <button type="submit" class="btn m-2 custom-padding" (click)="PostEmergencyContact()">
                           <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading1}"></i>
                           <span *ngIf="!isLoading1" class="space">Save</span>
                           <span *ngIf="isLoading1" class="space">Save</span>
 
+                        </button>
+                      </div>
+                       <div class="col-1">
+                         <button type="submit" class="btn m-2 custom-padding" (click)="goToBookingAppointment()">
+                          Skip
                         </button>
                       </div>
                     </div>

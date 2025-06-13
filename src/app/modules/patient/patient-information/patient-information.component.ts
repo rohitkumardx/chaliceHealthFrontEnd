@@ -157,6 +157,10 @@ goBack() {
   }
 }
 
+goToBookingAppointment(){
+  this.router.navigate(['/patient/doctor-search'])
+}
+
   limitGeneralZipCodeLength(event: any) {
     let value = event.target.value;
     if (value.length > 5) {
@@ -531,11 +535,8 @@ goBack() {
           }
           this.isLoading1 = false;
 
-          // this.emergencyContactForm.reset();
           this.getEmergencyContactById;
-          // this.getEmergencyContactUniqueId()
-          // Redirect to the next tab (if any) or perform further actions
-          // this.tabGroup.selectedIndex = 2;
+         
         },
         (error: any) => {
           console.error('Post failed', error);

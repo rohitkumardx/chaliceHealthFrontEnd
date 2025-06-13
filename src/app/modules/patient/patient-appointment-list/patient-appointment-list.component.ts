@@ -563,7 +563,9 @@ uploadDocument(file: File, userId: string, shareConsentId: string) {
       (data: any) => {
         console.log("Downloaded patient document data", data);
         this.notificationService.showSuccess("Document uploaded successfully!");
-        window.location.reload();
+        // window.location.reload();
+        this.getTodayAppointmentsByUserId();
+        this.getUpcomingAppointmentsByUserId();
       },
       (error) => {
         console.error("Error uploading document", error);
