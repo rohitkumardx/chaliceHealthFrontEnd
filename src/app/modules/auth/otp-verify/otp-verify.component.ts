@@ -334,73 +334,59 @@ handlePaste(event: ClipboardEvent): void {
 
   }
 
-  getToken() {
+getToken() {
+  this.authService.Token().subscribe((data) => {
+    this.authService.setToken(data.token);
+    const userInfo = this.authService.getUserInfo();
 
-    this.authService.Token().subscribe((data) => {
+    // Check if we have a return URL and role first
+    const returnUrl = localStorage.getItem('returnUrl');
+    const returnRole = localStorage.getItem('returnRole');
 
-      debugger;
+    if (returnUrl && returnRole && returnRole === userInfo.accountType) {
+      // The role matches the current user's role, we can safely navigate back
+      this.router.navigateByUrl(returnUrl);
+      localStorage.removeItem('returnUrl'); // clear it afterwards
+      localStorage.removeItem('returnRole'); // clear it afterwards
+      return;
+    } else {
+      // Clear if roles don't match or it's invalid
+      localStorage.removeItem('returnUrl'); 
+      localStorage.removeItem('returnRole'); 
+    }
+  
+    // Otherwise fallback to your existing logic
+    if (userInfo.accountType == 'IndependentProvider') {
+      this.router.navigate(["/provider/dashboard"]);
+    }
+    else if (userInfo.accountType == 'Patient') {
+      const appointmentInfo = this.authService.getAppointmentInfo();
 
-      this.authService.setToken(data.token);
-
-      const userInfo = this.authService.getUserInfo();
-
-      if (userInfo.accountType == 'IndependentProvider') {
-
-        this.router.navigate(["/provider/dashboard"]);
-
-      }
-
-      ;
-
-      if (userInfo.accountType == 'Patient') {
-
- 
-
-      const appointmentInfo=this.authService.getAppointmentInfo();
-
-     
-
-        if(appointmentInfo!=null){
-
-          this.router.navigate(['/patient/book-appointment'], {
-
-            queryParams: { providerProfileId:appointmentInfo.providerProfileId, slotId: appointmentInfo.id, data: JSON.stringify(appointmentInfo.data) }
-
-          });
-
-        }
-
-       else{
-
+      if (appointmentInfo != null) {
+        this.router.navigate(['/patient/book-appointment'], {
+          queryParams: { 
+            providerProfileId: appointmentInfo.providerProfileId, 
+            slotId: appointmentInfo.id, 
+            data: JSON.stringify(appointmentInfo.data) 
+          }
+        });
+      } else {
         this.router.navigate(["/patient/dashboard"]);
-
-       }
-
       }
+    }
+    else if (userInfo.accountType == 'PrivatePractices' ||
+              userInfo.accountType == 'Facility') {
+      this.router.navigate(['/provider/clinic-dashboard']);
+    }
+    else if (userInfo.accountType == 'Admin') {
+      this.router.navigate(['/admin/dashboard']);
+    }
+  }, error => {
+    this.loading = false;
+    this.notificationService.showDanger(getErrorMessage(error)); 
+  });
+}
 
-      if (userInfo.accountType == 'PrivatePractices' || userInfo.accountType == 'Facility'){
-
-        this.router.navigate(['/provider/clinic-dashboard']);
-
-      }
-
-      if (userInfo.accountType == 'Admin'){
-
-        this.router.navigate(['/admin/dashboard']);
-
-      }
-
-    }, error => {
-
-      debugger;
-
-      this.loading = false;
-
-      this.notificationService.showDanger(getErrorMessage(error));
-
-    });
-
-  }
 
   resendOtp() {
 
