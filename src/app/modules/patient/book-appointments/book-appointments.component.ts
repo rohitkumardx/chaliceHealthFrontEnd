@@ -11,6 +11,7 @@ import { getErrorMessage } from 'src/app/utils/httpResponse';
 import { environment } from 'src/environments/environment';
 import { EditSlotModelComponent } from '../edit-slot-model/edit-slot-model.component';
 import { CancellationPolicyComponent } from '../cancellation-policy/cancellation-policy.component';
+import { ViewCancellationComponent } from '../view-cancellation/view-cancellation.component';
 
 @Component({
   selector: 'app-book-appointments',
@@ -114,14 +115,14 @@ export class BookAppointmentsComponent {
     }
   }
 
-  redirectTotermofservice() {
-    const modalRef = this.modalService.open(CancellationPolicyComponent, {
+  redirectToCancellation() {
+    const modalRef = this.modalService.open(ViewCancellationComponent, {
       backdrop: true,
-      size: 'xl',
+      size: 'lg',
       centered: true
     });
     // Pass data to modal
-    modalRef.componentInstance.scrollToId = 'cancellation-policy';
+    // modalRef.componentInstance.scrollToId = 'cancellation-policy';
   }
 
 
