@@ -26,6 +26,12 @@ input[type="date"] {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.custom-padding {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  float: right !important;
+}
+
 .signup-card {
   width: 100%;
   max-width:  100%;

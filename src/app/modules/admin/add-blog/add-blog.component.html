@@ -11,7 +11,6 @@
                                 <h1 class="m-0 text-center">{{ userId ? 'Edit Blog' : 'Add Blog' }}</h1>
                             </div>
 
-                            <!-- Row-0: Clinic Name, Middle Name, Last Name -->
                             <div class="row p-2">
                                 <!-- News Type -->
                                 <div class="col-12 col-sm-4">
@@ -64,7 +63,7 @@
                                             <span class="cursor" (click)="downloadFile(editDocument.filePath)">
                                                 {{ editDocument.postFile }}
                                             </span>
-                                            <a (click)="onDeleteOldFile()">
+                                            <a *ngIf="editDocument.postFile != null" (click)="onDeleteOldFile()">
                                                 <i class="fa-solid fa-trash ms-2 cursor"
                                                     style="color: rgb(166, 7, 7);"></i>
                                             </a>
