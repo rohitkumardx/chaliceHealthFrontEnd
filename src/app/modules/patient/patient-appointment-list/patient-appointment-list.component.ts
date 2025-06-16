@@ -551,9 +551,9 @@ export class PatientAppointmentListComponent implements OnInit {
       this.uploadDocument(file, this.userInfo.userId, this.selectedShareConsentId); // Pass userId instead of patientId
     }
   }
-  isLoading: Boolean = false;
+  
   uploadDocument(file: File, userId: string, shareConsentId: string) {
-    this.isLoading = true;
+  
     const formData = new FormData();
     formData.append("patientId", userId); // Use userId instead of patientId
     formData.append("shareConsentId", shareConsentId);
@@ -563,7 +563,7 @@ export class PatientAppointmentListComponent implements OnInit {
       (data: any) => {
         console.log("Downloaded patient document data", data);
         this.notificationService.showSuccess("Document uploaded successfully!");
-        this.isLoading = false;
+        
         // window.location.reload();
         this.getTodayAppointmentsByUserId();
         this.getUpcomingAppointmentsByUserId();

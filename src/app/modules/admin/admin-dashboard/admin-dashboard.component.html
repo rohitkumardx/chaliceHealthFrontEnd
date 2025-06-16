@@ -18,7 +18,7 @@
                   data-bs-toggle="dropdown" aria-expanded="false" style="text-align: left !important; ">
                   {{ selectedFacilityName || 'Select' }}
                 </button>
-                <ul class="dropdown-menu mt-0 p-2 shadow-lg" style="width: 100%;">
+                <ul class="dropdown-menu mt-0 p-2 shadow-lg cursor" style="width: 100%;">
                   <li class="dropdown-header">
                     <input type="text" class="form-control dropdown-search" placeholder="Search..."
                       [(ngModel)]="facilitySearchTerm" (input)="filterFacilityOptions()" />
