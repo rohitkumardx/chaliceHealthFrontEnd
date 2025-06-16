@@ -570,6 +570,7 @@ const currentDate = getCentralAmericaDate(inputDate);
       });
     }
     this.daysArray = weekDays;
+    console.log("this is weekdays",weekDays);
     return weekDays;
  
   }

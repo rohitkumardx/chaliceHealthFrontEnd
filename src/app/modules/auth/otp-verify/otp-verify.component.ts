@@ -423,39 +423,40 @@ getToken() {
  
 
 moveToNext(event: KeyboardEvent, index: number) {
-
   const input = event.target as HTMLInputElement;
-
- 
-
   const key = event.key;
-
   const value = input.value;
 
- 
-
-  // Move to next input only if a digit is typed (not on backspace or arrow keys)
-
+  // Move to next input if a digit is typed
   if (/^[0-9]$/.test(key) && value.length === 1 && index < this.otpArray.length - 1) {
-
-    const nextInput = document.getElementById('otpInput' + (index + 1));
-
+    const nextInput = document.getElementById('otpInput' + (index + 1)) as HTMLInputElement;
     nextInput?.focus();
-
+    nextInput?.setSelectionRange(1, 1); // place cursor at end
+    return;
   }
-
- 
 
   // Move back on Backspace if input is empty
-
   if (key === 'Backspace' && value === '' && index > 0) {
-
-    const prevInput = document.getElementById('otpInput' + (index - 1));
-
+    const prevInput = document.getElementById('otpInput' + (index - 1)) as HTMLInputElement;
     prevInput?.focus();
-
+    prevInput?.setSelectionRange(1, 1); // place cursor at end
+    return;
   }
 
+  // Handle ArrowRight
+  if (key === 'ArrowRight' && index < this.otpArray.length - 1) {
+    const nextInput = document.getElementById('otpInput' + (index + 1)) as HTMLInputElement;
+    nextInput?.focus();
+    nextInput?.setSelectionRange(1, 1); // place cursor at end
+    return;
+  }
+
+  // Handle ArrowLeft
+  if (key === 'ArrowLeft'  && index > 0) {
+    const prevInput = document.getElementById(`otpInput${index - 1}`) as HTMLInputElement;
+              prevInput?.focus();
+              event.preventDefault();
+  }
 }
 
  
