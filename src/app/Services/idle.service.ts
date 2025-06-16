@@ -8,12 +8,11 @@ import { switchMap, tap } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class IdleService implements OnDestroy {
 
-  private idleTimeout = 20 * 60 * 1000; // 5 minutes
-  private resetIdle$ = new Subject<void>();
-  private activitySubscription?: Subscription;
-  private warningTime = 1 * 60 * 1000; // 1-minute warning
-  private maxIdleDuration = 20 * 60 * 1000; // 5 minute in ms
- 
+private idleTimeout = 20 * 60 * 1000; // 1 minute and 30 seconds
+private resetIdle$ = new Subject<void>();
+private activitySubscription?: Subscription;
+private warningTime = 60 * 1000; // 1-minute warning
+private maxIdleDuration =20 * 60 * 1000; // 1 minute and 30 seconds in ms
  
 
   constructor(
