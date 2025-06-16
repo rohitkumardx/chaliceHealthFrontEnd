@@ -204,7 +204,7 @@ getBlogById(id: number) {
       centered: true
     });
     modalRef.componentInstance.deletePropertyId = id
-    modalRef.componentInstance.deleteProperty = 'Delete Blog'
+    modalRef.componentInstance.deleteProperty = 'Blog'
     modalRef.componentInstance.dialogClosed.subscribe(() => {
       this.getBlogList();
     });

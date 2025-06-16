@@ -223,7 +223,7 @@ export class DeletePopupComponent implements OnInit {
           this.notificationService.showDanger(getErrorMessage(error));
         });
     }
-    if (this.deleteProperty == 'Delete Blog') {
+    if (this.deleteProperty == 'Blog') {
       const id = this.deletePropertyId;
       this.adminService.deleteBlog(id).subscribe((data) => {
         this.notificationService.showSuccess("Blog deleted successfully.");

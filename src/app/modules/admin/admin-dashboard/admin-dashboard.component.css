@@ -98,3 +98,9 @@ margin: auto;
 }
  
 
+
+
+.dropdown-item:active {
+  background-color: #00876f !important; 
+  color: white !important;
+}
