@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/Services/auth.service';
 import { GlobalModalService } from 'src/app/Services/global-modal.service';
 import { NotificationService } from 'src/app/Services/notification.service';
 import { DeletePopupComponent } from 'src/app/shared/components/delete-popup/delete-popup.component';
+import { getErrorMessage } from 'src/app/utils/httpResponse';
 import { environment } from 'src/environments/environment';
 
 
@@ -131,7 +132,7 @@ export class AddBlogComponent implements OnInit {
       this.shouldDeleteOldFile = false; // reset flag
     },
     (error) => {
-      this.notificationService.showDanger(error);
+      this.notificationService.showDanger(getErrorMessage(error));
       this.loading = false;
     }
   );

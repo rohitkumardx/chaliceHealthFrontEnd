@@ -536,26 +536,23 @@
 
 
                     <!-- Save and Next Button -->
-                    <div class="row">
-                     <div class="col-1">
-                         <button type="submit" class="btn m-2 custom-padding" (click)="goBack()">
+                    <div class="row" style="  --bs-gutter-x:0rem!important;">
+                     <div class="col-12 col-md 8 ">
+                         <button type="submit" class="btn m-2 " (click)="goBack()">
                           Back
                         </button>
                       </div>
-                      <div class="col-4"></div>
-                       <div class="col-5"></div>
-                       
-                      
-                      <div class="col-1">
-                        <button type="submit" class="btn m-2 custom-padding" (click)="postFamilyMember()">
+                    
+                      <div class="col-12 col-md-3 text-end ">
+                        <button type="submit" class="btn m-2" (click)="postFamilyMember()">
                           <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading}"></i>
                           <span *ngIf="!isLoading" class="space">Save</span>
                           <span *ngIf="isLoading" class="space">Save</span>
                           <!-- <span *ngIf="isLoading" class="space">Save and Next...</span> -->
                         </button>
                       </div>
-                      <div class="col-1">
-                         <button type="submit" class="btn m-2 custom-padding" (click)="goToEmergencyContact()">
+                      <div class="col-12 col-md-1 ">
+                         <button type="submit" class="btn m-2 " (click)="goToEmergencyContact()">
                           Skip
                         </button>
                       </div>
@@ -775,25 +772,25 @@
                     </div>
 
                     <!-- Save and Next Button -->
-                    <div class="row">
+                    <div class="row" style="--bs-gutter-x: 0rem!important;">
                      
-                       <div class="col-1">
-                         <button type="submit" class="btn m-2 custom-padding" (click)="goBack()">
+                       <div class="col-12 col-md -8 ">
+                         <button type="submit" class="btn " (click)="goBack()">
                           Back
                         </button>
                       </div>
-                      <div class="col-9"></div>
+                     
                       
-                      <div class="col-1">
-                        <button type="submit" class="btn m-2 custom-padding" (click)="PostEmergencyContact()">
-                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading1}"></i>
+                      <div class="col-12 col-md-3 text-end ">
+                        <button type="submit" class="btn" (click)="PostEmergencyContact()">
+                          <i class="fas" [ngClass]="{'fa-spinner fa-spin': isLoading1}"></i>  
                           <span *ngIf="!isLoading1" class="space">Save</span>
                           <span *ngIf="isLoading1" class="space">Save</span>
 
                         </button>
                       </div>
-                       <div class="col-1">
-                         <button type="submit" class="btn m-2 custom-padding" (click)="goToBookingAppointment()">
+                       <div class="col-2 col-md-1 text-end ">
+                         <button type="submit" class="btn" (click)="goToBookingAppointment()">
                           Skip
                         </button>
                       </div>

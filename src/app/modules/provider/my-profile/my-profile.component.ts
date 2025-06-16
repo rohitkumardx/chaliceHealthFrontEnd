@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 import { DeletePopupComponent } from 'src/app/shared/components/delete-popup/delete-popup.component';
 import { GlobalModalService } from 'src/app/Services/global-modal.service';
 import { HttpClient } from '@angular/common/http';
-
+ 
 function fileValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     const filePaths = control.value as File[];
@@ -29,7 +29,7 @@ enum Obj {
   Labs = 4,
   Others = 5,
 }
-
+ 
 @Component({
   selector: 'app-my-profile',
   templateUrl: './my-profile.component.html',
@@ -42,9 +42,9 @@ export class MyProfileComponent {
   hovering: boolean = false;
   selectedFile: any;
   loading: boolean = false;
-
+ 
   userId: any;
-
+ 
   showEditTimeFile: boolean;
   editProfilePicture: any;
   selectedFilePath: any;
@@ -58,10 +58,10 @@ export class MyProfileComponent {
         .replace(/([a-z])([A-Z])/g, '$1 $2') // Add space before capital letters
         .replace("Card Form", "Card / Form") // Replace "Card Form" with "Card / Form"
     }));
-
-
+ 
+ 
    _=_ ;
-
+ 
   paginator = {
     pageNumber: 1,
     pageSize: 5,
@@ -78,12 +78,12 @@ export class MyProfileComponent {
     name: string;
     status: string;
   }[] = [];
-
+ 
   suggestions: any[] = [];
   isDropdownOpen = false;
   qualifications: any;
-
-
+ 
+ 
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -95,7 +95,7 @@ export class MyProfileComponent {
     private http: HttpClient,
     public notificationService: NotificationService
   ) { }
-
+ 
   ngOnInit() {
     this.myProfileForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -114,20 +114,20 @@ export class MyProfileComponent {
       telehealthVisitPrice: [''],
       inHomeVisitPrice: [''],
       officeVisitPrice: [''],
-
-
+ 
+ 
       id: ['0']
     })
     this.getState();
     this.getSpecialityDropdown();
     this.getProviderProfileByUserId();
-
+ 
     this.getQualificationDropdown();
     const userInfo = this.authService.getUserInfo()
     this.userId = userInfo.userId
   }
-
-
+ 
+ 
   limitZipCodeLength(event: any) {
     let value = event.target.value;
     if (value.length > 5) {
@@ -135,43 +135,43 @@ export class MyProfileComponent {
       this.myProfileForm.get('zipCode')?.setValue(value.slice(0, 5));
     }
   }
-
-
+ 
+ 
   postProviderProfile() {
     this.loading = true;
-    
+   
     const myProfileForm = this.myProfileForm.value;
-
+ 
     if (myProfileForm.phoneNumber) {
       myProfileForm.phoneNumber = myProfileForm.phoneNumber.replace(/\D/g, '');
     }
-
+ 
     myProfileForm.userId = this.userId;
     const formData = new FormData();
-
+ 
     // Ensure specialtyIds are sent as an array of integers
     if (Array.isArray(this.checkedSpecialityIds) && this.checkedSpecialityIds.length > 0) {
       this.checkedSpecialityIds.forEach((id) => {
         formData.append('specialtyIds', id.toString());  // Ensure integer values
       });
     }
-
+ 
     // Append other form data fields
     Object.keys(myProfileForm).forEach((key) => {
       if (key !== 'specialtyIds') { // Avoid duplication, we handled it above
         formData.append(key, myProfileForm[key]);
       }
     });
-
+ 
     // Append profile picture if available
     if (this.profilePicture.length > 0) {
       formData.append('profilePicture', this.profilePicture[0]);
     }
-
+ 
     this.providerService.postProviderProfile(formData).subscribe(
       (data: any) => {
         console.log('Post successful', data);
-
+ 
         if (this.myProfileForm.value.id == 0) {
           this.notificationService.showSuccess('Provider Information updated successfully.');
         } else {
@@ -186,16 +186,16 @@ export class MyProfileComponent {
       }
     );
   }
-
-
+ 
+ 
   async getProviderProfileByUserId() {
     try {
       const data: any = await this.providerService.getProviderProfileByUserId().toPromise();
       console.log("My profile data", data);
-  
+ 
       if (data) {
         const formattedPhone = this.globalModalService.formatPhoneNumberForDisplay(data.phoneNumber);
-  
+ 
         this.myProfileForm.patchValue({
           firstName: data.firstName || '',
           middleName: data.middleName || '',
@@ -211,7 +211,7 @@ export class MyProfileComponent {
           inHomeVisitPrice: data.inHomeVisitPrice,
           officeVisitPrice: data.officeVisitPrice,
         });
-  
+ 
         if (data.profilePictureFileName) {
           this.editProfilePicture = {
             userId: this.userId,
@@ -221,20 +221,20 @@ export class MyProfileComponent {
           this.showEditTimeFile = false;
         }
         console.log("get data", data);
-  
+ 
         // Ensure specialties are fully loaded before proceeding
         if (Array.isArray(data.specialtyId) && data.specialtyId.length > 0) {
           this.checkedSpecialityIds = [...data.specialtyId];
-  
+ 
           await this.getSpecialityDropdown();
-  
+ 
           // Update specialty list with checked and disabled statuses
           this.speciality = this.speciality.map(item => ({
             ...item,
             checked: data.specialtyId.includes(item.id),
             disabled: data.specialtyId.includes(item.id) // Disable existing specialties
           }));
-  
+ 
           // Display selected specialties in UI
           this.selectedSpecialityItems = this.speciality
             .filter(item => item.checked)
@@ -264,7 +264,7 @@ export class MyProfileComponent {
   selectedSpecialityItems: string[] = [];
   checkedSpecialityIds: number[] = [];
   selectedNewSpecialities: number[] = [];
-
+ 
 checkboxChangeOfSpeciality(event: any, name: string, specialtyId: number) {
   debugger;
   if (event.target.checked) {
@@ -285,8 +285,8 @@ checkboxChangeOfSpeciality(event: any, name: string, specialtyId: number) {
   this.myProfileForm.get('specialtyId').setValue(this.checkedSpecialityIds);
   this.updateValidationForSpeciality();
 }
-
-
+ 
+ 
   updateValidationForSpeciality() {
     if (this.checkedSpecialityIds.length > 0) {
       this.myProfileForm.get('specialtyIds').setErrors(null);
@@ -294,19 +294,19 @@ checkboxChangeOfSpeciality(event: any, name: string, specialtyId: number) {
       this.myProfileForm.get('specialtyIds').setErrors({ 'required': true });
     }
   }
-
-
-
+ 
+ 
+ 
   onProfileSelected(event: any) {
-    
+   
     this.profilePicture = [];
     const file = event.target.files[0];
     if (file) {
       this.profilePicture.push(file);
     }
   }
-
-
+ 
+ 
   formatCategory(category: string): string {
     if (!category) return '';
     return category.replace(/([a-z])([A-Z])/g, '$1 $2');
@@ -318,91 +318,114 @@ checkboxChangeOfSpeciality(event: any, name: string, specialtyId: number) {
       this.notificationService.showSuccess("Profile Picture Deleted Successfully");
     })
   }
-
+ 
   formatPhoneNumber(event: any): void {
     const input = event.target as HTMLInputElement;
     const formattedValue = this.globalModalService.formatPhoneNumberForDisplay(input.value);
     this.myProfileForm.get('phoneNumber').setValue(formattedValue);
   }
+ 
   onAddressChange(event: any): void {
-   
-    console.log("This is local storage ",localStorage);
-   
-  
     const query = event.target.value;
     if (query.length > 2) {
-     this.providerService.getAddressSearch(query).subscribe((response:any)=>{
-     
-      this.suggestions = response
-     });
-    
+      this.providerService.getAddressSearch(query).subscribe((response: any) => {
+ 
+        this.suggestions = response
+      });
+ 
     } else {
       this.suggestions = [];
     }
   }
-
-  selectSuggestion(suggestion: any): void {
-   
-    const postalCode = suggestion.postalCode?.includes('-')
-      ? suggestion.postalCode.split('-')[0]  // Extract part before the hyphen if present
-      : suggestion.postalCode;  // Use the full postal code if no hyphen
-  
-    const country = suggestion.country; // Ensure country is properly assigned
-  
-    // this.getStateId(suggestion.city, suggestion.countryCode, 3);
-  this.states.map((temp)=>{
-    if(temp.name==suggestion.state){
-     const StateId=temp.id
-     this.myProfileForm.patchValue({
-      stateId:StateId
-     }
-     )
+ 
+   selectedIndex = -1;
+ 
+  onKeyDown(event: KeyboardEvent) {
+    if (this.suggestions.length === 0) return;
+ 
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.suggestions.length) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectSuggestion(this.suggestions[this.selectedIndex]);
+      event.preventDefault();
     }
-  })
+ 
+    // 🟢 Auto-scroll active item into view
+    setTimeout(() => {
+      const activeElement = document.querySelector('.address1-suggestion-list .active');
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
+ 
+ 
+    selectSuggestion(suggestion: any): void {
+    debugger
+     const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
+    this.myProfileForm.get('address')?.setValue(addressWithCountry);
+    this.suggestions = [];
+    this.selectedIndex = -1;
+ 
+    const postalCode = suggestion.postalCode?.includes('-')
+      ? suggestion.postalCode.split('-')[0]
+      : suggestion.postalCode;
+    const country = suggestion.country;
+ 
+    this.states.forEach((temp) => {
+      if (temp.name === suggestion.state) {
+        this.myProfileForm.patchValue({ stateId: temp.id });
+      }
+    });
+ 
     this.myProfileForm.patchValue({
-      address: suggestion.address,
+      address: addressWithCountry,
       city: suggestion.city,
       zipCode: postalCode,
-    
-     
-
+      country: country // Use the extracted country
     });
-   
-    this.suggestions = [];  // Clear suggestions once an address is selected
+ 
+    this.suggestions = []; // Clear suggestions after selection
   }
-  
+ 
+ 
   getState() {
-
+ 
     this.patientService.getState().subscribe((data: any) => {
       this.states = data.items;
       console.log("states :", this.states)
     });
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   downloadFile(filePath: string): any {
     const downloadUrl = filePath;
     window.open(downloadUrl, '_blank');
   }
-
-
-
+ 
+ 
+ 
 toggleDropdown(): void {
   this.isDropdownOpen = !this.isDropdownOpen;
 }
-
+ 
 // Optional: close dropdown when clicking outside
 @HostListener('document:click', ['$event'])
 onDocumentClick(event: MouseEvent): void {
@@ -411,7 +434,9 @@ onDocumentClick(event: MouseEvent): void {
     this.isDropdownOpen = false;
   }
 }
-
-
-
+ 
+ 
+ 
 }
+ 
+ 
