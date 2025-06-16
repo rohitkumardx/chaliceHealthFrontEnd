@@ -6,7 +6,8 @@
     <hr class="mt-2 mb-3">
     <div class="row">
         <div class="col-md-6 mt-2"><b>Patient Name</b>: {{bookingData?.patientName || '--------'}}</div>
-        <div class="col-md-6 mt-2"><b>Provider Name</b>: {{bookingData?.providerName || '--------'}}</div>
+        <div class="col-md-6 mt-2" *ngIf="bookingData.accountType == 'IndependentProvider'"><b>Provider Name</b>: {{bookingData?.providerName || '--------'}}</div>
+        <div class="col-md-6 mt-2" *ngIf="bookingData.accountType == 'PrivatePractices'"><b>Provider Name</b>: {{bookingData?.legalPracticeName || '--------'}}</div>
         <div class="col-md-6 mt-2"><b>Appointment Date</b>: {{bookingData?.appointmentDate | date:'MM-dd-yyyy'}}</div>
         <div class="col-md-6 mt-2"><b>Appointment Time</b>: {{formatTime(bookingData?.startTime) || '--------'}}</div>
         <div class="col-md-6 mt-2"><b>Appointment Type</b>: {{ formatMeetingType(bookingData.meetingType) || '--------'

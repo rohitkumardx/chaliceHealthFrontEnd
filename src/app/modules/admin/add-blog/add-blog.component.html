@@ -148,8 +148,9 @@
                                         [ngClass]="{'fa': true, 'fa-sort': sortColumn !== 'title', 'fa-sort-up': sortColumn === 'title' && sortOrder === 'asc', 'fa-sort-down': sortColumn === 'title' && sortOrder === 'desc'}"></i>
                                 </th>
 
-                                <th scope="col" style="min-width: 150px;">Blog Content</th>
-                                <th scope="col">Action</th>
+                                <th scope="col" >Blog Content</th>
+                                 <th scope="col" style="min-width: 150px;">Created Date</th>
+                                <th scope="col" style="min-width: 150px;" >Action</th>
 
                             </tr>
                         </thead>
@@ -175,10 +176,15 @@
 
                                     <ng-template #noContent>-----</ng-template>
                                 </td>
+
+                                <td>{{ item.createdAt | date:'MM-dd-yyyy' }}<br>
+                                    {{ item.createdAt | date:'hh:mm a' }}</td>
+
+                               
                                 <td>
 
                                     <span class="icon-edit" title="Edit" style="color: #00876f; font-size: medium">
-                                        <i class="fa-solid fa-pen-to-square me-3 cursor"
+                                        <i class="fa-solid fa-pen-to-square me-2 cursor"
                                             (click)="getBlogById(item.id)"></i>
                                     </span>
 

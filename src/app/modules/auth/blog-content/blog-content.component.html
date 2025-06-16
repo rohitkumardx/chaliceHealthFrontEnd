@@ -15,7 +15,7 @@
                 <div class="card-body">
                   <span>
                     <a class="blog-category cursor bg-success" style="font-size: 16px;" (click)="redirectToBlogComments(item.id)">
-                      {{ item.newsType }}
+                      {{ item.heading }}
                     </a>
                   </span>
                   <h2 class="card-title mt-2 mb-1" style="line-height: 20px;" *ngIf="item.title; else noTitle">

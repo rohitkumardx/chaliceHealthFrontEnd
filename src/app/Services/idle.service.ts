@@ -7,11 +7,14 @@ import { Subject, fromEvent, merge, timer, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class IdleService implements OnDestroy {
- private idleTimeout = 60 * 1000; // 1 Minute
-private warningTime = 30 * 1000; // 30 Seconds
-private maxIdleDuration = 60 * 1000; // 1 Minute
-private resetIdle$ = new Subject<void>();
-private activitySubscription?: Subscription;
+
+  private idleTimeout = 20 * 60 * 1000; // 5 minutes
+  private resetIdle$ = new Subject<void>();
+  private activitySubscription?: Subscription;
+  private warningTime = 1 * 60 * 1000; // 1-minute warning
+  private maxIdleDuration = 20 * 60 * 1000; // 5 minute in ms
+ 
+ 
 
   constructor(
     private authService: AuthService,

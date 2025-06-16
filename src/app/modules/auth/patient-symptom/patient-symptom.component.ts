@@ -114,6 +114,10 @@ export class PatientSymptomComponent {
       }
     }
   }
+  
+  goBack() {
+  window.history.back();
+}
 
   postJoinOurCommunity() {
     if (this.communityForm.invalid) {
