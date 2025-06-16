@@ -252,7 +252,7 @@ handlePaste(event: ClipboardEvent): void {
 
   verifyOtp() {
 
-    debugger;  
+  
 
    // const userInfo = this.authService.getUserInfo();
 
@@ -262,7 +262,6 @@ handlePaste(event: ClipboardEvent): void {
 
       const otpCode = Object.values(this.otpForm.value).join('');
 
-      debugger;  
 
         const obj = {
 
@@ -335,6 +334,7 @@ handlePaste(event: ClipboardEvent): void {
   }
 
 getToken() {
+   debugger
   this.authService.Token().subscribe((data) => {
     this.authService.setToken(data.token);
     const userInfo = this.authService.getUserInfo();
@@ -361,7 +361,7 @@ getToken() {
     }
     else if (userInfo.accountType == 'Patient') {
       const appointmentInfo = this.authService.getAppointmentInfo();
-
+ debugger
       if (appointmentInfo != null) {
         this.router.navigate(['/patient/book-appointment'], {
           queryParams: { 
