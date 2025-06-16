@@ -214,7 +214,10 @@ goToBookingAppointment(){
   }
 
   selectSuggestion(suggestion: any): void {
-    this.generalForm.get('address')?.setValue(suggestion.address);
+    debugger
+     const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
+    this.generalForm.get('address')?.setValue(addressWithCountry);
     this.suggestions = [];
     this.selectedIndex = -1;
 
@@ -230,7 +233,7 @@ goToBookingAppointment(){
     });
 
     this.generalForm.patchValue({
-      address: suggestion.address,
+      address: addressWithCountry,
       city: suggestion.city,
       zipCode: postalCode,
       country: country // Use the extracted country
@@ -253,7 +256,9 @@ goToBookingAppointment(){
     }
   }
   selectSuggestionFamilyMember(suggestion: any): void {
-    this.familyMemberForm.get('address')?.setValue(suggestion.address);
+          const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
+    this.familyMemberForm.get('address')?.setValue(addressWithCountry);
     this.address1Suggestions = [];
     this.selectedIndex = -1;
     const postalCode = suggestion.postalCode?.includes('-')
@@ -270,7 +275,7 @@ goToBookingAppointment(){
       }
     })
     this.familyMemberForm.patchValue({
-      address: suggestion.address,
+      address: addressWithCountry,
       city: suggestion.city,
       zipCode: postalCode,
 
@@ -283,6 +288,8 @@ goToBookingAppointment(){
   }
   selectSuggestionEmergencyContact(suggestion: any): void {
     this.address2Suggestions = [];
+         const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
     const postalCode = suggestion.postalCode?.includes('-')
       ? suggestion.postalCode.split('-')[0]
       : suggestion.postalCode;
@@ -297,7 +304,7 @@ goToBookingAppointment(){
       }
     })
     this.emergencyContactForm.patchValue({
-      address: suggestion.address,
+      address: addressWithCountry,
       city: suggestion.city,
       zipCode: postalCode,
 
@@ -772,7 +779,9 @@ goToBookingAppointment(){
 
 
   selectSuggestionAddress(suggestion: any): void {
-    this.generalForm.get('address')?.setValue(suggestion.address);
+         const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
+    this.generalForm.get('address')?.setValue(addressWithCountry);
     this.suggestions = [];
     this.selectedIndex = -1;
     const postalCode = suggestion.postalCode?.includes('-')
@@ -789,7 +798,7 @@ goToBookingAppointment(){
       }
     })
     this.generalForm.patchValue({
-      address: suggestion.address,
+      address: addressWithCountry,
       city: suggestion.city,
       zipCode: postalCode,
 
@@ -832,6 +841,7 @@ goToBookingAppointment(){
 
   }
   onKeyDown3(event: KeyboardEvent) {
+    debugger
     if (this.address2Suggestions.length === 0) return;
 
     if (event.key === 'ArrowDown') {

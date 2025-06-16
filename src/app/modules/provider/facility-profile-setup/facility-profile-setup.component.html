@@ -141,11 +141,17 @@
             <div class="row">
               <div class="col-md-6">
                 <label for="address">Address <span class="red">*</span></label>
-                <textarea id="address" class="form-control" formControlName="address" (input)="onAddressChange($event)"
-                  [ngClass]="{'is-invalid': facilityProfileForm.get('address')?.invalid && facilityProfileForm.get('address')?.touched}"></textarea>
+               
+
+                <textarea id="address" class="form-control form-control-sm mt-1" formControlName="address"
+                        
+                          (input)="onAddressChange($event)"
+                          (keydown)="onKeyDown($event)" 
+                          [ngClass]="{'is-invalid': facilityProfileForm.get('address')?.invalid && facilityProfileForm.get('address')?.touched}"></textarea>
+
                 <ul *ngIf="suggestions.length">
 
-                  <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+                  <li *ngFor="let suggestion of suggestions; let i = index" (click)="selectSuggestion(suggestion)" [class.active]="i === selectedIndex">
                     {{ suggestion.address }}
                   </li>
                 </ul>

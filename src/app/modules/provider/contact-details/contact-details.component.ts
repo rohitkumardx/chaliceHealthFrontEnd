@@ -106,6 +106,32 @@ export class ContactDetailsComponent implements OnInit {
 
   }
 
+   selectedIndex = -1;
+
+    onKeyDown(event: KeyboardEvent) {
+    debugger
+    if (this.suggestions.length === 0) return;
+
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.suggestions.length) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectSuggestion(this.suggestions[this.selectedIndex]);
+      event.preventDefault();
+    }
+
+    // 🟢 Auto-scroll active item into view
+    setTimeout(() => {
+      const activeElement = document.querySelector('.address2-suggestion-list .active');
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
+
 
 
   onAddressChange(event: any): void {
@@ -126,6 +152,12 @@ export class ContactDetailsComponent implements OnInit {
   }
 
   selectSuggestion(suggestion: any): void {
+        debugger
+     const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
+    this.contactForm.get('address')?.setValue(addressWithCountry);
+    this.suggestions = [];
+    this.selectedIndex = -1;
     
     const postalCode = suggestion.postalCode?.includes('-')
       ? suggestion.postalCode.split('-')[0]  // Extract part before the hyphen if present
