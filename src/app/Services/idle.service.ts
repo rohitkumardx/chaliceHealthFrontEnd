@@ -7,13 +7,12 @@ import { Subject, fromEvent, merge, timer, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 @Injectable({ providedIn: 'root' })
 export class IdleService implements OnDestroy {
-  private idleTimeout = 5 * 60 * 1000; // 5 minutes
-  private resetIdle$ = new Subject<void>();
-  private activitySubscription?: Subscription;
-  private warningTime = 1 * 60 * 1000; // 1-minute warning
-  private maxIdleDuration = 5 * 60 * 1000; // 5 minute in ms
- 
- 
+ private idleTimeout = 60 * 1000; // 1 Minute
+private warningTime = 30 * 1000; // 30 Seconds
+private maxIdleDuration = 60 * 1000; // 1 Minute
+private resetIdle$ = new Subject<void>();
+private activitySubscription?: Subscription;
+
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -42,8 +41,9 @@ export class IdleService implements OnDestroy {
       fromEvent(document, 'keydown'),
       fromEvent(document, 'click')
     );
- 
-    this.activitySubscription = activityEvents.pipe(
+    const userInfo=this.authService.getUserInfo();
+ if(userInfo!=null){
+ this.activitySubscription = activityEvents.pipe(
       tap(() => {
         this.resetIdle$.next();
         localStorage.setItem('lastActiveAt', Date.now().toString());
@@ -58,6 +58,7 @@ export class IdleService implements OnDestroy {
         )
       )
     ).subscribe();
+ }
   }
  
   private handleLogout() {
@@ -96,3 +97,4 @@ private logoutUser(silent: boolean = false) {
 }
  
  
+

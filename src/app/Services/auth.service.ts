@@ -46,6 +46,8 @@ isLoggedIn(): boolean {
   logOut() {
     // sessionStorage.clear();
         localStorage.removeItem('userInfo'); 
+         localStorage.removeItem('appointmentInfo'); 
+       
     localStorage.removeItem('userToken'); // Remove token
     localStorage.removeItem('userData');  // Remove any stored data
     this.router.navigate(['/login']); // Redirect to login page

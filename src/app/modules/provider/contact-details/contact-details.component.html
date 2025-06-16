@@ -24,7 +24,7 @@
                 <label>Address <span class="red">*</span> </label>
                 <textarea id="address-input" class="form-control form-control-sm mt-1" type="text"
                     [ngClass]="{'is-invalid':contactForm.get('address')?.invalid && contactForm.get('address')?.touched}"
-                    formControlName="address" placeholder="Enter your address" (input)="onAddressChange($event)">
+                    formControlName="address" placeholder="Enter your address" (keydown)="onKeyDown($event)"  (input)="onAddressChange($event)">
               </textarea>
                 <ul *ngIf="suggestions.length">
 

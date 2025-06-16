@@ -179,38 +179,59 @@ export class FacilityProfileSetupComponent implements OnInit {
       this.suggestions = [];
     }
   }
+ selectedIndex = -1;
+ selectSuggestion(suggestion: any): void {
+    debugger
+     const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
+    this.facilityProfileForm.get('address')?.setValue(addressWithCountry);
+    this.suggestions = [];
+    this.selectedIndex = -1;
 
-  selectSuggestion(suggestion: any): void {
-    
     const postalCode = suggestion.postalCode?.includes('-')
-      ? suggestion.postalCode.split('-')[0]  // Extract part before the hyphen if present
-      : suggestion.postalCode;  // Use the full postal code if no hyphen
-  
-    const country = suggestion.country; // Ensure country is properly assigned
-  
-    // this.getStateId(suggestion.city, suggestion.countryCode, 3);
-  this.states.map((temp)=>{
-    if(temp.name==suggestion.state){
-     const StateId=temp.id
-     this.facilityProfileForm.patchValue({
-      StateId:StateId
-     }
-     )
-    }
-  })
-    this.facilityProfileForm.patchValue({
-      address: suggestion.address,
-      city: suggestion.city,
-      postalCode: postalCode,
-    
-      country: country  // Use the extracted country
+      ? suggestion.postalCode.split('-')[0]
+      : suggestion.postalCode;
+    const country = suggestion.country;
 
+    this.states.forEach((temp) => {
+      if (temp.name === suggestion.state) {
+        this.facilityProfileForm.patchValue({ stateId: temp.id });
+      }
     });
-  
-    this.suggestions = [];  // Clear suggestions once an address is selected
+
+    this.facilityProfileForm.patchValue({
+      address: addressWithCountry,
+      city: suggestion.city,
+      zipCode: postalCode,
+      country: country // Use the extracted country
+    });
+
+    this.suggestions = []; // Clear suggestions after selection
   }
   
+  onKeyDown(event: KeyboardEvent) {
+    debugger
+    if (this.suggestions.length === 0) return;
 
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.suggestions.length) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectSuggestion(this.suggestions[this.selectedIndex]);
+      event.preventDefault();
+    }
+
+    // 🟢 Auto-scroll active item into view
+    setTimeout(() => {
+      const activeElement = document.querySelector('.address2-suggestion-list .active');
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
 
   getStateId(city: string, countryCode: any, type: number) {
     this.patientService.getStateByCityAndCountry(city, countryCode).subscribe((response: any) => {
@@ -327,4 +348,5 @@ export class FacilityProfileSetupComponent implements OnInit {
     })
 
   }
+  
 }
