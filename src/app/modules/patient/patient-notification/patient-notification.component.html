@@ -298,7 +298,7 @@
                                                             <table class="table table-hover">
                                                                 <thead class="table-light">
                                                                     <tr>
-                                                                        <th scope="col">News Type</th>
+                                                                        <th scope="col">Heading</th>
                                                                         <th scope="col">Title</th>
                                                                         <th scope="col" style=" min-width: 150px;">Content</th>
                                                                         <th scope="col" style=" min-width: 150px;">
@@ -321,7 +321,7 @@
 
                                                                     <tr
                                                                         *ngFor="let blog of blogNotification; let i = index">
-                                                                        <td>{{ blog.newsType}}</td>
+                                                                        <td>{{ blog.heading}}</td>
                                                                         <td>{{ blog.title }}</td>
                                                                         <td style="min-width: 200px;"> <span
                                                                                 *ngIf="!isExpanded[i]">

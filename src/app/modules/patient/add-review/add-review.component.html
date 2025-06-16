@@ -2,6 +2,8 @@
   <div class="row  d-flex">
     <div class="col-11">
       <h2 class="text-center  fs-5 ">Write a Review for {{reviewObj.providerName}}</h2>
+      <!-- <h2 class="text-center  fs-5 " *ngIf="reviewObj.accountType == 'PrivatePractices'">Write a Review for {{reviewObj.legalPracticeName}}</h2> -->
+ 
     </div>
     <div class="col-1">
       <i class="fa-solid fa-xmark fs-5 text-end cancel-icon cursor" (click)="modalClose()"></i>

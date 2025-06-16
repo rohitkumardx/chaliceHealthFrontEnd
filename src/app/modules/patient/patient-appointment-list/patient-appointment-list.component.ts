@@ -28,17 +28,17 @@ export class PatientAppointmentListComponent implements OnInit {
   pastAppointment: any[] = [];
   cancelledAppointment: any[] = [];
   userId: any;
-  patientId:any;
-  shareConsentId:any;
+  patientId: any;
+  shareConsentId: any;
   hash: string;
-  userInfo : any; loading: boolean = false;
-  hasShareConsent: boolean =  true;
+  userInfo: any; loading: boolean = false;
+  hasShareConsent: boolean = true;
   filteredItems = []
   searchTerm = '';
   sortColumn: string = '';
   sortOrder: string = 'asc';
-  dynamicDateTime:any;
-   _ = _ ;
+  dynamicDateTime: any;
+  _ = _;
   paginator: { pageNumber: number; pageSize: number; totalCount: number; totalPages: number } = {
     pageNumber: 1,
     pageSize: 5,
@@ -51,9 +51,9 @@ export class PatientAppointmentListComponent implements OnInit {
     name: string,
     status: string
   }[] = [];
-item: any;
-hashData:any;
-documentData:any;
+  item: any;
+  hashData: any;
+  documentData: any;
 
 
 
@@ -64,32 +64,33 @@ documentData:any;
     private notificationService: NotificationService,
     private patientService: PatientService,
     private adminService: AdminService,
-     private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
   ) { }
 
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe(params => {
-      this.hash = params['hash'];});
-      this.dynamicDateTime=this.adminService.getDate();
-      if(this.hash){
-        this.getPatientHash();
-      }
-      else {
-        this.userInfo = this.authService.getUserInfo()
-        this.getTodayAppointmentsByUserId();
-        this.selectedAppointment = 'Today'
-      }
+      this.hash = params['hash'];
+    });
+    this.dynamicDateTime = this.adminService.getDate();
+    if (this.hash) {
+      this.getPatientHash();
+    }
+    else {
+      this.userInfo = this.authService.getUserInfo()
+      this.getTodayAppointmentsByUserId();
+      this.selectedAppointment = 'Today'
+    }
   }
 
   addToCalender(appointmentId) {
     const obj = {
       bookingAppointmentId: []
     };
- 
+
     obj.bookingAppointmentId.push(appointmentId);
     this.patientService.addToGoogleCalender(obj).subscribe((response: any) => {
-      
+
       const url = response.url
       if (url) {
         window.open(url, "_blank");
@@ -103,8 +104,8 @@ documentData:any;
 
   rescheduleAppointment(bookingId: any, id: any, meetingType: any) {
     this.router.navigate(['/patient/view-profile'], { queryParams: { appointmentId: bookingId, providerProfileId: id, meetingType: meetingType } });
-  
-    }
+
+  }
   expanded = false;
 
   getShortText(text: string): string {
@@ -123,7 +124,7 @@ documentData:any;
   }
 
   viewTodayProviderProfile(id: any, bookingId: any) {
-    
+
     const modalRef = this.modalService.open(ProviderProfileComponent, {
       backdrop: 'static',
       size: 'lg',
@@ -131,56 +132,56 @@ documentData:any;
     });
     modalRef.componentInstance.providerId = id;
     modalRef.componentInstance.bookingId = bookingId;
-   modalRef.componentInstance.dialogClosed.subscribe(() => {
-    this.getTodayAppointmentsByUserId();
-  });
-   
+    modalRef.componentInstance.dialogClosed.subscribe(() => {
+      this.getTodayAppointmentsByUserId();
+    });
+
   }
 
-  viewUpcomingProviderProfile( bookingId: any, id:any) {
+  viewUpcomingProviderProfile(bookingId: any, id: any) {
 
-      
-      const modalRef = this.modalService.open(ProviderProfileComponent, {
-        backdrop: 'static',
-        size: 'lg',
-        centered: true
-      });
-      modalRef.componentInstance.providerId = id;
-      modalRef.componentInstance.bookingId = bookingId;
+
+    const modalRef = this.modalService.open(ProviderProfileComponent, {
+      backdrop: 'static',
+      size: 'lg',
+      centered: true
+    });
+    modalRef.componentInstance.providerId = id;
+    modalRef.componentInstance.bookingId = bookingId;
     modalRef.componentInstance.dialogClosed.subscribe(() => {
       this.getUpcomingAppointmentsByUserId();
     });
-     
-    }
 
-    viewPastProviderProfile(id: any) {
-      
-      const modalRef = this.modalService.open(ProviderProfileComponent, {
-        backdrop: 'static',
-        size: 'lg',
-        centered: true
-      });
-      modalRef.componentInstance.providerId = id;
+  }
+
+  viewPastProviderProfile(id: any) {
+
+    const modalRef = this.modalService.open(ProviderProfileComponent, {
+      backdrop: 'static',
+      size: 'lg',
+      centered: true
+    });
+    modalRef.componentInstance.providerId = id;
     modalRef.componentInstance.dialogClosed.subscribe(() => {
       this.getPastAppointmentsByUserId();
     });
-     
-    }
 
-    viewCancelledProviderProfile(id: any) {
-      
-      const modalRef = this.modalService.open(ProviderProfileComponent, {
-        backdrop: 'static',
-        size: 'lg',
-        centered: true
-      });
-      modalRef.componentInstance.providerId = id;
+  }
+
+  viewCancelledProviderProfile(id: any) {
+
+    const modalRef = this.modalService.open(ProviderProfileComponent, {
+      backdrop: 'static',
+      size: 'lg',
+      centered: true
+    });
+    modalRef.componentInstance.providerId = id;
     modalRef.componentInstance.dialogClosed.subscribe(() => {
       this.getCancelledAppointmentsByUserId();
     });
-     
-    }
-  
+
+  }
+
   isTimePast(itemStartTime: string): boolean {
     const currentTime = new Date(); // Get current time
 
@@ -203,62 +204,62 @@ documentData:any;
   }
 
 
-downloadConsentDocument(bookingId: any) {
-  this.patientService.getPatientDocument(bookingId,'ConsentForm').subscribe((data: any) => {
+  downloadConsentDocument(bookingId: any) {
+    this.patientService.getPatientDocument(bookingId, 'ConsentForm').subscribe((data: any) => {
       if (!data || data.length === 0) {
-          console.error("No document found.");
-          return;
+        console.error("No document found.");
+        return;
       }
 
       const documentData = data[0]; // Access first object from array
       const fileUrl = environment.fileUrl + documentData.filePath;
 
       fetch(fileUrl)
-          .then(response => response.blob())
-          .then(blob => {
-              const a = document.createElement('a');
-              const url = window.URL.createObjectURL(blob);
-              a.href = url;
-              a.download = documentData.fileName; // Use correct property
-              document.body.appendChild(a);
-              a.click();
-              window.URL.revokeObjectURL(url);
-              document.body.removeChild(a);
-          })
-          .catch(error => console.error("Error downloading file:", error));
-  });
-}
+        .then(response => response.blob())
+        .then(blob => {
+          const a = document.createElement('a');
+          const url = window.URL.createObjectURL(blob);
+          a.href = url;
+          a.download = documentData.fileName; // Use correct property
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        })
+        .catch(error => console.error("Error downloading file:", error));
+    });
+  }
 
 
 
 
-downloadIntakeDocument(bookingId: any) {
-  this.patientService.getPatientDocument(bookingId,'IntakeForm' ).subscribe((data: any) => {
+  downloadIntakeDocument(bookingId: any) {
+    this.patientService.getPatientDocument(bookingId, 'IntakeForm').subscribe((data: any) => {
       if (!data || data.length === 0) {
-          console.error("No document found.");
-          return;
+        console.error("No document found.");
+        return;
       }
 
       const documentData = data[0]; // Access first object from array
       const fileUrl = environment.fileUrl + documentData.filePath;
 
       fetch(fileUrl)
-          .then(response => response.blob())
-          .then(blob => {
-              const a = document.createElement('a');
-              const url = window.URL.createObjectURL(blob);
-              a.href = url;
-              a.download = documentData.fileName; // Use correct property
-              document.body.appendChild(a);
-              a.click();
-              window.URL.revokeObjectURL(url);
-              document.body.removeChild(a);
-          })
-          .catch(error => console.error("Error downloading file:", error));
-  });
-}
+        .then(response => response.blob())
+        .then(blob => {
+          const a = document.createElement('a');
+          const url = window.URL.createObjectURL(blob);
+          a.href = url;
+          a.download = documentData.fileName; // Use correct property
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        })
+        .catch(error => console.error("Error downloading file:", error));
+    });
+  }
 
-  
+
 
   selectedAppointment: string = ''
   onAppointmentChange(event: any) {
@@ -271,7 +272,7 @@ downloadIntakeDocument(bookingId: any) {
         totalPages: 0
       };
       this.selectedAppointment = 'Today';
-      this.getTodayAppointmentsByUserId();  
+      this.getTodayAppointmentsByUserId();
     } else if (selectedIndex === 1) {
       this.paginator = {
         pageNumber: 1,
@@ -299,16 +300,16 @@ downloadIntakeDocument(bookingId: any) {
         totalPages: 0
       };
       this.selectedAppointment = 'Cancel';
-       this.getCancelledAppointmentsByUserId();  // Call the function to fetch past appointments
+      this.getCancelledAppointmentsByUserId();  // Call the function to fetch past appointments
 
     }
   }
   getTodayAppointmentsByUserId() {
     this.todayAppointment = []
     this.loading = true
-    this.patientService.getPatientTodayAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder,this.dynamicDateTime).subscribe(
+    this.patientService.getPatientTodayAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder, this.dynamicDateTime).subscribe(
       (data: any) => {
-      
+
         if (data.items.length > 0) {
           this.roles = _.get(data, 'items');
           this.paginator = {
@@ -324,9 +325,9 @@ downloadIntakeDocument(bookingId: any) {
           }
         }
         console.log("Today appointment data :", this.todayAppointment)
-       
+
         this.loading = false;
-      
+
       },
       (error) => {
         console.error("Error fetching today appointments:", error);
@@ -340,32 +341,32 @@ downloadIntakeDocument(bookingId: any) {
       this.sortColumn = column;
       this.sortOrder = 'asc';
     }
-    if(this.selectedAppointment == 'Today'){
+    if (this.selectedAppointment == 'Today') {
       this.getTodayAppointmentsByUserId();
     }
-    if(this.selectedAppointment == 'Upcoming'){
+    if (this.selectedAppointment == 'Upcoming') {
       this.getUpcomingAppointmentsByUserId();
     }
-    if(this.selectedAppointment == 'Past'){
+    if (this.selectedAppointment == 'Past') {
       this.getPastAppointmentsByUserId();
     }
-    if(this.selectedAppointment == 'Cancelled'){
+    if (this.selectedAppointment == 'Cancelled') {
       this.getCancelledAppointmentsByUserId();
     }
- 
+
   }
 
 
-  
-  
+
+
   getUpcomingAppointmentsByUserId() {
     this.upcomingAppointment = []
     this.loading = true
-    this.patientService.getPatientUpcomingAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder,this.dynamicDateTime).subscribe(
+    this.patientService.getPatientUpcomingAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder, this.dynamicDateTime).subscribe(
       (data: any) => {
-        
+
         if (data.items.length > 0) {
-        
+
           this.roles = _.get(data, 'items');
           this.paginator = {
             ...this.paginator,
@@ -373,9 +374,9 @@ downloadIntakeDocument(bookingId: any) {
             totalCount: _.get(data, 'totalCount'),
             totalPages: _.get(data, 'totalPages'),
           };
-       
+
           this.upcomingAppointment = data.items
-          
+
           if (data && data.items && Array.isArray(data.items)) {
             this.upcomingAppointment = this.upcomingAppointment;
             this.filteredItems = [...this.upcomingAppointment];
@@ -395,9 +396,9 @@ downloadIntakeDocument(bookingId: any) {
     ;
     this.pastAppointment = []
     this.loading = true
-    this.patientService.getPatientPastAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder,this.dynamicDateTime).subscribe(
+    this.patientService.getPatientPastAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder, this.dynamicDateTime).subscribe(
       (data: any) => {
-        
+
         if (data.items.length > 0) {
           this.roles = _.get(data, 'items');
           this.paginator = {
@@ -426,11 +427,11 @@ downloadIntakeDocument(bookingId: any) {
       size: 'md',
       centered: true,
     });
-     modalRef.componentInstance.appointmentDataId = id;
-     modalRef.result.then(
+    modalRef.componentInstance.appointmentDataId = id;
+    modalRef.result.then(
       (result) => {
-       this.getUpcomingAppointmentsByUserId();
-       this.getTodayAppointmentsByUserId(); 
+        this.getUpcomingAppointmentsByUserId();
+        this.getTodayAppointmentsByUserId();
       },
       (reason) => {
         console.log('Modal dismissed with reason:', reason);
@@ -445,7 +446,7 @@ downloadIntakeDocument(bookingId: any) {
     this.loading = true
     this.patientService.getPatientCancelledAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder).subscribe(
       (data: any) => {
-        
+
         if (data.items.length > 0) {
           this.roles = _.get(data, 'items');
           this.paginator = {
@@ -470,7 +471,7 @@ downloadIntakeDocument(bookingId: any) {
     );
   }
 
-  
+
   getMeetingTypeIcon(meetingType: string): string {
     switch (meetingType) {
       case 'VirtualVisit':
@@ -501,31 +502,31 @@ downloadIntakeDocument(bookingId: any) {
     }
   }
 
-  sendMessage(bookingId: any,id:any) {
-    this.router.navigate(['/patient/message'], { queryParams: { appointmentId: bookingId,userId :id } });
+  sendMessage(bookingId: any, id: any) {
+    this.router.navigate(['/patient/message'], { queryParams: { appointmentId: bookingId, userId: id } });
   }
 
 
 
-    @ViewChild('fileInput1') fileInput1: ElementRef;
- selectedShareIntakeId: any;
+  @ViewChild('fileInput1') fileInput1: ElementRef;
+  selectedShareIntakeId: any;
   browseIntakeDocument(shareIntakeId) {
     // alert(shareIntakeId)
-     this.selectedShareIntakeId = shareIntakeId; 
+    this.selectedShareIntakeId = shareIntakeId;
     this.fileInput1.nativeElement.click(); // Open file picker
   }
 
 
 
-    onFileSelected1(event: any, _unused: string,index :any) {
-      // alert(index)
+  onFileSelected1(event: any, _unused: string, index: any) {
+    // alert(index)
     const file = event.target.files[0]; // Get selected file
     if (file) {
       console.log("Selected file:", file);
       this.userInfo = this.authService.getUserInfo(); // Ensure userInfo is fetched
       this.uploadDocument(file, this.userInfo.userId, this.selectedShareIntakeId); // Pass userId instead of patientId
     }
-}
+  }
 
 
 
@@ -534,35 +535,35 @@ downloadIntakeDocument(bookingId: any) {
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
-selectedShareConsentId : any;
+  selectedShareConsentId: any;
   browseConsentDocument(shareConsentId) {
-    this.selectedShareConsentId = shareConsentId; 
+    this.selectedShareConsentId = shareConsentId;
 
     this.fileInput.nativeElement.click(); // Open file picker
   }
 
 
-    onFileSelected(event: any, _unused: string,index :any) {
-      // alert(index)
+  onFileSelected(event: any, _unused: string, index: any) {
     const file = event.target.files[0]; // Get selected file
     if (file) {
       console.log("Selected file:", file);
       this.userInfo = this.authService.getUserInfo(); // Ensure userInfo is fetched
       this.uploadDocument(file, this.userInfo.userId, this.selectedShareConsentId); // Pass userId instead of patientId
     }
-}
-
-uploadDocument(file: File, userId: string, shareConsentId: string) {
-    
+  }
+  isLoading: Boolean = false;
+  uploadDocument(file: File, userId: string, shareConsentId: string) {
+    this.isLoading = true;
     const formData = new FormData();
     formData.append("patientId", userId); // Use userId instead of patientId
-    formData.append("shareConsentId", shareConsentId); 
+    formData.append("shareConsentId", shareConsentId);
     formData.append("Document", file);
-  
+
     this.patientService.postPatientShareDocument(formData).subscribe(
       (data: any) => {
         console.log("Downloaded patient document data", data);
         this.notificationService.showSuccess("Document uploaded successfully!");
+        this.isLoading = false;
         // window.location.reload();
         this.getTodayAppointmentsByUserId();
         this.getUpcomingAppointmentsByUserId();
@@ -572,29 +573,8 @@ uploadDocument(file: File, userId: string, shareConsentId: string) {
         // this.notificationService.showError("Failed to upload document.");
       }
     );
-}
+  }
 
-  
-  
-  // onFileSelected(event: any) {
-  //   const file = event.target.files[0]; // Get selected file
-  //   if (file) {
-  //     console.log("Selected file:", file);
-  //     // Handle file upload or further processing here
-  //   }
-
-
-
-  // }
-
-  // postPatientShareDocument(){
-  //   this.patientService.postPatientShareDocument(obj).subscribe((data :any) => {
- 
-
-  //         console.log("Downloaded patient document data", this.documentData);
-  //      });
-
-  // }
 
   handleFileUpload(event: any) {
     const file = event.target.files[0];
@@ -603,8 +583,8 @@ uploadDocument(file: File, userId: string, shareConsentId: string) {
       // Perform file upload logic here
     }
   }
-  
-  complaintModal(bookAppointmentId: any){
+
+  complaintModal(bookAppointmentId: any) {
     const modalRef = this.modalService.open(ComplaintModalComponent, {
       backdrop: 'static',
       size: 'lg',
@@ -620,7 +600,7 @@ uploadDocument(file: File, userId: string, shareConsentId: string) {
 
 
 
-  viewSoapNotes(bookingId: any){
+  viewSoapNotes(bookingId: any) {
     const modalRef = this.modalService.open(ViewsoapnotesComponent, {
       backdrop: 'static',
       size: 'md',
@@ -630,8 +610,8 @@ uploadDocument(file: File, userId: string, shareConsentId: string) {
     // modalRef.componentInstance.userId = userId;
   }
 
-  joinCall(bookingId: any, time: string, meetingType: any,providerId:any) {
-  
+  joinCall(bookingId: any, time: string, meetingType: any, providerId: any) {
+
     const currentTime = new Date();
     const [hours, minutes, seconds] = time.split(':').map(Number);
 
@@ -642,34 +622,18 @@ uploadDocument(file: File, userId: string, shareConsentId: string) {
     const fiveMinutesInMillis = 5 * 60 * 1000;
 
     if (timeDifference <= fiveMinutesInMillis && timeDifference >= 0) {
-      this.router.navigate(['/call/join-call'], { queryParams: { appointmentId: bookingId, request: meetingType ,receiverId:providerId} });
+      this.router.navigate(['/call/join-call'], { queryParams: { appointmentId: bookingId, request: meetingType, receiverId: providerId } });
     } else {
-      this.router.navigate(['/call/join-call'], { queryParams: { appointmentId: bookingId, request: meetingType ,receiverId:providerId} });
+      this.router.navigate(['/call/join-call'], { queryParams: { appointmentId: bookingId, request: meetingType, receiverId: providerId } });
       this.notificationService.showDanger("You can join the call only within 5 minutes of the scheduled time.")
     }
   }
-  // joinCall(bookingId: any, time: string, meetingType: any) {
-  //   const currentTime = new Date();
-  //   const [hours, minutes, seconds] = time.split(':').map(Number);
 
-  //   const callTime = new Date(currentTime);
-  //   callTime.setHours(hours, minutes, seconds, 0); // Set the time based on the passed time
-
-  //   const timeDifference = callTime.getTime() - currentTime.getTime();
-  //   const fiveMinutesInMillis = 5 * 60 * 1000;
-
-  //   if (timeDifference <= fiveMinutesInMillis && timeDifference >= 0) {
-  //     this.router.navigate(['/call/join-call'], { queryParams: { appointmentId: bookingId, request: meetingType } });
-  //   } else {
-  //     this.router.navigate(['/call/join-call'], { queryParams: { appointmentId: bookingId, request: meetingType } });
-  //     this.notificationService.showDanger("You can join the call only within 5 minutes of the scheduled time.")
-  //   }
-  // }
-
-  giveFeedback(id: any,providerName : any){
+  giveFeedback(id: any, providerName: any) {
+    debugger
     const obj = {
-      providerId : id,
-      providerName : providerName
+      providerId: id,
+      providerName: providerName
     }
     const modalRef = this.modalService.open(AddReviewComponent, {
       backdrop: 'static',
