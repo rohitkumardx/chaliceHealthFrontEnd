@@ -312,23 +312,12 @@ handlePaste(event: ClipboardEvent): void {
           this.getToken();
 
         },
-
           (error) => {
-
             this.notificationService.showDanger(getErrorMessage(error));
-
             this.loading = false;
-
           }
-
         )
-
       }
-
-     
-
- 
-
     }
 
   }
