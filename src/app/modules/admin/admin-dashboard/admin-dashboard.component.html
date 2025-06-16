@@ -14,8 +14,8 @@
           </div>
           <div class="col-sm-3">
               <div class="custom-dropdown">
-                <button type="button" id="facilityDropdown" class="form-select form-select-sm cursor"
-                  data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" id="facilityDropdown"  class="form-select form-select-sm  cursor mt-1"
+                  data-bs-toggle="dropdown" aria-expanded="false" style="text-align: left !important; ">
                   {{ selectedFacilityName || 'Select' }}
                 </button>
                 <ul class="dropdown-menu mt-0 p-2 shadow-lg" style="width: 100%;">
@@ -29,13 +29,6 @@
                   </li>
                 </ul>
               </div>
-            <!-- <select class="form-select form-select-sm cursor mt-1" (change)="onChange($event, 'facility')"
-              [(ngModel)]="selectedFacility">
-              <option value="" disabled selected>Select</option>
-              <option *ngFor="let facility of facilityData" [value]="facility.id">
-                {{ facility.facilityName }}
-              </option>
-            </select> -->
           </div>
          
           <div class="col-sm-12 text-end mt-3">

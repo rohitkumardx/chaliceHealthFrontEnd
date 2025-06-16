@@ -10,7 +10,7 @@ import { ProviderService } from 'src/app/Services/provider.service';
 import { getErrorMessage } from 'src/app/utils/httpResponse';
 import { ProviderMedicalLicenseInfoComponent } from '../provider-medical-license-info/provider-medical-license-info.component';
 import { ProviderProfileComponent } from '../provider-profile/provider-profile.component';
-
+ 
 export function phonePatternValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     const value = control.value;
@@ -32,14 +32,14 @@ export function websiteUrlValidator(): ValidatorFn {
     return valid ? null : { 'invalidUrlPattern': { value } };
   };
 }
-
+ 
 @Component({
   selector: 'app-contact-details',
   templateUrl: './contact-details.component.html',
   styleUrls: ['./contact-details.component.css']
 })
 export class ContactDetailsComponent implements OnInit {
-
+ 
   contactForm!: FormGroup
   loading: boolean = false;
   loading1: boolean = false;
@@ -49,13 +49,13 @@ export class ContactDetailsComponent implements OnInit {
   @Output() dialogClosed = new EventEmitter<void>();
   userId: any
   userInfo: any
-
+ 
   suggestions: any[] = [];
   suggestions1: any[] = [];
-
+ 
   private HERE_API_URL = 'https://autocomplete.search.hereapi.com/v1/autocomplete';
   private API_KEY = 't58P7DlKUdXX1Wlcn1C9bRO7U9t1tC-Y3M2Q1T2m3Ac';
-
+ 
   constructor(private fb: FormBuilder,
     private activeModel: NgbActiveModal,
     private patientService: PatientService,
@@ -66,7 +66,7 @@ export class ContactDetailsComponent implements OnInit {
     private modalService: NgbModal,
     private providerService: ProviderService
   ) { }
-
+ 
   ngOnInit() {
     this.contactForm = this.fb.group({
       city: ['', [Validators.required, Validators.pattern(/\S+/)]],
@@ -93,7 +93,7 @@ export class ContactDetailsComponent implements OnInit {
       userInfo.phoneNumber = formattedPhone;
       this.contactForm.get('phoneNumber').setValue(userInfo.phoneNumber)
       this.userId = userInfo.userId
-
+ 
     }
     if (localStorage.getItem('NewProviderId')) {
       this.userId = localStorage.getItem('NewProviderId')
@@ -103,112 +103,39 @@ export class ContactDetailsComponent implements OnInit {
     }
     this.getState();
     this.getEditContactFormData();
-
+ 
   }
-
-   selectedIndex = -1;
-
-    onKeyDown(event: KeyboardEvent) {
-    debugger
-    if (this.suggestions.length === 0) return;
-
-    if (event.key === 'ArrowDown') {
-      this.selectedIndex = (this.selectedIndex + 1) % this.suggestions.length;
-      event.preventDefault();
-    } else if (event.key === 'ArrowUp') {
-      this.selectedIndex = (this.selectedIndex - 1 + this.suggestions.length) % this.suggestions.length;
-      event.preventDefault();
-    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
-      this.selectSuggestion(this.suggestions[this.selectedIndex]);
-      event.preventDefault();
-    }
-
-    // 🟢 Auto-scroll active item into view
-    setTimeout(() => {
-      const activeElement = document.querySelector('.address2-suggestion-list .active');
-      if (activeElement) {
-        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }
-    }, 0);
-  }
-
-
-
-  onAddressChange(event: any): void {
-   
-    console.log("This is local storage ",localStorage);
-   
-  
-    const query = event.target.value;
-    if (query.length > 2) {
-     this.providerService.getAddressSearch(query).subscribe((response:any)=>{
-     
-      this.suggestions = response
-     });
-    
-    } else {
-      this.suggestions = [];
-    }
-  }
-
-  selectSuggestion(suggestion: any): void {
-        debugger
-     const mainAddress = suggestion.address?.split(",")[0]?.trim();
-     const addressWithCountry = mainAddress + ', ' + suggestion.country;
-    this.contactForm.get('address')?.setValue(addressWithCountry);
-    this.suggestions = [];
-    this.selectedIndex = -1;
-    
-    const postalCode = suggestion.postalCode?.includes('-')
-      ? suggestion.postalCode.split('-')[0]  // Extract part before the hyphen if present
-      : suggestion.postalCode;  // Use the full postal code if no hyphen
-  
-    const country = suggestion.country; // Ensure country is properly assigned
-  
-    // this.getStateId(suggestion.city, suggestion.countryCode, 3);
-  this.state.map((temp)=>{
-    if(temp.name==suggestion.state){
-     const StateId=temp.id
-     this.contactForm.patchValue({
-      stateId:StateId
-     }
-     )
-    }
-  })
-    this.contactForm.patchValue({
-      address: suggestion.address,
-      city: suggestion.city,
-      postalCode: postalCode,
-    
-      country: country  // Use the extracted country
-
-    });
-  
-    this.suggestions = [];  // Clear suggestions once an address is selected
-  }
-  
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
   onAddressChange1(event: any): void {
     const query = event.target.value;
     if (query.length > 2) {
      this.providerService.getAddressSearch(query).subscribe((response:any)=>{
-      
+     
       this.suggestions1 = response
      });
-    
+   
     } else {
       this.suggestions = [];
     }
   }
-
-
+ 
+ 
   selectSuggestionPractice(suggestion: any): void {
+     const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
+    this.contactForm.get('practiceAddress')?.setValue(addressWithCountry);
     const postalCode = suggestion.postalCode?.includes('-')
       ? suggestion.postalCode.split('-')[0]  // Extract part before the hyphen if present
       : suggestion.postalCode;  // Use the full postal code if no hyphen
-  
+ 
     const country = suggestion.country; // Ensure country is properly assigned
-  
+ 
     // this.getStateId(suggestion.city, suggestion.countryCode, 3);
   this.state.map((temp)=>{
     if(temp.name==suggestion.state){
@@ -220,19 +147,19 @@ export class ContactDetailsComponent implements OnInit {
     }
   })
     this.contactForm.patchValue({
-      practiceAddress: suggestion.address,
+      practiceAddress: addressWithCountry,
       practiceCity: suggestion.city,
       practiceZipCode: postalCode,
-    
+   
       country: country  // Use the extracted country
-
+ 
     });
-  
+ 
     this.suggestions = [];  // Clear suggestions once an address is selected
-
+ 
   }
-
-
+ 
+ 
   getStateId(city: string, countryCode: any, type: number) {
     this.patientService.getStateByCityAndCountry(city, countryCode).subscribe((response: any) => {
       // Extract the state from the response
@@ -258,7 +185,7 @@ export class ContactDetailsComponent implements OnInit {
       }
     });
   }
-
+ 
   getEditContactFormData() {
     this.providerService.getContactDetailsById(this.userId).subscribe((response: any) => {
       const formattedPhone = this.globalModalService.formatPhoneNumberForDisplay(response.phoneNumber);
@@ -269,10 +196,10 @@ export class ContactDetailsComponent implements OnInit {
       if (this.userInfo.accountType == 'Admin') {
         // this.contactForm.disable()
       }
-
+ 
     })
   }
-
+ 
   formatPhoneNumber(event: any): void {
     const input = event.target as HTMLInputElement;
     const formattedValue = this.globalModalService.formatPhoneNumberForDisplay(input.value);
@@ -288,7 +215,7 @@ export class ContactDetailsComponent implements OnInit {
       this.state = data.items;
     })
   }
-
+ 
   submitData() {
     ;
     this.notificationService.markFormGroupTouched(this.contactForm);
@@ -308,7 +235,7 @@ export class ContactDetailsComponent implements OnInit {
       contactForm.phoneNumber = contactForm.phoneNumber.replace(/\D/g, '');
       contactForm.practicePhoneNumber = contactForm.practicePhoneNumber.replace(/\D/g, '');
     }
-
+ 
     contactForm.userId = this.userId
     this.providerService.postContactDetails(contactForm).subscribe((resposne: any) => {
       this.notificationService.showSuccess("Contact Info updated successfully.");
@@ -337,7 +264,7 @@ export class ContactDetailsComponent implements OnInit {
       centered: true
     });
   }
-
+ 
   openProfilePopUp() {
     this.activeModel.close();
     this.modalService.open(ProviderProfileComponent, {
@@ -350,4 +277,76 @@ export class ContactDetailsComponent implements OnInit {
     this.activeModel.close();
     this.dialogClosed.emit();
   }
+ 
+ 
+ 
+   onAddressChange(event: any): void {
+    const query = event.target.value;
+    if (query.length > 2) {
+      this.providerService.getAddressSearch(query).subscribe((response: any) => {
+ 
+        this.suggestions = response
+      });
+ 
+    } else {
+      this.suggestions = [];
+    }
+  }
+ 
+   selectedIndex = -1;
+ 
+  onKeyDown(event: KeyboardEvent) {
+    if (this.suggestions.length === 0) return;
+ 
+    if (event.key === 'ArrowDown') {
+      this.selectedIndex = (this.selectedIndex + 1) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'ArrowUp') {
+      this.selectedIndex = (this.selectedIndex - 1 + this.suggestions.length) % this.suggestions.length;
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.selectedIndex >= 0) {
+      this.selectSuggestion(this.suggestions[this.selectedIndex]);
+      event.preventDefault();
+    }
+ 
+    // 🟢 Auto-scroll active item into view
+    setTimeout(() => {
+      const activeElement = document.querySelector('.address1-suggestion-list .active');
+      if (activeElement) {
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
+ 
+ 
+    selectSuggestion(suggestion: any): void {
+    debugger
+     const mainAddress = suggestion.address?.split(",")[0]?.trim();
+     const addressWithCountry = mainAddress + ', ' + suggestion.country;
+    this.contactForm.get('address')?.setValue(addressWithCountry);
+    this.suggestions = [];
+    this.selectedIndex = -1;
+ 
+    const postalCode = suggestion.postalCode?.includes('-')
+      ? suggestion.postalCode.split('-')[0]
+      : suggestion.postalCode;
+    const country = suggestion.country;
+ 
+    this.state.forEach((temp) => {
+      if (temp.name === suggestion.state) {
+        this.contactForm.patchValue({ stateId: temp.id });
+      }
+    });
+ 
+    this.contactForm.patchValue({
+      address: addressWithCountry,
+      city: suggestion.city,
+      postalCode: postalCode,
+      country: country // Use the extracted country
+    });
+ 
+    this.suggestions = []; // Clear suggestions after selection
+  }
 }
+ 
+ 

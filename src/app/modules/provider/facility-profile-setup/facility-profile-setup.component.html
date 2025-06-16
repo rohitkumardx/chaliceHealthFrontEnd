@@ -140,26 +140,28 @@
 
             <div class="row">
               <div class="col-md-6">
-                <label for="address">Address <span class="red">*</span></label>
-               
-
-                <textarea id="address" class="form-control form-control-sm mt-1" formControlName="address"
-                        
+                        <label for="address">Address <span class="red">*</span></label>
+                        <textarea id="address" class="form-control form-control-sm mt-1" formControlName="address"
                           (input)="onAddressChange($event)"
-                          (keydown)="onKeyDown($event)" 
+                            (keydown)="onKeyDown($event)"
                           [ngClass]="{'is-invalid': facilityProfileForm.get('address')?.invalid && facilityProfileForm.get('address')?.touched}"></textarea>
-
-                <ul *ngIf="suggestions.length">
-
-                  <li *ngFor="let suggestion of suggestions; let i = index" (click)="selectSuggestion(suggestion)" [class.active]="i === selectedIndex">
-                    {{ suggestion.address }}
-                  </li>
-                </ul>
-                <div class="invalid-feedback"
-                  *ngIf="facilityProfileForm.get('address')?.touched && facilityProfileForm.get('address')?.hasError('required')">
-                  Address is required.
-                </div>
-              </div>
+                          <ul *ngIf="suggestions.length" class="suggestion-list">
+                            <li *ngFor="let suggestion of suggestions; let i = index"
+                                (click)="selectSuggestion(suggestion)"
+                                [class.active]="i === selectedIndex">
+                              {{ suggestion.address }}
+                            </li>
+                          </ul>
+                         
+                        <div class="invalid-feedback"
+                          *ngIf="facilityProfileForm.get('address')?.touched && facilityProfileForm.get('address')?.hasError('required')">
+                          Address is required.
+                        </div>
+                        <div class="invalid-feedback"
+                        *ngIf="facilityProfileForm.get('address')?.touched && facilityProfileForm.get('address')?.hasError('pattern')">
+                        Address cannot be empty or only spaces.
+                       </div>
+                      </div>
               <div class="col-md-6">
                 <label for="city">City <span class="red">*</span> </label>
                 <input type="text" id="city" placeholder="Los Angeles" class="form-control form-control-sm "

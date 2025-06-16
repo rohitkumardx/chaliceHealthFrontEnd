@@ -93,21 +93,30 @@
                         </div>
 
                         <div class="row">
-                          <div class="col-md-12">
-                            <label for="address">Address <span class="red">*</span></label>
-                            <textarea id="address" class="form-control" formControlName="address" (input)="onAddressChange($event)"
-                              [ngClass]="{'is-invalid': myProfileForm.get('address')?.invalid && myProfileForm.get('address')?.touched}"></textarea>
-                            <ul *ngIf="suggestions.length">
-            
-                              <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
-                                {{ suggestion.address }}
-                              </li>
-                            </ul>
-                            <div class="invalid-feedback"
-                              *ngIf="myProfileForm.get('address')?.touched && myProfileForm.get('address')?.hasError('required')">
-                              Address is required.
-                            </div>
-                          </div>
+                           <div class="col-md-12">
+                        <label for="address">Address <span class="red">*</span></label>
+                        <textarea id="address" class="form-control form-control-sm mt-1" formControlName="address"
+                          (input)="onAddressChange($event)"
+                            (keydown)="onKeyDown($event)"
+                          [ngClass]="{'is-invalid': myProfileForm.get('address')?.invalid && myProfileForm.get('address')?.touched}"></textarea>
+                          <ul *ngIf="suggestions.length" class="suggestion-list">
+                            <li *ngFor="let suggestion of suggestions; let i = index"
+                                (click)="selectSuggestion(suggestion)"
+                                [class.active]="i === selectedIndex">
+                              {{ suggestion.address }}
+                            </li>
+                          </ul>
+                         
+                        <div class="invalid-feedback"
+                          *ngIf="myProfileForm.get('address')?.touched && myProfileForm.get('address')?.hasError('required')">
+                          Address is required.
+                        </div>
+                        <div class="invalid-feedback"
+                        *ngIf="myProfileForm.get('address')?.touched && myProfileForm.get('address')?.hasError('pattern')">
+                        Address cannot be empty or only spaces.
+                       </div>
+                      </div>
+ 
                         </div>
     
                         <div class="row">

@@ -21,26 +21,28 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <label>Address <span class="red">*</span> </label>
-                <textarea id="address-input" class="form-control form-control-sm mt-1" type="text"
-                    [ngClass]="{'is-invalid':contactForm.get('address')?.invalid && contactForm.get('address')?.touched}"
-                    formControlName="address" placeholder="Enter your address" (keydown)="onKeyDown($event)"  (input)="onAddressChange($event)">
-              </textarea>
-                <ul *ngIf="suggestions.length">
-
-                    <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
-                        {{ suggestion.address  }}
-                    </li>
-                </ul>
-                <div class="invalid-feedback"
-                    *ngIf="contactForm.get('address')?.touched && contactForm.get('address')?.hasError('required')">
-                    Address is required.
-                </div>
-                <div class="invalid-feedback"
+                        <label for="address">Address <span class="red">*</span></label>
+                        <textarea id="address" class="form-control form-control-sm mt-1" formControlName="address"
+                          (input)="onAddressChange($event)"
+                            (keydown)="onKeyDown($event)"
+                          [ngClass]="{'is-invalid': contactForm.get('address')?.invalid && contactForm.get('address')?.touched}"></textarea>
+                          <ul *ngIf="suggestions.length" class="suggestion-list">
+                            <li *ngFor="let suggestion of suggestions; let i = index"
+                                (click)="selectSuggestion(suggestion)"
+                                [class.active]="i === selectedIndex">
+                              {{ suggestion.address }}
+                            </li>
+                          </ul>
+                         
+                        <div class="invalid-feedback"
+                          *ngIf="contactForm.get('address')?.touched && contactForm.get('address')?.hasError('required')">
+                          Address is required.
+                        </div>
+                        <div class="invalid-feedback"
                         *ngIf="contactForm.get('address')?.touched && contactForm.get('address')?.hasError('pattern')">
                         Address cannot be empty or only spaces.
                        </div>
-            </div>
+                      </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
@@ -139,7 +141,7 @@
             <div class="col-sm-12">
                 <label>Address </label>
                 <textarea class="form-control form-control-sm mt-1" type="text" formControlName="practiceAddress"
-                    (input)="onAddressChange1($event)" [value]="contactForm.get('practiceAddress')?.value"
+                    (input)="onAddressChange1($event)"  [value]="contactForm.get('practiceAddress')?.value"
                     [ngClass]="{'is-invalid':
                      contactForm.get('practiceAddress')?.invalid &&  contactForm.get('practiceAddress')?.touched}">
                 </textarea>
