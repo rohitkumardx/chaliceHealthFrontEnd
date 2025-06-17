@@ -13,22 +13,28 @@
             </select>
           </div>
           <div class="col-sm-3">
-              <div class="custom-dropdown">
-                <button type="button" id="facilityDropdown"  class="form-select form-select-sm  cursor mt-1"
-                  data-bs-toggle="dropdown" aria-expanded="false" style="text-align: left !important; ">
-                  {{ selectedFacilityName || 'Select' }}
-                </button>
-                <ul class="dropdown-menu mt-0 p-2 shadow-lg cursor" style="width: 100%;">
-                  <li class="dropdown-header">
-                    <input type="text" class="form-control dropdown-search" placeholder="Search..."
-                      [(ngModel)]="facilitySearchTerm" (input)="filterFacilityOptions()" />
-                  </li>
-                  <li *ngFor="let facility of filteredFacilities" class="dropdown-item"
-                    (click)="selectFacility(facility)">
-                    {{ facility.facilityName }}
-                  </li>
-                </ul>
-              </div>
+             <div class="custom-dropdown">
+  <button type="button" id="facilityDropdown" class="form-select form-select-sm cursor mt-1"
+    data-bs-toggle="dropdown" aria-expanded="false" style="text-align: left !important;"   >
+    {{ selectedFacilityName || 'Select' }}
+  </button>
+
+  <ul class="dropdown-menu mt-0 p-2 shadow-lg cursor" style="width: 100%;" tabindex="0"  (keydown)="onKeyDown3($event)">
+    <li class="dropdown-header">
+      <input type="text" class="form-control dropdown-search" placeholder="Search..."
+        [(ngModel)]="facilitySearchTerm" (input)="filterFacilityOptions()" />
+    </li>
+    <li *ngFor="let facility of filteredFacilities; let i = index"
+      class="dropdown-item"
+  
+      (click)="selectFacility(facility)"
+      [class.active]="i === selectedIndex"
+      [attr.tabindex]="0">
+      {{ facility.facilityName }}
+    </li>
+  </ul>
+</div>
+
           </div>
          
           <div class="col-sm-12 text-end mt-3">

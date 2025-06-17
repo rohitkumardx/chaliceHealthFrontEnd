@@ -84,6 +84,7 @@ filterFacilityOptions() {
 }
  
 selectFacility(facility: any) {
+  debugger
   this.selectedFacility = facility.id;
   this.selectedFacilityName = facility.facilityName;
   this.onChange({ target: { value: facility.id } }, 'facility');
@@ -380,7 +381,39 @@ closePopUp(){
   public barChartData2: any[] = [];
   public barChartLegend = true;
   public barChartData = [];
- 
+selectedIndex = -1;
+
+onKeyDown3(event: KeyboardEvent) {
+  debugger
+  const maxIndex = this.filteredFacilities.length - 1;
+
+  if (this.filteredFacilities.length === 0) return;
+
+  switch (event.key) {
+    case 'ArrowDown':
+      this.selectedIndex = this.selectedIndex < maxIndex ? this.selectedIndex + 1 : 0;
+      event.preventDefault();
+      break;
+
+    case 'ArrowUp':
+      this.selectedIndex = this.selectedIndex > 0 ? this.selectedIndex - 1 : maxIndex;
+      event.preventDefault();
+      break;
+
+    case 'Enter':
+      if (this.selectedIndex >= 0 && this.selectedIndex <= maxIndex) {
+        this.selectFacility(this.filteredFacilities[this.selectedIndex]);
+      }
+      event.preventDefault();
+      break;
+  }
+  setTimeout(() => {
+  const el = document.getElementById('facility-' + this.selectedIndex);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+}
+
+
  
 }
  
