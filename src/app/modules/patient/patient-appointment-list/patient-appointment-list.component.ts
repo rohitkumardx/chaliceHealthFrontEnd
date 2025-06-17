@@ -309,7 +309,8 @@ export class PatientAppointmentListComponent implements OnInit {
     this.loading = true
     this.patientService.getPatientTodayAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder, this.dynamicDateTime).subscribe(
       (data: any) => {
-
+  this.isUploading1=false;
+  this.isUploading=false;
         if (data.items.length > 0) {
           this.roles = _.get(data, 'items');
           this.paginator = {
@@ -364,6 +365,8 @@ export class PatientAppointmentListComponent implements OnInit {
     this.loading = true
     this.patientService.getPatientUpcomingAppointmentList(this.searchTerm, this.paginator.pageNumber, this.paginator.pageSize, this.sortColumn, this.sortOrder, this.dynamicDateTime).subscribe(
       (data: any) => {
+          this.isUploading1=false;
+           this.isUploading=false;
 
         if (data.items.length > 0) {
 
@@ -515,19 +518,17 @@ export class PatientAppointmentListComponent implements OnInit {
     this.selectedShareIntakeId = shareIntakeId;
     this.fileInput1.nativeElement.click(); // Open file picker
   }
-
-
-
-  onFileSelected1(event: any, _unused: string, index: any) {
-    // alert(index)
-    const file = event.target.files[0]; // Get selected file
-    if (file) {
-      console.log("Selected file:", file);
-      this.userInfo = this.authService.getUserInfo(); // Ensure userInfo is fetched
-      this.uploadDocument(file, this.userInfo.userId, this.selectedShareIntakeId); // Pass userId instead of patientId
-    }
+isUploading: boolean = false;
+isUploading1: boolean = false;
+onFileSelected1(event: any, shareIntakeId: string, index: any) {
+  const file = event.target.files[0];
+  if (file) {
+    this.isUploading = true;
+    this.userInfo = this.authService.getUserInfo();
+    this.selectedShareIntakeId = shareIntakeId;
+    this.uploadDocument(file, this.userInfo.userId, shareIntakeId);
   }
-
+}
 
 
 
@@ -545,35 +546,38 @@ export class PatientAppointmentListComponent implements OnInit {
 
   onFileSelected(event: any, _unused: string, index: any) {
     const file = event.target.files[0]; // Get selected file
+    this.isUploading1=true
     if (file) {
       console.log("Selected file:", file);
       this.userInfo = this.authService.getUserInfo(); // Ensure userInfo is fetched
       this.uploadDocument(file, this.userInfo.userId, this.selectedShareConsentId); // Pass userId instead of patientId
     }
   }
-  
-  uploadDocument(file: File, userId: string, shareConsentId: string) {
-  
-    const formData = new FormData();
-    formData.append("patientId", userId); // Use userId instead of patientId
-    formData.append("shareConsentId", shareConsentId);
-    formData.append("Document", file);
+  isLoading: Boolean = false;
 
-    this.patientService.postPatientShareDocument(formData).subscribe(
-      (data: any) => {
-        console.log("Downloaded patient document data", data);
-        this.notificationService.showSuccess("Document uploaded successfully!");
-        
-        // window.location.reload();
-        this.getTodayAppointmentsByUserId();
-        this.getUpcomingAppointmentsByUserId();
-      },
-      (error) => {
-        console.error("Error uploading document", error);
-        // this.notificationService.showError("Failed to upload document.");
-      }
-    );
-  }
+ 
+uploadDocument(file: File, userId: string, shareConsentId: string) {
+  const formData = new FormData();
+  formData.append("patientId", userId);
+  formData.append("shareConsentId", shareConsentId);
+  formData.append("Document", file);
+ 
+  this.patientService.postPatientShareDocument(formData).subscribe(
+    (data: any) => {
+      console.log("Uploaded successfully", data);
+      this.notificationService.showSuccess("Document uploaded successfully!");
+      this.isUploading = false;
+      this.getTodayAppointmentsByUserId();
+      this.getUpcomingAppointmentsByUserId();
+    },
+    (error) => {
+      console.error("Upload failed", error);
+      this.isUploading = false;
+    }
+  );
+}
+ 
+ 
 
 
   handleFileUpload(event: any) {

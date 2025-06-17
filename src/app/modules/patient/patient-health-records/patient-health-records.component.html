@@ -128,22 +128,6 @@
                         </tr>
                       </tbody>
 
-                      <!-- Show message when no search results found -->
-                      <!-- <tr style="width:100%!important; max-width: 100%!important;" *ngIf="filteredItems?.length === 0 && searchTerm">
-                       <td colspan="5">
-                         <div class="provider-card1" style="width:100%!important; max-width: 100%!important;" >
-                          <div class="provider-header">
-                            <h2 class="text-center">Nothing Found</h2>
-                          </div>
-                          <br>
-                          <div class="text-center">
-                            <span>Sorry, but nothing matched your search terms. Please try again with some different
-                              keywords.</span>
-                          </div>
-                        </div>
-                       </td>
-                      </tr> -->
-
                       <!-- Show message when no data -->
                       <tr *ngIf="!allergyData || allergyData?.length == null">
                         <td colspan="9" class="no-data-card">
@@ -613,7 +597,7 @@
                   <table class="table table-hover">
                     <thead>
                       <tr>
-                        <th style="min-width: 150px;" (click)="sortData('conditionName')">
+                        <th style="min-width: 170px;" (click)="sortData('conditionName')">
                           Condition Name
                           <i [ngClass]="{
                           fa: true,

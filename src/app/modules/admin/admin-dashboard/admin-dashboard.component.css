@@ -104,3 +104,10 @@ margin: auto;
   background-color: #00876f !important; 
   color: white !important;
 }
+
+.dropdown-item.active {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+
