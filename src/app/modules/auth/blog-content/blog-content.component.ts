@@ -146,7 +146,7 @@ export class BlogContentComponent implements OnInit {
   startAutoSlide() {
     this.autoSlideInterval = setInterval(() => {
       this.nextSlide();
-    }, 9000);
+    }, 20000);
   }
 
   nextSlide() {
