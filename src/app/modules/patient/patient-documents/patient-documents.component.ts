@@ -210,15 +210,6 @@ export class PatientDocumentsComponent implements OnInit {
           // ✅ Scroll to top
   window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-
-  // deleteDocument(id) {
-  //   this.patientService.deletePatientDocument(id).subscribe(data => {
-  //     this.getPatientDocumentsList();
-  //     this.notificationService.showSuccess("Deleted Successfully");
-  //   });
-  // }
-
   deleteDocument(id: any) {
     const modalRef = this.modalService.open(DeletePopupComponent, {
       backdrop: 'static',

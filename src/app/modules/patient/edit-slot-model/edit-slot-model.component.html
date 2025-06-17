@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-10">
             <div>
-                <h1 class="ms-0 mb-0 bold fs-3">Appointment Availabilities</h1>
+                <h2 class="ms-0 mb-0 bold fs-3 text-dark" style="font-weight: 500!important;">Appointment Availabilities</h2>
             </div>
         </div>
         <div class="col-2 text-end">
@@ -14,7 +14,7 @@
     <hr>
     <div *ngIf="!loading" class="row text-center">
         <div class="col-12">
-           <div id="slotCarousel" class="carousel slide position-relative">
+            <div id="slotCarousel" class="carousel slide position-relative">
                 <div class="carousel-inner">
                     <div class="carousel-item" *ngFor="let availabilityGroup of chunkedAvailabilities; let i = index"
                         [class.active]="i === 0">
@@ -25,19 +25,19 @@
                                     *ngIf="availability.limitedSlots && availability.limitedSlots.length > 0; else noData">
                                     <div *ngFor="let slot of availability.limitedSlots">
                                         <button class="time-btn mt-3"
-                                        (click)="saveData(slot.slotId, availability.date, slot.startTime)">
+                                            (click)="saveData(slot.slotId, availability.date, slot.startTime)">
                                             {{ formatTime(slot.startTime) }}
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                          <div *ngIf="hasSlots(availabilityGroup)" class="text-center mt-3">
-                                            <div (click)="toggleShowMore()" class="see-more">
-                                                {{ showMore ? 'See less times' : 'See more times' }}
-                                                <i [class]="showMore ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
-                                            </div>
-                                        </div>
+                        <div *ngIf="hasSlots(availabilityGroup)" class="text-center mt-3">
+                            <div (click)="toggleShowMore()" class="see-more cursor">
+                                {{ showMore ? 'See less times' : 'See more times' }}
+                                <i [class]="showMore ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+                            </div>
+                        </div>
                         <ng-template #noData>
                             <div class="text-center my-3 mt-4">
                                 <p>No data available</p>
@@ -45,24 +45,22 @@
                         </ng-template>
                     </div>
                 </div>
+
                 <button class="carousel-control-prev next-slide" type="button" data-bs-target="#slotCarousel"
-                    *ngIf="chunkedAvailabilities[0][0].date != currentDate" data-bs-slide="prev"
-                    (click)="previousSlots()">
+                    data-bs-slide="prev" (click)="previousSlots()">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 </button>
-                <button class="carousel-control-next next-slide" type="button" data-bs-target="#slotCarousel" data-bs-slide="next"
-                    >
+
+                <button class="carousel-control-next next-slide" type="button" data-bs-target="#slotCarousel"
+                    data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </button>
             </div>
         </div>
     </div>
     <div *ngIf="loading">
-        <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'"
-          [spinnerHeight]="'2rem !important'" [spinnerColor]="'#00876F !important'" class="heading"
-          [additionalClasses]="'mt-5'"></app-loader>
-      </div>
- 
+        <app-loader [loadingText]="'Loading...'" [spinnerWidth]="'2rem !important'" [spinnerHeight]="'2rem !important'"
+            [spinnerColor]="'#00876F !important'" class="heading" [additionalClasses]="'mt-5'"></app-loader>
+    </div>
+
 </div>
- 
- 

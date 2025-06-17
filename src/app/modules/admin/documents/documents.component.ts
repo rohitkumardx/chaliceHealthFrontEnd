@@ -135,6 +135,8 @@ export class DocumentsComponent implements OnInit {
                   this.notificationService.showSuccess('Document updated successfully.');
                 }
                 this.isLoading1 = false;
+                window.location.reload();
+
               },
               (error: any) => {
                 console.error('Post failed', error);
@@ -179,6 +181,7 @@ export class DocumentsComponent implements OnInit {
                   this.notificationService.showSuccess('Document updated successfully.');
                 }
                 this.isLoading = false;
+                window.location.reload();
               },
               (error: any) => {
                 console.error('Post failed', error);

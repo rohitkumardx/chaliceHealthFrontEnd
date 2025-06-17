@@ -104,7 +104,9 @@ margin: auto;
   background-color: #00876f !important; 
   color: white !important;
 }
+
 .dropdown-item.active {
   background-color: #007bff;
   color: white;
 }
+

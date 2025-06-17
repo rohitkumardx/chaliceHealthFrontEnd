@@ -56,12 +56,10 @@ export class BlogContentComponent implements OnInit {
       this.communityForm.markAllAsTouched();
       return;
     }
-
     const formData = this.communityForm.value;
     const postData = {
       email: formData.email
     };
-
     this.authService.postJoinOurCommunity(postData).subscribe({
       next: (response: any) => {
         if (response === true) {
@@ -74,7 +72,6 @@ export class BlogContentComponent implements OnInit {
       }
     });
   }
-
   redirectTotermofservice() {
     this.router.navigate(['/terms-of-service']).then(() => {
       window.scrollTo(0, 0);
@@ -115,7 +112,6 @@ export class BlogContentComponent implements OnInit {
   getBlogContent() {
   this.adminService.getBlogContent().subscribe(
     (response: any) => {
-      // Check if response exists and has an items array
       if (response && response.items && Array.isArray(response.items)) {
         this.blogGet = response.items.map((blog: any) => {
           return {
@@ -123,13 +119,8 @@ export class BlogContentComponent implements OnInit {
             postFileUrl: blog.postFileUrl ? `${environment.fileUrl}/${blog.postFileUrl}` : undefined
           };
         });
-
-        console.log("This is blog list with images:", this.blogGet);
-
         this.createPagedBlogs(); // Split into groups of 3
         this.startAutoSlide(); // Start auto-slide
-        
-        // You can also access other pagination properties if needed
         console.log('Pagination info:', {
           pageNumber: response.pageNumber,
           totalPages: response.totalPages,
@@ -146,16 +137,12 @@ export class BlogContentComponent implements OnInit {
     }
   );
 }
-
-
   createPagedBlogs() {
     this.pagedBlogs = [];
     for (let i = 0; i < this.blogGet.length; i += 3) {
       this.pagedBlogs.push(this.blogGet.slice(i, i + 3));
     }
   }
-
-
   startAutoSlide() {
     this.autoSlideInterval = setInterval(() => {
       this.nextSlide();

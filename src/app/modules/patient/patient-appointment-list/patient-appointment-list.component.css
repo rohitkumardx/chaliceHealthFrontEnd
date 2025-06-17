@@ -392,5 +392,13 @@ li:hover {
 .dropdown-menu{
   transform: none !important;
 }
+/* styles.css or component styles */
+.upload-loader {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #0d6efd;
+}
 
 
