@@ -229,88 +229,39 @@ handlePaste(event: ClipboardEvent): void {
  
 
       if (remainingTime === 0) {
-
         this.isExpired = true;
-
         clearInterval(this.intervalId);
-
       }
-
- 
-
       remainingTime--;
-
     }, 1000);
-
   }
-
- 
-
- 
-
- 
-
   verifyOtp() {
-
-  
-
    // const userInfo = this.authService.getUserInfo();
-
     if (this.otpForm.valid && !this.isExpired) {
-
       this.loading = true;
-
       const otpCode = Object.values(this.otpForm.value).join('');
-
-
         const obj = {
-
           userId: this.userId,
-
           otp: otpCode,
-
         };
-
         if(this.request == 'forgot-password'){
-
         this.authService.otpVerificationForForgotPassword(obj).subscribe((resposne : any)=>{
-
           // this.router.navigate(["/thank-you"]);
-
           this.router.navigate(['/thank-you'], { queryParams: { request: 'forgot-password' } });
-
-         
-
         },
-
         (error) => {
-
-         
-
           this.notificationService.showDanger(getErrorMessage(error));
-
           this.loading = false;
-
         })
-
       }
-
       else {
-
         this.authService.otpVerification(obj).subscribe((resposne: any) => {
-
           debugger;
-
           if(resposne){
-
             const data = sessionStorage.getItem('userInfo');
-
             this.authService.setUserInfo(data);
-
           }
-
           this.getToken();
-
         },
           (error) => {
             this.notificationService.showDanger(getErrorMessage(error));
@@ -319,15 +270,12 @@ handlePaste(event: ClipboardEvent): void {
         )
       }
     }
-
   }
-
 getToken() {
    debugger
   this.authService.Token().subscribe((data) => {
     this.authService.setToken(data.token);
     const userInfo = this.authService.getUserInfo();
-
     // Check if we have a return URL and role first
     const returnUrl = localStorage.getItem('returnUrl');
     const returnRole = localStorage.getItem('returnRole');
